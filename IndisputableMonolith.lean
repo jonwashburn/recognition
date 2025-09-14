@@ -656,20 +656,8 @@ lemma reach_time_eq
       simp
   | @succ n x y z hxy hyz ih =>
       have ht := H.step_time hyz
-      calc
-        time z = time y + U.tau0 := ht
-        _ = (time x + (n : ℝ) * U.tau0) + U.tau0 := by simpa [ih]
-        _ = time x + ((n : ℝ) * U.tau0 + U.tau0) := by
-              simp [add_comm, add_left_comm, add_assoc]
-        _ = time x + (((n : ℝ) + 1) * U.tau0) := by
-              have : (n : ℝ) * U.tau0 + U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
-                have : (n : ℝ) * U.tau0 + 1 * U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
-                  simpa [add_mul, one_mul]
-                simpa [one_mul] using this
-              simpa [this]
-        _ = time x + ((n + 1 : ℝ) * U.tau0) := by
-              have hcast : ((n + 1 : ℕ) : ℝ) = (n : ℝ) + 1 := by simp [Nat.cast_add, Nat.cast_one]
-              simpa [hcast]
+      -- (time x + n·τ) + τ = time x + (n+1)·τ
+      simp [ht, ih, Nat.cast_add, Nat.cast_one, add_mul, one_mul, add_comm, add_left_comm, add_assoc]
 
 /-- Under per-step bounds, the radial display grows by at most `n·ℓ0` along any `n`-step reach. -/
 lemma reach_rad_le
@@ -681,20 +669,10 @@ lemma reach_rad_le
       simp
   | @succ n x y z hxy hyz ih =>
       have hr := H.step_rad hyz
-      calc
-        rad z ≤ rad y + U.ell0 := hr
-        _ ≤ (rad x + (n : ℝ) * U.ell0) + U.ell0 := by exact add_le_add_right ih _
-        _ = rad x + ((n : ℝ) * U.ell0 + U.ell0) := by
-              simp [add_comm, add_left_comm, add_assoc]
-        _ = rad x + (((n : ℝ) + 1) * U.ell0) := by
-              have : (n : ℝ) * U.ell0 + U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
-                have : (n : ℝ) * U.ell0 + 1 * U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
-                  simpa [add_mul, one_mul]
-                simpa [one_mul] using this
-              simpa [this]
-        _ = rad x + ((n + 1 : ℝ) * U.ell0) := by
-              have hcast : ((n + 1 : ℕ) : ℝ) = (n : ℝ) + 1 := by simp [Nat.cast_add, Nat.cast_one]
-              simpa [hcast]
+      -- rad z ≤ rad y + ℓ ≤ rad x + n·ℓ + ℓ = rad x + (n+1)·ℓ
+      have := add_le_add_right ih U.ell0
+      -- rewrite both sides with simp
+      simpa [hr, Nat.cast_add, Nat.cast_one, add_mul, one_mul, add_comm, add_left_comm, add_assoc] using this
 
 /-- Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
     `c · Δt`. Formally, `rad y - rad x ≤ U.c * (time y - time x)`. -/
