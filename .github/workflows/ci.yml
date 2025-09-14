@@ -1,4 +1,4 @@
-name: CI
+name: Lean CI (head + full)
 
 on:
   push:
@@ -57,7 +57,7 @@ jobs:
             echo "No 'sorry'/'admit' outside monolith";
           fi
 
-name: Lean CI
+name: Lean CI (head + full)
 
 on:
   push:
@@ -82,12 +82,15 @@ jobs:
         with:
           path: ./.lake/packages
           key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
+          restore-keys: |
+            ${{ runner.os }}-lake-
       - name: Build sliced head (A/B region)
         shell: bash
         run: |
           set -euxo pipefail
           cp IndisputableMonolith.lean IndisputableMonolith.full.lean
           head -n 6000 IndisputableMonolith.full.lean > IndisputableMonolith.lean
+          lake update
           lake build IndisputableMonolith
           lake build ci_checks
           ./build/bin/ci_checks | sed -e 's/.*/HEAD: &/'
@@ -107,10 +110,13 @@ jobs:
         with:
           path: ./.lake/packages
           key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
+          restore-keys: |
+            ${{ runner.os }}-lake-
       - name: Build full monolith and summarize errors
         shell: bash
         run: |
           set -euxo pipefail
+          lake update
           lake build IndisputableMonolith 2>&1 | tee full_build.log || true
           tail -n 200 full_build.log || true
 name: CI
