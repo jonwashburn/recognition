@@ -1,0 +1,61 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  nightly-build:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache elan and Lake deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            ~/.cache/elan
+            ~/.lake
+            ./lake-packages
+            ./.lake
+          key: ${{ runner.os }}-lean-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}
+
+      - name: Install elan (Lean toolchain)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | bash -s -- -y --default-toolchain none
+          echo "source $HOME/.elan/env" >> $GITHUB_ENV
+
+      - name: Show versions
+        run: |
+          source $HOME/.elan/env
+          lean --version
+          lake --version
+
+      - name: Full build (nightly)
+        run: |
+          source $HOME/.elan/env
+          set +e
+          lake build | tee build.log
+          echo "Exit code: $?" | tee -a build.log
+
+      - name: Run smoke checks
+        run: |
+          source $HOME/.elan/env
+          lake exe ci_checks | tee -a build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-build-log
+          path: build.log
+
+
