@@ -9251,9 +9251,11 @@ end IndisputableMonolith
 namespace URC
 namespace BridgeAxioms
 
-def UnitsProp : Prop := True
+def UnitsProp : Prop :=
+  ∀ U : IndisputableMonolith.Constants.RSUnits, U.ell0 / U.tau0 = U.c
 
-def EightBeatProp : Prop := True
+def EightBeatProp : Prop :=
+  ∃ w : IndisputableMonolith.CompleteCover 3, w.period = 8
 
 def ELProp : Prop :=
   (deriv IndisputableMonolith.Jlog 0 = 0)
@@ -9262,7 +9264,7 @@ def ELProp : Prop :=
 def PhiRungProp : Prop :=
   ∀ (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ),
     IndisputableMonolith.Masses.Derivation.massCanonUnits U (r + 1) Z
-      = IndisputableMonolith.Constants.IndisputableMonolith.Constants.phi
+      = IndisputableMonolith.Constants.phi
         * IndisputableMonolith.Masses.Derivation.massCanonUnits U r Z
 
 def GapListenProp : Prop := True
