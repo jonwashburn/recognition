@@ -3967,17 +3967,21 @@ lemma no_smaller_multiple_9_5 (n : Nat) (hnpos : 0 < n) (hnlt : n < 45) :
   ¬ (9 ∣ n ∧ 5 ∣ n) := by
   intro h
   rcases h with ⟨h9, h5⟩
-  -- For coprime a,b, a∣n and b∣n ⇒ a*b ∣ n
-  have hmul : 9 * 5 ∣ n := Nat.coprime.mul_dvd_of_dvd_of_dvd coprime_9_5 h9 h5
-  -- Hence 45 ∣ n
-  have h45 : 45 ∣ n := by simpa using hmul
+  -- Using lcm minimality for coprimes: lcm(9,5)=45 divides n
+  have h45 : 45 ∣ n := by
+    have hcop : Nat.Coprime 9 5 := coprime_9_5
+    simpa [Nat.lcm_eq_mul_of_coprime hcop] using (Nat.lcm_dvd h9 h5)
   rcases h45 with ⟨k, hk⟩
-  -- If k = 0 then n = 0, contradicting 0 < n; otherwise n ≥ 45, contradicting n < 45.
-  rcases (Nat.eq_zero_or_pos k) with rfl | hkpos
-  · simpa using hnpos
-  · have : 45 ≤ 45 * k := Nat.mul_le_mul_left 45 hkpos
-    have : 45 ≤ n := by simpa [hk] using this
-    exact (not_le_of_gt hnlt) this
+  -- k cannot be 0 because 0 < n
+  have hkpos : 0 < k := by
+    -- from n = 45*k and 0 < n
+    have : 0 < 45 * k := by simpa [hk] using hnpos
+    exact Nat.pos_of_mul_pos_left this (by decide : 0 < 45)
+  -- hence n ≥ 45, contradicting n < 45
+  have : 45 ≤ n := by
+    have : 45 ≤ 45 * k := Nat.mul_le_mul_left 45 (Nat.succ_le_of_lt hkpos)
+    simpa [hk] using this
+  exact (not_le_of_gt hnlt) this
 
 /-- Summary: 45 is the first rung where 9- and 5-fold periodicities coincide, and it is not
     synchronized with the 8-beat (since 8 ∤ 45). -/
@@ -4090,8 +4094,8 @@ open Nat
 its order divides `gcd(8,45)=1`, hence `g = 1`. -/
 lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
   (h8 : g ^ 8 = 1) (h45 : g ^ 45 = 1) : g = 1 := by
-  have h8d : orderOf g ∣ 8 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=8)).2 h8
-  have h45d : orderOf g ∣ 45 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=45)).2 h45
+  have h8d : orderOf g ∣ 8 := (orderOf_dvd_iff_pow_eq_one (x:=g) (n:=8)).2 h8
+  have h45d : orderOf g ∣ 45 := (orderOf_dvd_iff_pow_eq_one (x:=g) (n:=45)).2 h45
   have hgcd : orderOf g ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
   have hone : orderOf g ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
   have h1 : orderOf g = 1 := Nat.dvd_one.mp hone
@@ -4107,8 +4111,8 @@ open Nat
 divides `gcd(8,45)=1`, hence `a = 0`. -/
 lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
   (h8 : (8 : ℕ) • a = 0) (h45 : (45 : ℕ) • a = 0) : a = 0 := by
-  have h8d : addOrderOf a ∣ 8 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=8)).2 h8
-  have h45d : addOrderOf a ∣ 45 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=45)).2 h45
+  have h8d : addOrderOf a ∣ 8 := (addOrderOf_dvd_iff_nsmul_eq_zero (x:=a) (n:=8)).2 h8
+  have h45d : addOrderOf a ∣ 45 := (addOrderOf_dvd_iff_nsmul_eq_zero (x:=a) (n:=45)).2 h45
   have hgcd : addOrderOf a ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
   have hone : addOrderOf a ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
   have h1 : addOrderOf a = 1 := Nat.dvd_one.mp hone
@@ -4119,140 +4123,7 @@ end AddGroupView
 end Gap45
 end IndisputableMonolith
 
-namespace IndisputableMonolith
-namespace Recognition
-namespace Certification
-
-noncomputable section
-open Classical
-
-/-- Closed interval with endpoints `lo ≤ hi`. -/
-structure Interval where
-  lo : ℝ
-  hi : ℝ
-  lo_le_hi : lo ≤ hi
-@[simp] def memI (I : Interval) (x : ℝ) : Prop := I.lo ≤ x ∧ x ≤ I.hi
-
-@[simp] def width (I : Interval) : ℝ := I.hi - I.lo
-
-/-- If `x,y` lie in the same interval `I`, then `|x − y| ≤ width(I)`. -/
-lemma abs_sub_le_width_of_memI {I : Interval} {x y : ℝ}
-  (hx : memI I x) (hy : memI I y) : |x - y| ≤ width I := by
-  have hxhi : x ≤ I.hi := hx.2
-  have hylo : I.lo ≤ y := hy.1
-  have h1 : x - y ≤ I.hi - I.lo := by
-    have hneg : -y ≤ -I.lo := neg_le_neg hylo
-    have hleft : x - y ≤ x - I.lo := by
-      simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using add_le_add_left hneg x
-    have hright : x - I.lo ≤ I.hi - I.lo := by
-      simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using sub_le_sub_right hxhi I.lo
-    exact le_trans hleft hright
-  have h2 : y - x ≤ I.hi - I.lo := by
-    have hxlo : I.lo ≤ x := hx.1
-    have hyhi : y ≤ I.hi := hy.2
-    have hneg : -x ≤ -I.lo := neg_le_neg hxlo
-    have hleft : y - x ≤ y - I.lo := by
-      simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using add_le_add_left hneg y
-    have hright : y - I.lo ≤ I.hi - I.lo := by
-      simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using sub_le_sub_right hyhi I.lo
-    exact le_trans hleft hright
-  have hboth : -(I.hi - I.lo) ≤ x - y ∧ x - y ≤ I.hi - I.lo := by
-    constructor
-    · simpa [neg_sub] using h2
-    · exact h1
-  simpa [width, sub_eq_add_neg] using (abs_le.mpr hboth)
-
-/-- Anchor certificate: species residue intervals and charge‑wise gap intervals. -/
-structure AnchorCert where
-  M0 : Interval
-  Ires : Species → Interval
-  center : Int → ℝ
-  eps : Int → ℝ
-  eps_nonneg : ∀ z, 0 ≤ eps z
-
-@[simp] def Igap (C : AnchorCert) (z : Int) : Interval :=
-{ lo := C.center z - C.eps z
-, hi := C.center z + C.eps z
-, lo_le_hi := by have := C.eps_nonneg z; linarith }
-
-/-- Validity of a certificate w.r.t. the formal layer. -/
-structure Valid (C : AnchorCert) : Prop where
-  M0_pos : 0 < C.M0.lo
-  Fgap_in : ∀ i : Species, memI (C.Igap (Z i)) (Fgap (Z i))
-  Ires_in_Igap : ∀ i : Species,
-    (C.Igap (Z i)).lo ≤ (C.Ires i).lo ∧ (C.Ires i).hi ≤ (C.Igap (Z i)).hi
-
-/-- Positivity of `M0` from the certificate. -/
-lemma M0_pos_of_cert {C : AnchorCert} (hC : Valid C) : 0 < C.M0.lo := hC.M0_pos
-
-/-- Certificate replacement for anchorIdentity (inequality form). -/
-lemma anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
-  (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i)) :
-  ∀ i : Species, |res i - Fgap (Z i)| ≤ 2 * C.eps (Z i) := by
-  intro i
-  have hinc := (hC.Ires_in_Igap i)
-  have hresI : memI (C.Igap (Z i)) (res i) := by
-    have hri := hres i
-    exact And.intro (le_trans hinc.left hri.left) (le_trans hri.right hinc.right)
-  have : |res i - Fgap (Z i)| ≤ width (C.Igap (Z i)) :=
-    abs_sub_le_width_of_memI hresI (hC.Fgap_in i)
-  have : |res i - Fgap (Z i)| ≤ (C.center (Z i) + C.eps (Z i)) - (C.center (Z i) - C.eps (Z i)) := by
-    simpa [Igap, width, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using this
-  simpa [two_mul, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using this
-
-/-- Equal‑Z degeneracy (inequality form) from a certificate. -/
-lemma equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
-  (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i))
-  {i j : Species} (hZ : Z i = Z j) :
-  |res i - res j| ≤ 2 * C.eps (Z i) := by
-  have hi : memI (C.Igap (Z i)) (res i) := by
-    have hinc := (hC.Ires_in_Igap i); have hri := hres i
-    exact And.intro (le_trans hinc.left hri.left) (le_trans hri.right hinc.right)
-  have hj : memI (C.Igap (Z j)) (res j) := by
-    have hinc := (hC.Ires_in_Igap j); have hrj := hres j
-    exact And.intro (le_trans hinc.left hrj.left) (le_trans hrj.right hinc.right)
-  have : |res i - res j| ≤ width (C.Igap (Z i)) := by
-    have hj' : memI (C.Igap (Z i)) (res j) := by simpa [hZ] using hj
-    exact abs_sub_le_width_of_memI hi hj'
-  simpa [Igap, width, sub_eq_add_neg, add_comm, add_left_comm, add_assoc, two_mul] using this
-
-/-! #### Zero-width anchor certificate (exact equality) -/
-
-/-- Zero-width certificate with centers at `Fgap` and epsilons 0. -/
-noncomputable def zeroWidthCert : AnchorCert :=
-{ M0 := { lo := 1, hi := 1, lo_le_hi := by norm_num }
-, Ires := fun i => { lo := Fgap (Z i), hi := Fgap (Z i), lo_le_hi := by linarith }
-, center := fun z => Fgap z
-, eps := fun _ => 0
-, eps_nonneg := by intro _; exact by norm_num }
-
-/-- Validity of the zero-width certificate. -/
-lemma zeroWidthCert_valid : Valid zeroWidthCert := by
-  refine {
-    M0_pos := by simp [zeroWidthCert]
-  , Fgap_in := by
-      intro i; dsimp [zeroWidthCert, Igap, memI]; simp
-  , Ires_in_Igap := by
-      intro i; dsimp [zeroWidthCert, Igap]; constructor <;> simp }
-
-/-- Exact anchor identity from the zero-width certificate: any residue inside the
-    certified intervals equals `Fgap ∘ Z`. -/
-lemma anchorIdentity_of_zeroWidthCert
-  (res : Species → ℝ) (hres : ∀ i, memI (zeroWidthCert.Ires i) (res i)) :
-  ∀ i : Species, res i = Fgap (Z i) := by
-  intro i
-  have h := hres i
-  -- interval is [Fgap(Z i), Fgap(Z i)]
-  dsimp [zeroWidthCert, memI] at h
-  have hlo : Fgap (Z i) ≤ res i := by simpa using h.left
-  have hhi : res i ≤ Fgap (Z i) := by simpa using h.right
-  exact le_antisymm hhi hlo
-
-end
-
-end
-end Recognition
-end IndisputableMonolith
+-- Duplicate Certification block removed; keeping the single canonical Certification above.
 
 namespace IndisputableMonolith
 namespace RSBridge
