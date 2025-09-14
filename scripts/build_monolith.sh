@@ -4,11 +4,9 @@ set -euo pipefail
 # Go to repo root (this script is in scripts/)
 cd "$(dirname "$0")/.."
 
-# Ensure elan env is loaded if available
-if [ -f "$HOME/.elan/env" ]; then
-  # shellcheck disable=SC1090
-  source "$HOME/.elan/env"
-fi
+# Project env (elan, macOS SDKROOT)
+# shellcheck disable=SC1090
+source "$(dirname "$0")/env.sh"
 
 # Update deps to avoid network in build phase
 lake update

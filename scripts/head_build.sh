@@ -3,10 +3,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-if [ -f "$HOME/.elan/env" ]; then
-  # shellcheck disable=SC1090
-  source "$HOME/.elan/env"
-fi
+# Project env (elan, macOS SDKROOT)
+# shellcheck disable=SC1090
+source "$(dirname "$0")/env.sh"
 
 : "${HEAD_LINES:=6000}"
 

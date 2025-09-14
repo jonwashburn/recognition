@@ -4,11 +4,9 @@ set -euo pipefail
 # Go to repo root (this script is in scripts/)
 cd "$(dirname "$0")/.."
 
-# Ensure elan env is loaded if available
-if [ -f "$HOME/.elan/env" ]; then
-  # shellcheck disable=SC1090
-  source "$HOME/.elan/env"
-fi
+# Project env (elan, macOS SDKROOT)
+# shellcheck disable=SC1090
+source "$(dirname "$0")/env.sh"
 
 echo "[cache_get] Tool versions:"
 command -v elan >/dev/null 2>&1 && elan --version || echo "elan: not found"
