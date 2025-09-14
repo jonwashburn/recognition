@@ -1223,6 +1223,10 @@ namespace MeasurementLayer
 open scoped BigOperators
 open Finset PatternLayer
 
+/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
+def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
+  ∑ j : Fin k, subBlockSum8 s j.val
+
 /-- Sum of one 8‑tick sub‑block starting at index `j*8`. -/
 def subBlockSum8 (s : Stream) (j : Nat) : Nat :=
   ∑ i : Fin 8, (if s (j * 8 + i.val) then 1 else 0)
@@ -1252,10 +1256,6 @@ lemma blockSum_equals_Z_on_cylinder_first (w : Pattern 8) {s : Stream}
   unfold blockSumAligned8
   -- Only one block `j=0`.
   simpa using firstBlockSum_eq_Z_on_cylinder w (s:=s) hs
-
-/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
-def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
-  ∑ j : Fin k, subBlockSum8 s j.val
 
 /-- On periodic extensions of a window, each 8‑sub‑block sums to `Z`. -/
 lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
@@ -1382,12 +1382,8 @@ lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
   have h2 := h₂ (basepoint (M:=M) x0)
   -- From h1,h2: g x0 + c₁ = g x0 + c₂
   have : g (basepoint (M:=M) x0) + c₁ = g (basepoint (M:=M) x0) + c₂ := by
-    -- both equal f (basepoint x0)
-    have := h1
-    have := h2
-    -- rewrite to the same right-hand side
-    simp [this] at *
-    exact rfl
+    -- both equal `f (basepoint x0)` by h1,h2
+    exact by simpa [h1, h2]
   exact add_left_cancel this
 
 /-- Classical T4 restatement: for δ-potentials, there exists a unique constant
@@ -1403,10 +1399,11 @@ theorem T4_unique_constant_on_component
   · intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable
   · intro c' hc'
     -- uniqueness of the constant by evaluating at basepoint
-    exact gauge_constant_unique (M:=M) (x0:=x0)
+    exact (gauge_constant_unique (M:=M) (x0:=x0)
       (f := restrictToComponent (M:=M) x0 p) (g := restrictToComponent (M:=M) x0 q)
-      (c₁ := c) (c₂ := c') (h₁ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)
-      (h₂ := hc')
+      (c₁ := c') (c₂ := c)
+      (h₁ := hc')
+      (h₂ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)).symm
 
 /-- Corollary: the gauge classes of any two δ-potentials coincide on the component. -/
 theorem gaugeClass_const (x0 : M.U) {δ : ℤ} {p q : Potential.Pot M}
