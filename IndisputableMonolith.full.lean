@@ -495,7 +495,6 @@ structure Kinematics (α : Type) where
 inductive ReachN (K : Kinematics α) : Nat → α → α → Prop
 | zero {x} : ReachN K 0 x x
 | succ {n x y z} : ReachN K n x y → K.step y z → ReachN K (n+1) x z
-
 def inBall (K : Kinematics α) (x : α) (n : Nat) (y : α) : Prop :=
   ∃ k ≤ n, ReachN K k x y
 
@@ -604,24 +603,26 @@ variable {α : Type} {d : Nat}
 variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
-/-/ Kinematics induced by a `BoundedStep` instance. -/
+/-- Kinematics induced by a `BoundedStep` instance. -/
 def KB : Kinematics α := { step := B.step }
 
-/-/ Minimal finset n-ball for head build (keeps focus on later sections). -/
+/-- Minimal finset n-ball for head build (keeps focus on later sections). -/
 noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
 
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
   simp [ballFS]
 
-theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
-  intro n; admit
+-- TODO: Reinstate once required downstream
+-- theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
+--   intro n; admit
 
 @[simp] lemma card_singleton {x : α} : ({x} : Finset α).card = 1 := by
   classical
   simp
 
-theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
-  intro n; admit
+-- TODO: Reinstate once required downstream
+-- theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
+--   intro n; admit
 
 end ConeBound
 
@@ -639,7 +640,6 @@ structure StepBounds (K : Causality.Kinematics α)
     (time rad : α → ℝ) : Prop where
   step_time : ∀ {y z}, K.step y z → time z = time y + U.tau0
   step_rad  : ∀ {y z}, K.step y z → rad z ≤ rad y + U.ell0
-
 namespace StepBounds
 
 variable {K : Causality.Kinematics α}
@@ -662,9 +662,9 @@ lemma reach_time_eq
         _ = time x + ((n : ℝ) * U.tau0 + U.tau0) := by simp [add_comm, add_left_comm, add_assoc]
         _ = time x + (((n : ℝ) + 1) * U.tau0) := by
               have : (n : ℝ) * U.tau0 + U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
-                calc
-                  (n : ℝ) * U.tau0 + U.tau0 = (n : ℝ) * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
-                  _ = ((n : ℝ) + 1) * U.tau0 := by simpa [add_mul, one_mul]
+                have : (n : ℝ) * U.tau0 + 1 * U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
+                  simpa [add_mul, one_mul]
+                simpa [one_mul] using this
               simpa [this]
 
 /-- Under per-step bounds, the radial display grows by at most `n·ℓ0` along any `n`-step reach. -/
@@ -683,9 +683,9 @@ lemma reach_rad_le
         _ = rad x + ((n : ℝ) * U.ell0 + U.ell0) := by simp [add_comm, add_left_comm, add_assoc]
         _ = rad x + (((n : ℝ) + 1) * U.ell0) := by
               have : (n : ℝ) * U.ell0 + U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
-                calc
-                  (n : ℝ) * U.ell0 + U.ell0 = (n : ℝ) * U.ell0 + 1 * U.ell0 := by simpa [one_mul]
-                  _ = ((n : ℝ) + 1) * U.ell0 := by simpa [add_mul, one_mul]
+                have : (n : ℝ) * U.ell0 + 1 * U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
+                  simpa [add_mul, one_mul]
+                simpa [one_mul] using this
               simpa [this]
 
 /-- Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
@@ -893,7 +893,8 @@ theorem T4_unique_on_inBall {δ : ℤ} {p q : Pot M}
     In particular, if `p` and `q` agree at `x0`, then `c = 0` and `p = q` on the component. -/
 theorem T4_unique_up_to_const_on_component {δ : ℤ} {p q : Pot M}
   (hp : DE (M:=M) δ p) (hq : DE (M:=M) δ q) {x0 : M.U} :
-  ∃ c : ℤ, ∀ {y : M.U}, Causality.Reaches (Kin M) x0 y → p y = q y + c := by
+  ∃ c : ℤ, ∀ {y : M.U}, Causality.Reaches (Kin M) x0 y →
+    p y = q y + c := by
   refine ⟨p x0 - q x0, ?_⟩
   intro y hreach
   have hdiff := diff_const_on_component (M:=M) (δ:=δ) (p:=p) (q:=q) hp hq (x0:=x0) (y:=y) hreach
@@ -2454,7 +2455,7 @@ end RH
 
 /-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
 
-/‑‑ Partial closure witnesses built from current exports -/
+/-‑ Partial closure witnesses built from current exports -/
 namespace RH
 namespace RS
 namespace Witness
@@ -3214,7 +3215,6 @@ def normalForm (w : Word) : Word :=
 /-- Net winding on the eight‑tick clock (abstracted): +1 for dir, −1 otherwise. -/
 def winding (w : Word) : Int :=
   (w.map (fun r => if r.dir then (1 : Int) else (-1 : Int))).foldl (·+·) 0
-
 /-- Formal torsion mod‑8 class wrapper. -/
 /-- Proper mod‑8 torsion quotient. -/
 abbrev Torsion8 := ZMod 8
@@ -3485,7 +3485,6 @@ theorem tv_contract_of_uniform_overlap {A : Matrix ι ι ℝ}
 end YM
 /-! ## φ support lemmas (ported example) -/
 namespace PhiSupport
-
 open Real
 
 lemma phi_squared : Constants.phi ^ 2 = Constants.phi + 1 := by
@@ -3864,7 +3863,6 @@ theorem sync_counts :
 /-- The beat-level clock-lag fraction implied by the 45-gap arithmetic: δ_time = 45/960 = 3/64. -/
 theorem delta_time_eq_3_div_64 : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
   norm_num
-
 /-! ### Beat-level API (arithmetic mapping to 8-beat cycles)
 
 This section exposes the synchronization facts as "beat" counts without importing
@@ -3888,7 +3886,7 @@ namespace Beat
   simp [beats, lcm_8_45_div_45]
 
 /-- Minimality: any time `t` that is simultaneously a multiple of 8 and 45 must be a
-multiple of the minimal joint duration `beats` (i.e., 360). -/
+    multiple of the minimal joint duration `beats` (i.e., 360). -/
 lemma minimal_sync_divides {t : Nat} (h8 : 8 ∣ t) (h45 : 45 ∣ t) : beats ∣ t := by
   simpa [beats] using Nat.lcm_dvd h8 h45
 
@@ -3986,7 +3984,6 @@ end AddGroupView
 
 end Gap45
 end IndisputableMonolith
-
 -- Duplicate Certification block removed; keeping the single canonical Certification above.
 
 namespace IndisputableMonolith
@@ -4480,7 +4477,6 @@ structure Witness where
   Z  : ℝ
   pass : Bool
 deriving Repr
-
 @[simp] def witness (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Witness :=
   let KA := K_A B
   let KB := K_B B
@@ -4514,7 +4510,6 @@ deriving Repr
 /-- Bohr radius a0 = ħ / (m_e c α). -/
 @[simp] def a0_bohr (B : BridgeData) : ℝ :=
   B.hbar / (m_e B * B.c * alpha)
-
 end BridgeData
 
 /-! ### Machine-checkable index (rendered, #eval-friendly) -/
@@ -4981,7 +4976,6 @@ structure ScalingModel where
 /-- Predicted ratio under the scaling model. -/
 @[simp] def predicted_ratio (M : ScalingModel) (tau_m1 tau_m2 tau_f : ℝ) : ℝ :=
   ((tau_m1 / tau_m2) ^ M.gamma) * M.f (tau_m1 / tau_f) (tau_m2 / tau_f)
-
 /-- Invariance under common rescaling of all times (c > 0). -/
 lemma predicted_ratio_rescale (M : ScalingModel)
   (c tau_m1 tau_m2 tau_f : ℝ) (hc : 0 < c) :
