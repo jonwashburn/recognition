@@ -30,4 +30,13 @@ lake exe ci_checks
 - The repository includes a GitHub Actions workflow that installs elan, builds the project, runs a smoke check, and guards against `sorry`/`admit` outside the heavy monolith file.
 - For monolith exploration, open `IndisputableMonolith.lean` in your editor with Lean support enabled.
 
+## Syncing the monolith from a canonical source
+
+Use the helper script to copy a canonical `IndisputableMonolith.lean` here and commit it:
+
+```bash
+./scripts/sync_monolith_from.sh /absolute/path/to/IndisputableMonolith.lean
+git push
+```
+
 
