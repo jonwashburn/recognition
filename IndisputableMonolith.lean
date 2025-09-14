@@ -817,7 +817,16 @@ def step (P : Program) (s : State) : State :=
 lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod := by
   dsimp [step, bumpBreath, breathPeriod]
   have hpos : 0 < (1024 : Nat) := by decide
-  split <;> simp [Nat.mod_lt, hpos]
+  split
+  · -- halted branch: step returns s; breath unchanged but mod bound applies
+    intro
+    have : s.breath % 1024 < 1024 := Nat.mod_lt _ hpos
+    simpa using this
+  · -- running branch: breath' = (s'.breath + 1) % 1024
+    intro
+    have : (s.breath + 1) % 1024 < 1024 := Nat.mod_lt _ hpos
+    -- after single step, breath of s' is s.breath+1
+    simpa using this
 
 end LNAL
 
