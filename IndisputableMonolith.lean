@@ -626,7 +626,7 @@ noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
 
 end ConeBound
 
-/-- Discrete light-cone bound (speed ≤ c from per-step bounds). -/
+/-! Discrete light-cone bound (speed ≤ c from per-step bounds). -/
 namespace LightCone
 
 open Real
@@ -682,7 +682,7 @@ end StepBounds
 
 end LightCone
 
-/-- Maxwell DEC bridge (scaffold). -/
+/-! Maxwell DEC bridge (scaffold). -/
 namespace MaxwellDEC
 
 /-- Oriented k-simplex (abstract id). -/
@@ -739,7 +739,7 @@ structure PEC (β : Type) where
 
 end MaxwellDEC
 
-/-- LNAL machine scaffold (6 registers, 16 opcodes, 1024-breath). -/
+/-! LNAL machine scaffold (6 registers, 16 opcodes, 1024-breath). -/
 namespace LNAL
 
 abbrev Reg := Fin 6
@@ -2604,6 +2604,15 @@ open Real
 /-- Golden ratio φ and convenience. -/
 def phi : ℝ := (1 + Real.sqrt 5) / 2
 
+  /-- Golden ratio is positive. -/
+  lemma phi_pos : 0 < phi := by
+    have hs : 0 < Real.sqrt (5 : ℝ) := Real.sqrt_pos.mpr (by norm_num)
+    have hsum : 0 < (1 : ℝ) + Real.sqrt 5 := by
+      have : 0 ≤ (1 : ℝ) := by norm_num
+      exact add_pos_of_nonneg_of_pos this hs
+    have hden : 0 < (2 : ℝ) := by norm_num
+    simpa [phi] using (div_pos hsum hden)
+
 /-- Damping seed A^2 = P · φ^{−2γ} (P,γ are fixed per field sector). -/
 def A2 (P γ : ℝ) : ℝ := P * (phi) ^ (-(2 * γ))
 
@@ -2644,23 +2653,49 @@ def A2_QCD : ℝ := A2 ((2 : ℝ) / 9) ((2 : ℝ) / 3)
 /-- Convergence guard: require 1 − 2 A^2 > 0 for denominators. -/
 def convergent (a2 : ℝ) : Prop := 1 - 2 * a2 > 0
 
+/-
+  TODO(convergence-QED): it suffices to show `phi ≥ 1` and apply
+  `Real.rpow_le_one_of_one_le_of_nonpos` to bound `phi^(−4/3) ≤ 1`, hence
+  `2*A2_QED ≤ 2*(1/18) < 1`. Provide a clean `phi_ge_one` proof via
+  `sqrt` monotonicity: from `1 ≤ 5` deduce `sqrt 1 ≤ sqrt 5`, thus
+  `phi = (1+sqrt 5)/2 ≥ (1+1)/2 = 1`.
+-/
 lemma convergent_QED : convergent A2_QED := by
   admit
 
+/-
+  TODO(core-positivity): for `n>0`, show `(3*a2)^n > 0` from `ha` and
+  `Real.rpow_nonneg_of_nonneg`, and denominator positive from `hc`.
+  This yields `0 < (num / den)`.
+-/
 lemma sigmaCore_pos {n : ℕ} {a2 : ℝ} (hc : convergent a2) (hn : 0 < n) (ha : 0 ≤ a2) :
   0 < sigmaCore n a2 := by
   admit
 /-- Convergence for the QCD preset: 1 − 2 A2_QCD > 0. -/
+/-
+  TODO(convergence-QCD): identical to QED with `P=2/9`, use
+  `phi^(−4/3) ≤ 1` to bound `2*A2_QCD ≤ 4/9 < 1`.
+-/
 lemma convergent_QCD : convergent A2_QCD := by
   admit
 
 /-- Nonnegativity of A2_QED. -/
 lemma A2_QED_nonneg : 0 ≤ A2_QED := by
-  admit
+  unfold A2_QED A2
+  have hφ : 0 < phi := phi_pos
+  have hr : 0 < phi ^ (-(2 * ((2 : ℝ) / 3))) := by
+    simpa using (Real.rpow_pos_of_pos hφ (-(2 * ((2 : ℝ) / 3))))
+  have hP : 0 ≤ ((1 : ℝ) / 18) := by norm_num
+  exact mul_nonneg hP (le_of_lt hr)
 
 /-- Nonnegativity of A2_QCD. -/
 lemma A2_QCD_nonneg : 0 ≤ A2_QCD := by
-  admit
+  unfold A2_QCD A2
+  have hφ : 0 < phi := phi_pos
+  have hr : 0 < phi ^ (-(2 * ((2 : ℝ) / 3))) := by
+    simpa using (Real.rpow_pos_of_pos hφ (-(2 * ((2 : ℝ) / 3))))
+  have hP : 0 ≤ ((2 : ℝ) / 9) := by norm_num
+  exact mul_nonneg hP (le_of_lt hr)
 
 /-- With eye and half‑voxel enabled (no face), the selected factors reduce to
     core * (1/2)^n * (23/24)^n. -/
