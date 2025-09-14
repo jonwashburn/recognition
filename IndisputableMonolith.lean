@@ -1069,18 +1069,15 @@ theorem gaugeClass_eq_of_same_delta_basepoint
   (x0 : M.U) (hbase : p x0 = q x0) :
   Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 p) =
   Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 q) := by
-  -- T4 componentwise uniqueness with basepoint equality gives equality (c = 0)
+  -- Using T4 uniqueness: with basepoint equality, we actually have p = q on the component
   apply Quot.sound
   refine ⟨0, ?_⟩
   intro yc
-  have hconst : ∃ c : ℤ, p yc.y = q yc.y + c :=
-    Potential.T4_unique_up_to_const_on_component (M:=M) (δ:=δ)
-      (p:=p) (q:=q) (x0:=x0) (hbase:=hbase) yc.reachable
-  rcases hconst with ⟨c, hc⟩
-  -- Gauge equality allows any constant; choose c=0 since classes are quotient by constants
-  -- Rewrite with the provided constant c and coerce to the case c=0 by definition of GaugeEq
-  -- Here we directly use the constant returned by T4
-  simpa [restrictToComponent, hc]
+  -- specialize the equality-on-component form (no constant) with basepoint equality
+  have h_eq : p yc.y = q yc.y :=
+    Potential.T4_unique_on_component (M:=M) (δ:=δ) (p:=p) (q:=q)
+      hp hq (x0:=x0) hbase yc.reachable
+  simpa [restrictToComponent, h_eq]
 
 /-- T3 bridge (alias): `Conserves` is the discrete continuity equation on closed chains. -/
 abbrev DiscreteContinuity (L : Ledger M) : Prop := Conserves L
@@ -1110,14 +1107,15 @@ lemma schedule_unique [AtomicTick M] {t : Nat} {u : M.U}
   (hu : AtomicTick.postedAt (M:=M) t u) : u = schedule (M:=M) t := by
   classical
   rcases (AtomicTick.unique_post (M:=M) t) with ⟨w, hw, huniq⟩
-  have : u = w := huniq u hu
-  simpa [schedule, Classical.choose] using this
+  have hu' : u = w := huniq u hu
+  have hs : schedule (M:=M) t = w := huniq _ (postedAt_schedule (M:=M) t)
+  exact Eq.trans hu' hs.symm
 
 end ClassicalBridge
 
 namespace ClassicalBridge
 
-open Measure Theory
+open MeasureTheory
 
 variable {M : RecognitionStructure}
 
