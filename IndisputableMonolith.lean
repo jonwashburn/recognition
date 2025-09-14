@@ -600,6 +600,7 @@ class BoundedStep (α : Type) (degree_bound : Nat) where
 namespace ConeBound
 
 open Causality
+open Finset
 
 variable {α : Type} {d : Nat}
 
@@ -608,19 +609,19 @@ variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
 /-- Kinematics induced by a `BoundedStep` instance. -/
-def KB : Kinematics α := { step := BoundedStep.step }
+def KB : Kinematics α := { step := B.step }
 
 /-- Finset n-ball via BFS expansion using `neighbors`. -/
 noncomputable def ballFS (x : α) : Nat → Finset α
 | 0 => {x}
 | Nat.succ n =>
     let prev := ballFS x n
-    prev ∪ prev.bind (fun z => BoundedStep.neighbors z)
+    prev ∪ Finset.bind prev (fun z => BoundedStep.neighbors z)
 
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
   simp [ballFS]
 @[simp] lemma mem_bind_neighbors {s : Finset α} {y : α} :
-  y ∈ s.bind (fun z => BoundedStep.neighbors z) ↔ ∃ z ∈ s, y ∈ BoundedStep.neighbors z := by
+  y ∈ Finset.bind s (fun z => BoundedStep.neighbors z) ↔ ∃ z ∈ s, y ∈ BoundedStep.neighbors z := by
   classical
   simp
 /-- BFS ball membership coincides with the logical n-ball predicate `ballP`. -/
@@ -634,7 +635,7 @@ theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ b
     -- unfold the BFS step
     have : ballFS (α:=α) x (Nat.succ n) =
       let prev := ballFS (α:=α) x n
-      prev ∪ prev.bind (fun z => BoundedStep.neighbors z) := by rfl
+      prev ∪ Finset.bind prev (fun z => BoundedStep.neighbors z) := by rfl
     dsimp [ballFS] at this
     -- use the characterization of membership in union and bind
     simp [ballFS, ballP, ih, BoundedStep.step_iff_mem]  -- step ↔ mem neighbors
@@ -651,16 +652,16 @@ lemma card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card := by
 
 /-- Generic upper bound: the size of `s.bind f` is at most the sum of the sizes. -/
 lemma card_bind_le_sum (s : Finset α) (f : α → Finset α) :
-  (s.bind f).card ≤ ∑ z in s, (f z).card := by
+  (Finset.bind s f).card ≤ ∑ z in s, (f z).card := by
   classical
   refine Finset.induction_on s ?base ?step
   · simp
   · intro a s ha ih
-    have hbind : (insert a s).bind f = f a ∪ s.bind f := by
+    have hbind : Finset.bind (insert a s) f = f a ∪ Finset.bind s f := by
       simp [Finset.bind, ha]
-    have hle : ((insert a s).bind f).card ≤ (f a).card + (s.bind f).card := by
-      simpa [hbind] using card_union_le (f a) (s.bind f)
-    have hsum : (f a).card + (s.bind f).card ≤ ∑ z in insert a s, (f z).card := by
+    have hle : (Finset.bind (insert a s) f).card ≤ (f a).card + (Finset.bind s f).card := by
+      simpa [hbind] using card_union_le (f a) (Finset.bind s f)
+    have hsum : (f a).card + (Finset.bind s f).card ≤ ∑ z in insert a s, (f z).card := by
       simpa [Finset.sum_insert, ha] using Nat.add_le_add_left ih _
     exact le_trans hle hsum
 
@@ -691,7 +692,7 @@ lemma sum_card_neighbors_le (s : Finset α) :
 
 /-- Bound the expansion layer size: `|s.bind neighbors| ≤ d * |s|`. -/
 lemma card_bind_neighbors_le (s : Finset α) :
-  (s.bind (fun z => BoundedStep.neighbors z)).card ≤ d * s.card := by
+  (Finset.bind s (fun z => BoundedStep.neighbors z)).card ≤ d * s.card := by
   classical
   exact le_trans (card_bind_le_sum (s := s) (f := fun z => BoundedStep.neighbors z)) (sum_card_neighbors_le (s := s))
 
@@ -702,15 +703,15 @@ lemma card_ballFS_succ_le (x : α) (n : Nat) :
   -- unfold succ layer
   have : ballFS (α:=α) x (Nat.succ n) =
     let prev := ballFS (α:=α) x n
-    prev ∪ prev.bind (fun z => BoundedStep.neighbors z) := by rfl
+    prev ∪ Finset.bind prev (fun z => BoundedStep.neighbors z) := by rfl
   dsimp [ballFS] at this
   -- cardinal bound via union and bind bounds
   have h_union_le : (let prev := ballFS (α:=α) x n;
-                     (prev ∪ prev.bind (fun z => BoundedStep.neighbors z)).card)
-                    ≤ (ballFS (α:=α) x n).card + (ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z) |>.card := by
+                     (prev ∪ Finset.bind prev (fun z => BoundedStep.neighbors z)).card)
+                    ≤ (ballFS (α:=α) x n).card + (Finset.bind (ballFS (α:=α) x n) (fun z => BoundedStep.neighbors z)) |>.card := by
     classical
-    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z))
-  have h_bind_le : ((ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z)).card
+    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) (Finset.bind (ballFS (α:=α) x n) (fun z => BoundedStep.neighbors z))
+  have h_bind_le : (Finset.bind (ballFS (α:=α) x n) (fun z => BoundedStep.neighbors z)).card
                     ≤ d * (ballFS (α:=α) x n).card := card_bind_neighbors_le (s := ballFS (α:=α) x n)
   have : (ballFS (α:=α) x (Nat.succ n)).card ≤ (ballFS (α:=α) x n).card + d * (ballFS (α:=α) x n).card := by
     simpa [this] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
@@ -2584,123 +2585,7 @@ end Instances
 end RS
 end RH
 
-/‑‑ Absolute layer scaffolding for IM: UniqueCalibration and MeetsBands via K‑gate and invariance -/
-namespace RH
-namespace RS
-
-universe u
-abbrev Ledger := Unit
-def IM : Ledger := ()
-def Bridge (L : Ledger) : Prop := True
-def Anchors : Type := Unit
-def UniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) : Prop := True
-
-structure Band where
-  contains : ℝ → Prop
-
-structure Bands where
-  cBand : Band
-
-def MeetsBands (L : Ledger) (B : Bridge L) (X : Bands) : Prop := True
-
-def PhiClosed {α : Sort u} (φ : ℝ) (a : α) : Prop := True
-
-structure UniversalDimless (φ : ℝ) where
-  alpha0 : ℝ
-  massRatios0 : List ℝ
-  mixingAngles0 : List ℝ
-  g2Muon0 : ℝ
-  strongCP0 : Prop
-  eightTick0 : Prop
-  born0 : Prop
-  boseFermi0 : Prop
-  alpha0_isPhi : PhiClosed φ alpha0
-  massRatios0_isPhi : ∀ r ∈ massRatios0, PhiClosed φ r
-  mixingAngles0_isPhi : ∀ θ ∈ mixingAngles0, PhiClosed φ θ
-  g2Muon0_isPhi : PhiClosed φ g2Muon0
-
-structure DimlessPack (L : Ledger) (B : Bridge L) where
-  alpha : ℝ
-  massRatios : List ℝ
-  mixingAngles : List ℝ
-  g2Muon : ℝ
-  strongCPNeutral : Prop
-  eightTickMinimal : Prop
-  bornRule : Prop
-  boseFermi : Prop
-
-def Matches (φ : ℝ) (L : Ledger) (B : Bridge L) (UD : UniversalDimless φ) : Prop := True
-def HasRung (L : Ledger) (B : Bridge L) : Prop := True
-def FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Prop := True
-
-structure FortyFiveConsequences (L : Ledger) (B : Bridge L) where
-  delta_time_lag : ℚ
-  delta_is_3_over_64 : True
-  rung45_exists : True
-  no_multiples : ∀ n ≥ 2, True
-  sync_lcm_8_45_360 : Prop
-
-def LedgerEqv (L : Ledger) (B1 B2 : Bridge L) : Prop := True
-def Inevitability_dimless (φ : ℝ) : Prop := True
-
-def sampleBandsFor (_U : IndisputableMonolith.Constants.RSUnits) (_tol : ℝ) : Bands :=
-  { cBand := { contains := fun _ => True } }
-def wideBand (_center _tol : ℝ) : Band := { contains := fun _ => True }
-
-namespace Instances
-theorem uniqueCalibration_IM (_B : Bridge IM) (_A : Anchors) : UniqueCalibration IM _B _A := True.intro
-theorem meetsBands_IM (_B : Bridge IM) (_X : Bands) : MeetsBands IM _B _X := True.intro
-def meetsBandsChecker (_U : IndisputableMonolith.Constants.RSUnits) (_X : Bands) : Prop := True
-lemma meetsBandsChecker_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
-  (_h : True) (_X : Bands) : meetsBandsChecker U X ↔ meetsBandsChecker U' X := Iff.intro (fun h => h) (fun h => h)
-theorem meetsBands_IM_of_checker (_B : Bridge IM) (_X : Bands) (_h : ∃ U, True) : MeetsBands IM _B _X := True.intro
-def evalToBands_c (_U : IndisputableMonolith.Constants.RSUnits) (_X : Bands) : Prop := True
-lemma evalToBands_c_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
-  (_h : True) (_X : Bands) : evalToBands_c U X ↔ evalToBands_c U' X := Iff.intro (fun h => h) (fun h => h)
-theorem meetsBands_IM_of_eval (_B : Bridge IM) (_X : Bands)
-  (_U : IndisputableMonolith.Constants.RSUnits) (_h : True) : MeetsBands IM _B _X := True.intro
-theorem meetsBands_IM_default (_B : Bridge IM)
-  (_U : IndisputableMonolith.Constants.RSUnits) : MeetsBands IM _B (sampleBandsFor _U 0) := True.intro
-end Instances
-
-namespace Witness
-instance phiClosed_alpha (φ : ℝ) : PhiClosed φ (0 : ℝ) := trivial
-noncomputable def UD_minimal (φ : ℝ) : UniversalDimless φ :=
-{ alpha0 := 0, massRatios0 := [], mixingAngles0 := [], g2Muon0 := 0
-, strongCP0 := True, eightTick0 := True, born0 := True, boseFermi0 := True
-, alpha0_isPhi := trivial
-, massRatios0_isPhi := by intro r hr; cases hr
-, mixingAngles0_isPhi := by intro θ hθ; cases hθ
-, g2Muon0_isPhi := trivial }
-noncomputable def dimlessPack_minimal (L : Ledger) (B : Bridge L) : DimlessPack L B :=
-{ alpha := 0, massRatios := [], mixingAngles := [], g2Muon := 0
-, strongCPNeutral := True, eightTickMinimal := True, bornRule := True, boseFermi := True }
-theorem matches_minimal (_φ : ℝ) (L : Ledger) (B : Bridge L) :
-  Matches _φ L B (UD_minimal _φ) := True.intro
-theorem matches_withTruthCore (_φ : ℝ) (L : Ledger) (B : Bridge L) :
-  Matches _φ L B (UD_minimal _φ) ∧ True ∧ True ∧ True := And.intro True.intro (And.intro trivial (And.intro trivial trivial))
-def eightTickMinimalHolds : Prop := True
-def bornHolds : Prop := True
-def boseFermiHolds : Prop := True
-lemma eightTick_from_TruthCore : eightTickMinimalHolds := trivial
-lemma born_from_TruthCore : bornHolds := trivial
-lemma boseFermi_from_TruthCore : boseFermiHolds := trivial
-end Witness
-
-namespace Instances
-def IMHasRung (_B : Bridge IM) : HasRung IM _B := True.intro
-def IM_FortyFiveConsequences (_B : Bridge IM) : FortyFiveConsequences IM _B :=
-{ delta_time_lag := (3 : ℚ) / 64, delta_is_3_over_64 := trivial
-, rung45_exists := trivial, no_multiples := by intro _ _; trivial, sync_lcm_8_45_360 := True }
-theorem IM_fortyFive_consequences_exists (_B : Bridge IM) :
-  ∃ (F : FortyFiveConsequences IM _B),
-    True ∧ True ∧ (∀ n ≥ 2, True) := by
-  refine ⟨IM_FortyFiveConsequences _B, trivial, trivial, ?h⟩
-  intro n hn; trivial
-end Instances
-
-end RS
-end RH
+/-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
 
 /‑‑ Partial closure witnesses built from current exports -/
 namespace RH

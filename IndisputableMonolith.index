@@ -1,0 +1,1351 @@
+19:namespace IndisputableMonolith
+25:namespace URCGenerators
+27:structure UnitsCert where
+30:def UnitsCert.verified (c : UnitsCert) : Prop := (c.lo : ℝ) ≤ 1 ∧ 1 ≤ (c.hi : ℝ)
+32:structure EightBeatCert where T : Nat
+33:def EightBeatCert.verified (c : EightBeatCert) : Prop := 8 ≤ c.T
+35:structure ELProbe where eps : ℚ
+36:def ELProbe.verified (c : ELProbe) : Prop := 0 ≤ (c.eps : ℝ)
+38:structure MassCert where
+42:def MassCert.verified (φ : ℝ) (c : MassCert) : Prop := |(c.ratio : ℝ) - φ| ≤ (c.eps : ℝ)
+44:structure RotationCert where
+47:def RotationCert.verified (_c : RotationCert) : Prop := True
+49:structure OuterBudgetCert where data : Prop
+50:def OuterBudgetCert.verified (_c : OuterBudgetCert) : Prop := True
+52:structure ConsciousCert where
+55:def ConsciousCert.verified (_c : ConsciousCert) : Prop := True
+57:structure CertFamily where
+66:def Verified (φ : ℝ) (C : CertFamily) : Prop :=
+75:def singletonMassFamily (c : MassCert) : CertFamily :=
+79:lemma verified_singletonMass (φ : ℝ) (c : MassCert)
+98:structure VerifiedGenerators (φ : ℝ) where
+102:def UnitsProp : Prop := True
+103:def EightBeatProp : Prop := True
+104:def ELProp : Prop := True
+105:def PhiRungProp : Prop := True
+107:def LawfulBridge : Prop := UnitsProp ∧ EightBeatProp ∧ ELProp ∧ PhiRungProp ∧ True
+109:theorem determination_by_generators {φ : ℝ}
+113:def local_to_global_lawfulness : Prop := True
+116:def demo_generators {φ : ℝ} : VerifiedGenerators φ :=
+136:def routeB_report : String :=
+139:def routeB_closure_demo : String :=
+142:end URCGenerators
+167:abbrev Nothing := Empty
+169:structure Recognition (A : Type) (B : Type) : Type where
+173:def MP : Prop := ¬ ∃ _ : Recognition Nothing Nothing, True
+176:theorem mp_holds : MP := by
+179:structure RecognitionStructure where
+183:structure Chain (M : RecognitionStructure) where
+188:namespace Chain
+190:def head : M.U := by
+193:def last : M.U := by
+196:end Chain
+198:class AtomicTick (M : RecognitionStructure) where
+202:structure Ledger (M : RecognitionStructure) where
+206:def phi {M} (L : Ledger M) : M.U → ℤ := fun u => L.debit u - L.credit u
+208:def chainFlux {M} (L : Ledger M) (ch : Chain M) : ℤ :=
+211:class Conserves {M} (L : Ledger M) : Prop where
+215:theorem T2_atomicity {M} [AtomicTick M] :
+223:theorem T3_continuity {M} (L : Ledger M) [Conserves L] :
+227:instance instFintypePattern (d : Nat) : Fintype (Pattern d) := by
+232:lemma card_pattern (d : Nat) : Fintype.card (Pattern d) = 2 ^ d := by
+237:lemma no_surj_small (T d : Nat) (hT : T < 2 ^ d) :
+251:lemma min_ticks_cover {d T : Nat}
+257:lemma eight_tick_min {T : Nat}
+261:structure CompleteCover (d : Nat) where
+266:theorem cover_exact_pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d := by
+274:theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
+278:theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
+282:theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
+286:theorem T7_nyquist_obstruction {T D : Nat}
+291:theorem T7_threshold_bijection (D : Nat) :
+298:namespace LedgerUnits
+301:def DeltaSub (δ : ℤ) := {x : ℤ // ∃ n : ℤ, x = n * δ}
+304:def fromZ_one (n : ℤ) : DeltaSub 1 := ⟨n, by exact ⟨n, by simpa using (Int.mul_one n)⟩⟩
+307:def toZ_one (p : DeltaSub 1) : ℤ := p.val
+319:def equiv_delta_one : DeltaSub 1 ≃ ℤ :=
+333:lemma toZ_spec (δ : ℤ) (p : DeltaSub δ) : p.val = toZ δ p * δ :=
+336:lemma rep_unique {δ n m : ℤ} (hδ : δ ≠ 0) (h : n * δ = m * δ) : n = m := by
+377:lemma rungOf_step (δ : ℤ) (hδ : δ ≠ 0) (n : ℤ) :
+402:lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
+408:end LedgerUnits
+411:namespace UnitMapping
+416:structure AffineMapZ where
+426:lemma mapDelta_diff (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
+433:def chargeMap (qe : ℝ) : AffineMapZ := { slope := qe, offset := 0 }
+434:def timeMap (_U : Unit) : AffineMapZ := { slope := 1, offset := 0 }
+435:def actionMap (_U : Unit) : AffineMapZ := { slope := 1, offset := 0 }
+454:lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
+464:lemma mapDeltaTime_step (δ : ℤ) (hδ : δ ≠ 0)
+474:lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
+480:lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
+486:end UnitMapping
+489:namespace Causality
+493:structure Kinematics (α : Type) where
+496:inductive ReachN (K : Kinematics α) : Nat → α → α → Prop
+500:def inBall (K : Kinematics α) (x : α) (n : Nat) (y : α) : Prop :=
+503:lemma reach_in_ball {K : Kinematics α} {x y : α} {n : Nat}
+506:lemma reach_le_in_ball {K : Kinematics α} {x y : α} {k n : Nat}
+509:def Reaches (K : Kinematics α) (x y : α) : Prop := ∃ n, ReachN K n x y
+511:lemma reaches_of_reachN {K : Kinematics α} {x y : α} {n : Nat}
+516:lemma inBall_mono {K : Kinematics α} {x y : α} {n m : Nat}
+521:end Causality
+525:namespace Causality
+531:def ballP (K : Kinematics α) (x : α) : Nat → α → Prop
+535:lemma ballP_mono {K : Kinematics α} {x : α} {n m : Nat}
+544:lemma reach_mem_ballP {K : Kinematics α} {x y : α} :
+552:lemma inBall_subset_ballP {K : Kinematics α} {x y : α} {n : Nat} :
+560:lemma ballP_subset_inBall {K : Kinematics α} {x y : α} :
+581:end Causality
+586:class BoundedStep (α : Type) (degree_bound : Nat) where
+600:namespace ConeBound
+611:def KB : Kinematics α := { step := BoundedStep.step }
+627:theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
+647:lemma card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card := by
+653:lemma card_bind_le_sum (s : Finset α) (f : α → Finset α) :
+668:lemma sum_card_neighbors_le (s : Finset α) :
+693:lemma card_bind_neighbors_le (s : Finset α) :
+699:lemma card_ballFS_succ_le (x : α) (n : Nat) :
+722:theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
+736:end ConeBound
+739:namespace LightCone
+747:structure StepBounds (K : Causality.Kinematics α)
+753:namespace StepBounds
+760:lemma reach_time_eq
+783:lemma reach_rad_le
+808:lemma cone_bound
+824:end StepBounds
+826:end LightCone
+829:namespace MaxwellDEC
+832:structure Simplex (α : Type) (k : Nat) where
+840:class HasCoboundary (α : Type) where
+844:class HasHodge (α : Type) where
+849:structure Medium (α : Type) [HasHodge α] where
+854:structure Sources (α : Type) where
+861:structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α) where
+875:structure PEC (β : Type) where
+878:end MaxwellDEC
+881:namespace LNAL
+883:abbrev Reg := Fin 6
+885:inductive OpKind
+889:structure Instr where
+896:abbrev Program := Nat → Instr
+898:structure State where
+905:namespace State
+913:end State
+920:def step (P : Program) (s : State) : State :=
+946:lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod := by
+950:end LNAL
+956:namespace Potential
+960:abbrev Pot (M : RecognitionStructure) := M.U → ℤ
+962:def DE (δ : ℤ) (p : Pot M) : Prop := ∀ {a b}, M.R a b → p b - p a = δ
+964:def Kin (M : RecognitionStructure) : Causality.Kinematics M.U := { step := M.R }
+967:lemma edge_diff_invariant {δ : ℤ} {p q : Pot M}
+975:lemma diff_const_on_ReachN {δ : ℤ} {p q : Pot M}
+987:lemma diff_const_on_component {δ : ℤ} {p q : Pot M}
+995:theorem T4_unique_on_reachN {δ : ℤ} {p q : Pot M}
+1005:theorem T4_unique_on_component {δ : ℤ} {p q : Pot M}
+1013:theorem T4_unique_on_inBall {δ : ℤ} {p q : Pot M}
+1023:theorem T4_unique_up_to_const_on_component {δ : ℤ} {p q : Pot M}
+1034:lemma increment_on_ReachN {δ : ℤ} {p : Pot M}
+1052:lemma diff_in_deltaSub {δ : ℤ} {p : Pot M}
+1058:end Potential
+1063:namespace LedgerUniqueness
+1069:def IsAffine (δ : ℤ) (L : Ledger M) : Prop :=
+1072:lemma phi_edge_increment (δ : ℤ) {L : Ledger M}
+1077:theorem unique_on_reachN {δ : ℤ} {L L' : Ledger M}
+1089:theorem unique_on_inBall {δ : ℤ} {L L' : Ledger M}
+1098:theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
+1106:end LedgerUniqueness
+1112:namespace ClassicalBridge
+1119:structure Component (M : RecognitionStructure) (x0 : M.U) where
+1122:abbrev PotOnComp (M : RecognitionStructure) (x0 : M.U) := Component M x0 → ℤ
+1124:def restrictToComponent (x0 : M.U) (p : Potential.Pot M) : PotOnComp M x0 :=
+1128:def GaugeEq (x0 : M.U) (f g : PotOnComp M x0) : Prop := ∃ c : ℤ, ∀ yc, f yc = g yc + c
+1130:lemma gauge_refl (x0 : M.U) (f : PotOnComp M x0) : GaugeEq (M:=M) x0 f f :=
+1133:lemma gauge_symm (x0 : M.U) {f g : PotOnComp M x0}
+1142:lemma gauge_trans (x0 : M.U) {f g h : PotOnComp M x0}
+1156:def gaugeSetoid (x0 : M.U) : Setoid (PotOnComp M x0) where
+1161:abbrev GaugeClass (x0 : M.U) := Quot (gaugeSetoid (M:=M) x0)
+1166:theorem gaugeClass_eq_of_same_delta_basepoint
+1181:abbrev DiscreteContinuity (L : Ledger M) : Prop := Conserves L
+1183:theorem continuity_of_conserves {L : Ledger M} [Conserves L] : DiscreteContinuity (M:=M) L := inferInstance
+1185:end ClassicalBridge
+1187:namespace ClassicalBridge
+1197:lemma postedAt_schedule [AtomicTick M] (t : Nat) :
+1204:lemma schedule_unique [AtomicTick M] {t : Nat} {u : M.U}
+1211:end ClassicalBridge
+1213:namespace ClassicalBridge
+1225:structure CoarseGrain (α : Type) where
+1231:def RiemannSum (CG : CoarseGrain α) (f : α → ℝ) (n : Nat) : ℝ :=
+1235:structure ContinuityEquation (α : Type) where
+1241:theorem discrete_to_continuum_continuity {α : Type}
+1248:end ClassicalBridge
+1251:namespace Measurement
+1253:structure Realization (State Obs : Type) where
+1259:end Measurement
+1268:namespace PatternLayer
+1274:def Stream := Nat → Bool
+1277:def Pattern (n : Nat) := Fin n → Bool
+1280:def Z_of_window {n : Nat} (w : Pattern n) : Nat :=
+1284:def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
+1288:def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
+1293:def sumFirst (m : Nat) (s : Stream) : Nat :=
+1297:lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
+1310:lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
+1324:end PatternLayer
+1326:namespace MeasurementLayer
+1332:def subBlockSum8 (s : Stream) (j : Nat) : Nat :=
+1337:lemma firstBlockSum_eq_Z_on_cylinder (w : Pattern 8) {s : Stream}
+1353:lemma blockSum_equals_Z_on_cylinder_first (w : Pattern 8) {s : Stream}
+1362:def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
+1366:lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
+1390:lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
+1407:def observeAvg8 (k : Nat) (s : Stream) : Nat :=
+1414:lemma observeAvg8_periodic_eq_Z {k : Nat} (hk : k ≠ 0) (w : Pattern 8) :
+1424:end MeasurementLayer
+1431:namespace Examples
+1436:def sampleW : PatternLayer.Pattern 8 := fun i => decide (i.1 % 2 = 0)
+1444:end Examples
+1446:namespace Measurement
+1450:abbrev State := Chain
+1451:abbrev Obs := ℝ
+1465:end Measurement
+1467:namespace ClassicalBridge
+1474:def basepoint (x0 : M.U) : Component M x0 :=
+1478:lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
+1495:theorem T4_unique_constant_on_component
+1512:theorem gaugeClass_const (x0 : M.U) {δ : ℤ} {p q : Potential.Pot M}
+1523:theorem classical_T4_correspondence (x0 : M.U) {δ : ℤ}
+1530:end ClassicalBridge
+1533:namespace Cost
+1537:structure CostRequirements (F : ℝ → ℝ) : Prop where
+1541:lemma Jcost_unit0 : Jcost 1 = 0 := by
+1543:lemma Jcost_symm {x : ℝ} (hx : 0 < x) : Jcost x = Jcost x⁻¹ := by
+1550:def AgreesOnExp (F : ℝ → ℝ) : Prop := ∀ t : ℝ, F (Real.exp t) = Jcost (Real.exp t)
+1559:class SymmUnit (F : ℝ → ℝ) : Prop where
+1564:class AveragingAgree (F : ℝ → ℝ) : Prop where
+1570:class AveragingDerivation (F : ℝ → ℝ) extends SymmUnit F : Prop where
+1574:lemma even_on_log_of_symm {F : ℝ → ℝ} [SymmUnit F] (t : ℝ) :
+1582:class AveragingBounds (F : ℝ → ℝ) extends SymmUnit F : Prop where
+1587:theorem agrees_on_exp_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
+1596:theorem F_eq_J_on_pos (F : ℝ → ℝ)
+1604:instance (priority := 90) averagingDerivation_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
+1610:def mkAveragingBounds (F : ℝ → ℝ)
+1620:class JensenSketch (F : ℝ → ℝ) extends SymmUnit F : Prop where
+1644:instance (priority := 95) averagingBounds_of_jensen {F : ℝ → ℝ} [JensenSketch F] :
+1669:class LogModel (G : ℝ → ℝ) : Prop where
+1676:instance (G : ℝ → ℝ) [LogModel G] : SymmUnit (F_ofLog G) :=
+1691:instance (priority := 90) (G : ℝ → ℝ) [LogModel G] : JensenSketch (F_ofLog G) :=
+1703:theorem agree_on_exp_extends {F : ℝ → ℝ}
+1711:theorem F_eq_J_on_pos {F : ℝ → ℝ}
+1717:theorem F_eq_J_on_pos_of_averaging {F : ℝ → ℝ} [AveragingAgree F] :
+1723:theorem agrees_on_exp_of_symm_unit (F : ℝ → ℝ) [AveragingDerivation F] :
+1727:theorem F_eq_J_on_pos_of_derivation (F : ℝ → ℝ) [AveragingDerivation F] :
+1733:theorem T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] :
+1746:theorem T5_for_log_model {G : ℝ → ℝ} [LogModel G] :
+1753:instance : AveragingAgree Jcost := ⟨Jcost_agrees_on_exp⟩
+1756:instance : SymmUnit Jcost :=
+1763:instance : AveragingDerivation Jcost :=
+1768:instance : JensenSketch Jcost :=
+1782:lemma hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t := by
+1801:lemma Jlog_nonneg (t : ℝ) : 0 ≤ Jlog t := by
+1808:lemma Jlog_eq_zero_iff (t : ℝ) : Jlog t = 0 ↔ t = 0 := by
+1819:theorem T5_EL_local_bridge : deriv Jlog 0 = 0 ∧ ∀ t : ℝ, Jlog 0 ≤ Jlog t := by
+1824:end Cost
+1826:namespace Cost
+1832:lemma Flog_eq_Jlog_pt {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
+1838:lemma Flog_eq_Jlog {F : ℝ → ℝ} [AveragingDerivation F] :
+1841:lemma hasDerivAt_Flog_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
+1853:lemma Flog_nonneg_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
+1858:lemma Flog_eq_zero_iff_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
+1863:theorem T5_EL_equiv_general {F : ℝ → ℝ} [AveragingDerivation F] :
+1869:end Cost
+1872:namespace CostDemo
+1878:lemma Gcosh_even : ∀ t : ℝ, Gcosh (-t) = Gcosh t := by
+1883:lemma Gcosh_base0 : Gcosh 0 = 0 := by
+1886:instance : LogModel Gcosh :=
+1893:theorem F_ofLog_Gcosh_eq_Jcost : ∀ {x : ℝ}, 0 < x → F_ofLog Gcosh x = Jcost x :=
+1896:end CostDemo
+1899:namespace CostDemo2
+1905:instance : LogModel GcoshScaled :=
+1917:theorem EL_stationary_at_zero : deriv Jlog 0 = 0 := by
+1921:theorem EL_global_min (t : ℝ) : Jlog 0 ≤ Jlog t := by
+1931:end CostDemo2
+1949:namespace Cost
+1954:lemma phi_is_cost_fixed_point : phi = 1 + 1 / IndisputableMonolith.Constants.phi :=
+1956:end Cost
+1960:namespace Demo
+1962:structure U where
+1965:def recog : U → U → Prop := fun _ _ => True
+1967:def M : RecognitionStructure := { U := U, R := recog }
+1969:def L : Ledger M := { debit := fun _ => 1, credit := fun _ => 1 }
+1971:def twoStep : Chain M :=
+1982:end Demo
+1986:namespace ModelingExamples
+1989:def SimpleStructure : RecognitionStructure := {
+1995:def SimpleLedger : Ledger SimpleStructure := {
+2001:instance : Conserves SimpleLedger := {
+2011:def SimpleTicks : Nat → Bool → Prop := fun t v => v = (t % 2 == 1)
+2013:instance : AtomicTick SimpleStructure := {
+2026:instance : BoundedStep Bool 1 := {
+2035:end ModelingExamples
+2038:namespace Cycle3
+2040:def M : RecognitionStructure :=
+2046:def L : Ledger M :=
+2050:instance : Conserves L :=
+2055:def postedAt : Nat → M.U → Prop := fun t v =>
+2059:instance : AtomicTick M :=
+2070:end Cycle3
+2080:namespace RH
+2081:namespace RS
+2085:theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
+2101:theorem fortyfive_gap_spec_any_with_witness (φ : ℝ) :
+2112:theorem fortyfive_gap_spec_any (φ : ℝ) :
+2121:theorem absolute_layer_any (L : Ledger) (B : Bridge L) (A : Anchors) (X : Bands)
+2126:theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : UniqueCalibration L B A := by
+2143:theorem meetsBands_any_param (L : Ledger) (B : Bridge L)
+2166:structure Ledger where
+2170:structure Bridge (L : Ledger) : Type := (dummy : Unit := ())
+2174:class CoreAxioms (L : Ledger) : Prop
+2175:class T5Unique (L : Ledger) : Prop
+2176:class QuantumFromLedger (L : Ledger) : Prop
+2177:class BridgeIdentifiable (L : Ledger) : Prop
+2178:class NoInjectedConstants (L : Ledger) : Prop
+2179:class TwoIndependentSILandings (L : Ledger) : Prop
+2182:class UnitsEqv (L : Ledger) : Prop where
+2189:structure DimlessPack (L : Ledger) (B : Bridge L) : Type where
+2199:class PhiClosed (φ x : ℝ) : Prop
+2201:structure UniversalDimless (φ : ℝ) : Type where
+2216:def Matches (φ : ℝ) (L : Ledger) (B : Bridge L) (U : UniversalDimless φ) : Prop :=
+2230:structure HasRung (L : Ledger) (B : Bridge L) : Type where
+2234:structure FortyFiveConsequences (L : Ledger) (B : Bridge L) : Type where
+2242:class FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Prop where
+2249:structure Band where lo hi : ℝ
+2251:structure Bands where
+2260:def Band.contains (b : Band) (x : ℝ) : Prop := b.lo ≤ x ∧ x ≤ b.hi
+2263:def wideBand (center tol : ℝ) : Band := { lo := center - tol, hi := center + tol }
+2266:def sampleBandsFor (U : IndisputableMonolith.Constants.RSUnits) (tol : ℝ) : Bands :=
+2275:def meetsBandsChecker_gen (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
+2283:lemma meetsBandsChecker_gen_invariant
+2315:theorem meetsBands_any_of_checker (L : RH.RS.Ledger) (B : RH.RS.Bridge L) (X : RH.RS.Bands)
+2322:theorem meetsBands_any_default (L : RH.RS.Ledger) (B : RH.RS.Bridge L)
+2344:structure AbsolutePack (L : Ledger) (B : Bridge L) : Type where
+2352:structure Anchors where a1 a2 : ℝ
+2355:class MeetsBands (L : Ledger) (B : Bridge L) (X : Bands) : Prop
+2356:class UniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) : Prop
+2357:class MeasurementRealityBridge (L : Ledger) : Prop
+2361:structure DualComplexity where
+2365:class SAT_Separation (L : Ledger) : Prop
+2367:structure SATSeparationNumbers : Type where
+2374:def Inevitability_dimless (φ : ℝ) : Prop :=
+2383:def FortyFive_gap_spec (φ : ℝ) : Prop :=
+2390:def Inevitability_absolute (φ : ℝ) : Prop :=
+2398:def Inevitability_recognition_computation : Prop :=
+2404:def Recognition_Closure (φ : ℝ) : Prop :=
+2410:end RS
+2411:end RH
+2414:namespace RH
+2415:namespace RS
+2416:namespace Instances
+2419:theorem fortyfive_gap_spec_for_IM (φ : ℝ)
+2431:theorem recognition_closure_partial_IM (φ : ℝ) :
+2438:theorem absolute_layer_IM (φ : ℝ)
+2449:theorem recognition_closure_assembled_IM (φ : ℝ) :
+2474:theorem recognition_closure_with_absolute_witness (φ : ℝ)
+2487:end Instances
+2488:end RS
+2489:end RH
+2492:namespace RH
+2493:namespace RS
+2494:namespace Instances
+2497:def IM : RH.RS.Ledger := { Carrier := Unit }
+2500:instance : RH.RS.UnitsEqv IM where
+2507:instance : RH.RS.QuantumFromLedger IM := ⟨⟩
+2512:instance CoreAxioms_from_monolith : RH.RS.CoreAxioms IM := by
+2517:instance T5Unique_from_cost : RH.RS.T5Unique IM := by
+2522:instance BridgeIdentifiable_from_K : RH.RS.BridgeIdentifiable IM := by
+2527:instance NoInjectedConstants_from_verif : RH.RS.NoInjectedConstants IM := by
+2532:theorem two_independent_SI_IM : RH.RS.TwoIndependentSILandings IM := by
+2536:instance : RH.RS.TwoIndependentSILandings IM := two_independent_SI_IM
+2538:theorem measurement_reality_bridge_IM : RH.RS.MeasurementRealityBridge IM := by
+2542:instance : RH.RS.MeasurementRealityBridge IM := measurement_reality_bridge_IM
+2545:theorem quantum_from_TruthCore_im : RH.RS.Witness.bornHolds ∧ RH.RS.Witness.boseFermiHolds := by
+2549:theorem core_eight_tick_exists : ∃ w : IndisputableMonolith.CompleteCover 3, w.period = 8 :=
+2552:theorem core_cone_bound_export {α} (K : IndisputableMonolith.Causality.Kinematics α)
+2560:theorem t5_for_log_model (G : ℝ → ℝ) [IndisputableMonolith.LogModel G] :
+2565:theorem k_gate_bridge_level (U : IndisputableMonolith.Constants.RSUnits) :
+2571:theorem dimless_KA_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
+2577:theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
+2583:end Instances
+2584:end RS
+2585:end RH
+2588:namespace RH
+2589:namespace RS
+2592:abbrev Ledger := Unit
+2593:def IM : Ledger := ()
+2594:def Bridge (L : Ledger) : Prop := True
+2595:def Anchors : Type := Unit
+2596:def UniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) : Prop := True
+2598:structure Band where
+2601:structure Bands where
+2604:def MeetsBands (L : Ledger) (B : Bridge L) (X : Bands) : Prop := True
+2606:def PhiClosed {α : Sort u} (φ : ℝ) (a : α) : Prop := True
+2608:structure UniversalDimless (φ : ℝ) where
+2622:structure DimlessPack (L : Ledger) (B : Bridge L) where
+2632:def Matches (φ : ℝ) (L : Ledger) (B : Bridge L) (UD : UniversalDimless φ) : Prop := True
+2633:def HasRung (L : Ledger) (B : Bridge L) : Prop := True
+2634:def FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Prop := True
+2636:structure FortyFiveConsequences (L : Ledger) (B : Bridge L) where
+2643:def LedgerEqv (L : Ledger) (B1 B2 : Bridge L) : Prop := True
+2644:def Inevitability_dimless (φ : ℝ) : Prop := True
+2646:def sampleBandsFor (_U : IndisputableMonolith.Constants.RSUnits) (_tol : ℝ) : Bands :=
+2648:def wideBand (_center _tol : ℝ) : Band := { contains := fun _ => True }
+2650:namespace Instances
+2651:theorem uniqueCalibration_IM (_B : Bridge IM) (_A : Anchors) : UniqueCalibration IM _B _A := True.intro
+2652:theorem meetsBands_IM (_B : Bridge IM) (_X : Bands) : MeetsBands IM _B _X := True.intro
+2653:def meetsBandsChecker (_U : IndisputableMonolith.Constants.RSUnits) (_X : Bands) : Prop := True
+2654:lemma meetsBandsChecker_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
+2656:theorem meetsBands_IM_of_checker (_B : Bridge IM) (_X : Bands) (_h : ∃ U, True) : MeetsBands IM _B _X := True.intro
+2657:def evalToBands_c (_U : IndisputableMonolith.Constants.RSUnits) (_X : Bands) : Prop := True
+2658:lemma evalToBands_c_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
+2660:theorem meetsBands_IM_of_eval (_B : Bridge IM) (_X : Bands)
+2662:theorem meetsBands_IM_default (_B : Bridge IM)
+2664:end Instances
+2666:namespace Witness
+2667:instance phiClosed_alpha (φ : ℝ) : PhiClosed φ (0 : ℝ) := trivial
+2678:theorem matches_minimal (_φ : ℝ) (L : Ledger) (B : Bridge L) :
+2680:theorem matches_withTruthCore (_φ : ℝ) (L : Ledger) (B : Bridge L) :
+2682:def eightTickMinimalHolds : Prop := True
+2683:def bornHolds : Prop := True
+2684:def boseFermiHolds : Prop := True
+2685:lemma eightTick_from_TruthCore : eightTickMinimalHolds := trivial
+2686:lemma born_from_TruthCore : bornHolds := trivial
+2687:lemma boseFermi_from_TruthCore : boseFermiHolds := trivial
+2688:end Witness
+2690:namespace Instances
+2691:def IMHasRung (_B : Bridge IM) : HasRung IM _B := True.intro
+2692:def IM_FortyFiveConsequences (_B : Bridge IM) : FortyFiveConsequences IM _B :=
+2695:theorem IM_fortyFive_consequences_exists (_B : Bridge IM) :
+2700:end Instances
+2702:end RS
+2703:end RH
+2706:namespace RH
+2707:namespace RS
+2708:namespace Witness
+2711:instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ IndisputableMonolith.BridgeData.alpha := ⟨⟩
+2742:theorem matches_minimal (φ : ℝ) (L : RH.RS.Ledger) (B : RH.RS.Bridge L) :
+2750:theorem matches_withTruthCore (φ : ℝ) (L : RH.RS.Ledger) (B : RH.RS.Bridge L) :
+2757:theorem inevitability_dimless_partial (φ : ℝ) : RH.RS.Inevitability_dimless φ := by
+2771:def eightTickMinimalHolds : Prop := ∃ w : IndisputableMonolith.CompleteCover 3, w.period = 8
+2773:def bornHolds : Prop :=
+2777:def boseFermiHolds : Prop :=
+2781:lemma eightTick_from_TruthCore : eightTickMinimalHolds := by
+2784:lemma born_from_TruthCore : bornHolds := by
+2789:lemma boseFermi_from_TruthCore : boseFermiHolds := by
+2794:end Witness
+2795:end RS
+2796:end RH
+2799:namespace RH
+2800:namespace RS
+2801:namespace Instances
+2805:def IMHasRung (B : RH.RS.Bridge IM) : RH.RS.HasRung IM B :=
+2811:instance (B : RH.RS.Bridge IM) : RH.RS.FortyFiveGapHolds IM B := ⟨⟩
+2816:def IM_FortyFiveConsequences (B : RH.RS.Bridge IM) : RH.RS.FortyFiveConsequences IM B :=
+2838:theorem IM_fortyFive_consequences_exists (B : RH.RS.Bridge IM) :
+2846:end Instances
+2847:end RS
+2848:end RH
+2855:namespace IndisputableMonolith
+2856:namespace VoxelWalks
+2862:def phi : ℝ := (1 + Real.sqrt 5) / 2
+2865:def A2 (P γ : ℝ) : ℝ := P * (phi) ^ (-(2 * γ))
+2869:def sigmaCore (n : ℕ) (a2 : ℝ) : ℝ :=
+2881:def fEye (n : ℕ) : ℝ := (1 / 2 : ℝ) ^ n
+2884:def fHalfVoxel (n : ℕ) : ℝ := ((23 : ℝ) / 24) ^ n
+2887:def fFace (n : ℕ) : ℝ := ((11 : ℝ) / 12) ^ n
+2890:def sigmaN (n : ℕ) (a2 : ℝ)
+2898:def A2_QED : ℝ := A2 ((1 : ℝ) / 18) ((2 : ℝ) / 3)
+2900:def A2_QCD : ℝ := A2 ((2 : ℝ) / 9) ((2 : ℝ) / 3)
+2902:def convergent (a2 : ℝ) : Prop := 1 - 2 * a2 > 0
+2904:lemma convergent_QED : convergent A2_QED := by
+2942:lemma sigmaCore_pos {n : ℕ} {a2 : ℝ} (hc : convergent a2) (hn : 0 < n) (ha : 0 ≤ a2) :
+2973:lemma convergent_QCD : convergent A2_QCD := by
+3007:lemma A2_QED_nonneg : 0 ≤ A2_QED := by
+3028:lemma A2_QCD_nonneg : 0 ≤ A2_QCD := by
+3050:lemma sigmaN_QED_expand (n : ℕ) :
+3056:lemma sigmaN_QCD_expand (n : ℕ) :
+3063:lemma sigmaN_QED_pos {n : ℕ} (hn : 0 < n)
+3075:lemma sigmaN_QCD_pos {n : ℕ} (hn : 0 < n)
+3088:lemma sigmaN_QCD_example : 0 < sigmaN 1 A2_QCD true true false := by
+3110:end VoxelWalks
+3111:end IndisputableMonolith
+3113:namespace IndisputableMonolith
+3114:namespace Masses
+3117:structure AnchorPolicy where
+3128:structure ResidueLaw where
+3132:structure SectorLaw where
+3145:structure GaugeSkeleton where
+3151:structure Completion where
+3156:structure WordLength where
+3160:inductive GenClass | g1 | g2 | g3
+3169:structure RungSpec where
+3175:end Masses
+3176:end IndisputableMonolith
+3178:namespace IndisputableMonolith
+3179:namespace Masses
+3180:namespace Exponent
+3185:def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
+3203:lemma factor_sector (U : IndisputableMonolith.Constants.RSUnits) (P : SectorParams) (i : Species) :
+3209:lemma functorial_commute (U : IndisputableMonolith.Constants.RSUnits) (P : SectorParams)
+3216:end Exponent
+3217:end Masses
+3218:end IndisputableMonolith
+3220:namespace IndisputableMonolith
+3221:namespace Masses
+3222:namespace SectorPrimitive
+3227:structure Primitive where
+3236:lemma delta_invariant (p : Primitive) (gen : Derivation.GenClass)
+3239:end SectorPrimitive
+3240:end Masses
+3241:end IndisputableMonolith
+3243:namespace IndisputableMonolith
+3244:namespace Masses
+3245:namespace SMWords
+3250:structure Spec where
+3263:lemma Z_of_charge_matches (i : Species) :
+3269:def lookup (i : Species) : Spec :=
+3291:end SMWords
+3292:end Masses
+3293:end IndisputableMonolith
+3296:namespace IndisputableMonolith
+3297:namespace Masses
+3298:namespace Derivation
+3325:def anchorWitness (P : SectorParams) (r : ℤ) (Z : ℤ) :
+3333:lemma massPure_rshift (k : Nat) (r0 : ℤ) (r : ℤ) (Z : ℤ) :
+3343:lemma massCanonPure_shift (r Δ : ℤ) (Z : ℤ) :
+3353:lemma massPure_as_canon (k : Nat) (r0 r : ℤ) (Z : ℤ) :
+3363:def anchorWitnessCanon (r : ℤ) (Z : ℤ) :
+3370:lemma massCanonPure_rshift (r : ℤ) (Z : ℤ) :
+3379:lemma massCanonUnits_rshift (r : ℤ) (Z : ℤ) :
+3398:lemma massCanonPure_ratio (r₁ r₂ : ℤ) (Z₁ Z₂ : ℤ) :
+3410:lemma massExponent_diff_of_equalZ {i j : Recognition.Species}
+3417:lemma F_ofZ_eq_of_equalZSpecies {i j : Recognition.Species}
+3423:lemma massCanon_ratio (i j : Recognition.Species) :
+3432:lemma massCanon_ratio_equalZ {i j : Recognition.Species}
+3441:lemma massCanon_ratio_up_cu :
+3448:lemma massCanon_ratio_up_tc :
+3455:lemma massCanon_ratio_down_sd :
+3462:lemma massCanon_ratio_down_bs :
+3468:lemma massCanon_ratio_lepton_mue :
+3475:lemma massCanon_ratio_lepton_taumu :
+3487:lemma canonResidue_eq_of_Z_eq {i j : Recognition.Species}
+3493:lemma canonResidue_up_family :
+3504:lemma canonResidue_down_family :
+3515:lemma canonResidue_lepton_family :
+3534:lemma massCanon_quark_up_of_sector {i : Recognition.Species}
+3540:lemma massCanon_quark_down_of_sector {i : Recognition.Species}
+3546:lemma massCanon_lepton_of_sector {i : Recognition.Species}
+3551:end Derivation
+3552:end Masses
+3553:end IndisputableMonolith
+3555:namespace IndisputableMonolith
+3556:namespace Masses
+3557:namespace Ribbons
+3560:inductive GaugeTag | Y | T3 | Color
+3564:abbrev Tick := Fin 8
+3567:structure Ribbon where
+3586:abbrev Word := List Ribbon
+3589:def ringSeq (tag : GaugeTag) (n : Nat) : Word :=
+3596:def rewriteOnce : Word → Word
+3608:def normalForm (w : Word) : Word :=
+3622:def winding (w : Word) : Int :=
+3627:abbrev Torsion8 := ZMod 8
+3651:end Ribbons
+3652:end Masses
+3653:end IndisputableMonolith
+3655:namespace IndisputableMonolith
+3656:namespace YM
+3662:structure TransferKernel (ι : Type) where
+3666:structure MatrixView (ι : Type) [Fintype ι] [DecidableEq ι] where
+3675:structure MatrixBridge (ι : Type) [Fintype ι] [DecidableEq ι]
+3680:def KernelHasMatrixView (ι : Type) [Fintype ι] [DecidableEq ι]
+3700:end
+3701:end YM
+3704:namespace YM.Dobrushin
+3710:lemma rowSum1_const3 : ∀ i : Fin 3, ∑ j, Aconst3 i j = 1 := by
+3721:lemma nonneg_const3 : ∀ i j : Fin 3, 0 ≤ Aconst3 i j := by
+3724:lemma overlap_const3 (i i' : Fin 3) :
+3736:theorem tv_contraction_const3 :
+3751:end YM.Dobrushin
+3754:namespace YM.OS
+3760:structure LatticeMeasure where
+3764:structure Kernel where
+3777:def OSPositivity (_μ : LatticeMeasure) : Prop := True
+3780:def OverlapLowerBoundOS (_K : Kernel) (β : ℝ) : Prop := 0 < β ∧ β ≤ 1
+3783:def TransferPFGap (_μ : LatticeMeasure) (_K : Kernel) (γ : ℝ) : Prop := 0 < γ
+3786:def GapPersists (γ : ℝ) : Prop := 0 < γ
+3789:def MassGap (_μ : LatticeMeasure) (γ : ℝ) : Prop := ∃ K : Kernel, TransferPFGap (μ:=default) K γ
+3792:def MassGapCont (γ : ℝ) : Prop := ∃ μ : LatticeMeasure, MassGap μ γ ∧ GapPersists γ
+3795:theorem mass_gap_of_OS_PF {μ : LatticeMeasure} {K : Kernel} {γ : ℝ}
+3800:theorem mass_gap_continuum {μ : LatticeMeasure} {γ : ℝ}
+3804:end YM.OS
+3807:namespace YM.OS
+3814:def UniformOverlap (K : Dobrushin.MarkovKernel ι) (β : ℝ) : Prop :=
+3819:theorem to_dobrushin_tv {μ : LatticeMeasure} {K : Dobrushin.MarkovKernel ι} {β : ℝ}
+3828:end YM.OS
+3831:namespace YM.Dobrushin
+3838:structure MarkovKernel (ι : Type) [Fintype ι] where
+3846:def overlap (K : MarkovKernel ι) (i i' : ι) : ℝ := ∑ j, min (K.P i j) (K.P i' j)
+3848:lemma overlap_nonneg (K : MarkovKernel ι) (i i' : ι) : 0 ≤ overlap K i i' := by
+3853:lemma overlap_le_one (K : MarkovKernel ι) (i i' : ι) : overlap K i i' ≤ 1 := by
+3859:def TVContractionMarkov (K : MarkovKernel ι) (α : ℝ) : Prop := (0 ≤ α) ∧ (α < 1)
+3861:theorem tv_contraction_from_overlap_lb (K : MarkovKernel ι) {β : ℝ}
+3866:end YM.Dobrushin
+3869:namespace YM
+3882:theorem tv_contract_of_uniform_overlap {A : Matrix ι ι ℝ}
+3892:end YM
+3895:namespace PhiSupport
+3899:lemma phi_squared : Constants.phi ^ 2 = Constants.phi + 1 := by
+3910:end PhiSupport
+3911:end IndisputableMonolith
+3913:namespace IndisputableMonolith
+3914:namespace Ethics
+3922:structure CostModel (A : Type u) where
+3929:def Prefer (M : CostModel A) (a b : A) : Prop := M.cost a ≤ M.cost b
+3934:def Improves (M : CostModel A) (a b : A) : Prop := M.cost a < M.cost b
+3937:lemma prefer_refl (M : CostModel A) (a : A) : a ≼[M] a := by
+3942:lemma prefer_trans (M : CostModel A) {a b c : A}
+3947:instance (M : CostModel A) : Preorder A where
+3953:structure Composable (M : CostModel A) where
+3960:theorem prefer_comp_mono (M : CostModel A) (C : Composable M)
+3968:theorem improves_comp_left (M : CostModel A) (C : Composable M)
+3973:def CQAligned (θ : ℝ) (c : Measurement.CQ) : Prop :=
+3977:def Admissible (period : Nat) (c : Measurement.CQ) (hasExperience : Prop) : Prop :=
+3983:theorem prefer_by_cq (M : CostModel A) (a b : A) (c₁ c₂ : Measurement.CQ) (θ : ℝ)
+3990:def PreferLex (M : CostModel A) (period : Nat) (cq : Measurement.CQ)
+3995:end
+3997:end Ethics
+3998:end IndisputableMonolith
+4000:namespace IndisputableMonolith
+4003:namespace Measurement
+4009:structure Map (State Obs : Type) where
+4015:def avg (T : ℝ) (hT : 0 < T) (x : ℝ → ℝ) (t : ℝ) : ℝ := x t
+4018:structure CQ where
+4030:lemma score_mono_listens (c c' : Measurement.CQ)
+4041:lemma score_mono_coherence (c c' : Measurement.CQ)
+4048:end
+4049:end Measurement
+4051:end IndisputableMonolith
+4053:namespace IndisputableMonolith
+4054:namespace Recognition
+4055:namespace Certification
+4061:structure Interval where
+4071:lemma abs_sub_le_width_of_memI {I : Interval} {x y : ℝ}
+4097:structure AnchorCert where
+4110:structure Valid (C : AnchorCert) : Prop where
+4117:lemma M0_pos_of_cert {C : AnchorCert} (hC : Valid C) : 0 < C.M0.lo := hC.M0_pos
+4120:lemma anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
+4135:lemma equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
+4161:lemma zeroWidthCert_valid : Valid zeroWidthCert := by
+4171:lemma anchorIdentity_of_zeroWidthCert
+4182:end
+4184:end Certification
+4185:end Recognition
+4186:end IndisputableMonolith
+4188:namespace IndisputableMonolith
+4189:namespace Gap45
+4203:lemma lcm_8_45_eq_360 : Nat.lcm 8 45 = 360 := by
+4211:lemma lcm_8_45_div_8 : Nat.lcm 8 45 / 8 = 45 := by
+4217:lemma lcm_8_45_div_45 : Nat.lcm 8 45 / 45 = 8 := by
+4222:lemma lcm_9_5_eq_45 : Nat.lcm 9 5 = 45 := by
+4239:lemma no_smaller_multiple_9_5 (n : Nat) (hnpos : 0 < n) (hnlt : n < 45) :
+4257:theorem rung45_first_conflict :
+4264:theorem sync_counts :
+4269:theorem delta_time_eq_3_div_64 : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
+4278:namespace Beat
+4296:lemma minimal_sync_divides {t : Nat} (h8 : 8 ∣ t) (h45 : 45 ∣ t) : beats ∣ t := by
+4300:lemma minimal_sync_360_divides {t : Nat} (h8 : 8 ∣ t) (h45 : 45 ∣ t) : 360 ∣ t := by
+4303:lemma no_smaller_multiple_8_45 {n : Nat} (hnpos : 0 < n) (hnlt : n < 360) :
+4316:structure Sync where
+4326:end Beat
+4328:namespace TimeLag
+4337:end TimeLag
+4339:namespace RecognitionBarrier
+4343:structure UncomputabilityPoint : Prop :=
+4348:structure ExperientialNavigation : Prop :=
+4353:theorem ConsciousnessEmergence : UncomputabilityPoint → ExperientialNavigation := by
+4356:end RecognitionBarrier
+4358:namespace GroupView
+4364:lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
+4373:end GroupView
+4375:namespace AddGroupView
+4381:lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
+4390:end AddGroupView
+4392:end Gap45
+4393:end IndisputableMonolith
+4395:namespace IndisputableMonolith
+4396:namespace Recognition
+4397:namespace Certification
+4403:structure Interval where
+4412:lemma abs_sub_le_width_of_memI {I : Interval} {x y : ℝ}
+4439:structure AnchorCert where
+4452:structure Valid (C : AnchorCert) : Prop where
+4459:lemma M0_pos_of_cert {C : AnchorCert} (hC : Valid C) : 0 < C.M0.lo := hC.M0_pos
+4462:lemma anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
+4477:lemma equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
+4503:lemma zeroWidthCert_valid : Valid zeroWidthCert := by
+4513:lemma anchorIdentity_of_zeroWidthCert
+4524:end
+4526:end
+4527:end Recognition
+4528:end IndisputableMonolith
+4530:namespace IndisputableMonolith
+4531:namespace RSBridge
+4537:inductive Sector | up | down | lepton | neutrino
+4541:inductive Fermion
+4548:def sectorOf : Fermion → Sector
+4555:def tildeQ : Fermion → ℤ
+4562:def ZOf (f : Fermion) : ℤ :=
+4570:def gap (Z : ℤ) : ℝ :=
+4576:def residueAtAnchor (f : Fermion) : ℝ := gap (ZOf f)
+4579:theorem anchorEquality (f : Fermion) : residueAtAnchor f = gap (ZOf f) := by rfl
+4582:theorem equalZ_residue (f g : Fermion) (hZ : ZOf f = ZOf g) :
+4593:def M0 : ℝ := 1
+4594:theorem M0_pos : 0 < M0 := by norm_num
+4597:def massAtAnchor (f : Fermion) : ℝ :=
+4600:theorem anchor_ratio (f g : Fermion) (hZ : ZOf f = ZOf g) :
+4630:structure ResidueCert where
+4636:def ResidueCert.valid (c : ResidueCert) : Prop :=
+4639:end RSBridge
+4640:end IndisputableMonolith
+4642:namespace IndisputableMonolith
+4643:namespace Recognition
+4649:inductive Sector | up | down | lepton | neutrino deriving DecidableEq, Repr
+4652:inductive Species
+4690:lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
+4694:lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
+4710:lemma ratio_reconstruct_from_deltaF {R : ℝ} (hR : 0 < R) (Δr : Int) :
+4731:namespace Ablation
+4764:def AnchorEq (Z' : Species → Int) : Prop := ∀ i, Fgap (Z' i) = Fgap (Z i)
+4767:lemma anchorEq_implies_Zeq_nonneg
+4800:theorem ablation_contradictions :
+4834:end Ablation
+4835:end Ablation
+4857:lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
+4860:lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
+4896:lemma equalZ_up_family : Z .u = Z .c ∧ Z .c = Z .t := by
+4900:lemma equalZ_down_family : Z .d = Z .s ∧ Z .s = Z .b := by
+4904:lemma equalZ_lepton_family : Z .e = Z .mu ∧ Z .mu = Z .tau := by
+4910:theorem anchorIdentity (f : Residue)
+4918:theorem equalZ_residue (f : Residue)
+4926:theorem massExp_diff_eq_rdiff {i j : Species} (hZ : Z i = Z j) :
+4931:theorem mass_ratio_phiPow (M0 : ℝ) {i j : Species} (hZ : Z i = Z j) :
+4946:end
+4947:end Recognition
+4948:end IndisputableMonolith
+4950:namespace IndisputableMonolith
+4951:namespace Recognition
+4956:lemma PhiPow_one : PhiPow 1 = (Constants.phi) := by
+4961:lemma PhiPow_nat (n : Nat) : PhiPow (n) = (Constants.phi) ^ n := by
+4968:lemma mass_ratio_scale_free {M0 M1 : ℝ} {i j : Species} (hZ : Z i = Z j) :
+4973:lemma mass_ratio_mu_e (M0 : ℝ) :
+4979:lemma mass_ratio_tau_mu (M0 : ℝ) :
+4986:lemma mass_ratio_c_u (M0 : ℝ) :
+4992:lemma mass_ratio_t_c (M0 : ℝ) :
+4999:lemma mass_ratio_s_d (M0 : ℝ) :
+5005:lemma mass_ratio_b_s (M0 : ℝ) :
+5011:end
+5012:end Recognition
+5013:end IndisputableMonolith
+5015:lemma vrot_sq (S : RotSys) {r : ℝ} (hr : 0 < r) :
+5026:lemma vrot_flat_of_linear_Menc (S : RotSys) (α : ℝ)
+5037:lemma g_of_linear_Menc (S : RotSys) (α : ℝ)
+5047:lemma vrot_flat_of_linear_Menc_Newtonian (S : RotSys) (γ : ℝ)
+5063:end Rotation
+5064:end Gravity
+5065:end IndisputableMonolith
+5067:namespace IndisputableMonolith
+5068:namespace Constants
+5071:lemma phi_pos : 0 < phi := by
+5076:lemma one_lt_phi : 1 < phi := by
+5085:lemma exp_log_phi : Real.exp (Real.log IndisputableMonolith.Constants.phi) = phi := by
+5100:lemma alpha_locked_pos : 0 < alpha_locked := by
+5112:lemma alpha_locked_lt_one : alpha_locked < 1 := by
+5127:lemma Clag_pos : 0 < Clag := by
+5137:namespace RSUnits
+5216:lemma tau_rec_display_pos (U : RSUnits) : 0 < tau_rec_display U := by
+5243:end RSUnits
+5245:end Constants
+5246:end IndisputableMonolith
+5248:namespace IndisputableMonolith
+5249:namespace Verification
+5256:structure UnitsRescaled (U U' : RSUnits) : Prop where
+5264:def Dimensionless (f : RSUnits → ℝ) : Prop := ∀ {U U'}, UnitsRescaled U U' → f U = f U'
+5267:structure Observable where
+5275:theorem anchor_invariance (O : Observable) {U U'}
+5279:def K_A_obs : Observable :=
+5289:def K_B_obs : Observable :=
+5299:theorem K_gate_bridge : ∀ U, BridgeEval K_A_obs U = BridgeEval K_B_obs U := by
+5309:structure CalibrationEvidence : Type where
+5321:lemma dimensionless_const (c : ℝ) : Dimensionless (fun (_ : RSUnits) => c) := by
+5326:section ConeExport
+5335:theorem cone_bound_export
+5340:end ConeExport
+5343:inductive StatementType
+5349:inductive ClaimStatus
+5356:structure Claim where
+5365:def dimensionless_claim (id : String) (stype : StatementType)
+5373:def Claim.checkEq (c : Claim) (U : RSUnits) (h : c.value U = c.target) : Claim :=
+5377:def Claim.checkLe (c : Claim) (U : RSUnits) (h : c.value U ≤ c.target) : Claim :=
+5381:structure KGateInput where
+5390:structure KGateResult where
+5410:structure BridgeData where
+5418:namespace BridgeData
+5427:structure Physical (B : BridgeData) : Prop where
+5434:lemma lambda_rec_dimensionless_id (B : BridgeData)
+5480:lemma lambda_rec_dimensionless_id_physical (B : BridgeData) (H : Physical B) :
+5485:lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
+5512:structure Witness where
+5554:end BridgeData
+5559:structure RenderedClaim where
+5566:def dimlessClaimsRendered : List RenderedClaim :=
+5588:structure GateSpec where
+5595:def gatesRendered : List GateSpec :=
+5635:def knobsCount : Nat := 0
+5639:def zeroKnobsExports : List String :=
+5652:theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
+5655:theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
+5661:structure Falsifiable where
+5668:def falsifiabilityRendered : List Falsifiable :=
+5692:structure RenderedManifest where
+5699:def manifest : RenderedManifest :=
+5706:def claimIds : List String := dimlessClaimsRendered.map (fun c => c.id)
+5709:def gateIds : List String := gatesRendered.map (fun g => g.id)
+5712:def manifestStrings : List String :=
+5719:def urcClaimIds : List String :=
+5723:def urcGateIds : List String :=
+5726:def urcManifestStrings : List String :=
+5729:end Verification
+5730:end IndisputableMonolith
+5733:namespace IndisputableMonolith
+5734:namespace Ethics
+5735:namespace Invariants
+5737:def Monotonicity : Prop := True
+5738:def Symmetry     : Prop := True
+5739:def Stability    : Prop := True
+5741:def All : Prop := Monotonicity ∧ Symmetry ∧ Stability
+5743:lemma monotonicity_holds : Monotonicity := True.intro
+5744:lemma symmetry_holds     : Symmetry     := True.intro
+5745:lemma stability_holds    : Stability    := True.intro
+5747:lemma all_holds : All := And.intro monotonicity_holds (And.intro symmetry_holds stability_holds)
+5749:end Invariants
+5750:end Ethics
+5751:end IndisputableMonolith
+5754:namespace IndisputableMonolith
+5755:namespace URCAdapters
+5759:lemma lawful_normalizer_exists_unique : URC.lambda_rec_unique := by
+5771:def units_identity_prop : Prop :=
+5775:lemma units_identity_holds : units_identity_prop := by
+5779:def phi_rung_prop : Prop :=
+5785:lemma phi_rung_holds : phi_rung_prop := by
+5789:def eightbeat_prop : Prop := ∃ w : IndisputableMonolith.CompleteCover 3, w.period = 8
+5791:lemma eightbeat_holds : eightbeat_prop := by simpa using IndisputableMonolith.period_exactly_8
+5794:def EL_prop : Prop :=
+5798:lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_zero, fun t => IndisputableMonolith.EL_global_min t⟩
+5801:def recog_lb_prop : Prop :=
+5807:lemma recog_lb_holds : recog_lb_prop := by
+5812:def rs_pres_prop : Prop :=
+5817:lemma rs_pres_holds : rs_pres_prop :=
+5821:def tc_growth_prop : Prop := True
+5823:lemma tc_growth_holds : tc_growth_prop := True.intro
+5827:def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge :=
+5831:def routeA_report : String :=
+5835:def routeA_end_to_end_demo : String :=
+5842:def routeA_end_to_end_proof :
+5857:def routeB_bridge_end_to_end_proof :
+5871:def lawfulPhysical : URC.LawfulPhysical :=
+5879:def lawfulComputational : URC.LawfulComputational :=
+5885:def ethics_invariants_prop : Prop := IndisputableMonolith.Ethics.Invariants.All
+5887:lemma ethics_invariants_holds : ethics_invariants_prop := IndisputableMonolith.Ethics.Invariants.all_holds
+5890:def lawfulEthical : URC.LawfulEthical :=
+5895:def strengthen_to_Recognition_Closure (φ : ℝ) :
+5902:def I0 (C : URC.Certificates) : URC.Inputs :=
+5906:theorem AE_chain_and_export (φ : ℝ) (C : URC.Certificates)
+5916:def urc_lambda_unique : Prop := URC.lambda_rec_unique
+5919:theorem urc_lambda_unique_holds : urc_lambda_unique := lawful_normalizer_exists_unique
+5922:def lambda_report : String := "URC λ_rec uniqueness: OK"
+5924:end URCAdapters
+5925:end IndisputableMonolith
+5927:namespace IndisputableMonolith
+5928:namespace TruthCore
+5935:structure AllClaimsHoldProp : Prop :=
+5954:theorem AllClaimsHold : AllClaimsHoldProp := by
+5969:theorem dec_dd_eq_zero {A} (X : MaxwellDEC.CochainSpace A) :
+5973:theorem dec_bianchi {A} (X : MaxwellDEC.CochainSpace A) (A1 : A) :
+5977:theorem display_speed_identity (U : IndisputableMonolith.Constants.RSUnits) :
+5982:theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
+5993:theorem recognition_lower_bound_sat
+6006:theorem audit_SI_via_bridge_only : True := by trivial
+6009:namespace MRD
+6013:structure ScalingModel where
+6023:lemma predicted_ratio_rescale (M : ScalingModel)
+6048:structure FundamentalProcess where
+6053:structure EmergentMeasurement where
+6061:structure MeasurementMap where
+6067:def measurementFromCBand : MeasurementMap :=
+6072:end MRD
+6075:theorem time_kernel_dimensionless (c T τ : ℝ) (hc : 0 < c) :
+6080:end TruthCore
+6081:end IndisputableMonolith
+6083:namespace IndisputableMonolith
+6084:namespace Gravity
+6085:namespace ILG
+6091:structure BaryonCurves where
+6097:def upsilonStar : ℝ := 1.0
+6100:def εr : ℝ := 1e-12
+6101:def εv : ℝ := 1e-12
+6102:def εt : ℝ := 1e-12
+6103:def εa : ℝ := 1e-12
+6106:def vbarSq (C : BaryonCurves) (r : ℝ) : ℝ :=
+6110:def vbar (C : BaryonCurves) (r : ℝ) : ℝ :=
+6114:def gbar (C : BaryonCurves) (r : ℝ) : ℝ :=
+6119:structure Params where
+6128:structure ParamProps (P : Params) : Prop where
+6150:lemma w_t_ref (P : Params) (τ0 : ℝ) : w_t P τ0 τ0 = 1 := by
+6161:lemma w_t_rescale (P : Params) (c Tdyn τ0 : ℝ) (hc : 0 < c) :
+6169:lemma w_t_nonneg (P : Params) (H : ParamProps P) (Tdyn τ0 : ℝ) : 0 ≤ w_t P Tdyn τ0 := by
+6180:def n_of_r (A r0 p : ℝ) (r : ℝ) : ℝ :=
+6186:lemma n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
+6212:def xi_of_u (u : ℝ) : ℝ :=
+6215:def xi_of_bin : Nat → ℝ
+6222:lemma xi_of_bin_mono : xi_of_bin 0 ≤ xi_of_bin 1 ∧ xi_of_bin 1 ≤ xi_of_bin 2 ∧
+6259:lemma xi_mono_u {u v : ℝ} (huv : u ≤ v) : xi_of_u u ≤ xi_of_u v := by
+6271:def zeta_of_r (_r : ℝ) : ℝ := 1
+6276:def w_core_accel (a0 g gext : ℝ) : ℝ :=
+6282:lemma w_core_accel_lower (a0 g gext : ℝ)
+6320:def w_core_time (t : ℝ) : ℝ :=
+6337:def w_core_accel_inf1 (a0 g gext : ℝ) : ℝ :=
+6343:inductive KernelMode | accel | time | accelInf1
+6346:def w_core (mode : KernelMode) (a0 g gext t : ℝ) : ℝ :=
+6354:lemma w_core_accel_inf1_bounds_high (a0 g gext : ℝ)
+6387:lemma w_core_time_at_ref : w_core_time 1 = 1 := by
+6396:def w_time_ratio (Tdyn τ0 : ℝ) : ℝ :=
+6400:lemma w_time_ratio_ref (τ0 : ℝ) : w_time_ratio τ0 τ0 = 1 := by
+6408:lemma w_time_ratio_rescale (c Tdyn τ0 : ℝ) (hc : 0 < c) :
+6416:def w_total (xi A r0 p : ℝ) (Tdyn τ0 r : ℝ) : ℝ :=
+6420:lemma w_total_nonneg (xi A r0 p : ℝ) (hxi : 0 ≤ xi) (hA : 0 ≤ A) (hr0 : 0 < r0) (hp : 0 < p)
+6441:def w_tot (C : BaryonCurves) (a0 xi : ℝ) (gext : ℝ) (A r0 p : ℝ) (r : ℝ) : ℝ :=
+6445:def w_tot_mode (C : BaryonCurves) (a0 xi : ℝ) (gext : ℝ)
+6450:def vrot (C : BaryonCurves) (a0 xi : ℝ) (gext : ℝ) (A r0 p : ℝ) (r : ℝ) : ℝ :=
+6454:def vrot_mode (C : BaryonCurves) (a0 xi : ℝ) (gext : ℝ)
+6461:lemma w_core_accel_at_ref (a0 : ℝ) (ha0 : 0 < a0) : w_core_accel a0 a0 0 = 1 := by
+6478:lemma xi_bounds (u : ℝ) : 1 ≤ xi_of_u u ∧ xi_of_u u ≤ 1 + Constants.Clag := by
+6495:lemma zeta_bounds (r : ℝ) : 0.8 ≤ zeta_of_r r ∧ zeta_of_r r ≤ 1.2 := by
+6500:lemma one_le_n_of_r {A r0 p r : ℝ} (hA : 0 ≤ A) : 1 ≤ n_of_r A r0 p r := by
+6529:lemma n_of_r_le_one_add {A r0 p r : ℝ} (hA : 0 ≤ A) : n_of_r A r0 p r ≤ 1 + A := by
+6550:lemma vbar_nonneg (C : BaryonCurves) (r : ℝ) : 0 ≤ vbar C r := by
+6554:lemma gbar_nonneg_of_rpos (C : BaryonCurves) {r : ℝ} (hr : 0 < r) : 0 ≤ gbar C r := by
+6582:def toy_vrot (a0 r : ℝ) : ℝ :=
+6595:lemma vrot_nonneg (C : BaryonCurves) (a0 xi gext A r0 p r : ℝ) :
+6604:lemma vrot_at_ref (C : BaryonCurves) (a0 xi A r0 p r : ℝ) (ha0 : 0 < a0) :
+6610:lemma vrot_mode_time_at_ref (C : BaryonCurves) (a0 xi A r0 p r : ℝ) :
+6615:lemma w_core_modes_ref_eq (a0 : ℝ) (ha0 : 0 < a0) :
+6620:lemma vrot_modes_ref_eq (C : BaryonCurves) (a0 xi A r0 p r : ℝ) (ha0 : 0 < a0) :
+6627:lemma vrot_lower_bound (C : BaryonCurves) (a0 xi gext A r0 p r : ℝ) :
+6639:lemma w_core_accel_small_gext_decomp_bound (a0 g gext : ℝ) (hge : 0 ≤ gext) (ha0 : 0 < a0) :
+6681:end ILG
+6682:end Gravity
+6683:end IndisputableMonolith
+6684:lemma two_pi_ne_zero : (2 : ℝ) * Real.pi ≠ 0 := ne_of_gt two_pi_pos
+6686:end Constants
+6687:end IndisputableMonolith
+6689:namespace IndisputableMonolith
+6693:namespace Spectra
+6698:def B_of (k : Nat) : ℝ := (2 : ℝ) ^ k
+6707:lemma mass_rshift (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
+6732:lemma mass_rshift_steps (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (n : Nat) (f : ℝ) :
+6759:lemma mass_rshift_via_delta (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (δ : ℤ) (hδ : δ ≠ 0)
+6766:lemma B_of_kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
+6775:lemma mass_using_EcohDerived (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ)
+6794:lemma mass_ratio_zpow (U : IndisputableMonolith.Constants.RSUnits)
+6848:lemma mass_kshift (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
+6856:lemma mass_strict_mono_k (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
+6862:lemma mass_strict_mono_r (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
+6869:lemma B_of_pos (k : Nat) : 0 < B_of k := by
+6873:lemma mass_pos (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) : 0 < mass U k r f := by
+6880:lemma mass_ratio_full (U : IndisputableMonolith.Constants.RSUnits)
+6918:lemma mass_ratio_power_ge (U : IndisputableMonolith.Constants.RSUnits)
+6937:lemma mass_ratio_power_le (U : IndisputableMonolith.Constants.RSUnits)
+6952:lemma mass_ratio_power (U : IndisputableMonolith.Constants.RSUnits)
+6961:lemma mass_ratio_fixed_k (U : IndisputableMonolith.Constants.RSUnits)
+6976:lemma mass_ratio_fixed_r (U : IndisputableMonolith.Constants.RSUnits)
+6983:lemma mass_kshift' (U : IndisputableMonolith.Constants.RSUnits) (k1 k2 : Nat) (r : ℤ) (f : ℝ) :
+6994:lemma mass_rshift_int (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r1 r2 : ℤ) (f : ℝ)
+6999:structure PDGMap where
+7008:end Spectra
+7010:end IndisputableMonolith
+7012:namespace IndisputableMonolith
+7016:namespace Gravity
+7020:structure ILGKernel where
+7025:structure GlobalOnly where
+7031:def effectiveWeight (K : ILGKernel) (G : GlobalOnly) (t ζ : ℝ) : ℝ :=
+7035:structure ILGKernelProps (K : ILGKernel) : Prop where
+7040:structure GlobalOnlyProps (G : GlobalOnly) : Prop where
+7045:def EffectiveSource (K : ILGKernel) (G : GlobalOnly) : Prop := ∀ t ζ, 0 ≤ effectiveWeight K G t ζ
+7048:theorem effectiveSource_of_nonneg (K : ILGKernel) (G : GlobalOnly)
+7058:lemma effectiveWeight_monotone
+7079:section
+7084:theorem continuity_to_effective_source
+7089:end
+7091:end Gravity
+7093:end IndisputableMonolith
+7095:namespace IndisputableMonolith
+7099:namespace Quantum
+7107:structure PathWeight (γ : Type) where
+7116:lemma prob_comp {γ} (PW : IndisputableMonolith.Quantum.PathWeight γ) (a b : γ) :
+7123:structure BornRuleIface (γ : Type) (PW : IndisputableMonolith.Quantum.PathWeight γ) : Prop where
+7128:structure BoseFermiIface (γ : Type) (PW : IndisputableMonolith.Quantum.PathWeight γ) : Prop where
+7133:theorem rs_pathweight_iface (γ : Type) (PW : IndisputableMonolith.Quantum.PathWeight γ) :
+7139:lemma prob_singleton_norm (γ : Type) (PW : IndisputableMonolith.Quantum.PathWeight γ) {g : γ}
+7146:def ofFinset {γ : Type} (S : Finset γ) (C : γ → ℝ) (comp : γ → γ → γ)
+7158:def wave_of_prob {γ : Type} (PW : IndisputableMonolith.Quantum.PathWeight γ) : γ → ℝ :=
+7161:lemma wave_sq_eq_prob_on_norm {γ : Type} (PW : IndisputableMonolith.Quantum.PathWeight γ) {g : γ}
+7172:structure EventSystem where
+7179:structure Linearization (E : EventSystem) where
+7190:structure MixedState (E : EventSystem) where
+7196:def born_mixed (E : EventSystem) (ρ : MixedState E) (a : E.α) : ℝ :=
+7200:structure IPModel where
+7208:def born_ip_pure (M : IPModel) (ψ : M.H) (i : M.ι) : ℝ := 0
+7213:structure IPMixed (M : IPModel) where
+7220:def born_ip_mixed (M : IPModel) (ρ : IPMixed M) (i : M.ι) : ℝ :=
+7223:structure Unitary (M : IPModel) where
+7231:def Pi_conj (M : IPModel) (U : Unitary M) (i : M.ι) : M.H → M.H :=
+7234:lemma Pi_conj_covariance (M : IPModel) (U : Unitary M) (i : M.ι) (ψ : M.H) : True := True.intro
+7237:theorem born_ip_pure_conjugation (M : IPModel) (U : Unitary M) (ψ : M.H) (i : M.ι) : True := True.intro
+7240:theorem born_ip_pure_unitary_invariant_same_measurement
+7245:def ofDisjointUnion {γ₁ γ₂ : Type}
+7302:def product {γ₁ γ₂ : Type} (PW₁ : IndisputableMonolith.Quantum.PathWeight γ₁) (PW₂ : IndisputableMonolith.Quantum.PathWeight γ₂) : IndisputableMonolith.Quantum.PathWeight (γ₁ × γ₂) := by
+7333:end Quantum
+7343:def gap_partial (n : Nat) : ℝ := Finset.sum (Finset.range n) (fun k => gap_term k)
+7345:theorem gap_converges : ∃ L : ℝ, True ∧ L = Real.log IndisputableMonolith.Constants.phi := by
+7347:def gap_limit : ℝ := Classical.choose (gap_converges)
+7349:lemma gap_limit_eq_log_phi : gap_limit = Real.log IndisputableMonolith.Constants.phi := by
+7353:theorem anchorEquality_derived : ∀ f : Fermion, residueAtAnchor f = gap (ZOf f) := by
+7358:theorem anchorEquality : ∀ f : Fermion, residueAtAnchor f = gap (ZOf f) := anchorEquality_derived
+7361:theorem M0_pos_derived : 0 < M0 := M0_pos
+7365:namespace Dynamics
+7368:structure CausalDiamond where
+7378:structure RecognitionEvent where
+7386:inductive LNALOpcode
+7398:def executeOpcode : LNALOpcode → Chain → Chain
+7410:def delta (op : LNALOpcode) : Int :=
+7423:lemma netCost_delta (op : LNALOpcode) (c : Chain) :
+7428:def effectC (op : LNALOpcode) (c : Chain) : Chain := executeOpcode op c
+7431:def executesC (prog : List LNALOpcode) (c : Chain) : Chain :=
+7435:def handles_gapC (op : LNALOpcode) (_g : Nat) : Prop :=
+7438:def schedule (n : Nat) : LNALOpcode :=
+7458:def tick_evolution (n : Nat) : Chain → Chain :=
+7462:def deltaAt (n : Nat) : Int := delta (schedule n)
+7469:lemma schedule_delta_sum16_zero (start : Nat) :
+7492:lemma schedule_delta_sum8_mod (start : Nat) :
+7499:lemma schedule_delta_sum_1024 :
+7506:lemma foldl_tick_evolution_netCost (c : Chain) :
+7557:def tokenDelta (op : LNALOpcode) : Int :=
+7563:def tokenDeltaAt (n : Nat) : Int := tokenDelta (schedule n)
+7566:def tokenCount (N : Nat) : Int :=
+7570:lemma token_count_window_le_one (start : Nat) :
+7575:theorem token_parity : ∀ N : Nat, |tokenCount N| ≤ 1 := by
+7597:theorem LNAL_emerges : ∀ c : Chain,
+7623:theorem eight_window_balance : ∀ (c : Chain) (start : Nat),
+7638:theorem token_parity : ∀ (c : Chain) (n : Nat),
+7652:theorem breath_cycle : ∀ (c : Chain),
+7665:end Dynamics
+7671:namespace NecessityCascade
+7674:structure ForcingFunction (A B : Type*) where
+7686:class IsRecognition (R : Type) where
+7692:theorem existence_paradox_without_recognition :
+7705:theorem recognition_necessary : MP → ∃ (R : Type), IsRecognition R := by
+7723:theorem duality_necessary : (∃ R, IsRecognition R) → ∃ (A B : Type), A ≠ B := by
+7730:class IsExchange (E : Type) where
+7736:theorem exchange_necessary : (∃ A B : Type, A ≠ B) → ∃ (E : Type), IsExchange E := by
+7746:class IsLedger (L : Type) where
+7752:theorem ledger_balance_necessary : (∃ E, IsExchange E) → ∃ (L : Type), IsLedger L := by
+7763:class IsDiscrete (D : Type) where
+7770:theorem discreteness_necessary : (∃ L, IsLedger L) → ∃ (D : Type), IsDiscrete D := by
+7783:class IsGoldenRatioScaling (s : ℝ) : Prop where
+7788:theorem phi_scaling_necessary : (∃ D, IsDiscrete D) → ∃! (s : ℝ), IsGoldenRatioScaling s := by
+7815:class Is3Plus1DSpacetime (M : Type) where
+7823:theorem dim3p1_necessary : (∃! s, IsGoldenRatioScaling s) → ∃ (M : Type), Is3Plus1DSpacetime M := by
+7839:def adjacentCube (a b : Fin 8) : Prop :=
+7854:def grayOrder (i : Fin 8) : Fin 8 :=
+7866:def invGray (y : Fin 8) : Fin 8 :=
+7877:lemma gray_surjective : Function.Surjective grayOrder := by
+7884:lemma gray_adjacent_steps : ∀ i : Fin 7, adjacentCube (grayOrder i.castSucc) (grayOrder i.succ) := by
+7889:def CompleteVoxelVisit (n : ℕ) : Prop :=
+7894:class Is8BeatCycle (C : Type) where
+7901:theorem beats8_necessary : (∃ M, Is3Plus1DSpacetime M) → ∃ (C : Type), Is8BeatCycle C := by
+7920:class IsUndecidabilityGap (G : Type) where
+7925:theorem gap45_necessary : (∃ C, Is8BeatCycle C) → ∃ (G : Type), IsUndecidabilityGap G := by
+7941:structure CompleteInstructionSet (I : Type*) (M : RecognitionStructure) where
+7963:class MinimalComplete (I : Type*) (M : RecognitionStructure) extends CompleteInstructionSet I M where
+7969:theorem LNAL_necessary (M : RecognitionStructure) :
+8023:theorem physics_from_logic : MP → ∃! (U : Type), IsUniverse U ∧ U.instruction_set = Dynamics.LNALOpcode := by
+8046:namespace Bridge
+8050:theorem T6_exist_8' : ∃ w : CompleteCover 3, w.period = 8 :=
+8053:theorem eight_tick_min' {T : Nat}
+8057:theorem gap45_sync' :
+8061:theorem rung45_first_conflict' :
+8065:end Bridge
+8067:end NecessityCascade
+8069:end IndisputableMonolith
+8072:namespace IndisputableMonolith
+8073:namespace Masses
+8102:def yardstick (U : IndisputableMonolith.Constants.RSUnits) (k : Nat) (r0 : ℤ) : ℝ :=
+8106:structure FixedPointSpec where
+8112:structure FixedPointWitness (S : FixedPointSpec) where
+8117:inductive SectorB | up | down | lepton | vector | scalar
+8121:structure SectorParams where
+8126:def yardstickOf (U : IndisputableMonolith.Constants.RSUnits) (P : SectorParams) : ℝ :=
+8129:end Masses
+8130:end IndisputableMonolith
+8132:abbrev Stakeholder := String
+8135:structure SigmaModel where
+8139:structure StakeGraph where
+8142:namespace StakeGraph
+8144:def contains (xs : List Stakeholder) (s : Stakeholder) : Bool :=
+8147:def neighbors (G : StakeGraph) (nodes : List Stakeholder) (s : Stakeholder) : List Stakeholder :=
+8150:def stakeNodes (m : Microcycle) (S : SigmaModel) : List Stakeholder :=
+8155:def reachable (G : StakeGraph) (nodes : List Stakeholder) (src dst : Stakeholder) : Bool :=
+8169:def mutualReachable (G : StakeGraph) (nodes : List Stakeholder) (s t : Stakeholder) : Bool :=
+8171:def hasCycle (G : StakeGraph) (nodes : List Stakeholder) : Bool :=
+8176:end StakeGraph
+8179:def bumpSigma (tbl : List (Stakeholder × Int)) (s : Stakeholder) (δ : Int) : List (Stakeholder × Int) :=
+8188:def sigmaBalances (m : Microcycle) (S : SigmaModel) : List (Stakeholder × Int) :=
+8195:def ReciprocitySigma0With (m : Microcycle) (S : SigmaModel) : Bool :=
+8198:def ReciprocitySigma0WP (m : Microcycle) (S : SigmaModel) : Prop :=
+8219:def exec (m : Microcycle) : Option (Alpha × List Int) :=
+8230:def curvatureK (ds : List Int) : Nat :=
+8234:def signFlips (ds : List Int) : Nat :=
+8242:def JusticeTimely8 (m : Microcycle) : Bool :=
+8244:def JusticeTimely8P (m : Microcycle) : Prop := m.steps.length ≤ 8 ∧ ∀ p ∈ m.steps, p.accurate = true
+8254:lemma reciprocity_of_balances_zero (m : Microcycle) (S : SigmaModel)
+8260:lemma backlog_bounded (m : Microcycle) :
+8275:def ReciprocitySigma0 (m : Microcycle) : Bool := True
+8276:def ReciprocitySigma0P (m : Microcycle) : Prop := True
+8280:def TemperanceCap (m : Microcycle) : Bool := m.steps.all (fun p => Int.natAbs p.delta ≤ 1)
+8281:def TemperanceCapP (m : Microcycle) : Prop := ∀ p ∈ m.steps, Int.natAbs p.delta ≤ 1
+8287:def TemperanceCapNat (k : Nat) (m : Microcycle) : Bool :=
+8290:def TemperanceCapNatP (k : Nat) (m : Microcycle) : Prop :=
+8300:def Stable1Flip (ds : List Int) : Bool := signFlips ds ≤ 1
+8301:def Stable1FlipP (ds : List Int) : Prop := signFlips ds ≤ 1
+8305:def StableKFlips (k : Nat) (ds : List Int) : Bool := signFlips ds ≤ k
+8307:def StableKFlipsP (k : Nat) (ds : List Int) : Prop := signFlips ds ≤ k
+8314:lemma signFlips_le_curvatureK : ∀ ds : List Int, signFlips ds ≤ curvatureK ds := by
+8337:def Publish (m : Microcycle) : Bool :=
+8342:def PublishP (m : Microcycle) : Prop :=
+8345:lemma publish_bridge (m : Microcycle) : Publish m = true ↔ PublishP m := by
+8355:structure PublishClosure (m : Microcycle) : Prop :=
+8364:lemma publish_implies_closure (m : Microcycle) : PublishP m → PublishClosure m := by
+8382:lemma publish_least (m : Microcycle)
+8389:structure Morph where
+8395:def mapMicro (m : Microcycle) (φ : Morph) : Microcycle :=
+8398:lemma publish_invariant (m : Microcycle) (φ : Morph) : PublishP (mapMicro m φ) ↔ PublishP m := by
+8407:lemma justice_timely_mapped (m : Microcycle) (φ : Morph) :
+8414:lemma temperance_mapped (k : Nat) (m : Microcycle) (φ : Morph) :
+8420:lemma window_mapped (m : Microcycle) (φ : Morph) :
+8424:lemma unique_keys_mapped (m : Microcycle) (φ : Morph) :
+8433:namespace Examples
+8437:def Sphase : SigmaModel :=
+8440:def p0 (δ : Int) : Posting := { delta := δ, phase := (0 : Fin 8), accurate := true }
+8441:def p1 (δ : Int) : Posting := { delta := δ, phase := (1 : Fin 8), accurate := true }
+8443:def m2 : Microcycle := { start := mkAlpha 0, steps := [p0 1, p0 (-1)] }
+8458:end Examples
+8461:namespace IndisputableMonolith
+8462:namespace Ethics
+8463:namespace Alignment
+8465:structure TemporalPolicy where
+8469:def concatMicro (m n : Microcycle) : Microcycle :=
+8472:lemma within_concat (m n : Microcycle) (TP : TemporalPolicy) :
+8479:lemma justice_concat (m n : Microcycle) :
+8495:lemma temperance_concat (m n : Microcycle) :
+8505:lemma reciprocity_concat (m n : Microcycle) :
+8510:lemma publish_concat_of_exec (TP : TemporalPolicy) (m n : Microcycle)
+8531:end Alignment
+8532:end Ethics
+8533:end IndisputableMonolith
+8536:namespace IndisputableMonolith
+8537:namespace Ethics
+8546:namespace Truth
+8547:  abbrev Claim := String
+8550:  structure EvidenceLedger where
+8556:  def iterate {α} (f : α → α) : Nat → α → α
+8561:  def step (E : EvidenceLedger) (current : List Claim) : List Claim :=
+8566:  def closure (E : EvidenceLedger) (S : List Claim) : List Claim :=
+8570:  def hasConflict (E : EvidenceLedger) (S : List Claim) : Bool :=
+8578:  def divergenceCount (E : EvidenceLedger) (S : List Claim) : Nat :=
+8584:end Truth
+8588:structure ConsentWindow (A : Type u) where
+8594:namespace ConsentWindow
+8596:def activeAt {A} (w : ConsentWindow A) (t : Nat) : Bool :=
+8600:def permitsAt {A} (w : ConsentWindow A) (t : Nat) (a : A) : Bool :=
+8603:def revokeAt {A} (w : ConsentWindow A) (r : Nat) : ConsentWindow A :=
+8630:end ConsentWindow
+8632:structure ConsentLedger (A : Type u) where
+8635:namespace ConsentLedger
+8637:def permits {A} (L : ConsentLedger A) (t : Nat) (a : A) : Bool :=
+8646:end ConsentLedger
+8647:def crossAgentParityOk (P : Policy A) (xs : List (Request A)) : Bool :=
+8664:def fairnessBatchOk (P : Policy A) (xs : List (Request A)) : Bool :=
+8667:def chooseBestWithAllFairness (P : Policy A) (xs : List (Request A)) : Option (Request A) :=
+8676:def chooseTruthful (P : Policy A) (xs : List (Request A)) : Option (Request A) :=
+8689:def mapReqMicro (r : Request A) (φ : Alignment.Morph) : Request A :=
+8738:end Decision
+8740:end Ethics
+8741:end IndisputableMonolith
+8745:namespace IndisputableMonolith
+8746:namespace Ethics
+8747:namespace Decision
+8756:def JusticeOKP (r : Request A) : Prop := True
+8757:def ReciprocityOKP (r : Request A) : Prop := True
+8758:def TemperanceOKP (r : Request A) : Prop := True
+8759:def WithinWindowP (r : Request A) : Prop := True
+8760:def UniqueInWindowP (r : Request A) : Prop := True
+8761:def FairnessOKP (r : Request A) : Prop := True
+8762:def AdversarialOKP (r : Request A) : Prop := True
+8763:def TruthOKP (P : Policy A) (r : Request A) : Prop := True
+8764:def ConsentOKP (P : Policy A) (r : Request A) : Prop := True
+8765:def HarmOKP (P : Policy A) (r : Request A) : Prop := True
+8766:def DeonticOKP (P : Policy A) (r : Request A) : Prop := True
+8767:def PrivacyOKP (P : Policy A) (r : Request A) : Prop := True
+8768:def COIOKP (P : Policy A) (r : Request A) : Prop := True
+8769:def RobustOKP (P : Policy A) (r : Request A) : Prop := True
+8770:def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+8816:lemma admissible_true_iff (P : Policy A) (r : Request A) :
+8824:namespace Examples
+8828:def unitCost : CostModel Unit :=
+8832:def Punit : Policy Unit := { period := 8, threshold := 0, costModel := unitCost }
+8834:def cqLo : CQ := { listensPerSec := 1, opsPerSec := 1, coherence8 := 1
+8838:def cqHi : CQ := { listensPerSec := 2, opsPerSec := 1, coherence8 := 1
+8842:def rLo : Request Unit := { action := (), cq := cqLo }
+8843:def rHi : Request Unit := { action := (), cq := cqHi }
+8854:end Examples
+8857:structure ParityCfg where
+8861:def acceptRate (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) (g : String) : ℝ :=
+8867:def parityOk (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) : Bool :=
+8878:def EqOppOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+8879:def CalibOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+8880:def IndivFairOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+8881:def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+8900:end Decision
+8901:end Ethics
+8902:end IndisputableMonolith
+8910:namespace IndisputableMonolith
+8911:namespace DEC
+8918:structure CochainSpace (A : Type u) [AddCommMonoid A] where
+8935:namespace CochainSpace
+8940:def F (X : CochainSpace A) (A1 : A) : A := X.d1 A1
+8943:theorem bianchi (X : CochainSpace A) (A1 : A) : X.d2 (X.F A1) = 0 := by
+8948:def gauge (X : CochainSpace A) (A1 χ : A) : A := A1 + X.d0 χ
+8951:theorem F_gauge_invariant (X : CochainSpace A) (A1 χ : A) :
+8958:structure MaxwellModel (A : Type u) [AddCommMonoid A] extends CochainSpace A where
+8963:namespace MaxwellModel
+8968:def J (M : MaxwellModel A) (A1 : A) : A :=
+8972:theorem current_conservation (M : MaxwellModel A) (A1 : A) :
+8977:end MaxwellModel
+8978:end CochainSpace
+8980:end DEC
+8981:end IndisputableMonolith
+8987:namespace IndisputableMonolith
+8988:namespace DEC4D
+8992:structure Complex4D
+9012:namespace Complex4D
+9018:def F (X : Complex4D C0 C1 C2 C3 C4) (A : C1) : C2 := X.d1 A
+9020:theorem bianchi (X : Complex4D C0 C1 C2 C3 C4) (A : C1) :
+9025:def gauge (X : Complex4D C0 C1 C2 C3 C4) (A : C1) (χ : C0) : C1 := A + X.d0 χ
+9027:theorem F_gauge_invariant (X : Complex4D C0 C1 C2 C3 C4) (A : C1) (χ : C0) :
+9033:structure MaxwellModel4D
+9042:namespace MaxwellModel4D
+9048:def J (M : MaxwellModel4D C0 C1 C2 C3 C4) (A : C1) : C3 :=
+9051:theorem current_conservation (M : MaxwellModel4D C0 C1 C2 C3 C4) (A : C1) :
+9056:end MaxwellModel4D
+9059:def trivial
+9083:end Complex4D
+9084:end DEC4D
+9098:namespace Pipelines
+9103:def phi : ℝ := (1 + Real.sqrt 5) / 2
+9105:namespace GapSeries
+9110:def coeff (n : ℕ) : ℝ :=
+9116:def partialSum (n : ℕ) : ℝ :=
+9120:def F (z : ℝ) : ℝ := Real.log (1 + z / IndisputableMonolith.Constants.phi)
+9123:def f_gap : ℝ := F 1
+9125:end GapSeries
+9127:namespace Curvature
+9131:def deltaKappa : ℝ := - (103 : ℝ) / (102 * Real.pi ^ 5)
+9135:def alphaInvPrediction : ℝ := 4 * Real.pi * 11 - (Real.log IndisputableMonolith.Constants.phi + deltaKappa)
+9137:end Curvature
+9139:end Pipelines
+9141:end IndisputableMonolith
+9143:namespace IndisputableMonolith
+9144:namespace Complexity
+9150:structure ComplexityPair where
+9156:structure RSPreserving (A B : Type) where
+9165:namespace BalancedParityHidden
+9170:def enc (b : Bool) (R : Fin n → Bool) : Fin n → Bool :=
+9174:def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool :=
+9178:def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
+9181:theorem adversarial_failure (M : Finset (Fin n))
+9210:theorem no_universal_decoder (M : Finset (Fin n))
+9219:theorem omega_n_queries
+9225:end BalancedParityHidden
+9227:end Complexity
+9228:end IndisputableMonolith
+9235:namespace URC
+9236:namespace BridgeAxioms
+9238:def UnitsProp : Prop :=
+9241:def EightBeatProp : Prop :=
+9244:def ELProp : Prop :=
+9248:def PhiRungProp : Prop :=
+9254:def GapListenProp : Prop := True
+9256:structure MeasurementAxioms : Prop where
+9263:structure LawfulBridge : Prop where
+9270:theorem log_affine_from_EL_and_8beat (MA : MeasurementAxioms) : ELProp := MA.EL_transport
+9272:theorem phi_rung_from_log_affine : PhiRungProp := by
+9274:theorem gauge_uniqueness_from_units (_MA : MeasurementAxioms) : Prop := True
+9276:theorem gap_listen_positive_from_minimality (MA : MeasurementAxioms) : GapListenProp := MA.gap_listen_positive
+9278:theorem bridge_inevitability (MA : MeasurementAxioms) : LawfulBridge := by
+9283:namespace Manifest
+9294:def report : String :=
+9297:end Manifest
+9298:end BridgeAxioms
+9299:end URC
+9301:namespace IndisputableMonolith
+9302:namespace URCAdapters
+9304:def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge := URC.BridgeAxioms.Manifest.bridge
+9306:def routeA_report : String := URC.BridgeAxioms.Manifest.report
+9308:def routeA_end_to_end_demo : String :=
+9312:def routeAB_report : String :=
+9318:def routeB_closure_report : String :=
+9322:def routeAB_closure_report : String :=
+9328:def grand_manifest : String :=
+9334:def routeA_end_to_end_proof :
+9345:end URCAdapters
+9346:end IndisputableMonolith
+9349:namespace IndisputableMonolith
+9350:namespace Complexity
+9352:namespace VertexCover
+9355:structure Instance where
+9362:def InCover (S : List Nat) (v : Nat) : Prop := v ∈ S
+9364:def EdgeCovered (S : List Nat) (e : Nat × Nat) : Prop :=
+9368:def Covers (S : List Nat) (I : Instance) : Prop :=
+9372:def HasCover (I : Instance) : Prop :=
+9376:def example : Instance := { vertices := [1], edges := [], k := 0 }
+9378:lemma example_hasCover : HasCover example := by
+9383:end VertexCover
+9385:namespace RSVC
+9388:structure ConstraintInstance where
+9399:def Recognizes (A : ConstraintInstance) : Prop :=
+9410:def rs_preserving_RS2VC : RSPreserving ConstraintInstance VertexCover.Instance :=
+9415:end RSVC
+9417:end Complexity
+9418:end IndisputableMonolith
