@@ -1133,7 +1133,7 @@ structure CoarseGrain (α : Type) where
 
 /-- Riemann sum over the first `n` embedded cells for an observable `f`. -/
 def RiemannSum (CG : CoarseGrain α) (f : α → ℝ) (n : Nat) : ℝ :=
-  ∑ i in Finset.range n, f (CG.embed i) * CG.vol (CG.embed i)
+  (Finset.range n).sum (fun i => f (CG.embed i) * CG.vol (CG.embed i))
 
 /-- Statement schema for the continuum continuity equation (divergence form in the limit). -/
 structure ContinuityEquation (α : Type) where
@@ -1342,6 +1342,11 @@ open IndisputableMonolith.LNAL
 
 /-- Concrete state and observable for dynamics-coupled measurement. -/
 abbrev State := LNAL.State
+structure Realization (State Obs : Type) where
+  M : Measurement.Map State Obs
+  evolve : Nat → State → State
+  invariant8 : Prop
+  breath1024 : Prop
 abbrev Obs := ℝ
 
 /-- Packaged realization: evolution uses `Dynamics.tick_evolution`, and invariants are wired
@@ -1372,16 +1377,13 @@ lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
   {c₁ c₂ : ℤ}
   (h₁ : ∀ yc, f yc = g yc + c₁)
   (h₂ : ∀ yc, f yc = g yc + c₂) : c₁ = c₂ := by
-  -- evaluate at the basepoint element
+  -- evaluate at the basepoint element and cancel g(x0)
   have h1 := h₁ (basepoint (M:=M) x0)
   have h2 := h₂ (basepoint (M:=M) x0)
-  -- cancel g(x0)
-  simpa [basepoint, add_comm, add_left_comm, add_assoc] using (by
-    have := congrArg (fun t => t - g (basepoint (M:=M) x0)) h1
-    have := congrArg (fun t => t - g (basepoint (M:=M) x0)) h2 ▸ this
-    -- Simplify (g + c) - g = c
-    simp at this
-    exact this)
+  -- From h1,h2: g x0 + c₁ = g x0 + c₂
+  have : g (basepoint (M:=M) x0) + c₁ = g (basepoint (M:=M) x0) + c₂ := by
+    simpa [h1, h2]
+  exact add_left_cancel this
 
 /-- Classical T4 restatement: for δ-potentials, there exists a unique constant
     such that the two restrictions differ by that constant on the reach component. -/
