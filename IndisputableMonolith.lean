@@ -600,6 +600,7 @@ namespace ConeBound
 
 open Causality
 open Finset
+open scoped BigOperators
 
 variable {α : Type} {d : Nat}
 variable [DecidableEq α]
@@ -613,13 +614,13 @@ noncomputable def ballFS (x : α) : Nat → Finset α
 | 0 => {x}
 | Nat.succ n =>
     let prev := ballFS x n
-    prev ∪ prev.bind (fun z => B.neighbors z)
+    prev ∪ Finset.bind prev (fun z => B.neighbors z)
 
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
   simp [ballFS]
 
 @[simp] lemma mem_bind_neighbors {s : Finset α} {y : α} :
-  y ∈ s.bind (fun z => B.neighbors z) ↔ ∃ z ∈ s, y ∈ B.neighbors z := by
+  y ∈ Finset.bind s (fun z => B.neighbors z) ↔ ∃ z ∈ s, y ∈ B.neighbors z := by
   classical
   simp
 
@@ -631,7 +632,7 @@ theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ b
   · simpa [ballFS, ballP]
   · have : ballFS (α:=α) x (Nat.succ n) =
       let prev := ballFS (α:=α) x n
-      prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z) := by rfl
+      prev ∪ Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z) := by rfl
     dsimp [ballFS] at this
     simp [ballFS, ballP, ih, B.step_iff_mem]
 
@@ -647,16 +648,16 @@ lemma card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card := by
 
 /-- Generic upper bound: the size of `s.bind f` is at most the sum of the sizes. -/
 lemma card_bind_le_sum (s : Finset α) (f : α → Finset α) :
-  (s.bind f).card ≤ ∑ z in s, (f z).card := by
+  (Finset.bind s f).card ≤ ∑ z in s, (f z).card := by
   classical
   refine Finset.induction_on s ?base ?step
   · simp
   · intro a s ha ih
-    have hbind : (insert a s).bind f = f a ∪ s.bind f := by
+    have hbind : Finset.bind (insert a s) f = f a ∪ Finset.bind s f := by
       simp [Finset.bind, ha]
-    have hle : ((insert a s).bind f).card ≤ (f a).card + (s.bind f).card := by
-      simpa [hbind] using card_union_le (f a) (s.bind f)
-    have hsum : (f a).card + (s.bind f).card ≤ ∑ z in insert a s, (f z).card := by
+    have hle : (Finset.bind (insert a s) f).card ≤ (f a).card + (Finset.bind s f).card := by
+      simpa [hbind] using card_union_le (f a) (Finset.bind s f)
+    have hsum : (f a).card + (Finset.bind s f).card ≤ ∑ z in insert a s, (f z).card := by
       simpa [Finset.sum_insert, ha] using Nat.add_le_add_left ih _
     exact le_trans hle hsum
 
@@ -684,7 +685,7 @@ lemma sum_card_neighbors_le (s : Finset α) :
 
 /-- Bound the expansion layer size: `|s.bind neighbors| ≤ d * |s|`. -/
 lemma card_bind_neighbors_le (s : Finset α) :
-  (s.bind (fun z => B.neighbors z)).card ≤ d * s.card := by
+  (Finset.bind s (fun z => B.neighbors z)).card ≤ d * s.card := by
   classical
   exact le_trans (card_bind_le_sum (s := s) (f := fun z => B.neighbors z)) (sum_card_neighbors_le (s := s))
 
@@ -694,14 +695,14 @@ lemma card_ballFS_succ_le (x : α) (n : Nat) :
   classical
   have : ballFS (α:=α) x (Nat.succ n) =
     let prev := ballFS (α:=α) x n
-    prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z) := by rfl
+    prev ∪ Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z) := by rfl
   dsimp [ballFS] at this
   have h_union_le : (let prev := ballFS (α:=α) x n;
-                     (prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card)
-                    ≤ (ballFS (α:=α) x n).card + ((ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card := by
+                     (prev ∪ Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z)).card)
+                    ≤ (ballFS (α:=α) x n).card + (Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z)).card := by
     classical
-    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).bind (fun z => B.neighbors z))
-  have h_bind_le : ((ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card
+    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) (Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z))
+  have h_bind_le : (Finset.bind (ballFS (α:=α) x n) (fun z => B.neighbors z)).card
                     ≤ d * (ballFS (α:=α) x n).card := card_bind_neighbors_le (s := ballFS (α:=α) x n)
   have : (ballFS (α:=α) x (Nat.succ n)).card ≤ (ballFS (α:=α) x n).card + d * (ballFS (α:=α) x n).card := by
     simpa [this] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
