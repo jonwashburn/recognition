@@ -23,10 +23,10 @@ jobs:
             ${{ runner.os }}-lake-
       - name: Update deps
         run: lake update
-      - name: Build monolith and checks
+      - name: Build monolith and ci_checks
         run: |
-          lake build
-          lake build CI/Checks
-      - name: Run Checks
+          lake build IndisputableMonolith
+          lake build ci_checks
+      - name: Run CI checks
         run: |
-          lake env lean --run CI/Checks.lean
+          ./build/bin/ci_checks
