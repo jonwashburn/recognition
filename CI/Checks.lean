@@ -1,3 +1,5 @@
+module CI.Checks
+
 import IndisputableMonolith
 
 -- Compile-time checks for Route A/B symbols
@@ -6,8 +8,6 @@ import IndisputableMonolith
 #check IndisputableMonolith.URCAdapters.grand_manifest
 #check IndisputableMonolith.URC.BridgeAxioms.bridge_inevitability
 #check IndisputableMonolith.URCGenerators.determination_by_generators
-
--- Also reference the concrete Manifest bridge to ensure it elaborates
 #check IndisputableMonolith.URC.BridgeAxioms.Manifest.bridge
 
 def main : IO Unit := do

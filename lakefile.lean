@@ -6,3 +6,4 @@ package recognition
 require mathlib from git "https://github.com/leanprover-community/mathlib4.git"
 
 lean_lib IndisputableMonolith
+lean_lib CI
