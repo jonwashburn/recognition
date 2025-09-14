@@ -1,0 +1,33 @@
+# recognition
+
+[![CI](https://github.com/jonwashburn/recognition/actions/workflows/ci.yml/badge.svg)](https://github.com/jonwashburn/recognition/actions/workflows/ci.yml)
+
+Single-file executable monolith (Lean 4) for the Recognition project.
+
+## Quick start
+
+1) Install elan (Lean toolchain manager):
+
+```bash
+curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | bash -s -- -y
+source "$HOME/.elan/env"
+```
+
+2) Build:
+
+```bash
+lake build
+```
+
+3) CI smoke (fast):
+
+```bash
+lake exe ci_checks
+```
+
+## Notes
+
+- The repository includes a GitHub Actions workflow that installs elan, builds the project, runs a smoke check, and guards against `sorry`/`admit` outside the heavy monolith file.
+- For monolith exploration, open `IndisputableMonolith.lean` in your editor with Lean support enabled.
+
+
