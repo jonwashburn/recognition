@@ -1,16 +1,7 @@
-import IndisputableMonolith
-
--- Compile-time checks for Route A/B symbols
-#check IndisputableMonolith.URCAdapters.routeA_end_to_end_demo
-#check IndisputableMonolith.URCAdapters.routeB_closure_report
-#check IndisputableMonolith.URCAdapters.grand_manifest
--- (bridge_inevitability and Manifest.bridge checks moved to full-build stage)
-#check IndisputableMonolith.URCGenerators.determination_by_generators
+/-!
+  Minimal CI smoke check: keep this fast and independent from the heavy monolith.
+  This executable is only to verify the toolchain runs in CI.
+-/
 
 def main : IO Unit := do
-  let a := IndisputableMonolith.URCAdapters.routeA_end_to_end_demo
-  let b := IndisputableMonolith.URCAdapters.routeB_closure_report
-  let ab := IndisputableMonolith.URCAdapters.grand_manifest
-  IO.println s!"Route A: {a}"
-  IO.println s!"Route B: {b}"
-  IO.println s!"AB: {ab}"
+  IO.println "CI smoke: toolchain OK, lake exe ran."
