@@ -1,5 +1,11 @@
-.lake/
-build/
+#.lake/
+#build/
 *.olean
 *.trace
 *.hash
+
+# Local helper outputs
+IndisputableMonolith.index
+cache_fetch.log
+/tmp/*.log
+**/*.log

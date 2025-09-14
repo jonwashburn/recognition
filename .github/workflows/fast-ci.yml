@@ -1,0 +1,50 @@
+name: Fast CI (cached head build)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: fast-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  head_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Lean
+        uses: leanprover/setup-lean@v1
+
+      - name: Cache lake artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            lake-packages
+            build
+          key: ${{ runner.os }}-lake-${{ hashFiles('**/lake-manifest.json') }}
+          restore-keys: |
+            ${{ runner.os }}-lake-
+
+      - name: Update deps
+        run: lake update
+
+      - name: Head-only build (first 6000 lines)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cp IndisputableMonolith.lean IndisputableMonolith.full.lean
+          head -n 6000 IndisputableMonolith.full.lean > IndisputableMonolith.lean
+          lake build IndisputableMonolith
+          git checkout -- IndisputableMonolith.lean
+
+      - name: Run CI checks
+        run: |
+          lake build ci_checks
+          ./build/bin/ci_checks
+
+
