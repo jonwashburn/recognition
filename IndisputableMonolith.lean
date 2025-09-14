@@ -1194,7 +1194,6 @@ lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
   sumFirst n s = Z_of_window w := by
   classical
   unfold sumFirst Z_of_window Cylinder at *
-  ext1
   -- Pointwise the summands coincide by the cylinder condition.
   have : (fun i : Fin n => (if s i.val then 1 else 0)) =
          (fun i : Fin n => (if w i then 1 else 0)) := by
@@ -1383,7 +1382,12 @@ lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
   -- From h1,h2: g x0 + c₁ = g x0 + c₂
   have : g (basepoint (M:=M) x0) + c₁ = g (basepoint (M:=M) x0) + c₂ := by
     -- both equal `f (basepoint x0)` by h1,h2
-    exact by simpa [h1, h2]
+    -- from h1, h2: f(basepoint) = g(basepoint) + c₁ and = g(basepoint) + c₂
+    -- rearrange to equality of sums
+    have := congrArg (fun t => t) h1; clear h1
+    have := congrArg (fun t => t) h2; clear h2
+    -- now trivial rewrite
+    simpa using this
   exact add_left_cancel this
 
 /-- Classical T4 restatement: for δ-potentials, there exists a unique constant
@@ -1401,9 +1405,9 @@ theorem T4_unique_constant_on_component
     -- uniqueness of the constant by evaluating at basepoint
     exact (gauge_constant_unique (M:=M) (x0:=x0)
       (f := restrictToComponent (M:=M) x0 p) (g := restrictToComponent (M:=M) x0 q)
-      (c₁ := c') (c₂ := c)
-      (h₁ := hc')
-      (h₂ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)).symm
+      (c₁ := c) (c₂ := c')
+      (h₁ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)
+      (h₂ := hc'))
 
 /-- Corollary: the gauge classes of any two δ-potentials coincide on the component. -/
 theorem gaugeClass_const (x0 : M.U) {δ : ℤ} {p q : Potential.Pot M}
