@@ -604,8 +604,8 @@ variable {α : Type} {d : Nat}
 variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
-/-- Kinematics induced by a `BoundedStep` instance (stubbed for build progress). -/
-def KB : Kinematics α := { step := B.step }
+/-- Kinematics induced by an explicit `BoundedStep` instance. -/
+def KB' (B : BoundedStep α d) : Kinematics α := { step := B.step }
 
 /-- Finset n-ball (stub): keep {x} for all radii to avoid heavy combinatorics here. -/
 noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
@@ -613,11 +613,11 @@ noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
   simp [ballFS]
 
-/-- BFS ball membership vs logical n-ball (axiom stub). -/
-axiom mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y
+/-- BFS ball membership vs logical n-ball (axiom stub with explicit instance). -/
+axiom mem_ballFS_iff_ballP (B : BoundedStep α d) (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB' (α:=α) (d:=d) B) x n y
 
 /-- Geometric bound (axiom stub). -/
-axiom ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n
+axiom ballFS_card_le_geom (B : BoundedStep α d) (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n
 
 end ConeBound
 
