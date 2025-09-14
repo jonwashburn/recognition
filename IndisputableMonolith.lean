@@ -1342,10 +1342,10 @@ abbrev Obs := ℝ
 noncomputable def lnalRealization (meas : (ℝ → State) → ℝ → Obs) : Realization State Obs :=
 { meas := meas
 , evolve := fun n s => (fun n s => s) n s
-, invariant8 := (∀ c : Chain, ∀ start : Nat,
+, invariant8 := (∀ c : State, ∀ start : Nat,
     let window_sum := (Finset.range 8).sum (fun _i => 0);
     window_sum = 0)
-, breath1024 := (∀ c : Chain,
+, breath1024 := (∀ c : State,
     (Finset.range 1024).foldl (fun c' _n => c') c = c)
 }
 end Measurement
