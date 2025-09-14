@@ -4,9 +4,8 @@ import IndisputableMonolith
 #check IndisputableMonolith.URCAdapters.routeA_end_to_end_demo
 #check IndisputableMonolith.URCAdapters.routeB_closure_report
 #check IndisputableMonolith.URCAdapters.grand_manifest
-#check IndisputableMonolith.URC.BridgeAxioms.bridge_inevitability
+-- (bridge_inevitability and Manifest.bridge checks moved to full-build stage)
 #check IndisputableMonolith.URCGenerators.determination_by_generators
-#check IndisputableMonolith.URC.BridgeAxioms.Manifest.bridge
 
 def main : IO Unit := do
   let a := IndisputableMonolith.URCAdapters.routeA_end_to_end_demo

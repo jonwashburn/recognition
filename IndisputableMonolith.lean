@@ -6731,12 +6731,15 @@ lemma mass_rshift (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   dsimp [mass]
   simp [Int.cast_add, hdist, Real.exp_add, hexp_log, mul_comm, mul_left_comm, mul_assoc]
 /-- Auxiliary: exp of a natural multiple. -/-
-private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (Real.exp L) ^ n
-| 0 => by simp
-| Nat.succ n => by
+private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (Real.exp L) ^ n := by
+  intro n
+  induction' n with
+  | zero =>
+    simp
+  | succ n ih =>
     have hdist : ((Nat.succ n : ℝ) * L) = (n : ℝ) * L + L := by
       ring
-    simp [hdist, exp_nat_mul n, Real.exp_add, pow_succ, mul_comm, mul_left_comm, mul_assoc]
+    simp [hdist, ih, Real.exp_add, pow_succ, mul_comm, mul_left_comm, mul_assoc]
 
 /-- Multiple rung shifts: `n` steps multiply mass by `φ^n`. -/
 lemma mass_rshift_steps (U : Constants.RSUnits) (k : Nat) (r : ℤ) (n : Nat) (f : ℝ) :
@@ -6839,12 +6842,15 @@ lemma mass_ratio_zpow (U : Constants.RSUnits)
 @[simp] lemma mass_rshift_simp (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   mass U k (r + 1) f = Constants.phi * mass U k r f := mass_rshift U k r f
 
-private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (Real.exp L) ^ n
-| 0 => by simp
-| Nat.succ n => by
+private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (Real.exp L) ^ n := by
+  intro n
+  induction' n with
+  | zero =>
+    simp
+  | succ n ih =>
     have hdist : ((Nat.succ n : ℝ) * L) = (n : ℝ) * L + L := by
       ring
-    simp [hdist, exp_nat_mul n, Real.exp_add, pow_succ, mul_comm, mul_left_comm, mul_assoc]
+    simp [hdist, ih, Real.exp_add, pow_succ, mul_comm, mul_left_comm, mul_assoc]
 @[simp] lemma B_of_zero : B_of 0 = 1 := by simp [B_of]
 
 @[simp] lemma B_of_succ (k : Nat) : B_of (k+1) = 2 * B_of k := by
@@ -7102,6 +7108,8 @@ namespace IndisputableMonolith
 /-! ## Quantum interface stubs: path weights and interface-level propositions -/
 
 namespace Quantum
+
+open scoped BigOperators
 
 /-- Path weight class: assigns a cost `C`, a composition on paths, and defines probability `prob := exp(−C)`.
     Includes a normalization condition over a designated finite set, provided here as a theorem-level field
