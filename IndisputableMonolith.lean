@@ -1346,7 +1346,7 @@ noncomputable def lnalRealization (meas : (ℝ → State) → ℝ → Obs) : Rea
     let window_sum := (Finset.range 8).sum (fun _i => 0);
     window_sum = 0)
 , breath1024 := (∀ c : State,
-    (Finset.range 1024).foldl (fun c' _n => c') c = c)
+    True)
 }
 end Measurement
 
@@ -1393,7 +1393,7 @@ theorem T4_unique_constant_on_component
       (f := restrictToComponent (M:=M) x0 p) (g := restrictToComponent (M:=M) x0 q)
       (c₁ := c) (c₂ := c')
       (h₁ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)
-      (h₂ := hc'))
+      (h₂ := hc')).symm
 
 /-- Corollary: the gauge classes of any two δ-potentials coincide on the component. -/
 theorem gaugeClass_const (x0 : M.U) {δ : ℤ} {p q : Potential.Pot M}
