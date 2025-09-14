@@ -1382,7 +1382,12 @@ lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
   have h2 := h₂ (basepoint (M:=M) x0)
   -- From h1,h2: g x0 + c₁ = g x0 + c₂
   have : g (basepoint (M:=M) x0) + c₁ = g (basepoint (M:=M) x0) + c₂ := by
-    simpa [h1, h2]
+    -- both equal f (basepoint x0)
+    have := h1
+    have := h2
+    -- rewrite to the same right-hand side
+    simp [this] at *
+    exact rfl
   exact add_left_cancel this
 
 /-- Classical T4 restatement: for δ-potentials, there exists a unique constant
