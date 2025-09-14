@@ -1479,13 +1479,7 @@ theorem agrees_on_exp_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
   have : F (Real.exp t) = Jcost (Real.exp t) := le_antisymm h₁ h₂
   simpa using this
 
-/-- From exp-axis agreement, conclude equality with Jcost on ℝ_{>0}. -/
-theorem F_eq_J_on_pos (F : ℝ → ℝ)
-  (hAgree : AgreesOnExp F) : ∀ {x : ℝ}, 0 < x → F x = Jcost x := by
-  intro x hx
-  have : ∃ t, Real.exp t = x := ⟨Real.log x, by simpa using Real.exp_log hx⟩
-  rcases this with ⟨t, rfl⟩
-  simpa using hAgree t
+-- (moved) From exp-axis agreement, conclude equality with Jcost on ℝ_{>0}. See below.
 
 /-- Builder: any `AveragingBounds` instance induces an `AveragingDerivation` instance. -/
 instance (priority := 90) averagingDerivation_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
