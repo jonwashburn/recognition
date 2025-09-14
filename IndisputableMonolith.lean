@@ -2302,7 +2302,7 @@ theorem fortyfive_gap_spec_for_IM (φ : ℝ)
   (_hasRung : RH.RS.HasRung IM B)
   (_gap : RH.RS.FortyFiveGapHolds IM B) :
   ∃ (F : RH.RS.FortyFiveConsequences IM B), F.delta_is_3_over_64 ∧ F.rung45_exists ∧ (∀ n ≥ 2, F.no_multiples n ‹_›) :=
-  IM_fortyFive_consequences_exists (B := B)
+by exact IM_fortyFive_consequences_exists (B := B)
 
 /-- Partial closing: dimensionless inevitability and 45-gap for IM; placeholders for absolutes and SAT layer. -/
 /-- Partial closing for IM: dimensionless inevitability plus 45-gap witness for any IM bridge. -/
