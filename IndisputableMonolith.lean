@@ -626,6 +626,15 @@ noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
 
 end ConeBound
 
+/-! Minimal constants carrier to support LightCone bounds. -/
+namespace Constants
+  /-- RS units: time step τ0, length step ℓ0, speed of light c. -/
+  structure RSUnits where
+    tau0 : ℝ
+    ell0 : ℝ
+    c    : ℝ
+end Constants
+
 /-! Discrete light-cone bound (speed ≤ c from per-step bounds). -/
 namespace LightCone
 
@@ -641,7 +650,6 @@ structure StepBounds (K : Causality.Kinematics α)
   step_time : ∀ {y z}, K.step y z → time z = time y + U.tau0
   step_rad  : ∀ {y z}, K.step y z → rad z ≤ rad y + U.ell0
 namespace StepBounds
-
 variable {K : Causality.Kinematics α}
 variable {U : IndisputableMonolith.Constants.RSUnits}
 variable {time rad : α → ℝ}
@@ -857,8 +865,8 @@ lemma diff_const_on_component {δ : ℤ} {p q : Pot M}
 theorem T4_unique_on_reachN {δ : ℤ} {p q : Pot M}
   (hp : DE (M:=M) δ p) (hq : DE (M:=M) δ q) {x0 : M.U}
   (hbase : p x0 = q x0) : ∀ {n y}, Causality.ReachN (Kin M) n x0 y → p y = q y := by
-  intro n y h
-  have hdiff := diff_const_on_ReachN (M:=M) (δ:=δ) (p:=p) (q:=q) hp hq h
+  intro n y hreach
+  have hdiff := diff_const_on_ReachN (M:=M) (δ:=δ) (p:=p) (q:=q) hp hq hreach
   have : p x0 - q x0 = 0 := by simp [hbase]
   have : p y - q y = 0 := by simpa [this] using hdiff
   exact sub_eq_zero.mp this
@@ -1291,7 +1299,6 @@ the averaged instrument observation over `k` aligned windows, as in DNARP Eq. (b
 -/
 
 namespace Examples
-
 open PatternLayer MeasurementLayer
 
 /-- Example 8‑bit window: ones at even indices (Z=4). -/
@@ -1937,7 +1944,6 @@ end Cycle3
     45-Gap consequences, measurement–reality bridging, and
     recognition/computation separation. No axioms; no sorries.
 ############################################################ -/
-
 namespace RH
 namespace RS
 /-! ### General bundling (ledger-agnostic) -/
@@ -2585,7 +2591,6 @@ theorem IM_fortyFive_consequences_exists (B : RH.RS.Bridge IM) :
   · simp [IM_FortyFiveConsequences]
   · simp [IM_FortyFiveConsequences]
   · intro n hn; simp [IM_FortyFiveConsequences, hn]
-
 end Instances
 end RS
 end RH
@@ -3234,7 +3239,6 @@ def normalForm (w : Word) : Word :=
       let acc' := rewriteOnce acc
       if acc' = acc then acc else loop k acc'
   loop fuel w
-
 /-- Reduced length ℓ(W) as length of the normal form. -/
 @[simp] def ell (w : Word) : Nat := (normalForm w).length
 
@@ -4529,7 +4533,6 @@ deriving Repr
   IndisputableMonolith.Recognition.PhiPow
     ((IndisputableMonolith.Recognition.r IndisputableMonolith.Recognition.Species.e : ℝ)
      + IndisputableMonolith.Recognition.Fgap (IndisputableMonolith.Recognition.Z IndisputableMonolith.Recognition.Species.e))
-
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 @[simp] def m_e (B : BridgeData) : ℝ := m_e_over_Ecoh * E_coh B
 
@@ -4714,7 +4717,7 @@ def urcManifestStrings : List String :=
 end Verification
 end IndisputableMonolith
 
-/‑‑ ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
+/-! ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
 namespace IndisputableMonolith
 namespace Ethics
 namespace Invariants
