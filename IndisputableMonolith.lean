@@ -1254,27 +1254,20 @@ lemma blockSum_equals_Z_on_cylinder_first (w : Pattern 8) {s : Stream}
 lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
   subBlockSum8 (extendPeriodic8 w) j = Z_of_window w := by
   classical
-  unfold subBlockSum8 Z_of_window extendPeriodic8
-  -- Use `(j*8 + i) % 8 = i` for `i<8`.
+  -- periodicity: (j*8 + i) % 8 = i for i<8
   have hmod : ∀ i : Fin 8, ((j * 8 + i.val) % 8) = i.val := by
-    intro i
-    have : i.val < 8 := i.isLt
-    -- (a*8 + b) % 8 = b when b<8
-    simpa [Nat.add_comm, Nat.mul_comm, Nat.mod_eq_of_lt this, Nat.mul_mod] using
+    intro i; exact
       (by
-        -- Directly: (j*8) % 8 = 0, so (j*8 + i) % 8 = i % 8 = i
         have : (j * 8) % 8 = 0 := by simpa using Nat.mul_mod j 8 8
+        have hi : i.val < 8 := i.isLt
         calc
           (j * 8 + i.val) % 8
               = ((j * 8) % 8 + i.val % 8) % 8 := by simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.mul_comm] using Nat.add_mod (j*8) i.val 8
-          _   = (0 + i.val) % 8 := by simpa [this, Nat.mod_eq_of_lt i.isLt]
+          _   = (0 + i.val) % 8 := by simpa [this, Nat.mod_eq_of_lt hi]
           _   = i.val % 8 := by simp
-          _   = i.val := by simpa [Nat.mod_eq_of_lt i.isLt])
-  -- Rewrite each summand to the window bit.
-  have : (fun i : Fin 8 => if (extendPeriodic8 w) (j * 8 + i.val) then 1 else 0)
-         = (fun _i : Fin 8 => if w _i then 1 else 0) := by
-    funext i; simp [extendPeriodic8, hmod i]
-  simpa [this]
+          _   = i.val := by simpa [Nat.mod_eq_of_lt hi])
+  -- Summand-wise simplification
+  simp [subBlockSum8, extendPeriodic8, Z_of_window, hmod]
 
 /-- For `s = extendPeriodic8 w`, summing `k` aligned 8‑blocks yields `k * Z(w)`. -/
 lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
@@ -1338,7 +1331,7 @@ open IndisputableMonolith.LNAL
 /-- Concrete state and observable for dynamics-coupled measurement. -/
 abbrev State := LNAL.State
 structure Realization (State Obs : Type) where
-  M : Measurement.Map State Obs
+  meas : (ℝ → State) → ℝ → Obs
   evolve : Nat → State → State
   invariant8 : Prop
   breath1024 : Prop
@@ -1346,8 +1339,8 @@ abbrev Obs := ℝ
 
 /-- Packaged realization: evolution uses `Dynamics.tick_evolution`, and invariants are wired
     to `Dynamics.eight_window_balance` and `Dynamics.breath_cycle`. -/
-noncomputable def lnalRealization (Mmap : Measurement.Map State Obs) : Realization State Obs :=
-{ M := Mmap
+noncomputable def lnalRealization (meas : (ℝ → State) → ℝ → Obs) : Realization State Obs :=
+{ meas := meas
 , evolve := fun n s => (fun n s => s) n s
 , invariant8 := (∀ c : Chain, ∀ start : Nat,
     let window_sum := (Finset.range 8).sum (fun _i => 0);
