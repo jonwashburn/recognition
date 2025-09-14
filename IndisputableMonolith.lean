@@ -13,6 +13,8 @@ These confirm: A (axioms→bridge) ⇒ C; B (generators→bridge) ⇒ C; λ_rec 
 -/
 
 open Classical Function
+open Real Complex
+open scoped BigOperators
 
 namespace IndisputableMonolith
 /-! ###############################################################
@@ -493,7 +495,6 @@ lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
     = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
   classical
   simpa using (mapDelta_diff (δ:=δ) (hδ:=hδ) (f:=f) (p:=p) (q:=q))
-
 end UnitMapping
 
 /-! ## Causality: n-step reachability and an n-ball light-cone bound (definition-level). -/
@@ -982,7 +983,6 @@ lemma edge_diff_invariant {δ : ℤ} {p q : Pot M}
   have hδ : (p b - p a) - (q b - q a) = δ - δ := by simp [hp h, hq h]
   have : (p b - q b) - (p a - q a) = 0 := by simp [harr, hδ]
   exact sub_eq_zero.mp this
-
 /-- The difference (p − q) is constant along any n‑step reach. -/
 lemma diff_const_on_ReachN {δ : ℤ} {p q : Pot M}
   (hp : DE (M:=M) δ p) (hq : DE (M:=M) δ q) :
@@ -1474,7 +1474,6 @@ noncomputable def lnalRealization (Mmap : Map State Obs) : Realization State Obs
 , breath1024 := (∀ c : Chain,
     (Finset.range 1024).foldl (fun c' n => Dynamics.tick_evolution n c') c = c)
 }
-
 end Measurement
 
 namespace ClassicalBridge
@@ -1966,7 +1965,6 @@ open Constants
 /-- From the constants layer: φ is the positive solution of x = 1 + 1/x. -/
 lemma phi_is_cost_fixed_point : phi = 1 + 1 / phi :=
   Constants.phi_fixed_point
-
 end Cost
 
 /-! ## Tiny worked example + symbolic SI mapping (minimal) -/
@@ -2862,7 +2860,7 @@ def IM_FortyFiveConsequences (B : RH.RS.Bridge IM) : RH.RS.FortyFiveConsequences
     -- hence r = 45*n is impossible for n ≥ 2.
     intro hr
     rcases hr with ⟨R, hR, hr⟩
-    -- From hr we have 45 * n = 45, contradicting n ≥ 2
+    -- From hr we have 45 * n = 45 * 2, contradicting n ≥ 2
     have hge : 45 * 2 ≤ 45 * n := Nat.mul_le_mul_left 45 hn
     have hlt : 45 < 45 * 2 := by decide
     have hgt : 45 < 45 * n := lt_of_lt_of_le hlt hge
@@ -2933,7 +2931,6 @@ def sigmaN (n : ℕ) (a2 : ℝ)
 def A2_QED : ℝ := A2 ((1 : ℝ) / 18) ((2 : ℝ) / 3)
 /-- QCD preset parameters: P=2/9, γ=2/3. -/
 def A2_QCD : ℝ := A2 ((2 : ℝ) / 9) ((2 : ℝ) / 3)
-
 /-- Convergence guard: require 1 − 2 A^2 > 0 for denominators. -/
 def convergent (a2 : ℝ) : Prop := 1 - 2 * a2 > 0
 
@@ -3430,7 +3427,6 @@ lemma massCanonUnits_rshift (U : Constants.RSUnits) (r : ℤ) (Z : ℤ) :
 /-- Dimensionless architectural exponent: E(i) := r(i) + F(Z(i)). -/
 @[simp] def massExponent (i : Recognition.Species) : ℝ :=
   (Recognition.r i : ℝ) + F_ofZ (Recognition.Z i)
-
 /-- Canonical pure mass ratio equals φ^(exponent difference). -/
 lemma massCanonPure_ratio (r₁ r₂ : ℤ) (Z₁ Z₂ : ℤ) :
   massCanonPure r₁ Z₁ / massCanonPure r₂ Z₂
@@ -3926,57 +3922,7 @@ theorem tv_contract_of_uniform_overlap {A : Matrix ι ι ℝ}
   refine Dobrushin.tv_contraction_from_overlap_lb (K := markovOfMatrix A hrow hnn) hβpos hβle ?hβ
   intro i i'
   simpa [Dobrushin.overlap, markovOfMatrix] using hover i i'
-
 end YM
-
-/-! ## PF3x3: finite-dimensional spectral gap witness (ported) -/
-namespace YM.PF3x3
-
-open Complex Matrix scoped BigOperators
-
-def RowStochastic (A : Matrix (Fin 3) (Fin 3) ℝ) : Prop :=
-  (∀ i j, 0 ≤ A i j) ∧ (∀ i, ∑ j, A i j = 1)
-
-def PositiveEntries (A : Matrix (Fin 3) (Fin 3) ℝ) : Prop := ∀ i j, 0 < A i j
-
-structure SpectralGap (L : Module.End ℂ (Matrix (Fin 3) (Fin 1) ℂ)) : Prop :=
-  (gap : ∃ ε : ℝ, 0 < ε)
-
-lemma hasEigen_one (A : Matrix (Fin 3) (Fin 3) ℝ)
-    (hA : RowStochastic A) : Module.End.HasEigenvalue (Matrix.toLin' (A.map Complex.ofReal)) (1 : ℂ) := by
-  classical
-  -- ones vector (as function) is eigenvector at 1 by rowSum1
-  let v : (Fin 3 → ℂ) := fun _ => (1 : ℂ)
-  refine ⟨v, ?_⟩
-  ext i
-  simp [Matrix.toLin', hA.2 i, v]
-
-theorem pf_gap_row_stochastic_irreducible
-  (A : Matrix (Fin 3) (Fin 3) ℝ)
-  (hA : RowStochastic A) (hpos : PositiveEntries A) :
-  SpectralGap (Matrix.toLin' (A.map Complex.ofReal)) := by
-  -- Provide a simple positive gap certificate; details live in the full PF3x3 development.
-  refine ⟨⟨(1/2 : ℝ), by norm_num⟩⟩
-
-/-- Reusable witness: build a `MatrixView` (Fin 3) with strictly positive row‑stochastic entries
-    and return a kernel plus PF3x3 spectral‑gap certificate suitable for `MatrixBridge` use. -/
-noncomputable def witnessForMatrixBridge
-    (A : Matrix (Fin 3) (Fin 3) ℝ)
-    (hA : RowStochastic A) (hpos : PositiveEntries A) :
-    Σ V : IndisputableMonolith.YM.MatrixView (Fin 3),
-      Σ K : IndisputableMonolith.YM.TransferKernel (Fin 3),
-        IndisputableMonolith.YM.MatrixBridge (Fin 3) K V × SpectralGap (Matrix.toLin' (A.map Complex.ofReal)) := by
-  classical
-  -- build complex view and intertwined kernel
-  let V : IndisputableMonolith.YM.MatrixView (Fin 3) :=
-    { A := (A.map Complex.ofReal) }
-  let p := IndisputableMonolith.YM.buildKernelFromMatrix (ι := Fin 3) V
-  rcases p with ⟨K, hBridge⟩
-  -- pack with the PF gap certificate
-  refine ⟨V, ⟨K, hBridge, ?gap⟩⟩
-  exact pf_gap_row_stochastic_irreducible A hA hpos
-
-end YM.PF3x3
 
 /-! ## φ support lemmas (ported example) -/
 namespace PhiSupport
@@ -4423,7 +4369,6 @@ namespace TimeLag
   norm_num
 end TimeLag
 /-! ### Uncomputability and experiential navigation scaffolding -/
-
 namespace RecognitionBarrier
 
 /-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
@@ -5409,7 +5354,6 @@ theorem cone_bound_export
   simpa using (LightCone.StepBounds.cone_bound (K:=K) (U:=U) (time:=time) (rad:=rad) H h)
 end ConeExport
 /-! ### Machine-readable claims ledger and K-gate -/
-
 /--- Statement type for claims: equality or inequality. -/
 inductive StatementType
 | eq
@@ -5524,7 +5468,7 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
   have hc3_ne : B.c ^ 3 ≠ 0 := ne_of_gt hc3_pos
   calc
     (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G)
-        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3)))) / (B.hbar * B.G) := by simpa [hsq]
+        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)) := by simpa [hsq]
     _   = (B.c ^ 3) * ((B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G))) := by
           -- a*b/c = a*(b/c); (x/y)/z = x/(y*z)
           have : ((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)
@@ -5907,7 +5851,6 @@ def routeA_end_to_end_demo : String :=
   let _B := RouteA_LawfulBridge
   -- We expose a human-readable confirmation; quantitative witnesses remain abstract here.
   "URC Route A end-to-end: absolute layer accepts bridge; UniqueCalibration/MeetsBands witnesses available."
-
 /-- Concrete end-to-end construction: apply absolute_layer_any with placeholders.
     We pick a canonical ledger `IM`, the Route A bridge, and default anchors/bands.
     Returning this proof term ensures the wiring composes. -/
@@ -6902,7 +6845,6 @@ private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (R
     have hdist : ((Nat.succ n : ℝ) * L) = (n : ℝ) * L + L := by
       ring
     simp [hdist, exp_nat_mul n, Real.exp_add, pow_succ, mul_comm, mul_left_comm, mul_assoc]
-
 @[simp] lemma B_of_zero : B_of 0 = 1 := by simp [B_of]
 
 @[simp] lemma B_of_succ (k : Nat) : B_of (k+1) = 2 * B_of k := by
@@ -7182,19 +7124,19 @@ lemma prob_comp {γ} (PW : PathWeight γ) (a b : γ) :
 /-- Interface-level Born rule statement (placeholder): there exists a wave-like representation whose
     squared magnitude matches normalized `prob`. -/
 structure BornRuleIface (γ : Type) (PW : PathWeight γ) : Prop :=
-  normalized : Prop
-  exists_wave_repr : Prop
+  normalized : True
+  exists_wave_repr : True
 
 /-- Interface-level Bose/Fermi statement (placeholder): permutation invariance yields symmetrization. -/
 structure BoseFermiIface (γ : Type) (PW : PathWeight γ) : Prop :=
-  perm_invariant : Prop
-  symmetrization : Prop
+  perm_invariant : True
+  symmetrization : True
 
 /-- Existence lemma sketch: the RS path-weight (with additive cost) satisfies the interface. -/
 theorem rs_pathweight_iface (γ : Type) (PW : PathWeight γ) :
   BornRuleIface γ PW ∧ BoseFermiIface γ PW := by
   -- Placeholder existence; concrete instances supplied in applications
-  exact ⟨{ normalized := True, exists_wave_repr := True }, { perm_invariant := True, symmetrization := True }⟩
+  exact ⟨⟨True.intro, True.intro⟩, ⟨True.intro, True.intro⟩⟩
 
 /-- Tiny normalization helper: if the normalization set is a singleton {g}, then prob g = 1. -/
 lemma prob_singleton_norm (γ : Type) (PW : PathWeight γ) {g : γ}
@@ -7379,7 +7321,6 @@ def ofDisjointUnion {γ₁ γ₂ : Type}
     -- finish with given normalizations and w1+w2=1
     simpa [this, norm₁, norm₂, hsum, add_comm, add_left_comm, add_assoc]
 }
-
 /-- Independence product constructor: probabilities multiply over independent components. -/
 def product {γ₁ γ₂ : Type} (PW₁ : PathWeight γ₁) (PW₂ : PathWeight γ₂) : PathWeight (γ₁ × γ₂) :=
 { C := fun p => PW₁.C p.1 + PW₂.C p.2
@@ -7878,7 +7819,6 @@ theorem discreteness_necessary : (∃ L, IsLedger L) → ∃ (D : Type), IsDiscr
 class IsGoldenRatioScaling (s : ℝ) : Prop where
   is_golden : s = phi
   self_consistent : s^2 = s + 1
-
 /-- **Theorem: φ-Scaling is Necessary and Unique**
 The golden ratio is the unique scaling factor enabling self-similar closure. -/
 theorem phi_scaling_necessary : (∃ D, IsDiscrete D) → ∃! (s : ℝ), IsGoldenRatioScaling s := by
@@ -8376,7 +8316,6 @@ def TemperanceCapP (m : Microcycle) : Prop := ∀ p ∈ m.steps, Int.natAbs p.de
   classical
   unfold TemperanceCap TemperanceCapP
   simp [List.all]
-
 /-- Generalized temperance: per-step |ΔA| ≤ k. -/
 def TemperanceCapNat (k : Nat) (m : Microcycle) : Bool :=
   m.steps.all (fun p => Int.natAbs p.delta ≤ k)
@@ -8875,7 +8814,6 @@ def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 @[simp] lemma reciprocityOk_true_iff (P : Policy A) (r : Request A) : reciprocityOk (P:=P) r = true ↔ ReciprocityOKP r := by
   -- Prop-level Reciprocity is still a stub True; Bool gate depends on policy sigma hook
   simp [reciprocityOk, ReciprocityOKP]
-
 @[simp] lemma temperanceOk_true_iff (P : Policy A) (r : Request A) : temperanceOk (P:=P) r = true ↔ TemperanceOKP r := by
   simp [temperanceOk, TemperanceOKP]
 
@@ -9369,7 +9307,6 @@ theorem log_affine_from_EL_and_8beat (MA : MeasurementAxioms) : ELProp := MA.EL_
 
 theorem phi_rung_from_log_affine : PhiRungProp := by
   intro U r Z; simpa using IndisputableMonolith.Masses.Derivation.massCanonUnits_rshift U r Z
-
 theorem gauge_uniqueness_from_units (_MA : MeasurementAxioms) : Prop := True
 
 theorem gap_listen_positive_from_minimality (MA : MeasurementAxioms) : GapListenProp := MA.gap_listen_positive
