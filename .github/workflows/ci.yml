@@ -1,0 +1,32 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up elan (Lean toolchain)
+        uses: leanprover/elan-action@v1
+      - name: Cache Lake
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            lake-packages
+            build
+          key: ${{ runner.os }}-lake-${{ hashFiles('**/lake-manifest.json') }}
+          restore-keys: |
+            ${{ runner.os }}-lake-
+      - name: Update deps
+        run: lake update
+      - name: Build monolith and checks
+        run: |
+          lake build
+          lake build CI/Checks
+      - name: Run Checks
+        run: |
+          lake env lean --run CI/Checks.lean
