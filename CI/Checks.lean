@@ -1,5 +1,3 @@
-module CI.Checks
-
 import IndisputableMonolith
 
 -- Compile-time checks for Route A/B symbols
