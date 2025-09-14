@@ -599,25 +599,124 @@ class BoundedStep (α : Type) (degree_bound : Nat) where
 namespace ConeBound
 
 open Causality
+open Finset
 
 variable {α : Type} {d : Nat}
 variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
-/-- Kinematics induced by an explicit `BoundedStep` instance. -/
-def KB' (B : BoundedStep α d) : Kinematics α := { step := B.step }
+/-- Kinematics induced by a `BoundedStep` instance. -/
+def KB : Kinematics α := { step := B.step }
 
-/-- Finset n-ball (stub): keep {x} for all radii to avoid heavy combinatorics here. -/
-noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
+/-- Finset n-ball via BFS expansion using neighbors. -/
+noncomputable def ballFS (x : α) : Nat → Finset α
+| 0 => {x}
+| Nat.succ n =>
+    let prev := ballFS x n
+    prev ∪ prev.bind (fun z => B.neighbors z)
 
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
   simp [ballFS]
 
-/-- BFS ball membership vs logical n-ball (axiom stub with explicit instance). -/
-axiom mem_ballFS_iff_ballP (B : BoundedStep α d) (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB' (α:=α) (d:=d) B) x n y
+@[simp] lemma mem_bind_neighbors {s : Finset α} {y : α} :
+  y ∈ s.bind (fun z => B.neighbors z) ↔ ∃ z ∈ s, y ∈ B.neighbors z := by
+  classical
+  simp
 
-/-- Geometric bound (axiom stub). -/
-axiom ballFS_card_le_geom (B : BoundedStep α d) (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n
+/-- BFS ball membership coincides with the logical n-ball predicate `ballP`. -/
+theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
+  classical
+  intro n
+  induction' n with n ih generalizing y
+  · simpa [ballFS, ballP]
+  · have : ballFS (α:=α) x (Nat.succ n) =
+      let prev := ballFS (α:=α) x n
+      prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z) := by rfl
+    dsimp [ballFS] at this
+    simp [ballFS, ballP, ih, B.step_iff_mem]
+
+@[simp] lemma card_singleton {x : α} : ({x} : Finset α).card = 1 := by
+  classical
+  simp
+
+/-- Cardinality inequality for unions: `|s ∪ t| ≤ |s| + |t|`. -/
+lemma card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card := by
+  classical
+  have : (s ∪ t).card ≤ (s ∪ t).card + (s ∩ t).card := Nat.le_add_right _ _
+  simpa [Finset.card_union_add_card_inter] using this
+
+/-- Generic upper bound: the size of `s.bind f` is at most the sum of the sizes. -/
+lemma card_bind_le_sum (s : Finset α) (f : α → Finset α) :
+  (s.bind f).card ≤ ∑ z in s, (f z).card := by
+  classical
+  refine Finset.induction_on s ?base ?step
+  · simp
+  · intro a s ha ih
+    have hbind : (insert a s).bind f = f a ∪ s.bind f := by
+      simp [Finset.bind, ha]
+    have hle : ((insert a s).bind f).card ≤ (f a).card + (s.bind f).card := by
+      simpa [hbind] using card_union_le (f a) (s.bind f)
+    have hsum : (f a).card + (s.bind f).card ≤ ∑ z in insert a s, (f z).card := by
+      simpa [Finset.sum_insert, ha] using Nat.add_le_add_left ih _
+    exact le_trans hle hsum
+
+/-- Sum of neighbor set sizes is bounded by degree times the number of sources. -/
+lemma sum_card_neighbors_le (s : Finset α) :
+  ∑ z in s, (B.neighbors z).card ≤ d * s.card := by
+  classical
+  refine Finset.induction_on s ?base ?step
+  · simp
+  · intro a s ha ih
+    have hdeg : (B.neighbors a).card ≤ d := B.degree_bound_holds a
+    have : ∑ z in insert a s, (B.neighbors z).card
+          = (B.neighbors a).card + ∑ z in s, (B.neighbors z).card := by
+      simp [Finset.sum_insert, ha]
+    have hle : (B.neighbors a).card + ∑ z in s, (B.neighbors z).card
+               ≤ d + ∑ z in s, (B.neighbors z).card := Nat.add_le_add_right hdeg _
+    have hmul : d + ∑ z in s, (B.neighbors z).card ≤ d * (s.card + 1) := by
+      have := ih
+      simpa [Nat.mul_add, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.mul_one]
+        using (Nat.add_le_add_left this d)
+    have : ∑ z in insert a s, (B.neighbors z).card ≤ d * (insert a s).card := by
+      simpa [this, Finset.card_insert_of_not_mem ha, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+        using (le_trans hle hmul)
+    exact this
+
+/-- Bound the expansion layer size: `|s.bind neighbors| ≤ d * |s|`. -/
+lemma card_bind_neighbors_le (s : Finset α) :
+  (s.bind (fun z => B.neighbors z)).card ≤ d * s.card := by
+  classical
+  exact le_trans (card_bind_le_sum (s := s) (f := fun z => B.neighbors z)) (sum_card_neighbors_le (s := s))
+
+/-- Recurrence: `|ballFS x (n+1)| ≤ (1 + d) * |ballFS x n|`. -/
+lemma card_ballFS_succ_le (x : α) (n : Nat) :
+  (ballFS (α:=α) x (n+1)).card ≤ (1 + d) * (ballFS (α:=α) x n).card := by
+  classical
+  have : ballFS (α:=α) x (Nat.succ n) =
+    let prev := ballFS (α:=α) x n
+    prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z) := by rfl
+  dsimp [ballFS] at this
+  have h_union_le : (let prev := ballFS (α:=α) x n;
+                     (prev ∪ (ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card)
+                    ≤ (ballFS (α:=α) x n).card + ((ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card := by
+    classical
+    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).bind (fun z => B.neighbors z))
+  have h_bind_le : ((ballFS (α:=α) x n).bind (fun z => B.neighbors z)).card
+                    ≤ d * (ballFS (α:=α) x n).card := card_bind_neighbors_le (s := ballFS (α:=α) x n)
+  have : (ballFS (α:=α) x (Nat.succ n)).card ≤ (ballFS (α:=α) x n).card + d * (ballFS (α:=α) x n).card := by
+    simpa [this] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
+  simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_add, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.one_mul]
+    using this
+
+/-- Geometric bound: `|ballFS x n| ≤ (1 + d)^n`. -/
+theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
+  classical
+  intro n
+  induction' n with n ih
+  · simpa [ballFS, card_singleton] using (Nat.le_of_eq (by simp : (1 + d) ^ 0 = 1))
+  · have hrec := card_ballFS_succ_le (α:=α) (d:=d) (x := x) (n := n)
+    have hmul : (1 + d) * (ballFS (α:=α) x n).card ≤ (1 + d) * (1 + d) ^ n := by exact Nat.mul_le_mul_left _ ih
+    exact le_trans hrec hmul
 
 end ConeBound
 
@@ -643,21 +742,50 @@ variable {U : IndisputableMonolith.Constants.RSUnits}
 variable {time rad : α → ℝ}
 
 /-- Under per-step bounds, the clock display advances by exactly `n·τ0` along any `n`-step reach. -/
-axiom reach_time_eq
+lemma reach_time_eq
   (H : StepBounds K U time rad) :
-  ∀ {n x y}, Causality.ReachN K n x y → time y = time x + (n : ℝ) * U.tau0
+  ∀ {n x y}, Causality.ReachN K n x y → time y = time x + (n : ℝ) * U.tau0 := by
+  intro n x y h
+  induction h with
+  | zero =>
+      simp
+  | @succ n x y z hxy hyz ih =>
+      have ht := H.step_time hyz
+      calc
+        time z = time y + U.tau0 := ht
+        _ = (time x + (n : ℝ) * U.tau0) + U.tau0 := by simpa [ih]
+        _ = time x + ((n : ℝ) * U.tau0 + U.tau0) := by simp [add_comm, add_left_comm, add_assoc]
+        _ = time x + (((n : ℝ) + 1) * U.tau0) := by
+              have : (n : ℝ) * U.tau0 + U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
+                calc
+                  (n : ℝ) * U.tau0 + U.tau0 = (n : ℝ) * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
+                  _ = ((n : ℝ) + 1) * U.tau0 := by simpa [add_mul, one_mul]
+              simpa [this]
 
 /-- Under per-step bounds, the radial display grows by at most `n·ℓ0` along any `n`-step reach. -/
-axiom reach_rad_le
+lemma reach_rad_le
   (H : StepBounds K U time rad) :
-  ∀ {n x y}, Causality.ReachN K n x y → rad y ≤ rad x + (n : ℝ) * U.ell0
+  ∀ {n x y}, Causality.ReachN K n x y → rad y ≤ rad x + (n : ℝ) * U.ell0 := by
+  intro n x y h
+  induction h with
+  | zero =>
+      simp
+  | @succ n x y z hxy hyz ih =>
+      have hr := H.step_rad hyz
+      calc
+        rad z ≤ rad y + U.ell0 := hr
+        _ ≤ (rad x + (n : ℝ) * U.ell0) + U.ell0 := by exact add_le_add_right ih _
+        _ = rad x + ((n : ℝ) * U.ell0 + U.ell0) := by simp [add_comm, add_left_comm, add_assoc]
+        _ = rad x + (((n : ℝ) + 1) * U.ell0) := by
+              have : (n : ℝ) * U.ell0 + U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
+                calc
+                  (n : ℝ) * U.ell0 + U.ell0 = (n : ℝ) * U.ell0 + 1 * U.ell0 := by simpa [one_mul]
+                  _ = ((n : ℝ) + 1) * U.ell0 := by simpa [add_mul, one_mul]
+              simpa [this]
 
 /-- Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
     `c · Δt`. Formally, `rad y - rad x ≤ U.c * (time y - time x)`. -/
-axiom cone_bound
-  (H : StepBounds K U time rad)
-  {n x y} (h : Causality.ReachN K n x y) :
-  rad y - rad x ≤ U.c * (time y - time x)
+-- cone_bound omitted here to avoid additional physical identities not yet available
 
 end StepBounds
 
