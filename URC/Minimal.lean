@@ -22,5 +22,3 @@ structure LawfulBridge : Prop where
 @[simp] def ok : True := True.intro
 
 end URCMinimal
-
-
