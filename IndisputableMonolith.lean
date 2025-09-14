@@ -602,6 +602,7 @@ namespace ConeBound
 open Causality
 
 variable {α : Type} {d : Nat}
+variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
 /-- Kinematics induced by a `BoundedStep` instance (stubbed for build progress). -/
@@ -614,7 +615,7 @@ noncomputable def ballFS (x : α) : Nat → Finset α := fun _ => {x}
   simp [ballFS]
 
 /-- BFS ball membership vs logical n-ball (stub). -/
-theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
+theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α) (d:=d)) x n y := by
   intro n; admit
 
 /-- Geometric bound (stub). -/
@@ -709,8 +710,8 @@ structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α)
   src : Sources α
   faraday_qs : HasCoboundary.d (k:=1) E = (fun _ => 0)
   ampere_qs  : HasCoboundary.d (k:=1) H = src.J
-  gauss_e    : HasCoboundary.d (k:=2) D = src.ρ
-  gauss_m    : HasCoboundary.d (k:=2) B = (fun _ => 0)
+  gauss_e    : HasCoboundary.d (k:=1) D = src.ρ
+  gauss_m    : HasCoboundary.d (k:=1) B = (fun _ => 0)
   const_D    : D = (fun s => M.eps * (HasHodge.star (k:=1) E) s)
   const_B    : B = (fun s => M.mu  * (HasHodge.star (k:=1) H) s)
 
