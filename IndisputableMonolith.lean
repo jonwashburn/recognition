@@ -7180,7 +7180,11 @@ def wave_of_prob {γ : Type} (PW : IndisputableMonolith.Quantum.PathWeight γ) :
 
 lemma wave_sq_eq_prob_on_norm {γ : Type} (PW : IndisputableMonolith.Quantum.PathWeight γ) {g : γ}
   (hg : g ∈ PW.normSet) : (wave_of_prob PW g) ^ 2 = PW.prob g := by
-  dsimp [wave_of_prob]; simp [hg, sq, Real.mul_self_sqrt]
+  dsimp [wave_of_prob]
+  have hpos : 0 ≤ PW.prob g := by
+    dsimp [PathWeight.prob]
+    exact le_of_lt (Real.exp_pos _)
+  simp [hg, sq, Real.mul_self_sqrt hpos]
 
 /-- Born rule in RS (pure states): event probabilities are squared amplitudes.
     We package an event system (finite alternatives with a probability measure)
