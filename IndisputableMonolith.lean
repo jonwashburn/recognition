@@ -683,8 +683,8 @@ lemma reach_rad_le
       -- rewrite to rad x + (n+1)·ℓ
       simpa [Nat.cast_add, Nat.cast_one, add_mul, one_mul, add_comm, add_left_comm, add_assoc] using hzle
 
-/‑ Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
-    `c · Δt`. Formally, `rad y - rad x ≤ U.c * (time y - time x)`. -/
+-- Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
+-- `c · Δt`. Formally, `rad y - rad x ≤ U.c * (time y - time x)`.
 -- cone_bound omitted here to avoid additional physical identities not yet available
 
 end StepBounds
