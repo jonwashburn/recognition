@@ -789,44 +789,37 @@ end State
 @[simp] def bumpBreath (s : State) : Nat := (s.breath + 1) % breathPeriod
 
 def step (P : Program) (s : State) : State :=
-  if s.halted then s else
-  let i := fetch P s.ip
-  let s' :=
-    match i.kind with
-    | OpKind.NOP   => s
-    | OpKind.HALT  => { s with halted := true }
-    | OpKind.INC   => match i.dst with | some r => s.set r (s.get r + 1) | none => s
-    | OpKind.DEC   => match i.dst with | some r => s.set r (s.get r - 1) | none => s
-    | OpKind.MOV   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rs) | _, _ => s
-    | OpKind.ADD   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd + s.get rs) | _, _ => s
-    | OpKind.SUB   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd - s.get rs) | _, _ => s
-    | OpKind.XOR   => s
-    | OpKind.AND   => s
-    | OpKind.OR    => s
-    | OpKind.NOT   => s
-    | OpKind.LOAD  => s
-    | OpKind.STORE => s
-    | OpKind.SWAP  => match i.dst, i.src with | some rd, some rs => let v := s.get rd; (s.set rd (s.get rs)).set rs v | _, _ => s
-    | OpKind.JMP   => match i.imm with | some off => { s with ip := s.ip + (Int.natAbs off) } | none => s
-    | OpKind.JZ    => match i.dst, i.imm with | some rd, some off => if s.get rd = 0 then { s with ip := s.ip + (Int.natAbs off) } else s | _, _ => s
-  let s'' := if s'.ip = s.ip then { s' with ip := nextIP s' } else s'
-  { s'' with breath := bumpBreath s'', halted := s''.halted }
+  let t :=
+    if s.halted then s else
+    let i := fetch P s.ip
+    let s' :=
+      match i.kind with
+      | OpKind.NOP   => s
+      | OpKind.HALT  => { s with halted := true }
+      | OpKind.INC   => match i.dst with | some r => s.set r (s.get r + 1) | none => s
+      | OpKind.DEC   => match i.dst with | some r => s.set r (s.get r - 1) | none => s
+      | OpKind.MOV   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rs) | _, _ => s
+      | OpKind.ADD   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd + s.get rs) | _, _ => s
+      | OpKind.SUB   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd - s.get rs) | _, _ => s
+      | OpKind.XOR   => s
+      | OpKind.AND   => s
+      | OpKind.OR    => s
+      | OpKind.NOT   => s
+      | OpKind.LOAD  => s
+      | OpKind.STORE => s
+      | OpKind.SWAP  => match i.dst, i.src with | some rd, some rs => let v := s.get rd; (s.set rd (s.get rs)).set rs v | _, _ => s
+      | OpKind.JMP   => match i.imm with | some off => { s with ip := s.ip + (Int.natAbs off) } | none => s
+      | OpKind.JZ    => match i.dst, i.imm with | some rd, some off => if s.get rd = 0 then { s with ip := s.ip + (Int.natAbs off) } else s | _, _ => s
+    let s'' := if s'.ip = s.ip then { s' with ip := nextIP s' } else s'
+    { s'' with halted := s''.halted }
+  { t with breath := bumpBreath t }
 
 @[simp] lemma step_self (P : Program) (s : State) : step P s = step P s := rfl
 
 lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod := by
   dsimp [step, bumpBreath, breathPeriod]
   have hpos : 0 < (1024 : Nat) := by decide
-  split
-  · -- halted branch: step returns s; breath unchanged but mod bound applies
-    intro
-    have : s.breath % 1024 < 1024 := Nat.mod_lt _ hpos
-    simpa using this
-  · -- running branch: breath' = (s'.breath + 1) % 1024
-    intro
-    have : (s.breath + 1) % 1024 < 1024 := Nat.mod_lt _ hpos
-    -- after single step, breath of s' is s.breath+1
-    simpa using this
+  split <;> split <;> simp [Nat.mod_lt, hpos]
 
 end LNAL
 
