@@ -1122,7 +1122,7 @@ variable {M : RecognitionStructure}
 /-- Coarse-graining skeleton: a formal placeholder indicating a Riemann-sum style limit
     from tick-indexed sums to an integral in a continuum presentation. This is stated as
     a proposition to be instantiated when a concrete measure/embedding is provided. -/
-/-! ### Concrete Riemann-sum schema for a coarse-grain bridge -/
+-- ### Concrete Riemann-sum schema for a coarse-grain bridge
 
 /-- Coarse graining with an explicit embedding of ticks to cells and a cell volume weight. -/
 structure CoarseGrain (α : Type) where
