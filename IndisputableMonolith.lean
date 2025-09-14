@@ -709,8 +709,8 @@ structure Medium (α : Type) [HasHodge α] where
 
 /-- Sources (charge and current). -/
 structure Sources (α : Type) where
-  ρ : DForm α 0
-  J : DForm α 1
+  ρ : DForm α 3
+  J : DForm α 2
 
 variable {α : Type}
 
@@ -723,10 +723,15 @@ structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α)
   src : Sources α
   faraday_qs : HasCoboundary.d (k:=1) E = (fun _ => 0)
   ampere_qs  : HasCoboundary.d (k:=1) H = src.J
-  gauss_e    : HasCoboundary.d (k:=1) D = src.ρ
-  gauss_m    : HasCoboundary.d (k:=1) B = (fun _ => 0)
-  const_D    : D = (fun s => M.eps * HasHodge.star E s)
-  const_B    : B = (fun s => M.mu  * HasHodge.star H s)
+  gauss_e    : HasCoboundary.d (k:=2) D = src.ρ
+  gauss_m    : HasCoboundary.d (k:=2) B = (fun _ => 0)
+  dim3       : HasHodge.n = 3
+  const_D    : D = (by
+                    simpa [dim3]
+                    using (fun s => M.eps * (HasHodge.star (α:=α) (k:=1) E) s))
+  const_B    : B = (by
+                    simpa [dim3]
+                    using (fun s => M.mu * (HasHodge.star (α:=α) (k:=1) H) s))
 
 /-- PEC boundary descriptor (edges where tangential E vanishes). -/
 structure PEC (β : Type) where
