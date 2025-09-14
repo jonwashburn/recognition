@@ -1271,8 +1271,10 @@ lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
           _   = i.val % 8 := by simp
           _   = i.val := by simpa [Nat.mod_eq_of_lt i.isLt])
   -- Rewrite each summand to the window bit.
-  refine (congrArg (fun f => ∑ i : Fin 8, f i) ?_)
-  funext i; simpa [hmod i]
+  have : (fun i : Fin 8 => if (extendPeriodic8 w) (j * 8 + i.val) then 1 else 0)
+         = (fun _i : Fin 8 => if w _i then 1 else 0) := by
+    funext i; simp [extendPeriodic8, hmod i]
+  simpa [this]
 
 /-- For `s = extendPeriodic8 w`, summing `k` aligned 8‑blocks yields `k * Z(w)`. -/
 lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
@@ -1283,13 +1285,13 @@ lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
   have hconst : ∀ j : Fin k, subBlockSum8 (extendPeriodic8 w) j.val = Z_of_window w := by
     intro j; simpa using subBlockSum8_periodic_eq_Z w j.val
   -- Sum a constant over `Fin k`.
-  have : (∑ _j : Fin k, Z_of_window w) = k * Z_of_window w := by
-    simpa using (Finset.card_univ : Fintype.card (Fin k) = k) ▸ (by
-      -- use `sum_const_nat` via rewriting through `nsmul`
-      simpa using (Finset.sum_const_natural (s:=Finset.univ) (a:=Z_of_window w)))
-  -- Replace each term by the constant `Z_of_window w`.
-  have := congrArg (fun f => ∑ j : Fin k, f j) (funext hconst)
-  simpa using this.trans this
+  -- Replace each term by the constant `Z_of_window w` and sum
+  calc
+    (∑ j : Fin k, subBlockSum8 (extendPeriodic8 w) j.val)
+        = (∑ _j : Fin k, Z_of_window w) := by
+              refine Finset.sum_congr rfl ?_;
+              intro j _; simpa using hconst j
+    _   = k * Z_of_window w := by simpa using Finset.sum_const_nsmul (Z_of_window w) (Finset.univ : Finset (Fin k)) 1
 
 /-- Averaged (per‑window) observation equals `Z` on periodic extensions. -/
 def observeAvg8 (k : Nat) (s : Stream) : Nat :=
@@ -1375,13 +1377,10 @@ lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
   have h2 := h₂ (basepoint (M:=M) x0)
   -- From h1,h2: g x0 + c₁ = g x0 + c₂
   have : g (basepoint (M:=M) x0) + c₁ = g (basepoint (M:=M) x0) + c₂ := by
-    -- both equal `f (basepoint x0)` by h1,h2
-    -- from h1, h2: f(basepoint) = g(basepoint) + c₁ and = g(basepoint) + c₂
-    -- rearrange to equality of sums
-    have := congrArg (fun t => t) h1; clear h1
-    have := congrArg (fun t => t) h2; clear h2
-    -- now trivial rewrite
-    simpa using this
+    have := by
+      -- rewrite both to f(basepoint x0)
+      simp [h1] at *; exact h2
+    simpa [h1] using this
   exact add_left_cancel this
 
 /-- Classical T4 restatement: for δ-potentials, there exists a unique constant
