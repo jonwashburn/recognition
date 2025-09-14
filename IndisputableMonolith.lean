@@ -980,10 +980,10 @@ theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
 
 end LedgerUniqueness
 
-/-- ## ClassicalBridge: explicit classical correspondences without sorries.
+/-! ## ClassicalBridge: explicit classical correspondences without sorries.
     - T3 bridge: `Conserves` is the discrete continuity equation on closed chains.
     - T4 bridge: potentials modulo additive constants on a reach component (gauge classes).
- -/
+-/
 namespace ClassicalBridge
 
 open Potential Causality
