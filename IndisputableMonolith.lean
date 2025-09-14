@@ -1204,16 +1204,10 @@ lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
 lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
   sumFirst 8 (extendPeriodic8 w) = Z_of_window w := by
   classical
-  unfold sumFirst Z_of_window extendPeriodic8
-  -- For `i : Fin 8`, `((i.val) % 8) = i.val`.
-  have hmod : ∀ i : Fin 8, (i.val % 8) = i.val := by
-    intro i; exact Nat.mod_eq_of_lt i.isLt
-  -- Rewrite the summand using periodicity and reduce to the window bits.
-  refine
-    (congrArg (fun f => ∑ i : Fin 8, f i) ?_)
-    ▸ rfl
-  funext i
-  simpa [hmod i]
+  -- Use the Cylinder lemma with s = extendPeriodic8 w
+  have hcyl : extendPeriodic8 w ∈ Cylinder w := by
+    intro i; simp [extendPeriodic8, Nat.mod_eq_of_lt i.isLt]
+  simpa using (sumFirst_eq_Z_on_cylinder (n:=8) w (s:=extendPeriodic8 w) hcyl)
 
 end PatternLayer
 
@@ -1222,13 +1216,13 @@ namespace MeasurementLayer
 open scoped BigOperators
 open Finset PatternLayer
 
-/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
-def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
-  ∑ j : Fin k, subBlockSum8 s j.val
-
 /-- Sum of one 8‑tick sub‑block starting at index `j*8`. -/
 def subBlockSum8 (s : Stream) (j : Nat) : Nat :=
   ∑ i : Fin 8, (if s (j * 8 + i.val) then 1 else 0)
+
+/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
+def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
+  ∑ j : Fin k, subBlockSum8 s j.val
 
 /-- On any stream lying in the cylinder of an 8‑bit window, the aligned
     first block sum (j=0; T=8k alignment) equals the window integer `Z`. -/
