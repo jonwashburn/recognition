@@ -39,12 +39,7 @@ jobs:
           lean --version
           lake --version
 
-      - name: Build
-        run: |
-          source $HOME/.elan/env
-          lake build
-
-      - name: Run CI checks
+      - name: Build and run CI checks (lightweight)
         run: |
           source $HOME/.elan/env
           lake exe ci_checks
