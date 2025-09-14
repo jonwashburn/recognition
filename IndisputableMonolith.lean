@@ -1151,16 +1151,7 @@ def discrete_to_continuum_continuity {α : Type}
 
 end ClassicalBridge
 
-/-! ## Measurement realization: tie maps to dynamics and invariants -/
-namespace Measurement
-
-structure Realization (State Obs : Type) where
-  M : Measurement.Map State Obs
-  evolve : Nat → State → State
-  invariant8 : Prop
-  breath1024 : Prop
-
-end Measurement
+-- (moved) Measurement realization: relocated below `Measurement.Map` to avoid forward reference
 
 /-! # Pattern and Measurement layers: streams, windows, and aligned block sums
 
