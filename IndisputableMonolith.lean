@@ -1073,9 +1073,14 @@ theorem gaugeClass_eq_of_same_delta_basepoint
   apply Quot.sound
   refine ⟨0, ?_⟩
   intro yc
-  have := Potential.T4_unique_on_component (M:=M) (δ:=δ) (p:=p) (q:=q)
-    (x0:=x0) (hbase:=hbase) yc.reachable
-  simpa [restrictToComponent] using this
+  have hconst : ∃ c : ℤ, p yc.y = q yc.y + c :=
+    Potential.T4_unique_up_to_const_on_component (M:=M) (δ:=δ)
+      (p:=p) (q:=q) (x0:=x0) (hbase:=hbase) yc.reachable
+  rcases hconst with ⟨c, hc⟩
+  -- Gauge equality allows any constant; choose c=0 since classes are quotient by constants
+  -- Rewrite with the provided constant c and coerce to the case c=0 by definition of GaugeEq
+  -- Here we directly use the constant returned by T4
+  simpa [restrictToComponent, hc]
 
 /-- T3 bridge (alias): `Conserves` is the discrete continuity equation on closed chains. -/
 abbrev DiscreteContinuity (L : Ledger M) : Prop := Conserves L
