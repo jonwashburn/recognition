@@ -5396,3 +5396,8 @@ def w_time_ratio (Tdyn τ0 : ℝ) : ℝ :=
 lemma w_time_ratio_ref (τ0 : ℝ) : w_time_ratio τ0 τ0 = 1 := by
   dsimp [w_time_ratio]
   by_cases hτ : τ0 = 0
+  · -- degenerate case τ0 = 0; interpret ratio as 0 and use core-time at 0 ≥ 0
+    simp [w_time_ratio, hτ]
+  · -- nonzero τ0: reduce to w_core_time at 1
+    have : (τ0 / τ0) = 1 := by field_simp [hτ]
+    simpa [w_time_ratio, this]
