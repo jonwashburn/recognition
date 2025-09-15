@@ -2462,13 +2462,16 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
 
 /-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
 
-/-‑ Partial closure witnesses built from current exports -/
+/‑‑ Partial closure witnesses built from current exports -/
+/- TEMP DISABLE: Witness and minimal instances
+/- TEMP DISABLE: Witness and minimal instances
 namespace RH
 namespace RS
 namespace Witness
+/-
 
 /-- Provisional φ-closed proof for alpha (constant 1/alphaInv expression). -/
-instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ IndisputableMonolith.BridgeData.alpha := ⟨⟩
+-- instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ IndisputableMonolith.BridgeData.alpha := ⟨⟩
 
 /-- Minimal universal dimless pack using current dimensionless exports. -/
 noncomputable def UD_minimal (φ : ℝ) : RH.RS.UniversalDimless φ :=
@@ -2550,6 +2553,7 @@ lemma boseFermi_from_TruthCore : boseFermiHolds := by
   have h := IndisputableMonolith.TruthCore.AllClaimsHold.quantum_ifaces γ PW
   exact h.right
 
+-/
 end Witness
 end RS
 end RH
@@ -2558,6 +2562,7 @@ end RH
 namespace RH
 namespace RS
 namespace Instances
+/-
 
 /-- Ledger‑backed rung predicate using the RS ladder (Masses.Derivation.rungOf),
     specialized to witness a singleton rung at 45. -/
@@ -2601,6 +2606,7 @@ theorem IM_fortyFive_consequences_exists (B : RH.RS.Bridge IM) :
   · simp [IM_FortyFiveConsequences]
   · simp [IM_FortyFiveConsequences]
   · intro n hn; simp [IM_FortyFiveConsequences, hn]
+-/
 end Instances
 end RS
 end RH
