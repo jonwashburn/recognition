@@ -13,7 +13,7 @@ if [ "${OSTYPE:-}" = "darwin" ] || [[ "${OSTYPE:-}" == darwin* ]]; then
     export SDKROOT="$(xcrun --show-sdk-path)"
   fi
   # Optionally, prefer system clang; uncomment to force
-  # export LEAN_CC="/usr/bin/clang"
+  export LEAN_CC="/usr/bin/clang"
 fi
 
 export LC_ALL=C
