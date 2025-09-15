@@ -2283,7 +2283,7 @@ def Recognition_Closure (φ : ℝ) : Prop :=
 end RS
 end RH
 
-/- TEMP DISABLE: Partial closing assembly and minimal instances (to unblock head-build)
+-- TEMP DISABLE: Partial closing assembly and minimal instances (to unblock head-build)
 /-- Partial closing assembly for IM --/
 / - namespace RH
 / - namespace RS
@@ -2358,14 +2358,14 @@ theorem recognition_closure_with_absolute_witness (φ : ℝ)
                                     , IndisputableMonolith.URCAdapters.tc_growth_holds
                                     , IndisputableMonolith.URCAdapters.recog_lb_holds⟩))
 
-/- end Instances
-/- end RS
-/- end RH
+-- end Instances
+-- end RS
+-- end RH
 
-/- Minimal instances (partial closure wiring)
-/- namespace RH
-/- namespace RS
-/- namespace Instances
+-- Minimal instances (partial closure wiring)
+-- namespace RH
+-- namespace RS
+-- namespace Instances
 
 /-- Canonical ledger hooked to the current monolith (spec-level carrier). -/
 def IM : RH.RS.Ledger := { Carrier := Unit }
@@ -2402,7 +2402,7 @@ instance NoInjectedConstants_from_verif : RH.RS.NoInjectedConstants IM := by
   -- traceability: dimless_KA_invariant and dimless_KB_invariant
   exact ⟨⟩
 
-/- Minimal existence stubs for dual landings and bridge map (tied to K-gate and invariance). -/
+-- Minimal existence stubs for dual landings and bridge map (tied to K-gate and invariance).
 theorem two_independent_SI_IM : RH.RS.TwoIndependentSILandings IM := by
   -- route A/B via K identities are independent up to units
   exact ⟨⟩
@@ -2454,9 +2454,9 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
   = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U' :=
   IndisputableMonolith.Verification.anchor_invariance _ h
 
-/- end Instances
-/- end RS
-/- end RH
+-- end Instances
+-- end RS
+-- end RH
 
 -/
 
