@@ -2463,7 +2463,7 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
 /- end RS
 /- end RH
 
-/- END TEMP DISABLE
+-- END TEMP DISABLE
 
 /-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
 
