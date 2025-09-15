@@ -673,22 +673,22 @@ theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ b
       intro hy
       dsimp [ballFS] at hy
       rcases Finset.mem_union.mp hy with hyPrev | hyExp
-      · exact Or.inl (ih.mp hyPrev)
+      · exact Or.inl ((ih y).mp hyPrev)
       · rcases Finset.mem_biUnion.mp hyExp with ⟨z, hzPrev, hyNz⟩
         have hBstep : B.step z y := (B.step_iff_mem (x:=z) (y:=y)).mpr hyNz
         have hKstep : (KB (α:=α)).step z y := by simpa [KB] using hBstep
-        exact Or.inr ⟨z, ih.mp hzPrev, hKstep⟩
+        exact Or.inr ⟨z, (ih z).mp hzPrev, hKstep⟩
     · -- backward direction
       intro hy
       dsimp [ballP] at hy
       dsimp [ballFS]
       cases hy with
-      | inl hyPrev => exact Finset.mem_union.mpr (Or.inl (ih.mpr hyPrev))
+      | inl hyPrev => exact Finset.mem_union.mpr (Or.inl ((ih y).mpr hyPrev))
       | inr hyStep =>
           rcases hyStep with ⟨z, hzPrev, hKstep⟩
           have hBstep : B.step z y := by simpa [KB] using hKstep
           have hyNz : y ∈ B.neighbors z := (B.step_iff_mem (x:=z) (y:=y)).mp hBstep
-          exact Finset.mem_union.mpr (Or.inr (Finset.mem_biUnion.mpr ⟨z, ih.mpr hzPrev, hyNz⟩))
+          exact Finset.mem_union.mpr (Or.inr (Finset.mem_biUnion.mpr ⟨z, (ih z).mpr hzPrev, hyNz⟩))
 
 @[simp] lemma card_singleton {x : α} : ({x} : Finset α).card = 1 := by
   classical
