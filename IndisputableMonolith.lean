@@ -790,27 +790,27 @@ end State
 
 def step (P : Program) (s : State) : State :=
   let t :=
-    if s.halted then s else
-    let i := fetch P s.ip
-    let s' :=
-      match i.kind with
-      | OpKind.NOP   => s
-      | OpKind.HALT  => { s with halted := true }
-      | OpKind.INC   => match i.dst with | some r => s.set r (s.get r + 1) | none => s
-      | OpKind.DEC   => match i.dst with | some r => s.set r (s.get r - 1) | none => s
-      | OpKind.MOV   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rs) | _, _ => s
-      | OpKind.ADD   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd + s.get rs) | _, _ => s
-      | OpKind.SUB   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd - s.get rs) | _, _ => s
-      | OpKind.XOR   => s
-      | OpKind.AND   => s
-      | OpKind.OR    => s
-      | OpKind.NOT   => s
-      | OpKind.LOAD  => s
-      | OpKind.STORE => s
-      | OpKind.SWAP  => match i.dst, i.src with | some rd, some rs => let v := s.get rd; (s.set rd (s.get rs)).set rs v | _, _ => s
+  if s.halted then s else
+  let i := fetch P s.ip
+  let s' :=
+    match i.kind with
+    | OpKind.NOP   => s
+    | OpKind.HALT  => { s with halted := true }
+    | OpKind.INC   => match i.dst with | some r => s.set r (s.get r + 1) | none => s
+    | OpKind.DEC   => match i.dst with | some r => s.set r (s.get r - 1) | none => s
+    | OpKind.MOV   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rs) | _, _ => s
+    | OpKind.ADD   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd + s.get rs) | _, _ => s
+    | OpKind.SUB   => match i.dst, i.src with | some rd, some rs => s.set rd (s.get rd - s.get rs) | _, _ => s
+    | OpKind.XOR   => s
+    | OpKind.AND   => s
+    | OpKind.OR    => s
+    | OpKind.NOT   => s
+    | OpKind.LOAD  => s
+    | OpKind.STORE => s
+    | OpKind.SWAP  => match i.dst, i.src with | some rd, some rs => let v := s.get rd; (s.set rd (s.get rs)).set rs v | _, _ => s
       | OpKind.JMP   => match i.imm with | some off => { s with ip := s.ip + (Int.natAbs off) } | none => s
       | OpKind.JZ    => match i.dst, i.imm with | some rd, some off => if s.get rd = 0 then { s with ip := s.ip + (Int.natAbs off) } else s | _, _ => s
-    let s'' := if s'.ip = s.ip then { s' with ip := nextIP s' } else s'
+  let s'' := if s'.ip = s.ip then { s' with ip := nextIP s' } else s'
     { s'' with halted := s''.halted }
   { t with breath := bumpBreath t }
 
@@ -1009,7 +1009,7 @@ end LedgerUniqueness
 /-! ## ClassicalBridge: explicit classical correspondences without sorries.
     - T3 bridge: `Conserves` is the discrete continuity equation on closed chains.
     - T4 bridge: potentials modulo additive constants on a reach component (gauge classes).
--/
+ -/
 namespace ClassicalBridge
 
 open Potential Causality
@@ -2463,8 +2463,8 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
 -- Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above.
 
 -- Partial closure witnesses built from current exports
-/- TEMP DISABLE: Witness and minimal instances
-/- TEMP DISABLE: Witness and minimal instances
+-- TEMP DISABLE: Witness and minimal instances
+-- TEMP DISABLE: Witness and minimal instances
 namespace RH
 namespace RS
 namespace Witness
@@ -2611,11 +2611,11 @@ end Instances
 end RS
 end RH
 
-/-- ## VoxelWalks (combinatorial closed-walk core; master series skeleton)
-    Core definitions for constrained voxel walks and the parameter-free
-    amplitude core. We encode the analytic master term and fixed factors, with
-    proofs at the algebraic level; measure-theoretic/continuum correspondences
-    are bridged in papers. -/
+-- ## VoxelWalks (combinatorial closed-walk core; master series skeleton)
+-- Core definitions for constrained voxel walks and the parameter-free
+-- amplitude core. We encode the analytic master term and fixed factors, with
+-- proofs at the algebraic level; measure-theoretic/continuum correspondences
+-- are bridged in papers.
 namespace IndisputableMonolith
 namespace VoxelWalks
 
@@ -3891,7 +3891,7 @@ lemma no_smaller_multiple_9_5 (n : Nat) (hnpos : 0 < n) (hnlt : n < 45) :
   have : 45 ≤ n := by
     have : 45 ≤ 45 * k := Nat.mul_le_mul_left 45 (Nat.succ_le_of_lt hkpos)
     simpa [hk] using this
-  exact (not_le_of_gt hnlt) this
+    exact (not_le_of_gt hnlt) this
 
 /-- Summary: 45 is the first rung where 9- and 5-fold periodicities coincide, and it is not
     synchronized with the 8-beat (since 8 ∤ 45). -/
@@ -3932,7 +3932,7 @@ namespace Beat
   simp [beats, lcm_8_45_div_45]
 
 /-- Minimality: any time `t` that is simultaneously a multiple of 8 and 45 must be a
-    multiple of the minimal joint duration `beats` (i.e., 360). -/
+multiple of the minimal joint duration `beats` (i.e., 360). -/
 lemma minimal_sync_divides {t : Nat} (h8 : 8 ∣ t) (h45 : 45 ∣ t) : beats ∣ t := by
   simpa [beats] using Nat.lcm_dvd h8 h45
 
