@@ -1501,7 +1501,7 @@ def mkAveragingBounds (F : ℝ → ℝ)
 class JensenSketch (F : ℝ → ℝ) extends SymmUnit F : Prop where
   axis_upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
   axis_lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
-/-
+--
 ### Convexity/Jensen route (sketch)
 Let `G : ℝ → ℝ` be even (`G (-t) = G t`), `G 0 = 0`, and convex on ℝ (`ConvexOn ℝ Set.univ G`).
 Set `F x := G (Real.log x)` for `x > 0` and define the benchmark `H t := ((Real.exp t + Real.exp (-t))/2 - 1)`.
