@@ -663,7 +663,6 @@ noncomputable def ballFS (x : α) : Nat → Finset α
 theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
   classical
   -- ensure decidable equality instance for Finset membership
-  haveI : DecidableEq α := Classical.decEq _
   intro n
   induction' n with n ih generalizing y
   · -- n = 0
