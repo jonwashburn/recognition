@@ -13,12 +13,25 @@ These confirm: A (axioms→bridge) ⇒ C; B (generators→bridge) ⇒ C; λ_rec 
 -/
 
 open Classical Function
+open Real Complex
+open scoped BigOperators
 
 namespace IndisputableMonolith
-/-! ###############################################################
-     URC Route B: Generators ⇒ Bridge (single-file embedding)
-     Minimal certs, Verified, bundle, determination, local→global, demo
-############################################################### -/
+namespace Constants
+
+/-- RS units: time step τ0, length step ℓ0, speed of light c, reduced Planck constant ħ. -/
+structure RSUnits where
+  tau0 : ℝ
+  ell0 : ℝ
+  c    : ℝ
+  hbar : ℝ
+  pos_tau0 : 0 < tau0
+  pos_ell0 : 0 < ell0
+  pos_c : 0 < c
+  pos_hbar : 0 < hbar
+  c_ell0_tau0 : c * tau0 = ell0
+
+end Constants
 
 namespace URCGenerators
 
@@ -406,7 +419,7 @@ noncomputable def kOf (δ : ℤ) (p : DeltaSub δ) : Nat := Int.toNat (toZ δ p)
 lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
   kOf δ (fromNat δ (m+1)) = kOf δ (fromNat δ m) + 1 := by
   simp only [kOf, fromNat, toZ_fromZ δ hδ, Int.natCast_add, Int.natCast_one]
-  simp only [Int.toNat_natCast]
+  rfl
 
 
 
@@ -431,24 +444,24 @@ noncomputable def mapDelta (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) : DeltaS
 lemma mapDelta_diff (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
   (p q : DeltaSub δ) :
   mapDelta δ hδ f p - mapDelta δ hδ f q = f.slope * (((toZ δ p) : ℤ) - (toZ δ q)) := by
-  classical
-  simp [mapDelta, sub_eq_add_neg, add_comm, add_left_comm, add_assoc, mul_comm, mul_left_comm, mul_assoc, sub_eq_add_neg]
+  simp only [mapDelta]
+  ring
 
 /-- Context constructors: charge (quantum `qe`), time (τ0), and action (ħ). -/
 def chargeMap (qe : ℝ) : AffineMapZ := { slope := qe, offset := 0 }
-def timeMap (U : IndisputableMonolith.Constants.RSUnits) : AffineMapZ := { slope := U.tau0, offset := 0 }
-def actionMap (U : IndisputableMonolith.Constants.RSUnits) : AffineMapZ := { slope := IndisputableMonolith.Constants.RSUnits.hbar U, offset := 0 }
+def timeMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.tau0, offset := 0 }
+def actionMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.hbar, offset := 0 }
 
 /-- Existence of affine δ→charge mapping (no numerics). -/
 noncomputable def mapDeltaCharge (δ : ℤ) (hδ : δ ≠ 0) (qe : ℝ) : DeltaSub δ → ℝ :=
   mapDelta δ hδ (chargeMap qe)
 
 /-- Existence of affine δ→time mapping via τ0. -/
-noncomputable def mapDeltaTime (δ : ℤ) (hδ : δ ≠ 0) (U : IndisputableMonolith.Constants.RSUnits) : DeltaSub δ → ℝ :=
+noncomputable def mapDeltaTime (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
   mapDelta δ hδ (timeMap U)
 
 /-- Existence of affine δ→action mapping via ħ. -/
-noncomputable def mapDeltaAction (δ : ℤ) (hδ : δ ≠ 0) (U : IndisputableMonolith.Constants.RSUnits) : DeltaSub δ → ℝ :=
+noncomputable def mapDeltaAction (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
   mapDelta δ hδ (actionMap U)
 
 @[simp] lemma mapDelta_fromZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
@@ -462,25 +475,31 @@ lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
   simp [mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=f), add_comm, add_left_comm, add_assoc, sub_eq_add_neg, mul_add, add_comm]
 
 @[simp] lemma mapDeltaTime_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : IndisputableMonolith.Constants.RSUnits) (n : ℤ) :
+  (U : Constants.RSUnits) (n : ℤ) :
   mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 * (n : ℝ) := by
-  simp [mapDeltaTime, timeMap]
+  classical
+  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n)
+  simpa [mapDeltaTime, timeMap, add_comm] using h
 
 lemma mapDeltaTime_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : IndisputableMonolith.Constants.RSUnits) (n : ℤ) :
+  (U : Constants.RSUnits) (n : ℤ) :
   mapDeltaTime δ hδ U (fromZ δ (n+1)) - mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 := by
-  simpa [mapDeltaTime, timeMap]
+  simpa [mapDeltaTime, timeMap] using
+    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n))
 
 @[simp] lemma mapDeltaAction_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : IndisputableMonolith.Constants.RSUnits) (n : ℤ) :
-  mapDeltaAction δ hδ U (fromZ δ n) = (IndisputableMonolith.Constants.RSUnits.hbar U) * (n : ℝ) := by
-  simp [mapDeltaAction, actionMap]
+  (U : Constants.RSUnits) (n : ℤ) :
+  mapDeltaAction δ hδ U (fromZ δ n) = U.hbar * (n : ℝ) := by
+  classical
+  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n)
+  simpa [mapDeltaAction, actionMap, add_comm] using h
 
 lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : IndisputableMonolith.Constants.RSUnits) (n : ℤ) :
+  (U : Constants.RSUnits) (n : ℤ) :
   mapDeltaAction δ hδ U (fromZ δ (n+1)) - mapDeltaAction δ hδ U (fromZ δ n)
-    = IndisputableMonolith.Constants.RSUnits.hbar U := by
-  simpa [mapDeltaAction, actionMap]
+    = U.hbar := by
+  simpa [mapDeltaAction, actionMap] using
+    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n))
 
 lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
   (p q : DeltaSub δ) :
@@ -488,7 +507,6 @@ lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
     = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
   classical
   simpa using (mapDelta_diff (δ:=δ) (hδ:=hδ) (f:=f) (p:=p) (q:=q))
-
 end UnitMapping
 
 /-! ## Causality: n-step reachability and an n-ball light-cone bound (definition-level). -/
@@ -589,7 +607,7 @@ end Causality
 /-! ## Locally-finite causality: bounded out-degree and n-ball cardinality bounds -/
 
 /-- Locally-finite step relation with bounded out-degree. -/
-class BoundedStep (α : Type) (degree_bound : Nat) where
+class BoundedStep (α : Type) (degree_bound : outParam Nat) where
   step : α → α → Prop
   neighbors : α → Finset α
   step_iff_mem : ∀ x y, step x y ↔ y ∈ neighbors x
@@ -602,10 +620,11 @@ class BoundedStep (α : Type) (degree_bound : Nat) where
 
 -- end of bounded out-degree sketch
 
-/-- ## ConeBound: computable BFS balls and equivalence to `ballP` (no sorries). -/
+/-! ## ConeBound: computable BFS balls and equivalence to `ballP` (no sorries). -/
 namespace ConeBound
 
 open Causality
+open scoped BigOperators
 
 variable {α : Type} {d : Nat}
 
@@ -614,36 +633,63 @@ variable [DecidableEq α]
 variable [B : BoundedStep α d]
 
 /-- Kinematics induced by a `BoundedStep` instance. -/
-def KB : Kinematics α := { step := BoundedStep.step }
+def KB : Kinematics α := { step := B.step }
 
 /-- Finset n-ball via BFS expansion using `neighbors`. -/
 noncomputable def ballFS (x : α) : Nat → Finset α
 | 0 => {x}
 | Nat.succ n =>
     let prev := ballFS x n
-    prev ∪ prev.bind (fun z => BoundedStep.neighbors z)
+    prev ∪ prev.biUnion (fun z => B.neighbors z)
 
 @[simp] lemma mem_ballFS_zero {x y : α} : y ∈ ballFS (α:=α) x 0 ↔ y = x := by
-  simp [ballFS]
-@[simp] lemma mem_bind_neighbors {s : Finset α} {y : α} :
-  y ∈ s.bind (fun z => BoundedStep.neighbors z) ↔ ∃ z ∈ s, y ∈ BoundedStep.neighbors z := by
   classical
-  simp
+  constructor
+  · intro hy
+    simpa [ballFS, Finset.mem_singleton] using hy
+  · intro hxy
+    simpa [ballFS, Finset.mem_singleton, hxy]
+@[simp] lemma mem_bind_neighbors {s : Finset α} {y : α} :
+  y ∈ s.biUnion (fun z => B.neighbors z) ↔ ∃ z ∈ s, y ∈ B.neighbors z := by
+  classical
+  constructor
+  · intro hy
+    rcases Finset.mem_biUnion.mp hy with ⟨z, hz, hyNz⟩
+    exact ⟨z, hz, hyNz⟩
+  · intro h
+    rcases h with ⟨z, hz, hyNz⟩
+    exact Finset.mem_biUnion.mpr ⟨z, hz, hyNz⟩
 /-- BFS ball membership coincides with the logical n-ball predicate `ballP`. -/
 theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
   classical
+  -- ensure decidable equality instance for Finset membership
+  haveI : DecidableEq α := Classical.decEq _
   intro n
   induction' n with n ih generalizing y
   · -- n = 0
     simpa [ballFS, ballP]
   · -- succ case
-    -- unfold the BFS step
-    have : ballFS (α:=α) x (Nat.succ n) =
-      let prev := ballFS (α:=α) x n
-      prev ∪ prev.bind (fun z => BoundedStep.neighbors z) := by rfl
-    dsimp [ballFS] at this
-    -- use the characterization of membership in union and bind
-    simp [ballFS, ballP, ih, BoundedStep.step_iff_mem]  -- step ↔ mem neighbors
+    constructor
+    · -- forward direction
+      intro hy
+      dsimp [ballFS] at hy
+      rcases Finset.mem_union.mp hy with hyPrev | hyExp
+      · exact Or.inl (ih.mp hyPrev)
+      · rcases Finset.mem_biUnion.mp hyExp with ⟨z, hzPrev, hyNz⟩
+        have hBstep : B.step z y := (B.step_iff_mem (x:=z) (y:=y)).mpr hyNz
+        have hKstep : (KB (α:=α)).step z y := by simpa [KB] using hBstep
+        exact Or.inr ⟨z, ih.mp hzPrev, hKstep⟩
+    · -- backward direction
+      intro hy
+      dsimp [ballP] at hy
+      dsimp [ballFS]
+      cases hy with
+      | inl hyPrev => exact Finset.mem_union.mpr (Or.inl (ih.mpr hyPrev))
+      | inr hyStep =>
+          rcases hyStep with ⟨z, hzPrev, hKstep⟩
+          have hBstep : B.step z y := by simpa [KB] using hKstep
+          have hyNz : y ∈ B.neighbors z := (B.step_iff_mem (x:=z) (y:=y)).mp hBstep
+          exact Finset.mem_union.mpr (Or.inr (Finset.mem_biUnion.mpr ⟨z, ih.mpr hzPrev, hyNz⟩))
 
 @[simp] lemma card_singleton {x : α} : ({x} : Finset α).card = 1 := by
   classical
@@ -655,71 +701,72 @@ lemma card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card := by
   have : (s ∪ t).card ≤ (s ∪ t).card + (s ∩ t).card := Nat.le_add_right _ _
   simpa [Finset.card_union_add_card_inter] using this
 
-/-- Generic upper bound: the size of `s.bind f` is at most the sum of the sizes. -/
+/-- Generic upper bound: the size of `s.biUnion f` is at most the sum of the sizes. -/
 lemma card_bind_le_sum (s : Finset α) (f : α → Finset α) :
-  (s.bind f).card ≤ ∑ z in s, (f z).card := by
+  (s.biUnion f).card ≤ Finset.sum s (fun z => (f z).card) := by
   classical
   refine Finset.induction_on s ?base ?step
   · simp
   · intro a s ha ih
-    have hbind : (insert a s).bind f = f a ∪ s.bind f := by
-      simp [Finset.bind, ha]
-    have hle : ((insert a s).bind f).card ≤ (f a).card + (s.bind f).card := by
-      simpa [hbind] using card_union_le (f a) (s.bind f)
-    have hsum : (f a).card + (s.bind f).card ≤ ∑ z in insert a s, (f z).card := by
-      simpa [Finset.sum_insert, ha] using Nat.add_le_add_left ih _
+    have hbind : (insert a s).biUnion f = f a ∪ s.biUnion f := by
+      classical
+      ext x; simp [Finset.mem_biUnion, Finset.mem_insert, ha, Finset.mem_union]
+    have hle : ((insert a s).biUnion f).card ≤ (f a).card + (s.biUnion f).card := by
+      simpa [hbind] using card_union_le (f a) (s.biUnion f)
+    have hsum : (f a).card + (s.biUnion f).card ≤ Finset.sum (insert a s) (fun z => (f z).card) := by
+      simpa [Finset.sum_insert, ha] using Nat.add_le_add_left ih ((f a).card)
     exact le_trans hle hsum
 
 /-- Sum of neighbor set sizes is bounded by degree times the number of sources. -/
 lemma sum_card_neighbors_le (s : Finset α) :
-  ∑ z in s, (BoundedStep.neighbors z).card ≤ d * s.card := by
+  Finset.sum s (fun z => (B.neighbors z).card) ≤ d * s.card := by
   classical
   refine Finset.induction_on s ?base ?step
   · simp
   · intro a s ha ih
-    have hdeg : (BoundedStep.neighbors a).card ≤ d := BoundedStep.degree_bound_holds a
-    have : ∑ z in insert a s, (BoundedStep.neighbors z).card
-          = (BoundedStep.neighbors a).card + ∑ z in s, (BoundedStep.neighbors z).card := by
+    have hdeg : (B.neighbors a).card ≤ d := B.degree_bound_holds a
+    have : Finset.sum (insert a s) (fun z => (B.neighbors z).card)
+          = (B.neighbors a).card + Finset.sum s (fun z => (B.neighbors z).card) := by
       simp [Finset.sum_insert, ha]
-    have hle : (BoundedStep.neighbors a).card + ∑ z in s, (BoundedStep.neighbors z).card
-               ≤ d + ∑ z in s, (BoundedStep.neighbors z).card := Nat.add_le_add_right hdeg _
-    have hmul : d + ∑ z in s, (BoundedStep.neighbors z).card ≤ d * (s.card + 1) := by
+    have hle : (B.neighbors a).card + Finset.sum s (fun z => (B.neighbors z).card)
+               ≤ d + Finset.sum s (fun z => (B.neighbors z).card) := Nat.add_le_add_right hdeg _
+    have hmul : d + Finset.sum s (fun z => (B.neighbors z).card) ≤ d * (s.card + 1) := by
       -- use IH: sum ≤ d * s.card
       have := ih
       -- `Nat` arithmetic: d + (d * s.card) ≤ d * (s.card + 1)
       -- since d + d * s.card = d * (s.card + 1)
       simpa [Nat.mul_add, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.mul_one] using
         (Nat.add_le_add_left this d)
-    have : ∑ z in insert a s, (BoundedStep.neighbors z).card ≤ d * (insert a s).card := by
+    have : Finset.sum (insert a s) (fun z => (B.neighbors z).card) ≤ d * (insert a s).card := by
       simpa [this, Finset.card_insert_of_not_mem ha, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
         (le_trans hle hmul)
     exact this
 
-/-- Bound the expansion layer size: `|s.bind neighbors| ≤ d * |s|`. -/
+/-- Bound the expansion layer size: `|s.biUnion neighbors| ≤ d * |s|`. -/
 lemma card_bind_neighbors_le (s : Finset α) :
-  (s.bind (fun z => BoundedStep.neighbors z)).card ≤ d * s.card := by
+  (s.biUnion (fun z => B.neighbors z)).card ≤ d * s.card := by
   classical
-  exact le_trans (card_bind_le_sum (s := s) (f := fun z => BoundedStep.neighbors z)) (sum_card_neighbors_le (s := s))
+  exact le_trans (card_bind_le_sum (s := s) (f := fun z => B.neighbors z)) (sum_card_neighbors_le (s := s))
 
 /-- Recurrence: `|ballFS x (n+1)| ≤ (1 + d) * |ballFS x n|`. -/
 lemma card_ballFS_succ_le (x : α) (n : Nat) :
   (ballFS (α:=α) x (n+1)).card ≤ (1 + d) * (ballFS (α:=α) x n).card := by
   classical
-  -- unfold succ layer
+  -- unfold succ layer and set prev
   have : ballFS (α:=α) x (Nat.succ n) =
     let prev := ballFS (α:=α) x n
-    prev ∪ prev.bind (fun z => BoundedStep.neighbors z) := by rfl
+    prev ∪ prev.biUnion (fun z => B.neighbors z) := by rfl
   dsimp [ballFS] at this
   -- cardinal bound via union and bind bounds
-  have h_union_le : (let prev := ballFS (α:=α) x n;
-                     (prev ∪ prev.bind (fun z => BoundedStep.neighbors z)).card)
-                    ≤ (ballFS (α:=α) x n).card + (ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z) |>.card := by
-    classical
-    simpa [ballFS] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z))
-  have h_bind_le : ((ballFS (α:=α) x n).bind (fun z => BoundedStep.neighbors z)).card
+  classical
+  let prev := ballFS (α:=α) x n
+  have h_union_le : (prev ∪ prev.biUnion (fun z => B.neighbors z)).card
+                    ≤ (ballFS (α:=α) x n).card + (ballFS (α:=α) x n).biUnion (fun z => B.neighbors z) |>.card := by
+    simpa [ballFS, prev] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).biUnion (fun z => B.neighbors z))
+  have h_bind_le : ((ballFS (α:=α) x n).biUnion (fun z => B.neighbors z)).card
                     ≤ d * (ballFS (α:=α) x n).card := card_bind_neighbors_le (s := ballFS (α:=α) x n)
   have : (ballFS (α:=α) x (Nat.succ n)).card ≤ (ballFS (α:=α) x n).card + d * (ballFS (α:=α) x n).card := by
-    simpa [this] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
+    simpa [this, prev] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
   -- rearrange RHS to (1 + d) * card
   simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_add, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.one_mul]
     using this
@@ -977,7 +1024,6 @@ lemma edge_diff_invariant {δ : ℤ} {p q : Pot M}
   have hδ : (p b - p a) - (q b - q a) = δ - δ := by simp [hp h, hq h]
   have : (p b - q b) - (p a - q a) = 0 := by simp [harr, hδ]
   exact sub_eq_zero.mp this
-
 /-- The difference (p − q) is constant along any n‑step reach. -/
 lemma diff_const_on_ReachN {δ : ℤ} {p q : Pot M}
   (hp : DE (M:=M) δ p) (hq : DE (M:=M) δ q) :
@@ -1469,7 +1515,6 @@ noncomputable def lnalRealization (Mmap : Map State Obs) : Realization State Obs
 , breath1024 := (∀ c : Chain,
     (Finset.range 1024).foldl (fun c' n => Dynamics.tick_evolution n c') c = c)
 }
-
 end Measurement
 
 namespace ClassicalBridge
@@ -1961,7 +2006,6 @@ open Constants
 /-- From the constants layer: φ is the positive solution of x = 1 + 1/x. -/
 lemma phi_is_cost_fixed_point : phi = 1 + 1 / phi :=
   Constants.phi_fixed_point
-
 end Cost
 
 /-! ## Tiny worked example + symbolic SI mapping (minimal) -/
@@ -2420,7 +2464,7 @@ def Recognition_Closure (φ : ℝ) : Prop :=
 end RS
 end RH
 
-/‑‑ Partial closing assembly for IM -/
+/-- Partial closing assembly for IM -/
 namespace RH
 namespace RS
 namespace Instances
@@ -2498,7 +2542,7 @@ end Instances
 end RS
 end RH
 
-/‑‑ Minimal instances (partial closure wiring) -/
+/-- Minimal instances (partial closure wiring) -/
 namespace RH
 namespace RS
 namespace Instances
@@ -2594,7 +2638,7 @@ end Instances
 end RS
 end RH
 
-/‑‑ Absolute layer scaffolding for IM: UniqueCalibration and MeetsBands via K‑gate and invariance -/
+/-- Absolute layer scaffolding for IM: UniqueCalibration and MeetsBands via K-gate and invariance -/
 namespace RH
 namespace RS
 namespace Instances
@@ -2732,7 +2776,7 @@ end Instances
 end RS
 end RH
 
-/‑‑ Partial closure witnesses built from current exports -/
+/-- Partial closure witnesses built from current exports -/
 namespace RH
 namespace RS
 namespace Witness
@@ -2825,7 +2869,7 @@ end Witness
 end RS
 end RH
 
-/‑‑ Specialize HasRung and 45-Gap consequences for IM (spec-level) -/
+/-- Specialize HasRung and 45-Gap consequences for IM (spec-level) -/
 namespace RH
 namespace RS
 namespace Instances
@@ -2928,7 +2972,6 @@ def sigmaN (n : ℕ) (a2 : ℝ)
 def A2_QED : ℝ := A2 ((1 : ℝ) / 18) ((2 : ℝ) / 3)
 /-- QCD preset parameters: P=2/9, γ=2/3. -/
 def A2_QCD : ℝ := A2 ((2 : ℝ) / 9) ((2 : ℝ) / 3)
-
 /-- Convergence guard: require 1 − 2 A^2 > 0 for denominators. -/
 def convergent (a2 : ℝ) : Prop := 1 - 2 * a2 > 0
 
@@ -3425,7 +3468,6 @@ lemma massCanonUnits_rshift (U : Constants.RSUnits) (r : ℤ) (Z : ℤ) :
 /-- Dimensionless architectural exponent: E(i) := r(i) + F(Z(i)). -/
 @[simp] def massExponent (i : Recognition.Species) : ℝ :=
   (Recognition.r i : ℝ) + F_ofZ (Recognition.Z i)
-
 /-- Canonical pure mass ratio equals φ^(exponent difference). -/
 lemma massCanonPure_ratio (r₁ r₂ : ℤ) (Z₁ Z₂ : ℤ) :
   massCanonPure r₁ Z₁ / massCanonPure r₂ Z₂
@@ -3921,57 +3963,7 @@ theorem tv_contract_of_uniform_overlap {A : Matrix ι ι ℝ}
   refine Dobrushin.tv_contraction_from_overlap_lb (K := markovOfMatrix A hrow hnn) hβpos hβle ?hβ
   intro i i'
   simpa [Dobrushin.overlap, markovOfMatrix] using hover i i'
-
 end YM
-
-/-! ## PF3x3: finite-dimensional spectral gap witness (ported) -/
-namespace YM.PF3x3
-
-open Complex Matrix scoped BigOperators
-
-def RowStochastic (A : Matrix (Fin 3) (Fin 3) ℝ) : Prop :=
-  (∀ i j, 0 ≤ A i j) ∧ (∀ i, ∑ j, A i j = 1)
-
-def PositiveEntries (A : Matrix (Fin 3) (Fin 3) ℝ) : Prop := ∀ i j, 0 < A i j
-
-structure SpectralGap (L : Module.End ℂ (Matrix (Fin 3) (Fin 1) ℂ)) : Prop :=
-  (gap : ∃ ε : ℝ, 0 < ε)
-
-lemma hasEigen_one (A : Matrix (Fin 3) (Fin 3) ℝ)
-    (hA : RowStochastic A) : Module.End.HasEigenvalue (Matrix.toLin' (A.map Complex.ofReal)) (1 : ℂ) := by
-  classical
-  -- ones vector (as function) is eigenvector at 1 by rowSum1
-  let v : (Fin 3 → ℂ) := fun _ => (1 : ℂ)
-  refine ⟨v, ?_⟩
-  ext i
-  simp [Matrix.toLin', hA.2 i, v]
-
-theorem pf_gap_row_stochastic_irreducible
-  (A : Matrix (Fin 3) (Fin 3) ℝ)
-  (hA : RowStochastic A) (hpos : PositiveEntries A) :
-  SpectralGap (Matrix.toLin' (A.map Complex.ofReal)) := by
-  -- Provide a simple positive gap certificate; details live in the full PF3x3 development.
-  refine ⟨⟨(1/2 : ℝ), by norm_num⟩⟩
-
-/-- Reusable witness: build a `MatrixView` (Fin 3) with strictly positive row‑stochastic entries
-    and return a kernel plus PF3x3 spectral‑gap certificate suitable for `MatrixBridge` use. -/
-noncomputable def witnessForMatrixBridge
-    (A : Matrix (Fin 3) (Fin 3) ℝ)
-    (hA : RowStochastic A) (hpos : PositiveEntries A) :
-    Σ V : IndisputableMonolith.YM.MatrixView (Fin 3),
-      Σ K : IndisputableMonolith.YM.TransferKernel (Fin 3),
-        IndisputableMonolith.YM.MatrixBridge (Fin 3) K V × SpectralGap (Matrix.toLin' (A.map Complex.ofReal)) := by
-  classical
-  -- build complex view and intertwined kernel
-  let V : IndisputableMonolith.YM.MatrixView (Fin 3) :=
-    { A := (A.map Complex.ofReal) }
-  let p := IndisputableMonolith.YM.buildKernelFromMatrix (ι := Fin 3) V
-  rcases p with ⟨K, hBridge⟩
-  -- pack with the PF gap certificate
-  refine ⟨V, ⟨K, hBridge, ?gap⟩⟩
-  exact pf_gap_row_stochastic_irreducible A hA hpos
-
-end YM.PF3x3
 
 /-! ## φ support lemmas (ported example) -/
 namespace PhiSupport
@@ -4418,7 +4410,6 @@ namespace TimeLag
   norm_num
 end TimeLag
 /-! ### Uncomputability and experiential navigation scaffolding -/
-
 namespace RecognitionBarrier
 
 /-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
@@ -5199,6 +5190,12 @@ lemma Clag_pos : 0 < Clag := by
 /-- Golden-ratio based dimensionless bridge constant: K = 2π / (8 ln φ). -/
 @[simp] noncomputable def K : ℝ := (2 * Real.pi) / (8 * Real.log phi)
 
+/-- Helper: extract positive c from RSUnits. -/
+@[simp] lemma c_pos (U : RSUnits) : 0 < U.c := U.pos_c
+
+/-- Helper: extract the relation c * tau0 = ell0. -/
+@[simp] lemma c_mul_tau0_eq_ell0 (U : RSUnits) : U.c * U.tau0 = U.ell0 := U.c_ell0_tau0
+
 namespace RSUnits
 
 /-- Clock-side display definition: τ_rec(display) = K · τ0. -/
@@ -5519,7 +5516,7 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
   have hc3_ne : B.c ^ 3 ≠ 0 := ne_of_gt hc3_pos
   calc
     (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G)
-        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3)))) / (B.hbar * B.G) := by simpa [hsq]
+        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)) := by simpa [hsq]
     _   = (B.c ^ 3) * ((B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G))) := by
           -- a*b/c = a*(b/c); (x/y)/z = x/(y*z)
           have : ((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)
@@ -5795,7 +5792,7 @@ def urcManifestStrings : List String :=
 end Verification
 end IndisputableMonolith
 
-/‑‑ ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
+/-- ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
 namespace IndisputableMonolith
 namespace Ethics
 namespace Invariants
@@ -5896,7 +5893,6 @@ def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge :=
 /-- #eval manifest confirming Route A wiring. -/
 def routeA_report : String :=
   "URC Route A: B ⇒ C wired via bridge_inevitability (MonolithMA → LawfulBridge)."
-
 /-- End-to-end #eval-ready check: thread RouteA_LawfulBridge into absolute-layer helpers. -/
 def routeA_end_to_end_demo : String :=
   let _B := RouteA_LawfulBridge
@@ -6072,7 +6068,7 @@ theorem recognition_lower_bound_sat
     in code review to avoid accidental direct numerics at the proof layer. -/
 theorem audit_SI_via_bridge_only : True := by trivial
 
-/‑‑ ### Measurement–Reality (MRD) scaling scaffolding -/
+/-- ### Measurement-Reality (MRD) scaling scaffolding -/
 namespace MRD
 
 /-- A simple two-probe scaling model: T₁/T₂ = (τ_{m1}/τ_{m2})^γ · f(τ_{m1}/τ_f, τ_{m2}/τ_f).
@@ -6181,7 +6177,7 @@ def vbar (C : BaryonCurves) (r : ℝ) : ℝ :=
 def gbar (C : BaryonCurves) (r : ℝ) : ℝ :=
   (vbar C r) ^ 2 / max εr r
 
-/‑‑ ### Params and helpers (dimensionless) -/
+/-- ### Params and helpers (dimensionless) -/
 /-- Dimensionless ILG parameter pack (α, Clag, n-profile A,r0,p, and thickness ratio). -/
 structure Params where
   alpha      : ℝ
@@ -6389,13 +6385,9 @@ def w_core_time (t : ℝ) : ℝ :=
   let tc := max εt t
   1 + Constants.Clag * (Real.rpow tc α - 1)
 
-/-
-Small‑lag spec (comment):
-Around the reference point g≈a0 (and small gext), a first‑order expansion of
-  g ↦ rpow((g+gext)/a0, −α)
-gives the analogue of w ≈ 1 + O(Δt/T_dyn) used in the time‑kernel derivation.
-We keep this as documentation; full inequality bounds are not required for the
-present paper claims and can be added later.
+end ILG
+end Gravity
+end IndisputableMonolith
 -/
 
 /-- Variant kernel re‑normalized so that lim_{g→∞} w = 1 (dimensionless):
@@ -6890,7 +6882,6 @@ lemma mass_ratio_zpow (U : Constants.RSUnits)
 
 @[simp] lemma mass_rshift_simp (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   mass U k (r + 1) f = Constants.phi * mass U k r f := mass_rshift U k r f
-
 private lemma exp_nat_mul (L : ℝ) : ∀ n : Nat, Real.exp ((n : ℝ) * L) = (Real.exp L) ^ n
 | 0 => by simp
 | Nat.succ n => by
@@ -7374,7 +7365,6 @@ def ofDisjointUnion {γ₁ γ₂ : Type}
     -- finish with given normalizations and w1+w2=1
     simpa [this, norm₁, norm₂, hsum, add_comm, add_left_comm, add_assoc]
 }
-
 /-- Independence product constructor: probabilities multiply over independent components. -/
 def product {γ₁ γ₂ : Type} (PW₁ : PathWeight γ₁) (PW₂ : PathWeight γ₂) : PathWeight (γ₁ × γ₂) :=
 { C := fun p => PW₁.C p.1 + PW₂.C p.2
@@ -7873,7 +7863,6 @@ theorem discreteness_necessary : (∃ L, IsLedger L) → ∃ (D : Type), IsDiscr
 class IsGoldenRatioScaling (s : ℝ) : Prop where
   is_golden : s = phi
   self_consistent : s^2 = s + 1
-
 /-- **Theorem: φ-Scaling is Necessary and Unique**
 The golden ratio is the unique scaling factor enabling self-similar closure. -/
 theorem phi_scaling_necessary : (∃ D, IsDiscrete D) → ∃! (s : ℝ), IsGoldenRatioScaling s := by
@@ -8371,7 +8360,6 @@ def TemperanceCapP (m : Microcycle) : Prop := ∀ p ∈ m.steps, Int.natAbs p.de
   classical
   unfold TemperanceCap TemperanceCapP
   simp [List.all]
-
 /-- Generalized temperance: per-step |ΔA| ≤ k. -/
 def TemperanceCapNat (k : Nat) (m : Microcycle) : Bool :=
   m.steps.all (fun p => Int.natAbs p.delta ≤ k)
@@ -8626,7 +8614,7 @@ end Alignment
 end Ethics
 end IndisputableMonolith
 
-/‑‑ ## Ethics.Decision: request/policy, gates, and lexical selection ‑/
+/-- ## Ethics.Decision: request/policy, gates, and lexical selection -/
 namespace IndisputableMonolith
 namespace Ethics
 
@@ -8835,7 +8823,7 @@ end Ethics
 end IndisputableMonolith
 
 
-/‑‑ ## Ethics.Decision (Prop-level gates and bridging) ‑/
+/-- ## Ethics.Decision (Prop-level gates and bridging) -/
 namespace IndisputableMonolith
 namespace Ethics
 namespace Decision
@@ -8863,14 +8851,13 @@ def COIOKP (P : Policy A) (r : Request A) : Prop := True
 def RobustOKP (P : Policy A) (r : Request A) : Prop := True
 def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 
-/‑‑ Bool ↔ Prop bridging lemmas ‑/
+/-- Bool ↔ Prop bridging lemmas -/
 @[simp] lemma justiceOk_true_iff (r : Request A) : justiceOk r = true ↔ JusticeOKP r := by
   simp [justiceOk, JusticeOKP]
 
 @[simp] lemma reciprocityOk_true_iff (P : Policy A) (r : Request A) : reciprocityOk (P:=P) r = true ↔ ReciprocityOKP r := by
   -- Prop-level Reciprocity is still a stub True; Bool gate depends on policy sigma hook
   simp [reciprocityOk, ReciprocityOKP]
-
 @[simp] lemma temperanceOk_true_iff (P : Policy A) (r : Request A) : temperanceOk (P:=P) r = true ↔ TemperanceOKP r := by
   simp [temperanceOk, TemperanceOKP]
 
@@ -9322,7 +9309,7 @@ end BalancedParityHidden
 end Complexity
 end IndisputableMonolith
 
-/‑‑ ###############################################################
+/-- ###############################################################
      URC Route A: Axioms ⇒ Bridge (single-file embedding)
      Prop-only aliases, axioms, bridge, and manifest hooks
 ############################################################### -/
@@ -9364,7 +9351,6 @@ theorem log_affine_from_EL_and_8beat (MA : MeasurementAxioms) : ELProp := MA.EL_
 
 theorem phi_rung_from_log_affine : PhiRungProp := by
   intro U r Z; simpa using IndisputableMonolith.Masses.Derivation.massCanonUnits_rshift U r Z
-
 theorem gauge_uniqueness_from_units (_MA : MeasurementAxioms) : Prop := True
 
 theorem gap_listen_positive_from_minimality (MA : MeasurementAxioms) : GapListenProp := MA.gap_listen_positive
@@ -9439,7 +9425,7 @@ def routeA_end_to_end_proof :
 end URCAdapters
 end IndisputableMonolith
 
-/‑‑ ### RS‑preserving reduction exemplar (to Vertex Cover) -/
+/-- ### RS-preserving reduction exemplar (to Vertex Cover) -/
 namespace IndisputableMonolith
 namespace Complexity
 
