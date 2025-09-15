@@ -2460,15 +2460,15 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
 
 -/
 
-/-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
+-- Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above.
 
-/‑‑ Partial closure witnesses built from current exports -/
+-- Partial closure witnesses built from current exports
 /- TEMP DISABLE: Witness and minimal instances
 /- TEMP DISABLE: Witness and minimal instances
 namespace RH
 namespace RS
 namespace Witness
-/-
+--
 
 /-- Provisional φ-closed proof for alpha (constant 1/alphaInv expression). -/
 -- instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ IndisputableMonolith.BridgeData.alpha := ⟨⟩
