@@ -2288,11 +2288,11 @@ def Recognition_Closure (φ : ℝ) : Prop :=
 end RS
 end RH
 
-/‑- BEGIN TEMP DISABLE: Partial closing assembly and minimal instances (to unblock head-build) -/
-/‑‑ Partial closing assembly for IM -/
-/‑ namespace RH
-/‑ namespace RS
-/‑ namespace Instances
+/-- BEGIN TEMP DISABLE: Partial closing assembly and minimal instances (to unblock head-build) --/
+/-- Partial closing assembly for IM --/
+/ - namespace RH
+/ - namespace RS
+/ - namespace Instances
 
 /-- Specialization of the 45-Gap consequence witness to the IM ledger. -/
 theorem fortyfive_gap_spec_for_IM (φ : ℝ)
@@ -2367,7 +2367,7 @@ theorem recognition_closure_with_absolute_witness (φ : ℝ)
 /- end RS
 /- end RH
 
-/‑‑ Minimal instances (partial closure wiring) -/
+/-- Minimal instances (partial closure wiring) --/
 /- namespace RH
 /- namespace RS
 /- namespace Instances
@@ -2463,7 +2463,7 @@ theorem dimless_KB_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
 /- end RS
 /- end RH
 
-/‑- END TEMP DISABLE -/
+/-- END TEMP DISABLE --/
 
 /-‑ Absolute layer scaffolding duplicate (old stub) removed; keeping the unified spec above. -/
 
