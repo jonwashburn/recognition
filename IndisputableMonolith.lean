@@ -3701,7 +3701,7 @@ def winding (w : Word) : Int :=
 abbrev Torsion8 := ZMod 8
 
 /-- Torsion class via ZMod 8. -/
-@[simp] def torsion8 (w : Word) : Torsion8 := (winding w : Int) -- coerces into ZMod 8
+@[simp] def torsion8 (w : Word) : Torsion8 := ((winding w : Int) : Torsion8)
 
 /-- Map mod‑8 torsion to a 3‑class generation label. -/
 @[simp] def genOfTorsion (t : Torsion8) : Derivation.GenClass :=
@@ -4918,28 +4918,7 @@ end Ablation
 @[simp] def ΔB : Sector → Int
 | _ => 0
 
-/-- Closed‑form gap 𝔽(Z) = log(1 + Z/φ) / log φ. -/
-noncomputable def Fgap (z : Int) : ℝ :=
-  Real.log (1 + (z : ℝ) / (Constants.phi)) / Real.log (Constants.phi)
 
-/-- Mass‑law exponent Eᵢ = rᵢ + 𝔽(Zᵢ) − 8 (parameter‑free in exponent). -/
-noncomputable def massExp (i : Species) : ℝ := (r i : ℝ) + Fgap (Z i) - 8
-
-/-- φ‑power wrapper: Φ(x) := exp( (log φ)·x ). -/
-noncomputable def PhiPow (x : ℝ) : ℝ := Real.exp (Real.log (Constants.phi) * x)
-
-lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
-  unfold PhiPow
-  simpa [mul_add, Real.exp_add, mul_comm, mul_left_comm, mul_assoc]
-lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
-  unfold PhiPow
-  have : Real.log (Constants.phi) * (x - y)
-        = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
-  simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
-        mul_comm, mul_left_comm, mul_assoc]
-
-/-- Scale‑carrying mass: mᵢ = M₀ · Φ(Eᵢ). -/
-noncomputable def mass (M0 : ℝ) (i : Species) : ℝ := M0 * PhiPow (massExp i)
 
 
 
