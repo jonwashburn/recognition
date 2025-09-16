@@ -638,7 +638,7 @@ def KB : Kinematics α := { step := B.step }
 /-- Finset n-ball via BFS expansion using `neighbors`. -/
 noncomputable def ballFS (x : α) : Nat → Finset α
 | 0 => {x}
-| Nat.succ n =>
+| n+1 =>
     let prev := ballFS x n
     prev ∪ prev.biUnion (fun z => B.neighbors z)
 
@@ -877,7 +877,12 @@ lemma cone_bound
     exact hr
   have hcτ : U.ell0 = U.c * U.tau0 := by
     exact eq_comm.mp (IndisputableMonolith.Constants.c_mul_tau0_eq_ell0 U)
-  simpa [hτ, hcτ, mul_left_comm, mul_assoc] using hℓ
+  have : rad y - rad x ≤ ↑n * U.ell0 := by
+    rw [show (n : ℝ) = ↑n by rfl] at hℓ
+    exact hℓ
+  have : ↑n * U.ell0 = U.c * (↑n * U.tau0) := by rw [hcτ, mul_left_comm]
+  have : U.c * (↑n * U.tau0) = U.c * (time y - time x) := by rw [hτ]
+  exact le_trans this.1 (le_trans this.2.1 this.2.2)
 
 end StepBounds
 
