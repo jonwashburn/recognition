@@ -877,12 +877,12 @@ lemma cone_bound
     exact hr
   have hcτ : U.ell0 = U.c * U.tau0 := by
     exact eq_comm.mp (IndisputableMonolith.Constants.c_mul_tau0_eq_ell0 U)
-  have : rad y - rad x ≤ ↑n * U.ell0 := by
+  have h_rad_le : rad y - rad x ≤ ↑n * U.ell0 := by
     rw [show (n : ℝ) = ↑n by rfl] at hℓ
     exact hℓ
-  have : ↑n * U.ell0 = U.c * (↑n * U.tau0) := by rw [hcτ, mul_left_comm]
-  have : U.c * (↑n * U.tau0) = U.c * (time y - time x) := by rw [hτ]
-  exact le_trans this.1 (le_trans this.2.1 this.2.2)
+  have h_ell_eq : ↑n * U.ell0 = U.c * (↑n * U.tau0) := by rw [hcτ, mul_left_comm]
+  have h_tau_eq : U.c * (↑n * U.tau0) = U.c * (time y - time x) := by rw [hτ]
+  exact le_trans h_rad_le (le_trans h_ell_eq h_tau_eq)
 
 end StepBounds
 
