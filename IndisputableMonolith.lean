@@ -940,7 +940,7 @@ structure PEC (β : Type) where
 
 end MaxwellDEC
 
-/-- LNAL machine scaffold (6 registers, 16 opcodes, 1024-breath). -/
+/- LNAL machine scaffold -/
 namespace LNAL
 
 abbrev Reg := Fin 6
@@ -999,8 +999,8 @@ def step (P : Program) (s : State) : State :=
     | OpKind.LOAD  => s
     | OpKind.STORE => s
     | OpKind.SWAP  => match i.dst, i.src with | some rd, some rs => let v := s.get rd; (s.set rd (s.get rs)).set rs v | _, _ => s
-    | OpKind.JMP   => match i.imm with | some off => { s with ip := s.ip + Nat.ofInt off.natAbs } | none => s
-    | OpKind.JZ    => match i.dst, i.imm with | some rd, some off => if s.get rd = 0 then { s with ip := s.ip + Nat.ofInt off.natAbs } else s | _, _ => s
+    | OpKind.JMP   => match i.imm with | some off => { s with ip := s.ip + Int.toNat off.natAbs } | none => s
+    | OpKind.JZ    => match i.dst, i.imm with | some rd, some off => if s.get rd = 0 then { s with ip := s.ip + Int.toNat off.natAbs } else s | _, _ => s
   let s'' := if s'.ip = s.ip then { s' with ip := nextIP s' } else s'
   { s'' with breath := bumpBreath s'', halted := s''.halted }
 
