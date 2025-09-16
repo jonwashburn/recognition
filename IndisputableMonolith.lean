@@ -1656,7 +1656,7 @@ theorem agrees_on_exp_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
   simpa using this
 
 /-- From exp-axis agreement, conclude equality with Jcost on ℝ_{>0}. -/
-theorem F_eq_J_on_pos (F : ℝ → ℝ)
+theorem F_eq_J_on_pos_explicit (F : ℝ → ℝ)
   (hAgree : AgreesOnExp F) : ∀ {x : ℝ}, 0 < x → F x = Jcost x := by
   intro x hx
   have : ∃ t, Real.exp t = x := ⟨Real.log x, by simpa using Real.exp_log hx⟩
