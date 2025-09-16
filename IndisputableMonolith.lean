@@ -931,8 +931,8 @@ structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α)
   ampere_qs  : HasCoboundary.d (k:=1) H = src.J
   gauss_e    : HasCoboundary.d (k:=2) D = src.ρ
   gauss_m    : HasCoboundary.d (k:=2) B = (fun _ => 0)
-  const_D    : D = (fun s => M.eps * (HasHodge.star (k:=1) E) s)
-  const_B    : B = (fun s => M.mu  * (HasHodge.star (k:=1) H) s)
+  const_D    : D = (fun s => M.eps * (HasHodge.star E) s)
+  const_B    : B = cast (by rfl) (HasHodge.star H)
 
 /-- PEC boundary descriptor (edges where tangential E vanishes). -/
 structure PEC (β : Type) where
