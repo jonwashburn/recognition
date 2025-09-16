@@ -2123,6 +2123,7 @@ end Cycle3
 
 end IndisputableMonolith
 
+
 /-! ############################################################
     Recognition Closure Spec (embedded)
     A spec-only layer unifying: dimensionless inevitability,
@@ -2581,7 +2582,7 @@ instance NoInjectedConstants_from_verif : RH.RS.NoInjectedConstants IM := by
   -- traceability: dimless_KA_invariant and dimless_KB_invariant
   exact ⟨⟩
 
-/- Minimal existence stubs for dual landings and bridge map (tied to K-gate and invariance). -/
+/-- Minimal existence stubs for dual landings and bridge map (tied to K-gate and invariance). -/
 theorem two_independent_SI_IM : RH.RS.TwoIndependentSILandings IM := by
   -- route A/B via K identities are independent up to units
   exact ⟨⟩
@@ -4940,6 +4941,8 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
 /-- Scale‑carrying mass: mᵢ = M₀ · Φ(Eᵢ). -/
 noncomputable def mass (M0 : ℝ) (i : Species) : ℝ := M0 * PhiPow (massExp i)
 
+
+
 /-! ### Binary-gauged mass variant for discrete species-level factors -/
 
 /-- Species-level binary exponent (default 0). Negative values allowed. -/
@@ -4979,7 +4982,7 @@ lemma equalZ_lepton_family : Z .e = Z .mu ∧ Z .mu = Z .tau := by
 /-- Residue at anchor type. -/
 noncomputable abbrev Residue := Species → ℝ
 
-/-/ Derived anchor identity from the zero‑width certificate. -/
+/-- Derived anchor identity from the zero‑width certificate. -/
 theorem anchorIdentity (f : Residue)
   (hres : ∀ i, Recognition.Certification.memI (Recognition.Certification.zeroWidthCert.Ires i) (f i)) :
   ∀ i : Species, f i = Fgap (Z i) := by
@@ -8835,7 +8838,7 @@ open Classical
 universe u
 variable {A : Type u}
 
-/-‑ Prop-level counterparts (minimal, default to True; refine later) ‑-/
+/-- Prop-level counterparts (minimal, default to True; refine later) -/
 def JusticeOKP (r : Request A) : Prop := True
 def ReciprocityOKP (r : Request A) : Prop := True
 def TemperanceOKP (r : Request A) : Prop := True
@@ -8903,7 +8906,7 @@ lemma admissible_true_iff (P : Policy A) (r : Request A) :
   · simp [admissible, h]
   · simp [admissible, h]
 
-/‑‑ Example usage for fairness/time-window hooks ‑/
+/-- Example usage for fairness/time-window hooks -/
 namespace Examples
 
 open IndisputableMonolith.Measurement
