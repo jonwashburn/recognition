@@ -921,7 +921,7 @@ structure Sources (α : Type) where
 variable {α : Type}
 
 /-- Quasi-static Maxwell equations on the mesh (no time derivative terms). -/
-structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α) where
+structure Equations (α : Type) [HasCoboundary α] [HasH : HasHodge α] (M : Medium α) (h : HasH.n = 3) where
   E : DForm α 1
   H : DForm α 1
   B : DForm α 2
@@ -931,8 +931,8 @@ structure Equations (α : Type) [HasCoboundary α] [HasHodge α] (M : Medium α)
   ampere_qs  : HasCoboundary.d (k:=1) H = src.J
   gauss_e    : HasCoboundary.d (k:=2) D = src.ρ
   gauss_m    : HasCoboundary.d (k:=2) B = (fun _ => 0)
-  const_D    : D = (fun s => M.eps * (HasHodge.star E) s)
-  const_B    : B = cast (by rfl) (HasHodge.star H)
+  const_D    : D = cast (show DForm α (HasH.n - 1) = DForm α 2 by rw [h, Nat.sub_self, Nat.zero_add]) (fun s => M.eps * (HasHodge.star E) s)
+  const_B    : B = cast (show DForm α (HasH.n - 1) = DForm α 2 by rw [h, Nat.sub_self, Nat.zero_add]) (HasHodge.star H)
 
 /-- PEC boundary descriptor (edges where tangential E vanishes). -/
 structure PEC (β : Type) where
