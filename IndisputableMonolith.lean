@@ -1168,10 +1168,6 @@ theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
 
 end LedgerUniqueness
 
-/-- ## ClassicalBridge: explicit classical correspondences without sorries.
-    - T3 bridge: `Conserves` is the discrete continuity equation on closed chains.
-    - T4 bridge: potentials modulo additive constants on a reach component (gauge classes).
- -/
 namespace ClassicalBridge
 
 open Potential Causality
@@ -1244,10 +1240,6 @@ abbrev DiscreteContinuity (L : Ledger M) : Prop := Conserves L
 
 theorem continuity_of_conserves {L : Ledger M} [Conserves L] : DiscreteContinuity (M:=M) L := inferInstance
 
-end ClassicalBridge
-
-namespace ClassicalBridge
-
 open AtomicTick
 
 variable {M : RecognitionStructure}
@@ -1270,11 +1262,7 @@ lemma schedule_unique [AtomicTick M] {t : Nat} {u : M.U}
   have : u = w := huniq u hu
   simpa [schedule, Classical.choose] using this
 
-end ClassicalBridge
-
-namespace ClassicalBridge
-
-open Measure Theory
+open MeasureTheory
 
 variable {M : RecognitionStructure}
 
