@@ -760,15 +760,14 @@ lemma card_ballFS_succ_le (x : α) (n : Nat) :
   classical
   let prev := ballFS (α:=α) x n
   have h_union_le : (prev ∪ prev.biUnion (fun z => B.neighbors z)).card
-                    ≤ (ballFS (α:=α) x n).card + (ballFS (α:=α) x n).biUnion (fun z => B.neighbors z) |>.card := by
+                    ≤ (ballFS (α:=α) x n).card + ((ballFS (α:=α) x n).biUnion (fun z => B.neighbors z)).card := by
     simpa [ballFS, prev] using card_union_le (ballFS (α:=α) x n) ((ballFS (α:=α) x n).biUnion (fun z => B.neighbors z))
   have h_bind_le : ((ballFS (α:=α) x n).biUnion (fun z => B.neighbors z)).card
                     ≤ d * (ballFS (α:=α) x n).card := card_bind_neighbors_le (s := ballFS (α:=α) x n)
   have : (ballFS (α:=α) x (Nat.succ n)).card ≤ (ballFS (α:=α) x n).card + d * (ballFS (α:=α) x n).card := by
     simpa [this, prev] using Nat.le_trans h_union_le (Nat.add_le_add_left h_bind_le _)
   -- rearrange RHS to (1 + d) * card
-  simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_add, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.one_mul]
-    using this
+  simpa [Nat.add_mul, Nat.one_mul] using this
 
 /-- Geometric bound: `|ballFS x n| ≤ (1 + d)^n`. -/
 theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
@@ -783,7 +782,9 @@ theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card �
     have hmul : (1 + d) * (ballFS (α:=α) x n).card ≤ (1 + d) * (1 + d) ^ n := by
       exact Nat.mul_le_mul_left _ ih
     -- combine
-    exact le_trans hrec hmul
+    have hmul' : (1 + d) * (ballFS (α:=α) x n).card ≤ (1 + d) ^ (n + 1) := by
+      simpa [Nat.pow_succ, Nat.mul_comm] using hmul
+    exact le_trans hrec hmul'
 
 end ConeBound
 
@@ -6369,7 +6370,6 @@ def w_core_time (t : ℝ) : ℝ :=
 end ILG
 end Gravity
 end IndisputableMonolith
--/
 
 /-- Variant kernel re‑normalized so that lim_{g→∞} w = 1 (dimensionless):
     w_inf1(g,gext) = 1 + Clag * (( (g+gext)/a0)^(-α) ).
@@ -7696,7 +7696,7 @@ theorem eight_window_balance : ∀ (c : Chain) (start : Nat),
     schedule_delta_sum8_mod start
   simpa [hΔ] using hsum
 /-- Token parity is maintained -/
-theorem token_parity : ∀ (c : Chain) (n : Nat),
+theorem token_parity_evolved : ∀ (c : Chain) (n : Nat),
   let evolved := tick_evolution n c
   |countOpenLocks evolved| ≤ 1 := by
   intro c n; dsimp
@@ -8034,7 +8034,7 @@ theorem LNAL_necessary (M : RecognitionStructure) :
   -- Balance over 8‑windows:
   have hBalance := IndisputableMonolith.Dynamics.eight_window_balance
   -- Token parity bound:
-  have hParity := IndisputableMonolith.Dynamics.token_parity
+  have hParity := IndisputableMonolith.Dynamics.token_parity_evolved
   -- Breath cycle closure:
   have hBreath := IndisputableMonolith.Dynamics.breath_cycle
   -- Existence: choose L = LNALOpcode
@@ -9479,3 +9479,5 @@ end RSVC
 
 end Complexity
 end IndisputableMonolith
+
+-/
