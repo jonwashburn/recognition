@@ -1236,8 +1236,7 @@ theorem gaugeClass_eq_of_same_delta_basepoint
   apply Quot.sound
   refine ⟨0, ?_⟩
   intro yc
-  have := Potential.T4_unique_on_component (M:=M) (δ:=δ) (p:=p) (q:=q)
-    (x0:=x0) (hbase:=hbase) yc.reachable
+  have := @Potential.T4_unique_on_component M δ p q hp hq x0 yc.y hbase yc.reachable
   simpa [restrictToComponent] using this
 
 /-- T3 bridge (alias): `Conserves` is the discrete continuity equation on closed chains. -/
