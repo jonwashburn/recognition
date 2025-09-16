@@ -3347,19 +3347,19 @@ def lookup (i : Species) : Spec :=
           -- Up quarks: emphasize weak + color structure
           (Ribbons.ringSeq Ribbons.GaugeTag.T3 2)
           ++ (Ribbons.ringSeq Ribbons.GaugeTag.Color 2)
-          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y  (Nat.ofInt (Recognition.r i) - 4))
+          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y  (Int.toNat (Recognition.r i) - 4))
       | Recognition.Sector.down =>
           -- Down quarks: similar, with different ordering bias
           (Ribbons.ringSeq Ribbons.GaugeTag.Color 2)
           ++ (Ribbons.ringSeq Ribbons.GaugeTag.T3 2)
-          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y  (Nat.ofInt (Recognition.r i) - 4))
+          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y  (Int.toNat (Recognition.r i) - 4))
       | Recognition.Sector.lepton =>
           -- Charged leptons: hypercharge‑heavy
           (Ribbons.ringSeq Ribbons.GaugeTag.T3 1)
-          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y (Nat.ofInt (Recognition.r i) - 1))
+          ++ (Ribbons.ringSeq Ribbons.GaugeTag.Y (Int.toNat (Recognition.r i) - 1))
       | Recognition.Sector.neutrino =>
           -- Neutrinos: weak only (no Y, no color)
-          (Ribbons.ringSeq Ribbons.GaugeTag.T3 (Nat.ofInt (Recognition.r i)))
+          (Ribbons.ringSeq Ribbons.GaugeTag.T3 (Int.toNat (Recognition.r i)))
   , Z_matches := Z_of_charge_matches i }
 end SMWords
 end Masses
@@ -8207,6 +8207,8 @@ def yardstickOf (U : Constants.RSUnits) (P : SectorParams) : ℝ :=
 
 end Masses
 end IndisputableMonolith
+/-- Reopen the monolith namespace for subsequent Ethics/Stakeholder definitions. -/
+namespace IndisputableMonolith
 /-- Stakeholder label. -/
 abbrev Stakeholder := String
 
