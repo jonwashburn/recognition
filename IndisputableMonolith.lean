@@ -1008,7 +1008,7 @@ def step (P : Program) (s : State) : State :=
 
 lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod := by
   dsimp [step, bumpBreath, breathPeriod]
-  split <;> simp [Nat.mod_lt]
+  split <;> exact Nat.mod_lt (s.breath + 1) (by decide : 0 < 1024)
 
 end LNAL
 
