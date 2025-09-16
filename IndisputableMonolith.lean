@@ -554,7 +554,7 @@ variable {α : Type}
     This is the graph-theoretic n-ball as a predicate on vertices. -/
 def ballP (K : Kinematics α) (x : α) : Nat → α → Prop
 | 0, y => y = x
-| Nat.succ n, y => ballP K x n y ∨ ∃ z, ballP K x n z ∧ K.step z y
+| n+1, y => ballP K x n y ∨ ∃ z, ballP K x n z ∧ K.step z y
 
 lemma ballP_mono {K : Kinematics α} {x : α} {n m : Nat}
   (hnm : n ≤ m) : {y | ballP K x n y} ⊆ {y | ballP K x m y} := by
@@ -809,6 +809,10 @@ variable {K : Causality.Kinematics α}
 variable {U : IndisputableMonolith.Constants.RSUnits}
 variable {time rad : α → ℝ}
 
+/-- Arithmetic normalization: `↑n + 1 = ↑(n + 1)` for time calculations. -/
+lemma nat_cast_add_one (n : ℕ) : (↑n : ℝ) + 1 = ↑(n + 1) := by
+  simp [Nat.cast_add, Nat.cast_one]
+
 /-- Under per-step bounds, the clock display advances by exactly `n·τ0` along any `n`-step reach. -/
 lemma reach_time_eq
   (H : StepBounds K U time rad) :
@@ -821,16 +825,17 @@ lemma reach_time_eq
       have ht := H.step_time hyz
       calc
         time z = time y + U.tau0 := ht
-        _ = (time x + (n : ℝ) * U.tau0) + U.tau0 := by simpa [ih]
-        _ = time x + ((n : ℝ) * U.tau0 + U.tau0) := by
+        _ = (time x + ↑n * U.tau0) + U.tau0 := by simpa [ih]
+        _ = time x + (↑n * U.tau0 + U.tau0) := by
               simp [add_comm, add_left_comm, add_assoc]
-        _ = time x + (((n : ℝ) + 1) * U.tau0) := by
-              have : (n : ℝ) * U.tau0 + U.tau0 = ((n : ℝ) + 1) * U.tau0 := by
+        _ = time x + ((↑n + 1) * U.tau0) := by
+              have : ↑n * U.tau0 + U.tau0 = (↑n + 1) * U.tau0 := by
                 calc
-                  (n : ℝ) * U.tau0 + U.tau0
-                      = (n : ℝ) * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
-                  _ = ((n : ℝ) + 1) * U.tau0 := by simpa [add_mul, one_mul]
-              simpa [this]
+                  ↑n * U.tau0 + U.tau0
+                      = ↑n * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
+                  _ = (↑n + 1) * U.tau0 := by simpa [add_mul, one_mul]
+              rw [this]
+        _ = time x + ↑(n + 1) * U.tau0 := by rw [nat_cast_add_one n]
 
 /-- Under per-step bounds, the radial display grows by at most `n·ℓ0` along any `n`-step reach. -/
 lemma reach_rad_le
@@ -844,17 +849,18 @@ lemma reach_rad_le
       have hr := H.step_rad hyz
       calc
         rad z ≤ rad y + U.ell0 := hr
-        _ ≤ (rad x + (n : ℝ) * U.ell0) + U.ell0 := by
+        _ ≤ (rad x + ↑n * U.ell0) + U.ell0 := by
               exact add_le_add_right ih _
-        _ = rad x + ((n : ℝ) * U.ell0 + U.ell0) := by
+        _ = rad x + (↑n * U.ell0 + U.ell0) := by
               simp [add_comm, add_left_comm, add_assoc]
-        _ = rad x + (((n : ℝ) + 1) * U.ell0) := by
-              have : (n : ℝ) * U.ell0 + U.ell0 = ((n : ℝ) + 1) * U.ell0 := by
+        _ = rad x + ((↑n + 1) * U.ell0) := by
+              have : ↑n * U.ell0 + U.ell0 = (↑n + 1) * U.ell0 := by
                 calc
-                  (n : ℝ) * U.ell0 + U.ell0
-                      = (n : ℝ) * U.ell0 + 1 * U.ell0 := by simpa [one_mul]
-                  _ = ((n : ℝ) + 1) * U.ell0 := by simpa [add_mul, one_mul]
-              simpa [this]
+                  ↑n * U.ell0 + U.ell0
+                      = ↑n * U.ell0 + 1 * U.ell0 := by simpa [one_mul]
+                  _ = (↑n + 1) * U.ell0 := by simpa [add_mul, one_mul]
+              rw [this]
+        _ = rad x + ↑(n + 1) * U.ell0 := by rw [nat_cast_add_one n]
 
 /-- Discrete light-cone bound: along any `n`-step reach, the radial advance is bounded by
     `c · Δt`. Formally, `rad y - rad x ≤ U.c * (time y - time x)`. -/
@@ -864,14 +870,13 @@ lemma cone_bound
   rad y - rad x ≤ U.c * (time y - time x) := by
   have ht := H.reach_time_eq (K:=K) (U:=U) (time:=time) (rad:=rad) h
   have hr := H.reach_rad_le  (K:=K) (U:=U) (time:=time) (rad:=rad) h
-  have hτ : time y - time x = (n : ℝ) * U.tau0 := by
-    simpa [sub_eq, add_comm, add_left_comm, add_assoc] using ht
+  have hτ : time y - time x = ↑n * U.tau0 := by
+    simp [ht]
   have hℓ : rad y - rad x ≤ (n : ℝ) * U.ell0 := by
-    have := hr
-    have := sub_le_iff_le_add'.mpr this
-    simpa [sub_eq, add_comm, add_left_comm, add_assoc]
+    rw [← sub_le_iff_le_add'] at hr
+    exact hr
   have hcτ : U.ell0 = U.c * U.tau0 := by
-    simpa [IndisputableMonolith.Constants.c_mul_tau0_eq_ell0 U]
+    exact eq_comm.mp (IndisputableMonolith.Constants.c_mul_tau0_eq_ell0 U)
   simpa [hτ, hcτ, mul_left_comm, mul_assoc] using hℓ
 
 end StepBounds
