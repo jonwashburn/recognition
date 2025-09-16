@@ -4072,22 +4072,22 @@ end IndisputableMonolith
 
 namespace IndisputableMonolith
 
-/−! ## Measurement: maps from fundamentals to observables and a CQ observable −/
+/-! ## Measurement: maps from fundamentals to observables and a CQ observable -/
 namespace Measurement
 
 noncomputable section
 open Classical
 
-/−− Minimal measurement map scaffold (no measure theory dependencies). −−/
+/-- Minimal measurement map scaffold (no measure theory dependencies). -/
 structure Map (State Obs : Type) where
   T : ℝ
   T_pos : 0 < T
   meas : (ℝ → State) → ℝ → Obs
 
-/−− Simple temporal averaging placeholder (can be refined in a dedicated layer). −−/
+/-- Simple temporal averaging placeholder (can be refined in a dedicated layer). -/
 def avg (T : ℝ) (hT : 0 < T) (x : ℝ → ℝ) (t : ℝ) : ℝ := x t
 
-/−− Consciousness Quotient (CQ): `LISTEN` density times 8‑beat coherence. −−/
+/-- Consciousness Quotient (CQ): `LISTEN` density times 8‑beat coherence. -/
 structure CQ where
   listensPerSec : ℝ
   opsPerSec : ℝ
@@ -4099,7 +4099,7 @@ structure CQ where
 @[simp] def score (c : CQ) : ℝ :=
   if c.opsPerSec = 0 then 0 else (c.listensPerSec / c.opsPerSec) * c.coherence8
 
-/−− Score is monotone in listensPerSec. −−/
+/-- Score is monotone in listensPerSec. -/
 lemma score_mono_listens (c c' : Measurement.CQ)
   (h : c.listensPerSec ≤ c'.listensPerSec) (hops : c.opsPerSec = c'.opsPerSec) (hcoh : c.coherence8 = c'.coherence8) :
   Measurement.score c ≤ Measurement.score c' := by
@@ -4110,7 +4110,7 @@ lemma score_mono_listens (c c' : Measurement.CQ)
       div_le_div_of_le_left h (by linarith) (by linarith)
     simp [Measurement.score, hc, hc', hops, hcoh, hlist]
 
-/−− Score is monotone in coherence8. −−/
+/-- Score is monotone in coherence8. -/
 lemma score_mono_coherence (c c' : Measurement.CQ)
   (h : c.coherence8 ≤ c'.coherence8) (hlist : c.listensPerSec = c'.listensPerSec) (hops : c.opsPerSec = c'.opsPerSec) :
   Measurement.score c ≤ Measurement.score c' := by
@@ -8540,7 +8540,7 @@ end Alignment
 end Ethics
 end IndisputableMonolith
 
-/-‑ ## Temporal coherence: rolling constraints and concatenation ‑/
+/-- ## Temporal coherence: rolling constraints and concatenation -/
 namespace IndisputableMonolith
 namespace Ethics
 namespace Alignment
