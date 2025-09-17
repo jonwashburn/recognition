@@ -437,6 +437,14 @@ lemma wideBand_valid {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).Valid := by
   dsimp [Band.Valid, wideBand]
   linarith
 
+lemma wideBand_contains_lo {x ε : ℝ} (hε : 0 ≤ ε) :
+  Band.contains (wideBand x ε) (wideBand x ε).lo :=
+  Band.contains_lo_of_valid _ (wideBand_valid (x:=x) (ε:=ε) hε)
+
+lemma wideBand_contains_hi {x ε : ℝ} (hε : 0 ≤ ε) :
+  Band.contains (wideBand x ε) (wideBand x ε).hi :=
+  Band.contains_hi_of_valid _ (wideBand_valid (x:=x) (ε:=ε) hε)
+
 /-- Measurement anchors placeholder. -/
 structure Anchors where a1 a2 : ℝ
 
