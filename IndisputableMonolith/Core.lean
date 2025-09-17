@@ -1034,6 +1034,16 @@ deriving Repr
   let Z  := (Real.abs (KA - KB)) / (k * u)
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
+@[simp] lemma Zscore_zero_of_KA_eq_KB (B : BridgeData)
+  (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
+  Zscore B u_ell0 u_lrec k = 0 := by
+  simp [Zscore, h, sub_self]
+
+@[simp] lemma passAt_true_of_KA_eq_KB (B : BridgeData)
+  (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
+  passAt B u_ell0 u_lrec k = true := by
+  simp [passAt, Zscore_zero_of_KA_eq_KB B u_ell0 u_lrec k h]
+
 end BridgeData
 
 end Bridge
