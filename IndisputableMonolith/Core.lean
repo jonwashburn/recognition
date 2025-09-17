@@ -378,6 +378,12 @@ lemma Band.contains_hi_of_valid (b : Band) (hb : Band.Valid b) :
 
 def wideBand (x : ℝ) (ε : ℝ) : Band := { lo := x - ε, hi := x + ε }
 
+lemma wideBand_valid {x ε : ℝ} (hε : 0 ≤ ε) : Band.Valid (wideBand x ε) := by
+  dsimp [Band.Valid, wideBand]
+  have : x - ε ≤ x := sub_le_self _ hε
+  have : x ≤ x + ε := by simpa [zero_add] using add_le_add_left hε x
+  exact add_le_add_right this (-x)
+
 lemma wideBand_width {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).width = 2 * ε := by
   dsimp [Band.width, wideBand]
   ring
