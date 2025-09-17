@@ -250,6 +250,10 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
   let u  := u_comb B u_ell0 u_lrec
   (Real.abs (KA - KB)) / (k * u)
 
+/-- Boolean pass at threshold k: Z ≤ 1. -/
+@[simp] def passAt (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Bool :=
+  decide ((Zscore B u_ell0 u_lrec k) ≤ 1)
+
 /-- Full witness record for publication. -/
 structure Witness where
   KA : ℝ
