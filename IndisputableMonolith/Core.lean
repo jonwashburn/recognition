@@ -562,6 +562,13 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   let i : Fin 8 := ⟨t % 8, Nat.mod_lt _ (by decide)⟩
   w i
 
+/-- The periodic extension sits in the cylinder of its seed window. -/
+lemma extendPeriodic8_in_cylinder (w : Pattern 8) : extendPeriodic8 w ∈ Cylinder w := by
+  intro i
+  dsimp [extendPeriodic8, Cylinder]
+  have hmod : (i.val % 8) = i.val := Nat.mod_eq_of_lt i.isLt
+  simpa [hmod, Fin.mk.injEq]
+
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
