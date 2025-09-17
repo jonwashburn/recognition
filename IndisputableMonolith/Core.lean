@@ -54,6 +54,73 @@ theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
 
 end Patterns
 
+/‑! #### Streams: periodic extension and finite sums ‑/
+namespace Streams
+
+open Classical
+
+/-- Boolean stream as an infinite display. -/
+def Stream := Nat → Bool
+
+/-- A finite window/pattern of length `n`. -/
+def Pattern (n : Nat) := Fin n → Bool
+
+/-- Integer functional `Z` counting ones in a finite window. -/
+def Z_of_window {n : Nat} (w : Pattern n) : Nat :=
+  ∑ i : Fin n, (if w i then 1 else 0)
+
+/-- The cylinder set of streams whose first `n` bits coincide with the window `w`. -/
+def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
+  { s | ∀ i : Fin n, s i.val = w i }
+
+/-- Periodic extension of an 8‑bit window. -/
+def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
+  let i : Fin 8 := ⟨t % 8, Nat.mod_lt _ (by decide)⟩
+  w i
+
+/-- Sum of the first `m` bits of a stream. -/
+def sumFirst (m : Nat) (s : Stream) : Nat :=
+  ∑ i : Fin m, (if s i.val then 1 else 0)
+
+/-- If a stream agrees with a window on its first `n` bits, then the first‑`n` sum equals `Z`. -/
+lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
+  {s : Stream} (hs : s ∈ Cylinder w) :
+  sumFirst n s = Z_of_window w := by
+  unfold sumFirst Z_of_window Cylinder at *
+  -- Pointwise the summands coincide by the cylinder condition.
+  have : (fun i : Fin n => (if s i.val then 1 else 0)) =
+         (fun i : Fin n => (if w i then 1 else 0)) := by
+    funext i; simpa [hs i]
+  simpa [this]
+
+/-- For an 8‑bit window extended periodically, the first‑8 sum equals `Z`. -/
+lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
+  sumFirst 8 (extendPeriodic8 w) = Z_of_window w := by
+  unfold sumFirst Z_of_window extendPeriodic8
+  -- For `i : Fin 8`, `((i.val) % 8) = i.val`.
+  have hmod : ∀ i : Fin 8, (i.val % 8) = i.val := by
+    intro i; exact Nat.mod_eq_of_lt i.isLt
+  -- Rewrite the summand using periodicity and reduce to the window bits.
+  refine (congrArg (fun f => ∑ i : Fin 8, f i) ?_)?_;
+  · funext i; simp [hmod i]
+  · rfl
+
+lemma extendPeriodic8_in_cylinder (w : Pattern 8) : (extendPeriodic8 w) ∈ (Cylinder w) := by
+  intro i
+  dsimp [extendPeriodic8, Cylinder]
+  have hmod : (i.val % 8) = i.val := Nat.mod_eq_of_lt i.isLt
+  simp [hmod]
+
+lemma sumFirst_nonneg (m : Nat) (s : Stream) : 0 ≤ sumFirst m s := by
+  unfold sumFirst
+  apply Finset.sum_nonneg
+  intro i _
+  split
+  · norm_num
+  · norm_num
+
+end Streams
+
 /‑! #### URC adapters: stable Prop wrappers -/
 
 /-- Units identity (minimal core placeholder). -/
