@@ -685,4 +685,28 @@ lemma example_hasCover : HasCover example := by
 end VertexCover
 end Complexity
 
+/-! #### RSVC reduction wrapper -/
+namespace RSVC
+open Complexity
+
+/-- RS constraint instance mapped to edges to be covered. -/
+structure ConstraintInstance where
+  vertices    : List Nat
+  constraints : List (Nat × Nat)
+  k           : Nat
+  deriving Repr
+
+/-- Forgetful map to a Vertex Cover instance. -/
+@[simp] def toVC (A : ConstraintInstance) : Complexity.VertexCover.Instance :=
+{ vertices := A.vertices, edges := A.constraints, k := A.k }
+
+/-- RS recognizer: instance is accepted iff its Vertex Cover image has a cover. -/
+@[simp] def Recognizes (A : ConstraintInstance) : Prop :=
+  Complexity.VertexCover.HasCover (toVC A)
+
+/-- The reduction from RS constraints to Vertex Cover (identity on fields). -/
+@[simp] def reduceRS2VC : ConstraintInstance → Complexity.VertexCover.Instance := toVC
+
+end RSVC
+
 end IndisputableMonolith
