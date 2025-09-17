@@ -228,6 +228,49 @@ def K_B_obs : Observable :=
 theorem K_gate_bridge : ∀ U, BridgeEval K_A_obs U = BridgeEval K_B_obs U := by
   intro U; simp [BridgeEval, K_A_obs, K_B_obs]
 
+/-! Minimal claim/rendering scaffold -/
+
+inductive StatementType
+| eq
+| le
+deriving DecidableEq, Repr
+
+inductive ClaimStatus
+| proven
+| failed
+| unchecked
+deriving DecidableEq, Repr
+
+def statementString : StatementType → String
+| StatementType.eq => "eq"
+| StatementType.le => "le"
+
+def statusString : ClaimStatus → String
+| ClaimStatus.proven    => "proven"
+| ClaimStatus.failed    => "failed"
+| ClaimStatus.unchecked => "unchecked"
+
+structure Claim where
+  id     : String
+  stmt   : StatementType
+  status : ClaimStatus := ClaimStatus.unchecked
+deriving Repr
+
+structure RenderedClaim where
+  id        : String
+  statement : String
+  status    : String
+deriving Repr
+
+def renderClaim (c : Claim) : RenderedClaim :=
+  { id := c.id, statement := statementString c.stmt, status := statusString c.status }
+
+noncomputable def Claim.checkEq (c : Claim) (lhs rhs : ℝ) : Claim :=
+  { c with status := if lhs = rhs then ClaimStatus.proven else ClaimStatus.failed }
+
+noncomputable def Claim.checkLe (c : Claim) (lhs rhs : ℝ) : Claim :=
+  { c with status := if lhs ≤ rhs then ClaimStatus.proven else ClaimStatus.failed }
+
 end Verification
 
 /-! #### RH.RS bands foundation -/
