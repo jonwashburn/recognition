@@ -317,6 +317,29 @@ def equiv_delta_one : DeltaSub 1 ≃ ℤ :=
 
 end LedgerUnits
 
+/-‑ φ‑power wrapper and anchor parameters -/
+noncomputable def PhiPow (x : ℝ) : ℝ := Real.exp (Real.log (Constants.phi) * x)
+
+lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
+  unfold PhiPow
+  simpa [mul_add, Real.exp_add, mul_comm, mul_left_comm, mul_assoc]
+
+lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
+  unfold PhiPow
+  have : Real.log (Constants.phi) * (x - y)
+        = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
+  simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
+        mul_comm, mul_left_comm, mul_assoc]
+
+@[simp] def lambdaA : ℝ := Real.log Constants.phi
+@[simp] def kappaA  : ℝ := Constants.phi
+
+@[simp] def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
+
+@[simp] def Z_quark (Q : ℤ) : ℤ := 4 + (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
+@[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
+@[simp] def Z_neutrino : ℤ := 0
+
 end RS
 end RH
 
