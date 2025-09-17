@@ -61,6 +61,12 @@ structure RSUnits where
 /-- Minimal global constant K placeholder. -/
 @[simp] def K : ℝ := 1
 
+lemma K_pos : 0 < K := by
+  simp [K]
+
+lemma K_nonneg : 0 ≤ K := by
+  simp [K]
+
 end Constants
 
 /‑! #### Patterns: complete covers and 8‑tick existence for 3‑bit patterns -/
