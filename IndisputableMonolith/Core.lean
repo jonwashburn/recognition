@@ -220,4 +220,35 @@ end RSVC
 
 end Complexity
 
+/‑! #### Balanced‑parity hidden mask (minimal) ‑/
+namespace Complexity
+namespace BalancedParityHidden
+
+variable {n : ℕ} [DecidableEq (Fin n)]
+
+/‑‑ Hidden mask encoder: bit b with mask R is `R` if b=false and `bnot ∘ R` if b=true. ‑/
+def enc (b : Bool) (R : Fin n → Bool) : Fin n → Bool :=
+  fun i => if b then bnot (R i) else R i
+
+@[simp] lemma enc_false (R : Fin n → Bool) : enc (n:=n) false R = R := by
+  funext i; simp [enc]
+
+@[simp] lemma enc_true (R : Fin n → Bool) : enc (n:=n) true R = (fun i => bnot (R i)) := by
+  funext i; simp [enc]
+
+/‑‑ Restrict a full word to a queried index set `M`. ‑/
+def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool :=
+  fun i => f i.val
+
+@[simp] lemma restrict_enc_false (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (n:=n) (enc false R) M = restrict (n:=n) R M := by
+  funext i; simp [restrict, enc]
+
+@[simp] lemma restrict_enc_true (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (n:=n) (enc true R) M = (fun i => bnot (restrict (n:=n) R M i)) := by
+  funext i; simp [restrict, enc]
+
+end BalancedParityHidden
+end Complexity
+
 end IndisputableMonolith
