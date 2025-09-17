@@ -536,6 +536,13 @@ theorem cover_exact_pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
 theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
   simpa using cover_exact_pow 3
 
+/-! Aliases used downstream -/
+theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
+  cover_exact_pow d
+
+theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
+  period_exactly_8
+
 end Patterns
 
 /-! #### Stream processing foundations -/
