@@ -454,6 +454,16 @@ noncomputable def meetsBandsChecker_gen (xs : List ℝ) (bs : Bands) : Bool := b
 noncomputable def meetsBandsChecker (xs : List ℝ) (c : ℝ) : Bool :=
   meetsBandsChecker_gen xs (evalToBands_c c 1)
 
+@[simp] lemma meetsBandsChecker_gen_nil (bs : Bands) :
+  meetsBandsChecker_gen [] bs = false := by
+  classical
+  simp [meetsBandsChecker_gen]
+
+@[simp] lemma meetsBandsChecker_nil (c : ℝ) :
+  meetsBandsChecker [] c = false := by
+  classical
+  simp [meetsBandsChecker, meetsBandsChecker_gen]
+
 lemma center_in_sampleBandsFor (x : ℝ) :
   ∃ b ∈ sampleBandsFor x, Band.contains b x := by
   refine ⟨wideBand x 1, ?_, ?_⟩
