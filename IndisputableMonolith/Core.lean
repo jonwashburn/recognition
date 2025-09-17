@@ -104,6 +104,20 @@ variable {n : ℕ}
 @[simp] def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
   fun i => if h : i ∈ M then a ⟨i, h⟩ else false
 
+@[simp] lemma enc_false (R : Fin n → Bool) : enc (n:=n) false R = R := by
+  funext i; simp [enc]
+
+@[simp] lemma enc_true (R : Fin n → Bool) : enc (n:=n) true R = fun i => bnot (R i) := by
+  funext i; simp [enc]
+
+@[simp] lemma restrict_enc_false (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (enc (n:=n) false R) M = restrict R M := by
+  funext i; simp [restrict, enc]
+
+@[simp] lemma restrict_enc_true (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (enc (n:=n) true R) M = fun i => bnot (restrict R M i) := by
+  funext i; simp [restrict, enc]
+
 end BalancedParityHidden
 end Complexity
 
@@ -162,6 +176,15 @@ class Conserves {M} (L : Ledger M) : Prop where
 lemma chainFlux_zero_of_loop {M} (L : Ledger M) [Conserves L]
   (ch : Chain M) (h : ch.head = ch.last) : chainFlux L ch = 0 :=
   (Conserves.conserve (L:=L)) ch h
+
+/-- ## T2 (Atomicity): unique posting per tick implies no collision at a tick. -/
+theorem T2_atomicity {M : RecognitionStructure} [AtomicTick M] :
+  ∀ t (u v : M.U), AtomicTick.postedAt (M:=M) t u → AtomicTick.postedAt (M:=M) t v → u = v := by
+  intro t u v hu hv
+  rcases (AtomicTick.unique_post (M:=M) t) with ⟨w, hw, huniq⟩
+  have huw : u = w := huniq u hu
+  have hvw : v = w := huniq v hv
+  simpa [huw, hvw] using rfl
 
 end Recognition
 
