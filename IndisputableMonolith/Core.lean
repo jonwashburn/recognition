@@ -331,6 +331,23 @@ structure CertFamily where
   (∀ c ∈ C.outer, OuterBudgetCert.verified c) ∧
   (∀ c ∈ C.conscious, ConsciousCert.verified c)
 
+/-- Cert family with a single mass certificate. -/
+@[simp] def singletonMassFamily (c : MassCert) : CertFamily :=
+{ units := [], eightbeat := [], elprobes := [], masses := [c]
+, rotation := [], outer := [], conscious := [] }
+
+lemma verified_singletonMass (φ : ℝ) (c : MassCert)
+  (h : MassCert.verified φ c) : Verified φ (singletonMassFamily c) := by
+  dsimp [Verified, singletonMassFamily]
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; rcases List.mem_singleton.mp hx with rfl; simpa using h
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+
 end URCGenerators
 
 /-! #### RH.RS bands foundation -/
