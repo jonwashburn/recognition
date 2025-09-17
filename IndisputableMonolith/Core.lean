@@ -261,8 +261,6 @@ structure Witness where
   let Z  := (Real.abs (KA - KB)) / (k * u)
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
-end BridgeData
-
 end Bridge
 
 /-! #### URC generators (minimal certifications) -/
@@ -764,6 +762,23 @@ noncomputable def Claim.checkLe (c : Claim) (lhs rhs : ℝ) : Claim :=
   ", Gates: " ++ toString gatesCount ++
   ", Falsifiability: " ++ toString falsifiabilityCount ++
   ", Knobs: " ++ toString knobsCount
+
+/-- K-gate input descriptor. -/
+structure KGateInput where
+  id    : String
+  about : String
+  deriving Repr
+
+/-- K-gate result record. -/
+structure KGateResult where
+  id     : String
+  passed : Bool
+  note   : String := ""
+  deriving Repr
+
+/-- Stub runner for the K-gate; always passes for now. -/
+noncomputable def runKGate (_U : Constants.RSUnits) (inp : KGateInput) : KGateResult :=
+  { id := inp.id, passed := true, note := "stub" }
 
 end Verification
 
