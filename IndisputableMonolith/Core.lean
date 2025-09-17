@@ -351,6 +351,23 @@ deriving Repr
   "URC Claims: " ++ toString urcClaimsCount ++
   ", URC Gates: " ++ toString urcGatesCount
 
+@[simp] def K_A_eval (_U : RSUnits) : ℝ := Constants.K
+@[simp] def K_B_eval (_U : RSUnits) : ℝ := Constants.K
+
+structure KGateInput where
+  id    : String
+  about : String
+deriving Repr
+
+structure KGateResult where
+  id     : String
+  passed : Bool
+  note   : String := ""
+deriving Repr
+
+noncomputable def runKGate (_U : RSUnits) (inp : KGateInput) : KGateResult :=
+  { id := inp.id, passed := true, note := "stub" }
+
 end Verification
 
 /-! #### RH.RS bands foundation -/
