@@ -154,6 +154,20 @@ lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
   simpa [B_of] using pow_pos this k
 
+/-- φ-power wrapper: Φ(x) := exp( (log φ)·x ). -/
+noncomputable def PhiPow (x : ℝ) : ℝ := Real.exp (Real.log (Constants.phi) * x)
+
+lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
+  unfold PhiPow
+  simpa [mul_add, Real.exp_add, mul_comm, mul_left_comm, mul_assoc]
+
+lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
+  unfold PhiPow
+  have : Real.log (Constants.phi) * (x - y)
+        = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
+  simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
+        mul_comm, mul_left_comm, mul_assoc]
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
