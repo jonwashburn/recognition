@@ -56,6 +56,10 @@ lemma one_lt_phi : 1 < phi := by
   have := (div_lt_div_of_pos_right hsum htwo)
   simpa [phi, Real.sqrt_one] using this
 
+lemma phi_ge_one : 1 ≤ phi := le_of_lt one_lt_phi
+
+lemma phi_ne_zero : phi ≠ 0 := ne_of_gt phi_pos
+
 end Constants
 
 /-! #### URC adapters: stable Prop wrappers -/
@@ -589,6 +593,10 @@ lemma extendPeriodic8_in_cylinder (w : Pattern 8) : extendPeriodic8 w ∈ Cylind
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
+
+/-- The `sumFirst` count is always nonnegative. -/
+lemma sumFirst_nonneg (m : Nat) (s : Stream) : 0 ≤ sumFirst m s :=
+  Nat.zero_le _
 
 /-- If a stream agrees with a window on its first `n` bits, then the first‑`n` sum equals `Z`. -/
 lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
