@@ -728,6 +728,13 @@ structure ConstraintInstance where
 @[simp] theorem reduce_correct (A : ConstraintInstance) :
   Recognizes A ↔ Complexity.VertexCover.HasCover (reduceRS2VC A) := Iff.rfl
 
+/-- RS‑preserving wrapper bundling sizes and the reduction map. -/
+@[simp] def rs_preserving_RS2VC :
+  RSPreserving ConstraintInstance Complexity.VertexCover.Instance :=
+{ sizeA := fun a => a.vertices.length + a.constraints.length
+, sizeB := fun b => b.vertices.length + b.edges.length
+, reduce := reduceRS2VC }
+
 end RSVC
 
 /-! #### RS-preserving reduction scaffold -/
