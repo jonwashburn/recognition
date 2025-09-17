@@ -858,6 +858,11 @@ lemma Covers_nil_edges (S : List Nat) (V : List Nat) (k : Nat) :
   Covers S { vertices := V, edges := [], k := k } := by
   intro e he; cases he
 
+lemma hasCover_of_nil_edges (V : List Nat) (k : Nat) :
+  HasCover { vertices := V, edges := [], k := k } := by
+  refine ⟨[], by decide, ?_⟩
+  intro e he; cases he
+
 end VertexCover
 end Complexity
 
