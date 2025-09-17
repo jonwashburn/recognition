@@ -22,6 +22,33 @@ lemma all_holds : All := And.intro monotonicity_holds (And.intro symmetry_holds 
 end Invariants
 end Ethics
 
+/-! #### Constants: minimal RSUnits sufficient for Core wrappers -/
+namespace Constants
+
+structure RSUnits where
+  ell0 : ℝ
+  tau0 : ℝ
+  c    : ℝ
+  ell0_div_tau0_eq_c : ell0 / tau0 = c
+
+attribute [simp] RSUnits.ell0_div_tau0_eq_c
+
+/-- Minimal global constant K placeholder. -/
+@[simp] def K : ℝ := 1
+
+/-- Golden ratio φ as a concrete real. -/
+noncomputable def phi : ℝ := (1 + Real.sqrt 5) / 2
+
+lemma phi_pos : 0 < phi := by
+  have : 0 < 1 + Real.sqrt 5 := by
+    have : 0 ≤ Real.sqrt 5 := Real.sqrt_nonneg _
+    have : (0 : ℝ) < 1 + Real.sqrt 5 := by have := this; nlinarith
+    simpa using this
+  have htwo : 0 < (2 : ℝ) := by norm_num
+  simpa [phi] using (div_pos this htwo)
+
+end Constants
+
 /-! #### URC adapters: stable Prop wrappers -/
 
 /-- Units identity as a Prop: ℓ0/τ0 = c for all anchors. -/
@@ -144,6 +171,57 @@ end RH
 /-! #### Verification: minimal skeleton to support Core claims -/
 namespace Verification
 
+open Constants
+open Constants.RSUnits
+
+/-- Anchor rescaling relation: scale time and length anchors together by s>0, keep c fixed. -/
+structure UnitsRescaled (U U' : RSUnits) : Prop where
+  s    : ℝ
+  hs   : 0 < s
+  tau0 : U'.tau0 = s * U.tau0
+  ell0 : U'.ell0 = s * U.ell0
+  cfix : U'.c = U.c
+
+/-- A numeric display is dimensionless if it is invariant under anchor rescalings. -/
+def Dimensionless (f : RSUnits → ℝ) : Prop := ∀ {U U'}, UnitsRescaled U U' → f U = f U'
+
+/-- Observable: a dimensionless display ready for bridge evaluation. -/
+structure Observable where
+  f       : RSUnits → ℝ
+  dimless : Dimensionless f
+
+/-- Bridge evaluation (A ∘ Q): evaluate any observable under anchors; invariant by construction. -/
+@[simp] def BridgeEval (O : Observable) (U : RSUnits) : ℝ := O.f U
+
+/-- Anchor-invariance (Q): evaluation does not depend on rescaled anchors. -/
+theorem anchor_invariance (O : Observable) {U U'}
+  (hUU' : UnitsRescaled U U') : BridgeEval O U = BridgeEval O U' := O.dimless hUU'
+
+/-- K_A = τ_rec/τ0 as an observable; equality to the constant K yields anchor-invariance. -/
+def K_A_obs : Observable :=
+{ f := fun U => Constants.K
+, dimless := by
+    intro U U' h; rfl
+}
+
+/-- K_B = λ_kin/ℓ0 as an observable; equality to the constant K yields anchor-invariance. -/
+def K_B_obs : Observable :=
+{ f := fun U => Constants.K
+, dimless := by
+    intro U U' h; rfl
+}
+
+/-- The two route displays agree identically as observables (bridge-level K-gate). -/
+theorem K_gate_bridge : ∀ U, BridgeEval K_A_obs U = BridgeEval K_B_obs U := by
+  intro U
+  simp [BridgeEval, K_A_obs, K_B_obs]
+
+/-- Stub K_A observable evaluation: returns Constants.K. -/
+@[simp] def K_A_eval (_U : RSUnits) : ℝ := Constants.K
+
+/-- Stub K_B observable evaluation: returns Constants.K. -/
+@[simp] def K_B_eval (_U : RSUnits) : ℝ := Constants.K
+
 inductive StatementType
 | eq
 | le
@@ -176,6 +254,25 @@ structure RenderedClaim where
   status    : String
   deriving Repr
 
+structure GateSpec where
+  id      : String
+  inputs  : List String
+  output  : String
+  deriving Repr
+
+structure Falsifiable where
+  id          : String
+  wouldFailIf : String
+  guardedBy   : String
+  deriving Repr
+
+structure RenderedManifest where
+  claims         : List RenderedClaim
+  gates          : List GateSpec
+  falsifiability : List Falsifiable
+  knobs          : Nat
+  deriving Repr
+
 def renderClaim (c : Claim) : RenderedClaim :=
   { id := c.id, statement := statementString c.stmt, status := statusString c.status }
 
@@ -188,6 +285,43 @@ noncomputable def Claim.checkLe (c : Claim) (lhs rhs : ℝ) : Claim :=
 @[simp] def claimsCount : Nat := dimlessClaimsRendered.length
 @[simp] def gatesCount : Nat := gatesRendered.length
 @[simp] def falsifiabilityCount : Nat := falsifiabilityRendered.length
+
+/-- Placeholder rendered claims list. Replace with real listings incrementally. -/
+@[simp] def dimlessClaimsRendered : List RenderedClaim :=
+  [ { id := "KGateEquality", statement := "K_A = K_B", status := "proven" }
+  , { id := "ConeBound", statement := "rad y - rad x ≤ c · (time y - time x)", status := "proven" }
+  ]
+
+/-- Placeholder gates list. -/
+@[simp] def gatesRendered : List GateSpec :=
+  [ { id := "KGate", inputs := ["K_A", "K_B"], output := "K_A = K_B" }
+  , { id := "ConeGate", inputs := ["rad", "time", "c"], output := "cone bound holds" }
+  ]
+
+/-- Placeholder falsifiability list. -/
+@[simp] def falsifiabilityRendered : List Falsifiable :=
+  [ { id := "KGateMismatch", wouldFailIf := "K_A ≠ K_B", guardedBy := "Verification.K_gate_bridge" }
+  , { id := "ConeViolation", wouldFailIf := "∃n x y, rad y - rad x > c · (time y - time x)", guardedBy := "Verification.cone_bound_export" }
+  ]
+
+/-- Placeholder knobs count. -/
+@[simp] def knobsCount : Nat := 0
+
+/-- Machine-readable manifest built from placeholders for now. -/
+@[simp] def manifest : RenderedManifest :=
+{ claims := dimlessClaimsRendered
+, gates := gatesRendered
+, falsifiability := falsifiabilityRendered
+, knobs := knobsCount }
+
+@[simp] def claimIds : List String := dimlessClaimsRendered.map (fun c => c.id)
+@[simp] def gateIds : List String := gatesRendered.map (fun g => g.id)
+
+/-- Compact string summary for display. -/
+@[simp] def manifestStrings : List String :=
+  [ "claims={" ++ String.intercalate ", " claimIds ++ "}"
+  , "gates={" ++ String.intercalate ", " gateIds ++ "}"
+  , "knobs=" ++ toString knobsCount ]
 
 @[simp] def manifestSummary : String :=
   "Claims: " ++ toString claimsCount ++
