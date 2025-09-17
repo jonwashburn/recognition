@@ -874,6 +874,13 @@ lemma verified_singletonMass (φ : ℝ) (c : MassCert)
   · intro x hx; cases hx
   · intro x hx; cases hx
 
+lemma verified_empty (φ : ℝ) : Verified φ {
+  units := [], eightbeat := [], elprobes := [], masses := [], rotation := [], outer := [], conscious := [] } := by
+  dsimp [Verified]
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  all_goals
+    intro x hx; cases hx
+
 end URCGenerators
 
 /‑! #### Bridge foundations (minimal) ‑/
