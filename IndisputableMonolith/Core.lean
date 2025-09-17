@@ -333,6 +333,24 @@ deriving Repr
   ", Falsifiability: " ++ toString falsifiabilityCount ++
   ", Knobs: " ++ toString knobsCount
 
+@[simp] def urcClaimIds : List String :=
+  [ "URC.lawful_physical", "URC.lawful_computational", "URC.lawful_ethical"
+  , "URC.lambda_rec_unique", "URC.AE_skeleton" ]
+
+@[simp] def urcGateIds : List String :=
+  [ "URC.CertificatesGate", "URC.FixedPointT" ]
+
+@[simp] def urcManifestStrings : List String :=
+  [ "urc_claims={" ++ String.intercalate ", " urcClaimIds ++ "}"
+  , "urc_gates={"  ++ String.intercalate ", " urcGateIds  ++ "}" ]
+
+@[simp] def urcClaimsCount : Nat := urcClaimIds.length
+@[simp] def urcGatesCount  : Nat := urcGateIds.length
+
+@[simp] def urcSummary : String :=
+  "URC Claims: " ++ toString urcClaimsCount ++
+  ", URC Gates: " ++ toString urcGatesCount
+
 end Verification
 
 /-! #### RH.RS bands foundation -/
