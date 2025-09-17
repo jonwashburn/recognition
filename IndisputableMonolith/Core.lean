@@ -558,6 +558,15 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
   simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
         mul_comm, mul_left_comm, mul_assoc]
 
+@[simp] lemma PhiPow_zero : PhiPow 0 = 1 := by
+  unfold PhiPow
+  simp
+
+@[simp] lemma PhiPow_one : PhiPow 1 = Constants.phi := by
+  unfold PhiPow
+  have hφ : 0 < Constants.phi := Constants.phi_pos
+  simp [one_mul, Real.exp_log hφ]
+
 @[simp] def lambdaA : ℝ := Real.log Constants.phi
 @[simp] def kappaA  : ℝ := Constants.phi
 
