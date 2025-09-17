@@ -135,6 +135,99 @@ class Conserves {M} (L : Ledger M) : Prop where
 
 end Recognition
 
+/-! #### Bridge foundations -/
+namespace Bridge
+
+structure BridgeData where
+  G     : ℝ
+  hbar  : ℝ
+  c     : ℝ
+  tau0  : ℝ
+  ell0  : ℝ
+  deriving Repr
+
+namespace BridgeData
+
+@[simp] def K_A (_ : BridgeData) : ℝ := Constants.K
+
+/-- Recognition length from anchors: λ_rec = √(ħ G / c^3). -/
+@[simp] def lambda_rec (B : BridgeData) : ℝ :=
+  Real.sqrt (B.hbar * B.G / (Real.pi * (B.c ^ 3)))
+
+/-- Minimal physical assumptions on bridge anchors reused by analytical lemmas. -/
+structure Physical (B : BridgeData) : Prop where
+  c_pos    : 0 < B.c
+  hbar_pos : 0 < B.hbar
+  G_pos    : 0 < B.G
+
+/-- Dimensionless identity for λ_rec (under mild physical positivity assumptions):
+  (c^3 · λ_rec^2) / (ħ G) = 1/π. -/
+lemma lambda_rec_dimensionless_id (B : BridgeData)
+  (hc : 0 < B.c) (hh : 0 < B.hbar) (hG : 0 < B.G) :
+  (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G) = 1 / Real.pi := by
+  have hpi_pos : 0 < Real.pi := Real.pi_pos
+  have hc3_pos : 0 < B.c ^ 3 := by
+    have := pow_pos hc (3 : Nat)
+    simpa using this
+  have hden_pos : 0 < Real.pi * (B.c ^ 3) := mul_pos hpi_pos hc3_pos
+  have hnum_nonneg : 0 ≤ B.hbar * B.G := mul_nonneg (le_of_lt hh) (le_of_lt hG)
+  have hrad_nonneg : 0 ≤ (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) :=
+    div_nonneg hnum_nonneg (le_of_lt hden_pos)
+  -- Square of sqrt is the radicand
+  have hsq : (lambda_rec B) ^ 2
+      = (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := by
+    dsimp [lambda_rec]
+    have := Real.mul_self_sqrt hrad_nonneg
+    simpa [pow_two] using this
+  -- Compute the dimensionless ratio
+  have hprod_ne : B.hbar * B.G ≠ 0 := mul_ne_zero (ne_of_gt hh) (ne_of_gt hG)
+  have hc3_ne : B.c ^ 3 ≠ 0 := ne_of_gt hc3_pos
+  calc
+    (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G)
+        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)) := by simpa [hsq]
+    _   = (B.c ^ 3) * ((B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G))) := by
+          -- a*b/c = a*(b/c); (x/y)/z = x/(y*z)
+          have : ((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G)
+                = (B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G)) := by
+            exact div_div_eq_mul_div (B.hbar * B.G) (Real.pi * (B.c ^ 3)) (B.hbar * B.G)
+          exact this
+    _   = (B.c ^ 3) * ((B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G))) := rfl
+    _   = (B.c ^ 3) * (1 / (Real.pi * (B.c ^ 3))) := by
+          have : (B.hbar * B.G) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G)) = 1 / (Real.pi * (B.c ^ 3)) :=
+            div_self hprod_ne
+          exact this
+    _   = (B.c ^ 3) * (1 / (Real.pi * (B.c ^ 3))) := rfl
+    _   = 1 / Real.pi := by
+          have : (B.c ^ 3) / (Real.pi * (B.c ^ 3)) = 1 / Real.pi := div_self (mul_ne_zero Real.pi_ne_zero hc3_ne)
+          exact this
+
+/-- Positivity of λ_rec under physical assumptions. -/
+lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
+  dsimp [lambda_rec]
+  have num_pos : 0 < B.hbar * B.G := mul_pos H.hbar_pos H.G_pos
+  have den_pos : 0 < Real.pi * (B.c ^ 3) := by
+    have hc3 : 0 < B.c ^ 3 := by simpa using pow_pos H.c_pos (3 : Nat)
+    exact mul_pos Real.pi_pos hc3
+  have : 0 < (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := div_pos num_pos den_pos
+  exact Real.sqrt_pos.mpr this
+
+@[simp] def K_B (B : BridgeData) : ℝ :=
+  lambda_rec B / B.ell0
+
+/-- Combined uncertainty aggregator (placeholder policy). -/
+@[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
+
+/-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
+@[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
+  let KA := K_A B
+  let KB := K_B B
+  let u  := u_comb B u_ell0 u_lrec
+  (Real.abs (KA - KB)) / (k * u)
+
+end BridgeData
+
+end Bridge
+
 /-! #### RH.RS bands foundation -/
 namespace RH
 namespace RS
