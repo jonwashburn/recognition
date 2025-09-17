@@ -848,7 +848,7 @@ deriving Repr
 
 namespace BridgeData
 
-@[simp] def K_A (_ : BridgeData) : ℝ := 1
+@[simp] def K_A (_ : BridgeData) : ℝ := Constants.K
 
 /-- Recognition length from anchors: λ_rec = √(ħ G / (π c^3)). -/
 @[simp] def lambda_rec (B : BridgeData) : ℝ :=
