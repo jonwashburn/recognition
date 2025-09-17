@@ -103,6 +103,10 @@ lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
       simpa [zero_add] using this
     simpa using hx
 
+lemma wideBand_valid {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).Valid := by
+  dsimp [Band.Valid, wideBand]
+  linarith
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
@@ -137,6 +141,18 @@ lemma center_in_each_sample (x : ℝ) :
   have hb' : b = wideBand x 1 := by
     simpa [sampleBandsFor] using hb
   simpa [hb'] using wideBand_contains_center (x:=x) (ε:=1) (by norm_num)
+
+/-- Binary scale factor `B = 2^k` as a real. -/
+def B_of (k : Nat) : ℝ := (2 : ℝ) ^ k
+
+@[simp] lemma B_of_zero : B_of 0 = 1 := by simp [B_of]
+
+@[simp] lemma B_of_succ (k : Nat) : B_of (k+1) = 2 * B_of k := by
+  simp [B_of, pow_succ, mul_comm]
+
+lemma B_of_pos (k : Nat) : 0 < B_of k := by
+  have : 0 < (2:ℝ) := by norm_num
+  simpa [B_of] using pow_pos this k
 
 end RS
 end RH
