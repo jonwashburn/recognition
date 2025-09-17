@@ -271,6 +271,63 @@ theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
 
 end Patterns
 
+/-! #### Stream processing foundations -/
+namespace Streams
+
+/-- Boolean stream as an infinite display. -/
+def Stream := Nat → Bool
+
+/-- A finite window/pattern of length `n`. -/
+def Pattern (n : Nat) := Fin n → Bool
+
+/-- Integer functional `Z` counting ones in a finite window. -/
+def Z_of_window {n : Nat} (w : Pattern n) : Nat :=
+  ∑ i : Fin n, (if w i then 1 else 0)
+
+/-- The cylinder set of streams whose first `n` bits coincide with the window `w`. -/
+def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
+  { s | ∀ i : Fin n, s i.val = w i }
+
+/-- Periodic extension of an 8‑bit window. -/
+def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
+  let i : Fin 8 := ⟨t % 8, Nat.mod_lt _ (by decide)⟩
+  w i
+
+/-- Sum of the first `m` bits of a stream. -/
+def sumFirst (m : Nat) (s : Stream) : Nat :=
+  ∑ i : Fin m, (if s i.val then 1 else 0)
+
+/-- If a stream agrees with a window on its first `n` bits, then the first‑`n` sum equals `Z`. -/
+lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
+  {s : Stream} (hs : s ∈ Cylinder w) :
+  sumFirst n s = Z_of_window w := by
+  classical
+  unfold sumFirst Z_of_window Cylinder at *
+  ext1
+  -- Pointwise the summands coincide by the cylinder condition.
+  have : (fun i : Fin n => (if s i.val then 1 else 0)) =
+         (fun i : Fin n => (if w i then 1 else 0)) := by
+    funext i; simpa [hs i]
+  simpa [this]
+
+/-- For an 8‑bit window extended periodically, the first‑8 sum equals `Z`. -/
+lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
+  sumFirst 8 (extendPeriodic8 w) = Z_of_window w := by
+  classical
+  unfold sumFirst Z_of_window extendPeriodic8
+  -- For `i : Fin 8`, `((i.val) % 8) = i.val`.
+  have hmod : ∀ i : Fin 8, (i.val % 8) = i.val := by
+    intro i; exact Nat.mod_eq_of_lt i.isLt
+  -- Rewrite the summand using periodicity and reduce to the window bits.
+  refine
+    (congrArg (fun f => ∑ i : Fin 8, f i) ?_)
+    ▸ rfl
+    funext i
+  -- For each i, the stream at i equals the window at (i mod 8), which equals the window at i.
+  simp [hmod i, Fin.mk_eq_mk, Fin.val_eq_val]
+
+end Streams
+
 /-! #### RH.RS bands foundation -/
 namespace RH
 namespace RS
