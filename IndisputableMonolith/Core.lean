@@ -145,6 +145,11 @@ structure Anchors where a1 a2 : ℝ
 /-- Binary scale factor `B = 2^k` as a real. -/
 def B_of (k : Nat) : ℝ := (2 : ℝ) ^ k
 
+/-- Two to an integer power: 2^k for k ∈ ℤ. -/
+noncomputable def twoPowZ (k : Int) : ℝ :=
+  if 0 ≤ k then (2 : ℝ) ^ (Int.toNat k)
+  else 1 / ((2 : ℝ) ^ (Int.toNat (-k)))
+
 @[simp] lemma B_of_zero : B_of 0 = 1 := by simp [B_of]
 
 @[simp] lemma B_of_succ (k : Nat) : B_of (k+1) = 2 * B_of k := by
