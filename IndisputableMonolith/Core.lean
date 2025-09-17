@@ -224,6 +224,22 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
   let u  := u_comb B u_ell0 u_lrec
   (Real.abs (KA - KB)) / (k * u)
 
+/-- Full witness record for publication. -/
+structure Witness where
+  KA : ℝ
+  KB : ℝ
+  u  : ℝ
+  Z  : ℝ
+  pass : Bool
+  deriving Repr
+
+@[simp] def witness (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Witness :=
+  let KA := K_A B
+  let KB := K_B B
+  let u  := u_comb B u_ell0 u_lrec
+  let Z  := (Real.abs (KA - KB)) / (k * u)
+  { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
+
 end BridgeData
 
 end Bridge
