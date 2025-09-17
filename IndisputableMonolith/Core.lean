@@ -168,6 +168,13 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
   simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
         mul_comm, mul_left_comm, mul_assoc]
 
+/-- Anchor normalization constants. -/
+@[simp] def lambdaA : ℝ := Real.log Constants.phi
+@[simp] def kappaA  : ℝ := Constants.phi
+
+/-- Closed‑form residue at the anchor as a function of the integer Z. -/
+@[simp] def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
