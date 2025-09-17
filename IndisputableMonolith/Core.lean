@@ -707,6 +707,10 @@ structure ConstraintInstance where
 /-- The reduction from RS constraints to Vertex Cover (identity on fields). -/
 @[simp] def reduceRS2VC : ConstraintInstance → Complexity.VertexCover.Instance := toVC
 
+/-- Correctness of the reduction follows by definition. -/
+@[simp] theorem reduce_correct (A : ConstraintInstance) :
+  Recognizes A ↔ Complexity.VertexCover.HasCover (reduceRS2VC A) := Iff.rfl
+
 end RSVC
 
 end IndisputableMonolith
