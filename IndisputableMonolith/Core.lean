@@ -117,6 +117,12 @@ def Pattern (n : Nat) := Fin n → Bool
 def Z_of_window {n : Nat} (w : Pattern n) : Nat :=
   ∑ i : Fin n, (if w i then 1 else 0)
 
+lemma Z_of_window_nonneg {n : Nat} (w : Pattern n) : 0 ≤ Z_of_window w := by
+  unfold Z_of_window
+  apply Finset.sum_nonneg
+  intro i _
+  split <;> decide
+
 /-- The cylinder set of streams whose first `n` bits coincide with the window `w`. -/
 def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
   { s | ∀ i : Fin n, s i.val = w i }
