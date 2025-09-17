@@ -20,3 +20,15 @@ export LC_ALL=C
 export LANG=C
 
 
+# Run a cached build: fetch precompiled olean cache if available, then build.
+# Usage: source scripts/env.sh; cbuild [target...]
+function cbuild() {
+  set -euo pipefail
+  lake exe cache get || true
+  if [ "$#" -gt 0 ]; then
+    lake build "$@"
+  else
+    lake build
+  fi
+}
+
