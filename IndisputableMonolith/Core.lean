@@ -403,6 +403,9 @@ lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
       simpa [zero_add] using this
     simpa using hx
 
+lemma Band.width_nonneg_of_valid (b : Band) (hb : Band.Valid b) : 0 ≤ b.width := by
+  simpa [Band.width, Band.Valid] using sub_nonneg.mpr hb
+
 /-- Measurement anchors placeholder. -/
 structure Anchors where a1 a2 : ℝ
 
