@@ -130,6 +130,9 @@ lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
       simpa [zero_add] using this
     simpa using hx
 
+/-- Measurement anchors placeholder. -/
+structure Anchors where a1 a2 : ℝ
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
