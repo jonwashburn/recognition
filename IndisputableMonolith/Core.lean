@@ -154,6 +154,11 @@ def chainFlux {M} (L : Ledger M) (ch : Chain M) : ℤ :=
 class Conserves {M} (L : Ledger M) : Prop where
   conserve : ∀ ch : Chain M, ch.head = ch.last → chainFlux L ch = 0
 
+/-- If the ledger conserves and the chain starts and ends at the same point, the flux is zero. -/
+lemma chainFlux_zero_of_loop {M} (L : Ledger M) [Conserves L]
+  (ch : Chain M) (h : ch.head = ch.last) : chainFlux L ch = 0 :=
+  (Conserves.conserve (L:=L)) ch h
+
 end Recognition
 
 /-! #### Bridge foundations -/
