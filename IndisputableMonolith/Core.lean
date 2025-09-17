@@ -52,6 +52,13 @@ theorem cover_exact_pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
 theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
   simpa using cover_exact_pow 3
 
+/-‑ ## T6 alias theorems -/
+theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
+  cover_exact_pow d
+
+theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
+  period_exactly_8
+
 end Patterns
 
 /‑! #### Streams: periodic extension and finite sums ‑/
@@ -577,5 +584,77 @@ lemma verified_singletonMass (φ : ℝ) (c : MassCert)
   · intro x hx; cases hx
 
 end URCGenerators
+
+/‑! #### Bridge foundations (minimal) ‑/
+namespace Bridge
+
+structure BridgeData where
+  G     : ℝ
+  hbar  : ℝ
+  c     : ℝ
+  tau0  : ℝ
+  ell0  : ℝ
+deriving Repr
+
+namespace BridgeData
+
+@[simp] def K_A (_ : BridgeData) : ℝ := 1
+
+/-- Recognition length from anchors: λ_rec = √(ħ G / (π c^3)). -/
+@[simp] def lambda_rec (B : BridgeData) : ℝ :=
+  Real.sqrt (B.hbar * B.G / (Real.pi * (B.c ^ 3)))
+
+/-- Minimal physical assumptions on bridge anchors reused by analytical lemmas. -/
+structure Physical (B : BridgeData) : Prop where
+  c_pos    : 0 < B.c
+  hbar_pos : 0 < B.hbar
+  G_pos    : 0 < B.G
+
+/-- Positivity of λ_rec under physical assumptions. -/
+lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
+  dsimp [lambda_rec]
+  have num_pos : 0 < B.hbar * B.G := mul_pos H.hbar_pos H.G_pos
+  have den_pos : 0 < Real.pi * (B.c ^ 3) := by
+    have hc3 : 0 < B.c ^ 3 := by simpa using pow_pos H.c_pos (3 : Nat)
+    exact mul_pos Real.pi_pos hc3
+  have : 0 < (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := div_pos num_pos den_pos
+  exact Real.sqrt_pos.mpr this
+
+@[simp] def K_B (B : BridgeData) : ℝ :=
+  lambda_rec B / B.ell0
+
+/-- Combined uncertainty aggregator (placeholder policy). -/
+@[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
+
+/-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
+@[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
+  let KA := K_A B
+  let KB := K_B B
+  let u  := u_comb B u_ell0 u_lrec
+  (Real.abs (KA - KB)) / (k * u)
+
+/-- Boolean pass at threshold k: Z ≤ 1. -/
+@[simp] def passAt (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Bool :=
+  decide ((Zscore B u_ell0 u_lrec k) ≤ 1)
+
+/-- Full witness record for publication. -/
+structure Witness where
+  KA : ℝ
+  KB : ℝ
+  u  : ℝ
+  Z  : ℝ
+  pass : Bool
+deriving Repr
+
+@[simp] def witness (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Witness :=
+  let KA := K_A B
+  let KB := K_B B
+  let u  := u_comb B u_ell0 u_lrec
+  let Z  := (Real.abs (KA - KB)) / (k * u)
+  { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
+
+end BridgeData
+
+end Bridge
 
 end IndisputableMonolith
