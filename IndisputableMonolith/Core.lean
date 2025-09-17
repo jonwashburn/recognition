@@ -950,4 +950,32 @@ end BridgeData
 
 end Bridge
 
+/‑! #### Tiny demo example using Recognition -/
+namespace Demo
+
+open Recognition
+
+structure U where
+  a : Unit
+
+def recog : U → U → Prop := fun _ _ => True
+
+def M : RecognitionStructure := { U := U, R := recog }
+
+def L : Ledger M := { debit := fun _ => 1, credit := fun _ => 1 }
+
+def twoStep : Chain M :=
+  { n := 1
+  , f := fun _ => ⟨()⟩
+  , ok := by intro i; trivial }
+
+example : chainFlux L twoStep = 0 := by
+  haveI : Conserves L :=
+    { conserve := by
+        intro ch h; simp [chainFlux, phi, Recognition.Chain.head, Recognition.Chain.last, h] }
+  have hloop : twoStep.head = twoStep.last := rfl
+  simpa [hloop] using (chainFlux_zero_of_loop L twoStep hloop)
+
+end Demo
+
 end IndisputableMonolith
