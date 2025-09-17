@@ -398,6 +398,10 @@ lemma Band.contains_hi_of_valid (b : Band) (hb : Band.Valid b) :
   dsimp [Band.contains, Band.Valid] at *
   exact And.intro hb le_rfl
 
+lemma Band.width_nonneg (b : Band) (hb : Band.Valid b) : 0 ≤ b.width := by
+  dsimp [Band.width, Band.Valid] at *
+  exact sub_nonneg.mpr hb
+
 def wideBand (x : ℝ) (ε : ℝ) : Band := { lo := x - ε, hi := x + ε }
 
 lemma wideBand_width {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).width = 2 * ε := by
