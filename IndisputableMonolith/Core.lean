@@ -713,4 +713,13 @@ structure ConstraintInstance where
 
 end RSVC
 
+/-! #### RS-preserving reduction scaffold -/
+structure RSPreserving (A B : Type) where
+  sizeA : A → ℕ
+  sizeB : B → ℕ
+  reduce : A → B
+  TcBound : (ℕ → ℕ) → Prop := fun _ => True
+  TrBound : (ℕ → ℕ) → Prop := fun _ => True
+  deriving Repr
+
 end IndisputableMonolith
