@@ -240,6 +240,15 @@ lemma example_hasCover : HasCover example := by
   intro e he
   cases he
 
+lemma Covers_nil_edges (S : List Nat) (I : Instance) (h_edges : I.edges = []) : Covers S I := by
+  intro e he
+  simpa [Covers, h_edges] using he.elim
+
+lemma hasCover_of_nil_edges (I : Instance) (h_edges : I.edges = []) : HasCover I := by
+  refine ⟨[], by simp, ?_⟩
+  intro e he
+  simpa [Covers, h_edges] using he.elim
+
 end VertexCover
 
 namespace RSVC
