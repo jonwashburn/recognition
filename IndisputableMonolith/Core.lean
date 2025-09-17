@@ -661,6 +661,15 @@ class Conserves {M} (L : Ledger M) : Prop where
 lemma chainFlux_zero_of_loop {M} (L : Ledger M) [Conserves L] (ch : Chain M) (h : ch.head = ch.last) :
   chainFlux L ch = 0 := Conserves.conserve L ch h
 
+lemma phi_zero_of_balanced {M} (L : Ledger M) (hbal : ∀ u, L.debit u = L.credit u) :
+  ∀ u, phi L u = 0 := by
+  intro u; simp [phi, hbal u, sub_self]
+
+lemma chainFlux_zero_of_balanced {M} (L : Ledger M) (ch : Chain M)
+  (hbal : ∀ u, L.debit u = L.credit u) :
+  chainFlux L ch = 0 := by
+  simp [chainFlux, phi_zero_of_balanced (M:=M) L hbal]
+
 class AtomicTick (M : RecognitionStructure) where
   postedAt : Nat → M.U → Prop
   unique_post : ∀ t : Nat, ∃! u : M.U, postedAt t u
