@@ -186,6 +186,9 @@ lemma wideBand_valid {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).Valid := by
   dsimp [Band.Valid, wideBand]
   linarith
 
+/-- Measurement anchors placeholder. -/
+structure Anchors where a1 a2 : ℝ
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
@@ -232,6 +235,11 @@ def B_of (k : Nat) : ℝ := (2 : ℝ) ^ k
 lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
   simpa [B_of] using pow_pos this k
+
+/-- Two to an integer power: 2^k for k ∈ ℤ. -/
+noncomputable def twoPowZ (k : Int) : ℝ :=
+  if 0 ≤ k then (2 : ℝ) ^ (Int.toNat k)
+  else 1 / ((2 : ℝ) ^ (Int.toNat (-k)))
 
 namespace LedgerUnits
 
