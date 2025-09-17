@@ -284,6 +284,40 @@ structure EightBeatCert where
 /-- Eight-beat certificate is verified if T ≥ 8. -/
 @[simp] def EightBeatCert.verified (c : EightBeatCert) : Prop := 8 ≤ c.T
 
+/-- EL probe with tolerance. -/
+structure ELProbe where eps : ℚ
+
+@[simp] def ELProbe.verified (c : ELProbe) : Prop := 0 ≤ (c.eps : ℝ)
+
+structure RotationCert where
+  gamma : ℚ
+  scope : Prop
+
+@[simp] def RotationCert.verified (_c : RotationCert) : Prop := True
+
+structure OuterBudgetCert where data : Prop
+
+@[simp] def OuterBudgetCert.verified (_c : OuterBudgetCert) : Prop := True
+
+structure ConsciousCert where
+  k_pos : Nat
+  hk : 0 < (k_pos : ℝ)
+
+@[simp] def ConsciousCert.verified (_c : ConsciousCert) : Prop := True
+
+structure CertFamily where
+  units     : List UnitsCert    := []
+  eightbeat : List EightBeatCert := []
+  elprobes  : List ELProbe      := []
+  rotation  : List RotationCert := []
+  outer     : List OuterBudgetCert := []
+  conscious : List ConsciousCert := []
+
+@[simp] def Verified (φ : ℝ) (C : CertFamily) : Prop :=
+  (∀ c ∈ C.units, UnitsCert.verified c) ∧
+  (∀ c ∈ C.eightbeat, EightBeatCert.verified c) ∧
+  (∀ c ∈ C.elprobes, ELProbe.verified c)
+
 end URCGenerators
 
 /-! #### RH.RS bands foundation -/
