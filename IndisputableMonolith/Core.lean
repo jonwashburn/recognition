@@ -96,6 +96,10 @@ variable {n : ℕ}
 @[simp] def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool :=
   fun i => f i.val
 
+/-- Extend a partial assignment on `M` to a full mask by defaulting to `false` off `M`. -/
+@[simp] def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
+  fun i => if h : i ∈ M then a ⟨i, h⟩ else false
+
 end BalancedParityHidden
 end Complexity
 
