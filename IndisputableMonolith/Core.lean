@@ -141,6 +141,11 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   let i : Fin 8 := ⟨t % 8, Nat.mod_lt _ (by decide)⟩
   w i
 
+@[simp] lemma extendPeriodic8_zero (w : Pattern 8) : extendPeriodic8 w 0 = w ⟨0, by decide⟩ := by
+  dsimp [extendPeriodic8]
+  have : 0 % 8 = 0 := by decide
+  simp [this]
+
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
