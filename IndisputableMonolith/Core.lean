@@ -592,6 +592,17 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
 @[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
 @[simp] def Z_neutrino : ℤ := 0
 
+lemma kappaA_pos : 0 < kappaA := by
+  unfold kappaA
+  simpa using Constants.phi_pos
+
+lemma lambdaA_pos : 0 < lambdaA := by
+  unfold lambdaA
+  have : 1 < Constants.phi := Constants.one_lt_phi
+  simpa using (Real.log_pos_iff.mpr this)
+
+lemma lambdaA_ne_zero : lambdaA ≠ 0 := ne_of_gt lambdaA_pos
+
 end RS
 end RH
 
