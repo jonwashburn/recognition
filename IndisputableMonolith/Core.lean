@@ -390,7 +390,7 @@ noncomputable def twoPowZ (k : Int) : ℝ :=
 
 lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
-  simpa [B_of] using pow_pos this k
+  simpa [B_of] using pow_pos this
 
 /-- φ-power wrapper: Φ(x) := exp( (log φ)·x ). -/
 noncomputable def PhiPow (x : ℝ) : ℝ := Real.exp (Real.log (Constants.phi) * x)
@@ -647,5 +647,42 @@ noncomputable def Claim.checkLe (c : Claim) (lhs rhs : ℝ) : Claim :=
   ", Knobs: " ++ toString knobsCount
 
 end Verification
+
+/-! #### Complexity: minimal Vertex Cover block -/
+namespace Complexity
+namespace VertexCover
+
+/-- Vertex Cover instance over `Nat` vertices. -/
+structure Instance where
+  vertices : List Nat
+  edges    : List (Nat × Nat)
+  k        : Nat
+  deriving Repr
+
+/-- A set `S` covers an edge `(u,v)` if it contains `u` or `v`. -/
+def InCover (S : List Nat) (v : Nat) : Prop := v ∈ S
+
+/-- An edge is covered if one of its endpoints is in `S`. -/
+def EdgeCovered (S : List Nat) (e : Nat × Nat) : Prop :=
+  InCover S e.fst ∨ InCover S e.snd
+
+/-- `S` covers all edges of instance `I`. -/
+def Covers (S : List Nat) (I : Instance) : Prop :=
+  ∀ e, e ∈ I.edges → EdgeCovered S e
+
+/-- There exists a vertex cover of size ≤ k. -/
+def HasCover (I : Instance) : Prop :=
+  ∃ S : List Nat, S.length ≤ I.k ∧ Covers S I
+
+/-- A trivial example with no edges is always covered by the empty set. -/
+def example : Instance := { vertices := [1], edges := [], k := 0 }
+
+lemma example_hasCover : HasCover example := by
+  refine ⟨[], by decide, ?_⟩
+  intro e he
+  cases he
+
+end VertexCover
+end Complexity
 
 end IndisputableMonolith
