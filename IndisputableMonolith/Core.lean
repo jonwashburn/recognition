@@ -288,6 +288,12 @@ end Recognition
 /‑! ### RS‑preserving reduction exemplar (to Vertex Cover) ‑/
 namespace Complexity
 
+/-- Complexity pair (functions of input size). -/
+structure ComplexityPair where
+  Tc : ℕ → ℕ
+  Tr : ℕ → ℕ
+deriving Repr
+
 namespace VertexCover
 
 /‑‑ Vertex Cover instance over `Nat` vertices. ‑/
