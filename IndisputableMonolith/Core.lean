@@ -47,6 +47,15 @@ lemma phi_pos : 0 < phi := by
   have htwo : 0 < (2 : ℝ) := by norm_num
   simpa [phi] using (div_pos this htwo)
 
+lemma one_lt_phi : 1 < phi := by
+  -- √1 < √5, then add 1 and divide by 2
+  have hroot : Real.sqrt 1 < Real.sqrt 5 := by
+    simpa [Real.sqrt_one] using (Real.sqrt_lt_sqrt (by norm_num) (by norm_num : (1 : ℝ) < 5))
+  have hsum : (1 : ℝ) + 1 < 1 + Real.sqrt 5 := add_lt_add_left hroot 1
+  have htwo : 0 < (2 : ℝ) := by norm_num
+  have := (div_lt_div_of_pos_right hsum htwo)
+  simpa [phi, Real.sqrt_one] using this
+
 end Constants
 
 /-! #### URC adapters: stable Prop wrappers -/
