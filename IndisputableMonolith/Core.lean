@@ -51,6 +51,16 @@ lemma one_lt_phi : 1 < phi := by
 lemma phi_ge_one : 1 ≤ phi := le_of_lt one_lt_phi
 lemma phi_ne_zero : phi ≠ 0 := ne_of_gt phi_pos
 
+/-- Minimal RS units used in Core. -/
+structure RSUnits where
+  tau0 : ℝ
+  ell0 : ℝ
+  c    : ℝ
+  c_ell0_tau0 : c * tau0 = ell0
+
+/-- Minimal global constant K placeholder. -/
+@[simp] def K : ℝ := 1
+
 end Constants
 
 /‑! #### Patterns: complete covers and 8‑tick existence for 3‑bit patterns -/
