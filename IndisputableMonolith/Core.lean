@@ -315,6 +315,24 @@ deriving Repr
 , falsifiability := falsifiabilityRendered
 , knobs := knobsCount }
 
+@[simp] def claimIds : List String := dimlessClaimsRendered.map (fun c => c.id)
+@[simp] def gateIds  : List String := gatesRendered.map (fun g => g.id)
+
+@[simp] def claimsCount : Nat := dimlessClaimsRendered.length
+@[simp] def gatesCount  : Nat := gatesRendered.length
+@[simp] def falsifiabilityCount : Nat := falsifiabilityRendered.length
+
+@[simp] def manifestStrings : List String :=
+  [ "claims={" ++ String.intercalate ", " claimIds ++ "}"
+  , "gates={"  ++ String.intercalate ", " gateIds  ++ "}"
+  , "knobs="    ++ toString knobsCount ]
+
+@[simp] def manifestSummary : String :=
+  "Claims: " ++ toString claimsCount ++
+  ", Gates: " ++ toString gatesCount ++
+  ", Falsifiability: " ++ toString falsifiabilityCount ++
+  ", Knobs: " ++ toString knobsCount
+
 end Verification
 
 /-! #### RH.RS bands foundation -/
