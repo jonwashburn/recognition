@@ -703,6 +703,11 @@ lemma example_hasCover : HasCover example := by
   intro e he
   cases he
 
+/-- If an instance has no edges, any set covers it. -/
+lemma Covers_nil_edges (S : List Nat) (V : List Nat) (k : Nat) :
+  Covers S { vertices := V, edges := [], k := k } := by
+  intro e he; cases he
+
 end VertexCover
 end Complexity
 
