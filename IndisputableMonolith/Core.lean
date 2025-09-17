@@ -175,6 +175,11 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
 /-- Closed‑form residue at the anchor as a function of the integer Z. -/
 @[simp] def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
 
+/-- Charge/sector wrappers for the integer Z map at the anchor. -/
+@[simp] def Z_quark (Q : ℤ) : ℤ := 4 + (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
+@[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
+@[simp] def Z_neutrino : ℤ := 0
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
