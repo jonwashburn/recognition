@@ -310,4 +310,30 @@ theorem no_universal_decoder (M : Finset (Fin n))
 end BalancedParityHidden
 end Complexity
 
+/‑! #### URC generators (minimal certifications) ‑/
+namespace URCGenerators
+
+structure UnitsCert where
+  lo : ℚ
+  hi : ℚ
+deriving Repr
+
+/‑‑ Units certificate is verified if 1 lies within the rational bounds. ‑/
+@[simp] def UnitsCert.verified (c : UnitsCert) : Prop :=
+  (c.lo : ℝ) ≤ 1 ∧ 1 ≤ (c.hi : ℝ)
+
+structure EightBeatCert where
+  T : Nat
+deriving Repr
+
+/‑‑ Eight‑beat certificate is verified if `T ≥ 8`. ‑/
+@[simp] def EightBeatCert.verified (c : EightBeatCert) : Prop := 8 ≤ c.T
+
+structure ELProbe where eps : ℚ
+deriving Repr
+
+@[simp] def ELProbe.verified (c : ELProbe) : Prop := 0 ≤ (c.eps : ℝ)
+
+end URCGenerators
+
 end IndisputableMonolith
