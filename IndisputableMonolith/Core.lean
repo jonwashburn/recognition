@@ -142,6 +142,18 @@ lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
 /-- Measurement anchors placeholder. -/
 structure Anchors where a1 a2 : ℝ
 
+/-- Binary scale factor `B = 2^k` as a real. -/
+def B_of (k : Nat) : ℝ := (2 : ℝ) ^ k
+
+@[simp] lemma B_of_zero : B_of 0 = 1 := by simp [B_of]
+
+@[simp] lemma B_of_succ (k : Nat) : B_of (k+1) = 2 * B_of k := by
+  simp [B_of, pow_succ, mul_comm]
+
+lemma B_of_pos (k : Nat) : 0 < B_of k := by
+  have : 0 < (2:ℝ) := by norm_num
+  simpa [B_of] using pow_pos this k
+
 /-- Placeholder: choose trivial bands for a value. -/
 @[simp] def sampleBandsFor (x : ℝ) : Bands := [wideBand x 1]
 
