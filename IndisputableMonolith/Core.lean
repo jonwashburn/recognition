@@ -305,10 +305,19 @@ structure ConsciousCert where
 
 @[simp] def ConsciousCert.verified (_c : ConsciousCert) : Prop := True
 
+structure MassCert where
+  ratio : ℚ
+  eps : ℚ
+  pos : 0 < eps
+
+@[simp] def MassCert.verified (φ : ℝ) (c : MassCert) : Prop :=
+  |(c.ratio : ℝ) - φ| ≤ (c.eps : ℝ)
+
 structure CertFamily where
   units     : List UnitsCert    := []
   eightbeat : List EightBeatCert := []
   elprobes  : List ELProbe      := []
+  masses    : List MassCert     := []
   rotation  : List RotationCert := []
   outer     : List OuterBudgetCert := []
   conscious : List ConsciousCert := []
@@ -316,7 +325,11 @@ structure CertFamily where
 @[simp] def Verified (φ : ℝ) (C : CertFamily) : Prop :=
   (∀ c ∈ C.units, UnitsCert.verified c) ∧
   (∀ c ∈ C.eightbeat, EightBeatCert.verified c) ∧
-  (∀ c ∈ C.elprobes, ELProbe.verified c)
+  (∀ c ∈ C.elprobes, ELProbe.verified c) ∧
+  (∀ c ∈ C.masses, MassCert.verified φ c) ∧
+  (∀ c ∈ C.rotation, RotationCert.verified c) ∧
+  (∀ c ∈ C.outer, OuterBudgetCert.verified c) ∧
+  (∀ c ∈ C.conscious, ConsciousCert.verified c)
 
 end URCGenerators
 
