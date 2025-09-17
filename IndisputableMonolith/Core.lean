@@ -497,6 +497,8 @@ lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
   simpa [B_of] using pow_pos this k
 
+@[simp] lemma B_of_one : B_of 1 = 2 := by simp [B_of]
+
 /-- Lower bound: `B_of k = 2^k ≥ 1`. -/
 lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
   induction k with
@@ -515,6 +517,12 @@ lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
 noncomputable def twoPowZ (k : Int) : ℝ :=
   if 0 ≤ k then (2 : ℝ) ^ (Int.toNat k)
   else 1 / ((2 : ℝ) ^ (Int.toNat (-k)))
+
+@[simp] lemma twoPowZ_zero : twoPowZ 0 = 1 := by
+  simp [twoPowZ]
+
+@[simp] lemma twoPowZ_ofNat (k : Nat) : twoPowZ (Int.ofNat k) = (2 : ℝ) ^ k := by
+  simp [twoPowZ]
 
 namespace LedgerUnits
 
