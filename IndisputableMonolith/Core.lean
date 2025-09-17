@@ -123,6 +123,9 @@ lemma Z_of_window_nonneg {n : Nat} (w : Pattern n) : 0 ≤ Z_of_window w := by
   intro i _
   split <;> decide
 
+@[simp] lemma Z_of_window_zero (w : Pattern 0) : Z_of_window w = 0 := by
+  simp [Z_of_window]
+
 /-- The cylinder set of streams whose first `n` bits coincide with the window `w`. -/
 def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
   { s | ∀ i : Fin n, s i.val = w i }
@@ -135,6 +138,10 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
+
+/-- Base case: the sum of the first 0 bits is 0. -/
+@[simp] lemma sumFirst_zero (s : Stream) : sumFirst 0 s = 0 := by
+  simp [sumFirst]
 
 /-- If a stream agrees with a window on its first `n` bits, then the first‑`n` sum equals `Z`. -/
 lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
