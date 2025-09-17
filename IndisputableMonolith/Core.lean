@@ -95,6 +95,46 @@ lemma recog_lb_holds : recog_lb_prop := by
   intro n M g hMlt
   simpa using (IndisputableMonolith.TruthCore.recognition_lower_bound_sat (n:=n) M g hMlt)
 
+/-! #### Recognition foundations -/
+namespace Recognition
+
+structure RecognitionStructure where
+  U : Type
+  R : U → U → Prop
+
+structure Chain (M : RecognitionStructure) where
+  n : Nat
+  f : Fin (n+1) → M.U
+  ok : ∀ i : Fin n, M.R (f i.castSucc) (f i.succ)
+
+namespace Chain
+variable {M : RecognitionStructure} (ch : Chain M)
+def head : M.U := by
+  have hpos : 0 < ch.n + 1 := Nat.succ_pos _
+  exact ch.f ⟨0, hpos⟩
+def last : M.U := by
+  have hlt : ch.n < ch.n + 1 := Nat.lt_succ_self _
+  exact ch.f ⟨ch.n, hlt⟩
+end Chain
+
+class AtomicTick (M : RecognitionStructure) where
+  postedAt : Nat → M.U → Prop
+  unique_post : ∀ t : Nat, ∃! u : M.U, postedAt t u
+
+structure Ledger (M : RecognitionStructure) where
+  debit : M.U → ℤ
+  credit : M.U → ℤ
+
+def phi {M} (L : Ledger M) : M.U → ℤ := fun u => L.debit u - L.credit u
+
+def chainFlux {M} (L : Ledger M) (ch : Chain M) : ℤ :=
+  phi L (Chain.last ch) - phi L (Chain.head ch)
+
+class Conserves {M} (L : Ledger M) : Prop where
+  conserve : ∀ ch : Chain M, ch.head = ch.last → chainFlux L ch = 0
+
+end Recognition
+
 /-! #### RH.RS bands foundation -/
 namespace RH
 namespace RS
