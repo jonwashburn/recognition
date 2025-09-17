@@ -868,6 +868,49 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
   have : 0 < (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := div_pos num_pos den_pos
   exact Real.sqrt_pos.mpr this
 
+/-- Dimensionless identity for λ_rec (under mild physical positivity assumptions):
+    (c^3 · λ_rec^2) / (ħ G) = 1/π. -/
+lemma lambda_rec_dimensionless_id (B : BridgeData)
+  (hc : 0 < B.c) (hh : 0 < B.hbar) (hG : 0 < B.G) :
+  (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G) = 1 / Real.pi := by
+  have hpi_pos : 0 < Real.pi := Real.pi_pos
+  have hc3_pos : 0 < B.c ^ 3 := by simpa using pow_pos hc (3 : Nat)
+  have hden_pos : 0 < Real.pi * (B.c ^ 3) := mul_pos hpi_pos hc3_pos
+  have hnum_nonneg : 0 ≤ B.hbar * B.G := mul_nonneg (le_of_lt hh) (le_of_lt hG)
+  have hrad_nonneg : 0 ≤ (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) :=
+    div_nonneg hnum_nonneg (le_of_lt hden_pos)
+  -- Square of sqrt is the radicand
+  have hsq : (lambda_rec B) ^ 2
+      = (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := by
+    dsimp [lambda_rec]
+    have := Real.mul_self_sqrt hrad_nonneg
+    simpa [pow_two] using this
+  -- Compute the dimensionless ratio
+  have hprod_ne : B.hbar * B.G ≠ 0 := mul_ne_zero (ne_of_gt hh) (ne_of_gt hG)
+  have hc3_ne : B.c ^ 3 ≠ 0 := ne_of_gt hc3_pos
+  calc
+    (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G)
+        = (B.c ^ 3) * (((B.hbar * B.G) / (Real.pi * (B.c ^ 3))) ) / (B.hbar * B.G) := by
+              simpa [hsq]
+    _   = (((B.c ^ 3) * (B.hbar * B.G)) / (Real.pi * (B.c ^ 3))) / (B.hbar * B.G) := by
+              simpa [mul_comm, mul_left_comm, mul_assoc] using
+                (mul_div_assoc (B.c ^ 3) (B.hbar * B.G) (Real.pi * (B.c ^ 3))).symm
+    _   = ((B.c ^ 3) * (B.hbar * B.G)) / ((Real.pi * (B.c ^ 3)) * (B.hbar * B.G)) := by
+              simpa using (div_div_eq_mul_div ((B.c ^ 3) * (B.hbar * B.G)) (Real.pi * (B.c ^ 3)) (B.hbar * B.G))
+    _   = (B.c ^ 3) / (Real.pi * (B.c ^ 3)) := by
+              -- cancel (hbar*G) on both numerator and denominator
+              simpa using (mul_div_mul_right ((B.c ^ 3)) (Real.pi * (B.c ^ 3)) (B.hbar * B.G))
+    _   = 1 / Real.pi := by
+              -- rearrange and cancel c^3
+              have : (B.c ^ 3) / (Real.pi * (B.c ^ 3)) = (B.c ^ 3) / ((B.c ^ 3) * Real.pi) := by
+                simpa [mul_comm]
+              have : (B.c ^ 3) / ((B.c ^ 3) * Real.pi) = ((B.c ^ 3) / (B.c ^ 3)) / Real.pi := by
+                simpa [div_mul_eq_mul_div]
+              have : ((B.c ^ 3) / (B.c ^ 3)) / Real.pi = 1 / Real.pi := by
+                have hself : (B.c ^ 3) / (B.c ^ 3) = (1 : ℝ) := by simpa [hc3_ne] using (div_self hc3_ne)
+                simpa [hself]
+              simpa using this
+
 @[simp] def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
