@@ -82,6 +82,23 @@ def EL_prop : Prop :=
 lemma EL_holds : EL_prop := by
   exact ⟨IndisputableMonolith.EL_stationary_at_zero, fun t => IndisputableMonolith.EL_global_min t⟩
 
+/-! #### BalancedParityHidden minimal defs -/
+namespace Complexity
+namespace BalancedParityHidden
+
+variable {n : ℕ}
+
+/-- Hidden mask encoder: bit b with mask R is R if b=false and bnot ∘ R if b=true. -/
+@[simp] def enc (b : Bool) (R : Fin n → Bool) : Fin n → Bool :=
+  fun i => if b then bnot (R i) else R i
+
+/-- Restrict a full word to a queried index set `M`. -/
+@[simp] def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool :=
+  fun i => f i.val
+
+end BalancedParityHidden
+end Complexity
+
 /-! #### Recognition lower bound (stable wrapper) -/
 
 /-- Recognition lower bound (SAT exemplar) as a Prop. -/
