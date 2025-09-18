@@ -1120,6 +1120,12 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
   u_comb B a b = u_comb B b a := by
   simp [u_comb, add_comm]
 
+@[simp] lemma u_comb_zero_right (B : BridgeData) (u : ℝ) : u_comb B u 0 = u := by
+  simp [u_comb]
+
+@[simp] lemma u_comb_zero_left (B : BridgeData) (u : ℝ) : u_comb B 0 u = u := by
+  simp [u_comb]
+
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 @[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
   let KA := K_A B
