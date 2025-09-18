@@ -19,6 +19,9 @@ lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
   simpa [B_of] using pow_pos this k
 
+@[simp] lemma B_of_nonneg (k : Nat) : 0 ≤ B_of k := by
+  exact le_of_lt (B_of_pos k)
+
 @[simp] lemma B_of_one : B_of 1 = 2 := by simp [B_of]
 
 lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
@@ -34,6 +37,37 @@ lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
       have : (1 : ℝ) ≤ 2 * B_of k := le_trans h12 hmul
       simpa [B_of_succ, mul_comm] using this
 
+lemma B_of_add (a b : Nat) : B_of (a + b) = B_of a * B_of b := by
+  simp [B_of, pow_add, mul_comm, mul_left_comm, mul_assoc]
+
+lemma B_of_le_add_left (k m : Nat) : B_of k ≤ B_of (k + m) := by
+  have hk : k ≤ k + m := Nat.le_add_right _ _
+  exact B_of_le_of_le hk
+
+lemma B_of_le_of_le {k n : Nat} (hkn : k ≤ n) : B_of k ≤ B_of n := by
+  -- write n = k + m
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hkn
+  -- B_of (k+m) = B_of k * B_of m
+  have : B_of (k + m) = B_of k * B_of m := by
+    simp [B_of, pow_add, mul_comm, mul_left_comm, mul_assoc]
+  -- 1 ≤ B_of m
+  have h1 : (1 : ℝ) ≤ B_of m := one_le_B_of m
+  -- nonneg of left factor
+  have hnonneg : 0 ≤ B_of k := by simpa using B_of_nonneg k
+  -- multiply inequality by nonneg left factor
+  have : B_of k * 1 ≤ B_of k * B_of m := mul_le_mul_of_nonneg_left h1 hnonneg
+  simpa [this, mul_comm, mul_left_comm, mul_assoc] using this
+
+/-! ### Strict step growth for `B_of` -/
+
+lemma B_of_lt_succ (k : Nat) : B_of k < B_of (k + 1) := by
+  have hkpos : 0 < B_of k := B_of_pos k
+  have h12 : (1 : ℝ) < 2 := by norm_num
+  calc
+    B_of k = 1 * B_of k := by simp
+    _ < 2 * B_of k := by exact mul_lt_mul_of_pos_right h12 hkpos
+    _ = B_of (k + 1) := by simpa [B_of_succ, mul_comm]
+
 /-- Two to an integer power: 2^k for k ∈ ℤ. -/
 noncomputable def twoPowZ (k : Int) : ℝ :=
   if 0 ≤ k then (2 : ℝ) ^ (Int.toNat k)
@@ -44,19 +78,43 @@ noncomputable def twoPowZ (k : Int) : ℝ :=
 @[simp] lemma twoPowZ_negSucc (k : Nat) : twoPowZ (Int.negSucc k) = 1 / ((2 : ℝ) ^ k.succ) := by
   simp [twoPowZ]
 
+lemma twoPowZ_pos (k : Int) : 0 < twoPowZ k := by
+  unfold twoPowZ
+  by_cases h : 0 ≤ k
+  · have h2 : 0 < (2 : ℝ) := by norm_num
+    have : 0 < (2 : ℝ) ^ (Int.toNat k) := by simpa using pow_pos h2 (Int.toNat k)
+    simpa [h] using this
+  · have h2 : 0 < (2 : ℝ) := by norm_num
+    have : 0 < (2 : ℝ) ^ (Int.toNat (-k)) := by simpa using pow_pos h2 (Int.toNat (-k))
+    have : 0 < 1 / ((2 : ℝ) ^ (Int.toNat (-k))) := by
+      exact div_pos (by norm_num) this
+    simpa [h] using this
+
 /-- φ-power wrapper. -/
 noncomputable def PhiPow (x : ℝ) : ℝ := Real.exp (Real.log (Constants.phi) * x)
 
 lemma PhiPow_add (x y : ℝ) : PhiPow (x + y) = PhiPow x * PhiPow y := by
   unfold PhiPow
-  simpa [mul_add, Real.exp_add, mul_comm, mul_left_comm, mul_assoc]
+  have hx : Real.log (Constants.phi) * (x + y)
+            = Real.log (Constants.phi) * x + Real.log (Constants.phi) * y := by ring
+  have := Real.exp_add (Real.log (Constants.phi) * x) (Real.log (Constants.phi) * y)
+  simpa [hx, mul_comm, mul_left_comm, mul_assoc]
+    using this
 
 lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
   unfold PhiPow
-  have : Real.log (Constants.phi) * (x - y)
-        = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
-  simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
-        mul_comm, mul_left_comm, mul_assoc]
+  have hx : Real.log (Constants.phi) * (x - y)
+            = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
+  calc
+    Real.exp (Real.log (Constants.phi) * (x - y))
+        = Real.exp (Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y)) := by
+              simpa [hx]
+    _   = Real.exp (Real.log (Constants.phi) * x) * Real.exp (Real.log (Constants.phi) * (-y)) :=
+              Real.exp_add _ _
+    _   = Real.exp (Real.log (Constants.phi) * x) * (Real.exp (Real.log (Constants.phi) * y))⁻¹ := by
+              simp [Real.exp_neg]
+    _   = Real.exp (Real.log (Constants.phi) * x) / Real.exp (Real.log (Constants.phi) * y) := by
+              simp [div_eq_mul_inv]
 
 @[simp] lemma PhiPow_zero : PhiPow 0 = 1 := by
   unfold PhiPow
@@ -71,10 +129,17 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
   have := PhiPow_sub 0 y
   simpa [PhiPow_zero, sub_eq_add_neg] using this
 
-@[simp] def lambdaA : ℝ := Real.log Constants.phi
-@[simp] def kappaA  : ℝ := Constants.phi
+lemma PhiPow_pos (x : ℝ) : 0 < PhiPow x := by
+  unfold PhiPow
+  simpa using Real.exp_pos (Real.log (Constants.phi) * x)
 
-@[simp] def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
+@[simp] noncomputable def lambdaA : ℝ := Real.log Constants.phi
+@[simp] noncomputable def kappaA  : ℝ := Constants.phi
+
+@[simp] noncomputable def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
+
+@[simp] lemma F_ofZ_zero : F_ofZ 0 = 0 := by
+  simp [F_ofZ]
 
 @[simp] def Z_quark (Q : ℤ) : ℤ := 4 + (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
 @[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
@@ -89,10 +154,29 @@ lemma lambdaA_pos : 0 < lambdaA := by
   have : 1 < Constants.phi := Constants.one_lt_phi
   simpa using (Real.log_pos_iff.mpr this)
 
-lemma lambdaA_ne_zero : lambdaA ≠ 0 := ne_of_gt lambdaA_pos
+lemma lambdaA_ne_zero : lambdaA ≠ 0 := by
+  exact ne_of_gt lambdaA_pos
 
 lemma kappaA_ne_zero : kappaA ≠ 0 := by
   simpa [kappaA] using Constants.phi_ne_zero
+
+/-- Monotonicity of `PhiPow`: it is increasing in its argument. -/
+lemma PhiPow_mono {x y : ℝ} (hxy : x ≤ y) : PhiPow x ≤ PhiPow y := by
+  unfold PhiPow
+  have a_pos : 0 < Real.log Constants.phi := by
+    simpa [lambdaA] using lambdaA_pos
+  have : Real.log Constants.phi * x ≤ Real.log Constants.phi * y :=
+    mul_le_mul_of_nonneg_left hxy (le_of_lt a_pos)
+  exact (Real.exp_le_exp.mpr this)
+
+/-- Strict monotonicity of `PhiPow`. -/
+lemma PhiPow_strict_mono {x y : ℝ} (hxy : x < y) : PhiPow x < PhiPow y := by
+  unfold PhiPow
+  have a_pos : 0 < Real.log Constants.phi := by
+    simpa [lambdaA] using lambdaA_pos
+  have : Real.log Constants.phi * x < Real.log Constants.phi * y :=
+    mul_lt_mul_of_pos_left hxy a_pos
+  exact (Real.exp_lt_exp.mpr this)
 
 /-! Ledger units (δ subgroup) -/
 namespace LedgerUnits
