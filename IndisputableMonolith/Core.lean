@@ -146,6 +146,17 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   have : 0 % 8 = 0 := by decide
   simp [this]
 
+lemma extendPeriodic8_period (w : Pattern 8) (t : Nat) :
+  extendPeriodic8 w (t + 8) = extendPeriodic8 w t := by
+  dsimp [extendPeriodic8]
+  have hmod : (t + 8) % 8 = t % 8 := by
+    simpa [Nat.mod_self, Nat.add_comm] using (Nat.add_mod t 8 8)
+  have hfin : (⟨(t + 8) % 8, Nat.mod_lt _ (by decide)⟩ : Fin 8)
+            = ⟨t % 8, Nat.mod_lt _ (by decide)⟩ := by
+    apply Fin.mk_eq_mk.mpr
+    exact hmod
+  simp [hfin]
+
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
@@ -439,6 +450,10 @@ def wideBand (x : ℝ) (ε : ℝ) : Band := { lo := x - ε, hi := x + ε }
 lemma wideBand_width {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).width = 2 * ε := by
   dsimp [Band.width, wideBand]
   ring
+
+lemma wideBand_width_nonneg {x ε : ℝ} (hε : 0 ≤ ε) : 0 ≤ (wideBand x ε).width := by
+  have : (wideBand x ε).width = 2 * ε := wideBand_width (x:=x) (ε:=ε) hε
+  simpa [this] using mul_nonneg (by norm_num) hε
 
 lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
   Band.contains (wideBand x ε) x := by
