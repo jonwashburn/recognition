@@ -1,5 +1,5 @@
 import Mathlib
-import IndisputableMonolith.Core -- for Constants.K; minimal backref
+import IndisputableMonolith.Constants -- minimal import; avoids Core cycle
 
 namespace IndisputableMonolith
 namespace Bridge

@@ -40,6 +40,16 @@ lemma example_hasCover : HasCover example := by
   intro e he
   cases he
 
+@[simp] lemma InCover_cons {x : Nat} {xs : List Nat} : InCover (x :: xs) x := by
+  simp [InCover]
+
+@[simp] lemma InCover_of_mem {S : List Nat} {v : Nat} (h : v ∈ S) : InCover S v := by
+  simpa [InCover] using h
+
+lemma EdgeCovered_comm (S : List Nat) (u v : Nat) :
+  EdgeCovered S (u, v) ↔ EdgeCovered S (v, u) := by
+  simp [EdgeCovered, Or_comm]
+
 lemma Covers_nil_edges (S : List Nat) (I : Instance) (h_edges : I.edges = []) : Covers S I := by
   intro e he
   simpa [Covers, h_edges] using he.elim

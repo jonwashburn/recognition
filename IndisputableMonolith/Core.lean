@@ -14,6 +14,7 @@ import IndisputableMonolith.Bridge.BridgeData
 import IndisputableMonolith.Recognition
 import IndisputableMonolith.Verification
 import IndisputableMonolith.Verification.DEC
+import IndisputableMonolith.Streams
 
 namespace IndisputableMonolith
 /-! ### Core stable props and helpers moved from the monolith -/
