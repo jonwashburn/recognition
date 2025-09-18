@@ -79,5 +79,3 @@ def Matches (φ : ℝ) (L : Ledger) (B : Bridge L) (U : UniversalDimless φ) : P
 end RS
 end RH
 end IndisputableMonolith
-
-

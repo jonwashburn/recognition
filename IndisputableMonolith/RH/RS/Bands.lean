@@ -1,4 +1,5 @@
 import Mathlib
+import IndisputableMonolith.Verification
 
 namespace IndisputableMonolith
 namespace RH
@@ -74,14 +75,34 @@ lemma sampleBandsFor_nonempty (x : ℝ) : (sampleBandsFor x).length = 1 := by
 lemma sampleBandsFor_singleton (x : ℝ) : sampleBandsFor x = [wideBand x 1] := by
   simp [sampleBandsFor]
 
-@[simp] def evalToBands_c (c : ℝ) (x : ℝ) : Bands := sampleBandsFor (c * x)
+@[simp] def evalBandsAt (c : ℝ) (x : ℝ) : Bands := sampleBandsFor (c * x)
 
 noncomputable def meetsBandsChecker_gen (xs : List ℝ) (bs : Bands) : Bool := by
   classical
   exact xs.any (fun x => bs.any (fun b => decide (Band.contains b x)))
 
 noncomputable def meetsBandsChecker (xs : List ℝ) (c : ℝ) : Bool :=
-  meetsBandsChecker_gen xs (evalToBands_c c 1)
+  meetsBandsChecker_gen xs (evalBandsAt c 1)
+
+/-- Evaluate whether the anchors `U.c` lie in any of the candidate bands `X`. -/
+def evalToBands_c (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
+  ∃ b ∈ X, Band.contains b U.c
+
+/-- Invariance of the c-band check under units rescaling (c fixed by cfix). -/
+lemma evalToBands_c_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
+  (h : IndisputableMonolith.Verification.UnitsRescaled U U') (X : Bands) :
+  evalToBands_c U X ↔ evalToBands_c U' X := by
+  dsimp [evalToBands_c]
+  have hc : U'.c = U.c := h.cfix
+  constructor
+  · intro hx
+    rcases hx with ⟨b, hb, hbx⟩
+    refine ⟨b, hb, ?_⟩
+    simpa [Band.contains, hc] using hbx
+  · intro hx
+    rcases hx with ⟨b, hb, hbx⟩
+    refine ⟨b, hb, ?_⟩
+    simpa [Band.contains, hc.symm] using hbx
 
 @[simp] lemma meetsBandsChecker_gen_nil (bs : Bands) :
   meetsBandsChecker_gen [] bs = false := by
