@@ -49,6 +49,18 @@ lemma hasCover_of_nil_edges (I : Instance) (h_edges : I.edges = []) : HasCover I
   intro e he
   simpa [Covers, h_edges] using he.elim
 
+/-- Replace only the `k` field of an instance. -/
+@[simp] def withK (I : Instance) (k' : Nat) : Instance := { I with k := k' }
+
+/-- Monotonicity in `k`: if a cover of size ≤ `I.k` exists and `I.k ≤ k'`,
+    then the same set witnesses a cover for `withK I k'`. -/
+lemma HasCover.mono_k {I : Instance} (h : HasCover I) {k' : Nat} (hk : I.k ≤ k') :
+  HasCover (withK I k') := by
+  rcases h with ⟨S, hlen, hcov⟩
+  refine ⟨S, Nat.le_trans hlen hk, ?_⟩
+  -- Edges are unchanged by `withK`, so coverage is preserved.
+  simpa [withK, Covers]
+
 end VertexCover
 
 end Complexity

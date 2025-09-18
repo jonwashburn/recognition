@@ -1,5 +1,5 @@
 import Mathlib
-import IndisputableMonolith.Core -- for Constants.K; minimal backref
+import IndisputableMonolith.Constants -- use Constants.K without creating a cycle
 
 namespace IndisputableMonolith
 namespace Bridge
@@ -86,6 +86,18 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
 @[simp] lemma u_comb_zero_left (B : BridgeData) (u : ℝ) : u_comb B 0 u = u := by
   simp [u_comb]
 
+@[simp] lemma u_comb_add_left (B : BridgeData) (a b c : ℝ) :
+  u_comb B (a + b) c = a + b + c := by
+  simp [u_comb, add_assoc]
+
+@[simp] lemma u_comb_add_right (B : BridgeData) (a b c : ℝ) :
+  u_comb B a (b + c) = a + (b + c) := by
+  simp [u_comb, add_assoc]
+
+@[simp] lemma u_comb_assoc (B : BridgeData) (a b c : ℝ) :
+  u_comb B (u_comb B a b) c = u_comb B a (u_comb B b c) := by
+  simp [u_comb, add_assoc]
+
 @[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
   let KA := K_A B
   let KB := K_B B
@@ -119,6 +131,24 @@ structure Witness where
   (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
   passAt B u_ell0 u_lrec k = true := by
   simp [passAt, Zscore_zero_of_KA_eq_KB B u_ell0 u_lrec k h]
+
+lemma Zscore_nonneg
+  (B : BridgeData) (u_ell0 u_lrec k : ℝ)
+  (hk : 0 < k) (hu : 0 < u_comb B u_ell0 u_lrec) :
+  0 ≤ Zscore B u_ell0 u_lrec k := by
+  unfold Zscore
+  have hden_pos : 0 < k * (u_comb B u_ell0 u_lrec) := mul_pos hk hu
+  have hnum_nonneg : 0 ≤ Real.abs (K_A B - K_B B) := by exact abs_nonneg _
+  exact div_nonneg hnum_nonneg (le_of_lt hden_pos)
+
+lemma u_comb_nonneg (B : BridgeData) {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) :
+  0 ≤ u_comb B a b := by
+  simp [u_comb, add_nonneg, ha, hb]
+
+lemma passAt_false_of_gt (B : BridgeData) (u_ell0 u_lrec k : ℝ)
+  (h : 1 < Zscore B u_ell0 u_lrec k) :
+  passAt B u_ell0 u_lrec k = false := by
+  simp [passAt, not_le.mpr h]
 
 end BridgeData
 

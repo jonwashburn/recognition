@@ -2,7 +2,7 @@ import Mathlib
 
 namespace IndisputableMonolith
 
-/‑! #### Streams: periodic extension and finite sums ‑/
+/-! #### Streams: periodic extension and finite sums -/
 namespace Streams
 
 open Classical
@@ -63,6 +63,17 @@ lemma extendPeriodic8_period (w : Pattern 8) (t : Nat) :
     exact hmod
   simp [hfin]
 
+/-- Period k·8: shifting by a multiple of 8 leaves `extendPeriodic8` unchanged. -/
+lemma extendPeriodic8_period_k (w : Pattern 8) (t k : Nat) :
+  extendPeriodic8 w (t + 8 * k) = extendPeriodic8 w t := by
+  induction k with
+  | zero => simpa
+  | succ k ih =>
+      have hrewrite : t + 8 * (Nat.succ k) = (t + 8 * k) + 8 := by
+        simp [Nat.mul_succ, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+      -- Reduce one period step, then apply the induction hypothesis.
+      simpa [hrewrite, ih] using (extendPeriodic8_period w (t := t + 8 * k))
+
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
@@ -91,6 +102,15 @@ lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
   · funext i; simp [hmod i]
   · rfl
 
+/-- The sum of the first `m` bits is at most `m`. -/
+lemma sumFirst_le_m (m : Nat) (s : Stream) : sumFirst m s ≤ m := by
+  unfold sumFirst
+  have hle : ∀ i : Fin m, (if s i.val then 1 else 0) ≤ 1 := by
+    intro i; by_cases h : s i.val <;> simp [h]
+  have : (∑ i : Fin m, (if s i.val then 1 else 0)) ≤ (∑ _i : Fin m, (1 : Nat)) :=
+    Finset.sum_le_sum (fun i _ => hle i)
+  simpa using (le_trans this (by simpa using (Finset.card_univ (α := Fin m))))
+
 lemma extendPeriodic8_in_cylinder (w : Pattern 8) : (extendPeriodic8 w) ∈ (Cylinder w) := by
   intro i
   dsimp [extendPeriodic8, Cylinder]
@@ -110,6 +130,15 @@ lemma sumFirst_eq_zero_of_all_false {m : Nat} {s : Stream}
   sumFirst m s = 0 := by
   unfold sumFirst
   have : (fun i : Fin m => (if s i.val then 1 else 0)) = (fun _ => 0) := by
+    funext i; simp [h i]
+  simp [this]
+
+/-- If all of the first `m` bits of a stream are true, the sum is `m`. -/
+lemma sumFirst_eq_m_of_all_true {m : Nat} {s : Stream}
+  (h : ∀ i : Fin m, s i.val = true) :
+  sumFirst m s = m := by
+  unfold sumFirst
+  have : (fun i : Fin m => (if s i.val then 1 else 0)) = (fun _ => (1 : Nat)) := by
     funext i; simp [h i]
   simp [this]
 
