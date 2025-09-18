@@ -513,6 +513,11 @@ noncomputable def meetsBandsChecker (xs : List ℝ) (c : ℝ) : Bool :=
   classical
   simp [meetsBandsChecker, meetsBandsChecker_gen]
 
+@[simp] lemma meetsBandsChecker_gen_nilBands (xs : List ℝ) :
+  meetsBandsChecker_gen xs [] = false := by
+  classical
+  simp [meetsBandsChecker_gen]
+
 lemma center_in_sampleBandsFor (x : ℝ) :
   ∃ b ∈ sampleBandsFor x, Band.contains b x := by
   refine ⟨wideBand x 1, ?_, ?_⟩
