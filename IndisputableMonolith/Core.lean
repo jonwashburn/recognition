@@ -6,6 +6,7 @@ import IndisputableMonolith.Patterns
 import IndisputableMonolith.RH.RS.Bands
 import IndisputableMonolith.RH.RS.Anchors
 import IndisputableMonolith.RH.RS.Scales
+import IndisputableMonolith.RH.RS.Spec
 import IndisputableMonolith.Complexity.VertexCover
 import IndisputableMonolith.Complexity.RSVC
 import IndisputableMonolith.URCGenerators
@@ -209,6 +210,16 @@ theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
 
 theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
   cover_exact_pow d
+
+  /-! ## T7 (Nyquist and threshold) thin shims -/
+  theorem T7_nyquist_obstruction {T D : Nat}
+    (hT : T < 2 ^ D) : ¬ ∃ f : Fin T → Pattern D, Surjective f := by
+    -- delegate to Patterns
+    simpa [Pattern] using Patterns.T7_nyquist_obstruction (T:=T) (D:=D) hT
+
+  theorem T7_threshold_bijection (D : Nat) : ∃ f : Fin (2 ^ D) → Pattern D, Bijective f := by
+    -- delegate to Patterns
+    simpa [Pattern] using Patterns.T7_threshold_bijection D
 
 /-! Recognition foundations moved to submodule -/
 

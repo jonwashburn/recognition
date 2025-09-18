@@ -5,7 +5,9 @@ namespace RH
 namespace RS
 
 /-- Measurement anchors placeholder. -/
-structure Anchors where a1 a2 : ℝ
+structure Anchors where
+  a1 : ℝ
+  a2 : ℝ
 
 end RS
 end RH

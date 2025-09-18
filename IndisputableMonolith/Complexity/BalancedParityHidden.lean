@@ -94,4 +94,22 @@ theorem omega_n_queries
 
 end BalancedParityHidden
 end Complexity
+
+namespace IndisputableMonolith
+
+/-- SAT recognition lower bound (dimensionless): any universally-correct fixed-view
+    decoder over fewer than n queried indices is impossible. -/
+theorem recognition_lower_bound_sat
+  (n : ℕ) (M : Finset (Fin n))
+  (g : (({i // i ∈ M} → Bool)) → Bool)
+  (hMlt : M.card < n) :
+  ¬ (∀ (b : Bool) (R : Fin n → Bool),
+        g (Complexity.BalancedParityHidden.restrict
+              (Complexity.BalancedParityHidden.enc b R) M) = b) := by
+  classical
+  simpa using
+    (Complexity.BalancedParityHidden.omega_n_queries (n:=n) M g hMlt)
+
+end IndisputableMonolith
+
 end IndisputableMonolith

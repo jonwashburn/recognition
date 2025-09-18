@@ -2481,8 +2481,7 @@ namespace RH
 namespace RS
 /-! ### General bundling (ledger-agnostic) -/
 
-/-- Measurement anchors placeholder. -/
-structure Anchors where a1 a2 : ℝ
+-- Anchors/Bands/Spec are provided by submodules imported via Core
 
 /-- Abstract notion of "has an excitation at rung r". -/
 structure HasRung (L : Ledger) (B : Bridge L) : Type where
@@ -2503,41 +2502,6 @@ class FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Prop where
   no_multiples : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)
 
 /-! Measurement–Reality bridging (prediction → certified measurement bands). -/
-
-structure Band where lo hi : ℝ
-
-structure Bands where
-  cBand        : Band
-  hbarBand     : Band
-  GBand        : Band
-  LambdaBand   : Band
-  massesBand   : List Band
-  energiesBand : List Band
-
-/-- Simple interval membership. -/
-def Band.contains (b : Band) (x : ℝ) : Prop := b.lo ≤ x ∧ x ≤ b.hi
-
-/-- A convenient symmetric band with center±tol. -/
-def wideBand (center tol : ℝ) : Band := { lo := center - tol, hi := center + tol }
-
-/-- Sample Bands builder from anchors `U` with a tolerance for c; other bands are placeholders. -/
-def sampleBandsFor (U : IndisputableMonolith.Constants.RSUnits) (tol : ℝ) : Bands :=
-{ cBand := wideBand U.c tol
-, hbarBand := { lo := 0, hi := 1e99 }
-, GBand := { lo := 0, hi := 1e99 }
-, LambdaBand := { lo := -1e99, hi := 1e99 }
-, massesBand := []
-, energiesBand := [] }
-
--- (alias lives later against canonical RH.RS.evalToBands_c)
-
-/-- Generic K‑gate aware bands checker (ledger‑agnostic). -/
-def meetsBandsChecker_gen (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
-  evalToBands_c U X
-  ∧ (IndisputableMonolith.Constants.RSUnits.tau_rec_display U) / U.tau0 = IndisputableMonolith.Constants.K
-  ∧ (IndisputableMonolith.Constants.RSUnits.lambda_kin_display U) / U.ell0 = IndisputableMonolith.Constants.K
-  ∧ (IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
-      = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U)
 
 /-- Obligations as Prop‑classes to avoid trivialization. -/
 class MeetsBands (L : Ledger) (B : Bridge L) (X : Bands) : Prop
@@ -6067,14 +6031,7 @@ lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_ze
 /-- Recognition lower bound (SAT exemplar) as a Prop. -/
 -- moved to Core
 
-/-- RS‑preserving reduction existence as a Prop. -/
-def rs_pres_prop : Prop :=
-  Nonempty (IndisputableMonolith.Complexity.RSPreserving
-              IndisputableMonolith.Complexity.RSVC.ConstraintInstance
-              IndisputableMonolith.Complexity.VertexCover.Instance)
-
-lemma rs_pres_holds : rs_pres_prop :=
-  ⟨IndisputableMonolith.Complexity.RSVC.rs_preserving_RS2VC⟩
+-- (RS-preserving existence moved to Complexity/RSVC.)
 
 /-- Simple computation growth placeholder (e.g., O(n log n) abstracted as a Prop). -/
 def tc_growth_prop : Prop := True
@@ -6247,18 +6204,7 @@ theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
   (B : BridgeData) (Tdyn : ℝ) : ℝ :=
   IndisputableMonolith.Gravity.ILG.w_t_display P B Tdyn
 
-/-- SAT recognition lower bound (dimensionless): any universally-correct fixed-view
-    decoder over fewer than n queried indices is impossible. -/
-theorem recognition_lower_bound_sat
-  (n : ℕ) (M : Finset (Fin n))
-  (g : (({i // i ∈ M} → Bool)) → Bool)
-  (hMlt : M.card < n) :
-  ¬ (∀ (b : Bool) (R : Fin n → Bool),
-        g (Complexity.BalancedParityHidden.restrict
-              (Complexity.BalancedParityHidden.enc b R) M) = b) := by
-  classical
-  simpa using
-    (Complexity.BalancedParityHidden.omega_n_queries (n:=n) M g hMlt)
+-- (SAT recognition lower bound moved to Complexity/BalancedParityHidden.)
 
 /-- Audit: SI evaluation must go through BridgeData. This marker theorem is used as a guard
     in code review to avoid accidental direct numerics at the proof layer. -/

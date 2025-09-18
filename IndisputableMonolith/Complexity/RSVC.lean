@@ -47,4 +47,17 @@ end RSVC
 
 end Complexity
 
+namespace IndisputableMonolith
+
+/-- RS‑preserving reduction existence as a Prop. -/
+def rs_pres_prop : Prop :=
+  Nonempty (Complexity.RSPreserving
+              Complexity.RSVC.ConstraintInstance
+              Complexity.VertexCover.Instance)
+
+lemma rs_pres_holds : rs_pres_prop :=
+  ⟨Complexity.RSVC.rs_preserving_RS2VC⟩
+
+end IndisputableMonolith
+
 end IndisputableMonolith

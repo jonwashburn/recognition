@@ -37,8 +37,10 @@ lemma wideBand_width {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).width = 2 *
   ring
 
 lemma wideBand_width_nonneg {x ε : ℝ} (hε : 0 ≤ ε) : 0 ≤ (wideBand x ε).width := by
-  have : (wideBand x ε).width = 2 * ε := wideBand_width (x:=x) (ε:=ε) hε
-  simpa [this] using mul_nonneg (by norm_num) hε
+  have hw : (wideBand x ε).width = 2 * ε := wideBand_width (x:=x) (ε:=ε) hε
+  have h2 : 0 ≤ (2 : ℝ) := by norm_num
+  have hnonneg : 0 ≤ 2 * ε := mul_nonneg h2 hε
+  simpa [hw] using hnonneg
 
 lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
   Band.contains (wideBand x ε) x := by
