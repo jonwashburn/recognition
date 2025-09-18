@@ -191,6 +191,14 @@ lemma sumFirst_nonneg (m : Nat) (s : Stream) : 0 ≤ sumFirst m s := by
   · norm_num
   · norm_num
 
+lemma sumFirst_eq_zero_of_all_false {m : Nat} {s : Stream}
+  (h : ∀ i : Fin m, s i.val = false) :
+  sumFirst m s = 0 := by
+  unfold sumFirst
+  have : (fun i : Fin m => (if s i.val then 1 else 0)) = (fun _ => 0) := by
+    funext i; simp [h i]
+  simp [this]
+
 end Streams
 
 /‑! #### URC adapters: stable Prop wrappers -/
