@@ -12,6 +12,7 @@ import IndisputableMonolith.Complexity.BalancedParityHidden
 import IndisputableMonolith.Bridge.BridgeData
 import IndisputableMonolith.Recognition
 import IndisputableMonolith.Verification
+import IndisputableMonolith.Verification.DEC
 
 namespace IndisputableMonolith
 /-! ### Core stable props and helpers moved from the monolith -/
