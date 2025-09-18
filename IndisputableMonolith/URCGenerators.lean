@@ -108,5 +108,78 @@ structure VerifiedGenerators (φ : ℝ) where
 @[simp] def determination_by_generators {φ : ℝ}
   (VG : VerifiedGenerators φ) : True := True.intro
 
+/-- Append two certification families by concatenating their lists. -/
+def append (C₁ C₂ : CertFamily) : CertFamily :=
+{ units     := C₁.units ++ C₂.units
+, eightbeat := C₁.eightbeat ++ C₂.eightbeat
+, elprobes  := C₁.elprobes ++ C₂.elprobes
+, masses    := C₁.masses ++ C₂.masses
+, rotation  := C₁.rotation ++ C₂.rotation
+, outer     := C₁.outer ++ C₂.outer
+, conscious := C₁.conscious ++ C₂.conscious }
+
+/-- Verification is closed under appending certification families. -/
+lemma verified_append (φ : ℝ) (C₁ C₂ : CertFamily)
+  (h₁ : Verified φ C₁) (h₂ : Verified φ C₂) : Verified φ (append C₁ C₂) := by
+  dsimp [Verified, append] at *
+  rcases h₁ with ⟨h₁u, h₁e8, h₁el, h₁m, h₁rot, h₁out, h₁cons⟩
+  rcases h₂ with ⟨h₂u, h₂e8, h₂el, h₂m, h₂rot, h₂out, h₂cons⟩
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁u x hx | exact h₂u x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁e8 x hx | exact h₂e8 x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁el x hx | exact h₂el x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁m x hx | exact h₂m x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁rot x hx | exact h₂rot x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁out x hx | exact h₂out x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁cons x hx | exact h₂cons x hx
+
+/-- Merge two verified generator packs at the same φ. -/
+def VerifiedGenerators.merge {φ : ℝ} (G₁ G₂ : VerifiedGenerators φ) : VerifiedGenerators φ :=
+{ C  := append G₁.C G₂.C
+, ok := verified_append φ G₁.C G₂.C G₁.ok G₂.ok }
+
+/-- Counts for a certification family. -/
+@[simp] def unitsCount (C : CertFamily) : Nat := C.units.length
+@[simp] def eightbeatCount (C : CertFamily) : Nat := C.eightbeat.length
+@[simp] def elprobesCount (C : CertFamily) : Nat := C.elprobes.length
+@[simp] def massesCount (C : CertFamily) : Nat := C.masses.length
+@[simp] def rotationCount (C : CertFamily) : Nat := C.rotation.length
+@[simp] def outerCount (C : CertFamily) : Nat := C.outer.length
+@[simp] def consciousCount (C : CertFamily) : Nat := C.conscious.length
+
+/-- A compact human-readable summary of a certification family. -/
+@[simp] def summary (C : CertFamily) : String :=
+  "units=" ++ toString (unitsCount C) ++
+  ", eightbeat=" ++ toString (eightbeatCount C) ++
+  ", elprobes=" ++ toString (elprobesCount C) ++
+  ", masses=" ++ toString (massesCount C) ++
+  ", rotation=" ++ toString (rotationCount C) ++
+  ", outer=" ++ toString (outerCount C) ++
+  ", conscious=" ++ toString (consciousCount C)
+/-- Append two certification families by concatenating their lists. -/
+def append (C₁ C₂ : CertFamily) : CertFamily :=
+{ units     := C₁.units ++ C₂.units
+, eightbeat := C₁.eightbeat ++ C₂.eightbeat
+, elprobes  := C₁.elprobes ++ C₂.elprobes
+, masses    := C₁.masses ++ C₂.masses
+, rotation  := C₁.rotation ++ C₂.rotation
+, outer     := C₁.outer ++ C₂.outer
+, conscious := C₁.conscious ++ C₂.conscious }
+
+/-- Verification is closed under appending certification families. -/
+lemma verified_append (φ : ℝ) (C₁ C₂ : CertFamily)
+  (h₁ : Verified φ C₁) (h₂ : Verified φ C₂) : Verified φ (append C₁ C₂) := by
+  dsimp [Verified, append] at *
+  rcases h₁ with ⟨h₁u, h₁e8, h₁el, h₁m, h₁rot, h₁out, h₁cons⟩
+  rcases h₂ with ⟨h₂u, h₂e8, h₂el, h₂m, h₂rot, h₂out, h₂cons⟩
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁u x hx | exact h₂u x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁e8 x hx | exact h₂e8 x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁el x hx | exact h₂el x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁m x hx | exact h₂m x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁rot x hx | exact h₂rot x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁out x hx | exact h₂out x hx
+  · intro x hx; rcases List.mem_append.mp hx with hx | hx <;> first | exact h₁cons x hx | exact h₂cons x hx
+
 end URCGenerators
 end IndisputableMonolith

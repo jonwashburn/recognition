@@ -42,5 +42,8 @@ namespace URCAdapters
 @[simp] def quickSummary : List String :=
   [ Verification.manifestSummary, Verification.urcSummary ]
 
+@[simp] def allIds : List String :=
+  Verification.claimIds ++ Verification.gateIds ++ Verification.urcClaimIds ++ Verification.urcGateIds
+
 end URCAdapters
 end IndisputableMonolith

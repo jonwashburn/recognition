@@ -63,6 +63,17 @@ lemma extendPeriodic8_period (w : Pattern 8) (t : Nat) :
     exact hmod
   simp [hfin]
 
+/-- Period k·8: shifting by a multiple of 8 leaves `extendPeriodic8` unchanged. -/
+lemma extendPeriodic8_period_k (w : Pattern 8) (t k : Nat) :
+  extendPeriodic8 w (t + 8 * k) = extendPeriodic8 w t := by
+  induction k with
+  | zero => simpa
+  | succ k ih =>
+      have hrewrite : t + 8 * (Nat.succ k) = (t + 8 * k) + 8 := by
+        simp [Nat.mul_succ, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+      -- Reduce one period step, then apply the induction hypothesis.
+      simpa [hrewrite, ih] using (extendPeriodic8_period w (t := t + 8 * k))
+
 /-- Sum of the first `m` bits of a stream. -/
 def sumFirst (m : Nat) (s : Stream) : Nat :=
   ∑ i : Fin m, (if s i.val then 1 else 0)
