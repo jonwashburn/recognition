@@ -36,9 +36,19 @@ lemma wideBand_width {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).width = 2 *
   dsimp [Band.width, wideBand]
   ring
 
+lemma wideBand_valid' {x ε : ℝ} (hε : 0 ≤ ε) : (wideBand x ε).Valid := by
+  dsimp [Band.Valid, wideBand]
+  linarith
+
 lemma wideBand_width_nonneg {x ε : ℝ} (hε : 0 ≤ ε) : 0 ≤ (wideBand x ε).width := by
-  have : (wideBand x ε).width = 2 * ε := wideBand_width (x:=x) (ε:=ε) hε
-  simpa [this] using mul_nonneg (by norm_num) hε
+  -- Use general width nonneg from validity instead of rewriting
+  exact Band.width_nonneg _ (wideBand_valid' (x:=x) (ε:=ε) hε)
+
+lemma wideBand_width_pos {x ε : ℝ} (hε : 0 < ε) : 0 < (wideBand x ε).width := by
+  have hε' : 0 ≤ ε := le_of_lt hε
+  have h2 : 0 < (2 : ℝ) := by norm_num
+  -- width = 2 * ε
+  simpa [wideBand_width hε', mul_comm] using mul_pos_of_pos_of_pos h2 hε
 
 lemma wideBand_contains_center {x ε : ℝ} (hε : 0 ≤ ε) :
   Band.contains (wideBand x ε) x := by
@@ -109,6 +119,47 @@ lemma center_in_each_sample (x : ℝ) :
   have hb' : b = wideBand x 1 := by
     simpa [sampleBandsFor] using hb
   simpa [hb'] using wideBand_contains_center (x:=x) (ε:=1) (by norm_num)
+
+    /-! ### Abs-based characterization of wide bands -/
+    lemma wideBand_contains_of_abs_le {x ε y : ℝ}
+      (hε : 0 ≤ ε) (h : |y - x| ≤ ε) :
+      Band.contains (wideBand x ε) y := by
+      dsimp [Band.contains, wideBand]
+      have h' := abs_le.mp h
+      rcases h' with ⟨hle, hre⟩
+      constructor
+      · -- x - ε ≤ y
+        have : -ε ≤ y - x := hle
+        -- add x to both sides
+        have := add_le_add_left this x
+        simpa [add_comm, add_left_comm, add_assoc, sub_eq_add_neg] using this
+      · -- y ≤ x + ε
+        -- rewrite to y - x ≤ ε then add x to both sides
+        have := add_le_add_left hre x
+        simpa [add_comm, add_left_comm, add_assoc, sub_eq_add_neg] using this
+
+    lemma abs_le_of_wideBand_contains {x ε y : ℝ}
+      (hε : 0 ≤ ε) (h : Band.contains (wideBand x ε) y) :
+      |y - x| ≤ ε := by
+      dsimp [Band.contains, wideBand] at h
+      rcases h with ⟨hlo, hhi⟩
+      -- x - ε ≤ y ≤ x + ε ⇒ -ε ≤ y - x ≤ ε
+      have h_left : -ε ≤ y - x := by
+        -- hlo: x - ε ≤ y ⇒ (x - ε) - x ≤ y - x ⇒ -ε ≤ y - x
+        have := sub_le_sub_right hlo x
+        simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using this
+      have h_right : y - x ≤ ε := by
+        -- hhi: y ≤ x + ε ⇒ y - x ≤ (x + ε) - x ⇒ y - x ≤ ε
+        have := sub_le_sub_left hhi x
+        simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using this
+      exact abs_le.mpr ⟨h_left, h_right⟩
+
+    lemma wideBand_contains_iff_abs_le {x ε y : ℝ}
+      (hε : 0 ≤ ε) :
+      Band.contains (wideBand x ε) y ↔ |y - x| ≤ ε := by
+      constructor
+      · exact abs_le_of_wideBand_contains (x:=x) (ε:=ε) (y:=y) hε
+      · intro h; exact wideBand_contains_of_abs_le (x:=x) (ε:=ε) (y:=y) hε h
 
 end RS
 end RH
