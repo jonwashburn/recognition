@@ -50,6 +50,7 @@ lemma one_lt_phi : 1 < phi := by
 
 lemma phi_ge_one : 1 ≤ phi := le_of_lt one_lt_phi
 lemma phi_ne_zero : phi ≠ 0 := ne_of_gt phi_pos
+lemma phi_ne_one : phi ≠ 1 := ne_of_gt one_lt_phi
 
 /-- Minimal RS units used in Core. -/
 structure RSUnits where
@@ -669,6 +670,9 @@ lemma lambdaA_pos : 0 < lambdaA := by
   simpa using (Real.log_pos_iff.mpr this)
 
 lemma lambdaA_ne_zero : lambdaA ≠ 0 := ne_of_gt lambdaA_pos
+
+lemma kappaA_ne_zero : kappaA ≠ 0 := by
+  simpa [kappaA] using Constants.phi_ne_zero
 
 end RS
 end RH
