@@ -1,5 +1,5 @@
 import Mathlib
-import IndisputableMonolith.Core
+import IndisputableMonolith.Constants
 
 namespace IndisputableMonolith
 namespace Verification
@@ -177,6 +177,12 @@ deriving Repr
 
 @[simp] def urcClaimsCount : Nat := urcClaimIds.length
 @[simp] def urcGatesCount  : Nat := urcGateIds.length
+
+@[simp] lemma urcClaimsCount_eq_five : urcClaimsCount = 5 := by
+  simp [urcClaimsCount, urcClaimIds]
+
+@[simp] lemma urcGatesCount_eq_two : urcGatesCount = 2 := by
+  simp [urcGatesCount, urcGateIds]
 
 @[simp] def urcSummary : String :=
   "URC Claims: " ++ toString urcClaimsCount ++

@@ -380,6 +380,35 @@ lemma size_append (C₁ C₂ : CertFamily) :
 /-- Summaries for a list of certification families. -/
 @[simp] def summaries (fs : List CertFamily) : List String := fs.map summary
 
+/-! ### Additional size/append helpers (stable) -/
+
+@[simp] lemma foldAppend_cons (C : CertFamily) (Cs : List CertFamily) :
+  foldAppend (C :: Cs) = append C (foldAppend Cs) := by
+  induction Cs with
+  | nil => simp [foldAppend]
+  | cons C' Cs ih =>
+      simp [foldAppend, List.foldl, ih, append]
+
+lemma size_foldAppend (Cs : List CertFamily) :
+  (foldAppend Cs).size = (Cs.map CertFamily.size).sum := by
+  induction Cs with
+  | nil => simp [foldAppend]
+  | cons C Cs ih =>
+      simp [foldAppend_cons, size_append, ih, List.sum_cons]
+
+@[simp] lemma append_empty_left (C : CertFamily) : append emptyFamily C = C := by
+  dsimp [append, emptyFamily]
+  simp
+
+@[simp] lemma empty_append (C : CertFamily) : append C emptyFamily = C := by
+  dsimp [append, emptyFamily]
+  simp
+
+@[simp] lemma append_assoc (A B C : CertFamily) :
+  append (append A B) C = append A (append B C) := by
+  dsimp [append]
+  simp [List.append_assoc]
+
 /-- Empty verified generators at φ: uses the empty family. -/
 @[simp] def emptyGenerators (φ : ℝ) : VerifiedGenerators φ :=
   { C := emptyFamily, ok := verified_empty φ }

@@ -71,10 +71,17 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
   have := PhiPow_sub 0 y
   simpa [PhiPow_zero, sub_eq_add_neg] using this
 
+lemma PhiPow_pos (x : ℝ) : 0 < PhiPow x := by
+  unfold PhiPow
+  simpa using Real.exp_pos (Real.log (Constants.phi) * x)
+
 @[simp] def lambdaA : ℝ := Real.log Constants.phi
 @[simp] def kappaA  : ℝ := Constants.phi
 
 @[simp] def F_ofZ (Z : ℤ) : ℝ := (Real.log (1 + (Z : ℝ) / kappaA)) / lambdaA
+
+@[simp] lemma F_ofZ_zero : F_ofZ 0 = 0 := by
+  simp [F_ofZ]
 
 @[simp] def Z_quark (Q : ℤ) : ℤ := 4 + (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
 @[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
