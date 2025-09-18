@@ -1116,6 +1116,10 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
 /-- Combined uncertainty aggregator (placeholder policy). -/
 @[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
 
+@[simp] lemma u_comb_comm (B : BridgeData) (a b : ℝ) :
+  u_comb B a b = u_comb B b a := by
+  simp [u_comb, add_comm]
+
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 @[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
   let KA := K_A B
