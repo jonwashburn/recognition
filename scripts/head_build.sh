@@ -12,8 +12,9 @@ source "$(dirname "$0")/env.sh"
 cp IndisputableMonolith.lean IndisputableMonolith.full.lean
 head -n "$HEAD_LINES" IndisputableMonolith.full.lean > IndisputableMonolith.lean
 
-echo "[head_build] building first $HEAD_LINES lines..."
-lake build IndisputableMonolith
+echo "[head_build] building first $HEAD_LINES lines (lean quick checks)..."
+lake env -- lean -q IndisputableMonolith/Core.lean -o /dev/null
+lake env -- lean -q IndisputableMonolith.lean -o /dev/null
 
 echo "[head_build] restoring full file"
 git checkout -- IndisputableMonolith.lean || cp IndisputableMonolith.full.lean IndisputableMonolith.lean
