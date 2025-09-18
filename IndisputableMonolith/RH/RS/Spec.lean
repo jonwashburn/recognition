@@ -217,21 +217,21 @@ theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : Unique
     evalToBands_c_wideBand_center (U:=U) (tol:=tol) htol
   exact meetsBands_any_of_eval L B [wideBand U.c tol] U hc
 
-/-- Minimal checker alias: we equate the checker with the concrete c-band evaluation. -/
-def meetsBandsChecker_gen (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
+/-- Minimal checker alias (Prop-level): equate checker with concrete c-band evaluation. -/
+def meetsBandsCheckerP (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
   evalToBands_c U X
 
 /-- Invariance of the minimal checker under units rescaling (via cfix). -/
-lemma meetsBandsChecker_gen_invariant
+lemma meetsBandsCheckerP_invariant
   {U U' : IndisputableMonolith.Constants.RSUnits}
   (h : IndisputableMonolith.Verification.UnitsRescaled U U') (X : Bands) :
-  meetsBandsChecker_gen U X ↔ meetsBandsChecker_gen U' X := by
-  dsimp [meetsBandsChecker_gen]
+  meetsBandsCheckerP U X ↔ meetsBandsCheckerP U' X := by
+  dsimp [meetsBandsCheckerP]
   exact evalToBands_c_invariant (U:=U) (U':=U') h X
 
 /-- If some anchors U satisfy the minimal checker for bands X, then MeetsBands holds. -/
 theorem meetsBands_any_of_checker (L : Ledger) (B : Bridge L) (X : Bands)
-  (h : ∃ U, meetsBandsChecker_gen U X) : MeetsBands L B X := by
+  (h : ∃ U, meetsBandsCheckerP U X) : MeetsBands L B X := by
   rcases h with ⟨U, hU⟩
   exact meetsBands_any_of_eval L B X U hU
 
