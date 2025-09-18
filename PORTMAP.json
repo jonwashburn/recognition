@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2025-09-18T00:00:00Z",
+  "clusters": [
+    {
+      "id": "URCGenerators:VerifiedGenerators",
+      "namespace": "IndisputableMonolith.URCGenerators",
+      "path": "IndisputableMonolith/URCGenerators.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "VerifiedGenerators + route B demo"
+    },
+    {
+      "id": "RH.RS.Scales:delta-general",
+      "namespace": "IndisputableMonolith.RH.RS.LedgerUnits",
+      "path": "IndisputableMonolith/RH/RS/Scales.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "General δ ≠ 0 helpers (fromZ/toZ/rungOf/kOf)"
+    },
+    {
+      "id": "Gap45:arithmetic",
+      "namespace": "IndisputableMonolith.Gap45",
+      "path": "IndisputableMonolith/Gap45.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "gcd/lcm facts, Beat/TimeLag, GroupView/AddGroupView"
+    },
+    {
+      "id": "Measurement:CQ",
+      "namespace": "IndisputableMonolith.Measurement",
+      "path": "IndisputableMonolith/Measurement.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Map, avg, CQ, score and monotonicity"
+    },
+    {
+      "id": "Recognition:Consent",
+      "namespace": "IndisputableMonolith.Recognition",
+      "path": "IndisputableMonolith/Recognition/Consent.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "ConsentWindow/ConsentLedger"
+    },
+    {
+      "id": "Ethics:CostModel",
+      "namespace": "IndisputableMonolith.Ethics",
+      "path": "IndisputableMonolith/Ethics/CostModel.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "CostModel, Prefer/Improves, Composable"
+    },
+    {
+      "id": "Complexity:VertexCover",
+      "namespace": "IndisputableMonolith.Complexity.VertexCover",
+      "path": "IndisputableMonolith/Complexity/VertexCover.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already ported in submodule"
+    },
+    {
+      "id": "Complexity:RSVC",
+      "namespace": "IndisputableMonolith.Complexity.RSVC",
+      "path": "IndisputableMonolith/Complexity/RSVC.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already ported in submodule"
+    },
+    {
+      "id": "Complexity:BalancedParityHidden",
+      "namespace": "IndisputableMonolith.Complexity.BalancedParityHidden",
+      "path": "IndisputableMonolith/Complexity/BalancedParityHidden.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already in submodule"
+    },
+    {
+      "id": "Patterns:core",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Patterns.lean",
+      "status": "pending",
+      "owner": "",
+      "notes": "Choose next 100–250 line stable block"
+    },
+    {
+      "id": "Streams:core",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Streams.lean",
+      "status": "pending",
+      "owner": "",
+      "notes": "Choose next 100–250 line stable block"
+    },
+    {
+      "id": "RH.RS:Anchors",
+      "namespace": "IndisputableMonolith.RH.RS",
+      "path": "IndisputableMonolith/RH/RS/Anchors.lean",
+      "status": "pending",
+      "owner": "",
+      "notes": "Small lemmas only"
+    },
+    {
+      "id": "RH.RS:Bands",
+      "namespace": "IndisputableMonolith.RH.RS",
+      "path": "IndisputableMonolith/RH/RS/Bands.lean",
+      "status": "pending",
+      "owner": "",
+      "notes": "Small lemmas only"
+    }
+  ]
+}
+
+
