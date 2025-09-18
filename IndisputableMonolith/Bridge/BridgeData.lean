@@ -144,6 +144,37 @@ structure Witness where
 /-- Electron mass: `m_e = (m_e / E_coh) · E_coh`. -/
 @[simp] def m_e (B : BridgeData) : ℝ := m_e_over_Ecoh * E_coh B
 
+/-- If `B` is physical and `ℓ0>0`, then `K_B = λ_rec/ℓ0` is positive. -/
+lemma K_B_pos (B : BridgeData) (H : Physical B) (hℓ : 0 < B.ell0) : 0 < K_B B := by
+  dsimp [K_B]
+  exact div_pos (lambda_rec_pos (B:=B) H) hℓ
+
+/-- If `ℓ0 ≠ 0`, then `K_B ≠ 0`. -/
+lemma K_B_ne_zero (B : BridgeData) (H : Physical B) (hℓ : B.ell0 ≠ 0) : K_B B ≠ 0 := by
+  dsimp [K_B]
+  exact div_ne_zero (ne_of_gt (lambda_rec_pos (B:=B) H)) hℓ
+
+/-- If `B` is physical then `τ0 = λ_rec / c` is positive. -/
+lemma tau0_pos (B : BridgeData) (H : Physical B) : 0 < tau0 B := by
+  dsimp [tau0]
+  exact div_pos (lambda_rec_pos (B:=B) H) H.c_pos
+
+/-- Coherence energy is positive for physical `B`. -/
+lemma E_coh_pos (B : BridgeData) (H : Physical B) : 0 < E_coh B := by
+  dsimp [E_coh]
+  have hφ : 0 < (IndisputableMonolith.Constants.phi ^ (5 : Nat)) := by
+    have := IndisputableMonolith.Constants.phi_pos
+    simpa using pow_pos this (5 : Nat)
+  have h1 : 0 < 1 / (IndisputableMonolith.Constants.phi ^ (5 : Nat)) := one_div_pos.mpr hφ
+  have h2π : 0 < (2 : ℝ) * Real.pi := by
+    have : 0 < (2 : ℝ) := by norm_num
+    exact mul_pos this Real.pi_pos
+  have hnum : 0 < (2 * Real.pi) * B.hbar := mul_pos h2π H.hbar_pos
+  have hdiv : 0 < (2 * Real.pi * B.hbar) / (tau0 B) := by
+    have := tau0_pos (B:=B) H
+    simpa [mul_assoc] using div_pos hnum this
+  exact mul_pos h1 hdiv
+
 @[simp] lemma Zscore_zero_of_KA_eq_KB (B : BridgeData)
   (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
   Zscore B u_ell0 u_lrec k = 0 := by
