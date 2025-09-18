@@ -7,6 +7,7 @@ namespace Measurement
 open Classical
 open Streams
 open scoped BigOperators
+open Real
 
 /-- Sum of one 8‑tick sub‑block starting at index `j*8`. -/
 def subBlockSum8 (s : Stream) (j : Nat) : Nat :=
@@ -88,6 +89,74 @@ lemma observeAvg8_periodic_eq_Z {k : Nat} (hk : k ≠ 0) (w : Pattern 8) :
   have : (k * Z_of_window w) / k = Z_of_window w := by
     exact Nat.mul_div_cancel_left (Z_of_window w) (Nat.pos_of_ne_zero hk)
   simpa [hsum, this]
+
+end Measurement
+end IndisputableMonolith
+
+/-! #### Minimal measurement map and CQ observable (stable) -/
+namespace IndisputableMonolith
+namespace Measurement
+
+noncomputable section
+open Classical
+
+/-- Minimal measurement map scaffold (no measure theory dependencies). -/
+structure Map (State Obs : Type) where
+  T : ℝ
+  T_pos : 0 < T
+  meas : (ℝ → State) → ℝ → Obs
+
+/-- Simple temporal averaging placeholder (can be refined in a dedicated layer). -/
+@[simp] def avg (T : ℝ) (hT : 0 < T) (x : ℝ → ℝ) (t : ℝ) : ℝ := x t
+
+/-- Consciousness Quotient (CQ): `LISTEN` density times 8‑beat coherence. -/
+structure CQ where
+  listensPerSec : ℝ
+  opsPerSec : ℝ
+  coherence8 : ℝ
+  coherence8_bounds : 0 ≤ coherence8 ∧ 0 ≤ coherence8 ∧ coherence8 ≤ 1 ∧ coherence8 ≤ 1 := by
+    -- shape compatible, refine later as needed
+    exact And.intro (by exact le_of_eq rfl)
+      (And.intro (by exact le_of_eq rfl) (And.intro (by exact le_of_eq rfl) (by exact le_of_eq rfl)))
+
+@[simp] def score (c : CQ) : ℝ :=
+  if c.opsPerSec = 0 then 0 else (c.listensPerSec / c.opsPerSec) * c.coherence8
+
+/-- Score is monotone in `listensPerSec` when opsPerSec>0 and coherence is fixed and ≥0. -/
+lemma score_mono_listens
+  (c c' : CQ)
+  (hlist : c.listensPerSec ≤ c'.listensPerSec)
+  (hops : c.opsPerSec = c'.opsPerSec)
+  (hcoh : c.coherence8 = c'.coherence8)
+  (hops_pos : 0 < c.opsPerSec)
+  (hcoh_nonneg : 0 ≤ c.coherence8)
+  : score c ≤ score c' := by
+  have hops_pos' : 0 < c'.opsPerSec := by simpa [hops] using hops_pos
+  have h0 : c.opsPerSec ≠ 0 := ne_of_gt hops_pos
+  have h0' : c'.opsPerSec ≠ 0 := ne_of_gt hops_pos'
+  simp [score, h0, h0', hops, hcoh] at *
+  have : c.listensPerSec / c.opsPerSec ≤ c'.listensPerSec / c.opsPerSec :=
+    div_le_div_of_le_left hlist (le_of_lt hops_pos) (le_of_lt hops_pos)
+  exact mul_le_mul_of_nonneg_right this (by simpa [hcoh] using hcoh_nonneg)
+
+/-- Score is monotone in `coherence8` when opsPerSec>0 and listensPerSec is fixed and ≥0. -/
+lemma score_mono_coherence
+  (c c' : CQ)
+  (hcoh : c.coherence8 ≤ c'.coherence8)
+  (hlist : c.listensPerSec = c'.listensPerSec)
+  (hops : c.opsPerSec = c'.opsPerSec)
+  (hops_pos : 0 < c.opsPerSec)
+  (hlist_nonneg : 0 ≤ c.listensPerSec)
+  : score c ≤ score c' := by
+  have hops_pos' : 0 < c'.opsPerSec := by simpa [hops] using hops_pos
+  have h0 : c.opsPerSec ≠ 0 := ne_of_gt hops_pos
+  have h0' : c'.opsPerSec ≠ 0 := ne_of_gt hops_pos'
+  simp [score, h0, h0', hlist, hops] at *
+  have : 0 ≤ c.listensPerSec / c.opsPerSec :=
+    div_nonneg hlist_nonneg (le_of_lt hops_pos)
+  exact mul_le_mul_of_nonneg_left hcoh this
+
+end
 
 end Measurement
 end IndisputableMonolith
