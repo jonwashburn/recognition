@@ -233,6 +233,85 @@ lemma gauge_trans (x0 : M.U) {f g h : PotOnComp M x0}
   -- f = g + c1 and g = h + c2 ⇒ f = h + (c1+c2)
   simpa [add_comm, add_left_comm, add_assoc] using this
 
+/-- Setoid for gauge equivalence on a component. -/
+def gaugeSetoid (x0 : M.U) : Setoid (PotOnComp M x0) where
+  r := GaugeEq (M:=M) x0
+  iseqv := ⟨gauge_refl (M:=M) x0, gauge_symm (M:=M) x0, gauge_trans (M:=M) x0⟩
+
+/-- Gauge class (potential modulo additive constants) on a reach component. -/
+abbrev GaugeClass (x0 : M.U) := Quot (gaugeSetoid (M:=M) x0)
+
+/-- The basepoint packaged as a component element. -/
+def basepoint (x0 : M.U) : Component M x0 :=
+  ⟨x0, ⟨0, ReachN.zero⟩⟩
+
+/-- Uniqueness of the additive constant in a gauge relation on a component. -/
+lemma gauge_constant_unique {x0 : M.U} {f g : PotOnComp M x0}
+  {c₁ c₂ : ℤ}
+  (h₁ : ∀ yc, f yc = g yc + c₁)
+  (h₂ : ∀ yc, f yc = g yc + c₂) : c₁ = c₂ := by
+  -- evaluate at the basepoint element and cancel g(x0)
+  have h1 := h₁ (basepoint (M:=M) x0)
+  have h2 := h₂ (basepoint (M:=M) x0)
+  -- (g + c) - g = c in ℤ
+  have := congrArg (fun t => t - g (basepoint (M:=M) x0)) h1
+  have := (by
+    have := congrArg (fun t => t - g (basepoint (M:=M) x0)) h2
+    simpa using this) ▸ this
+  -- simplify both sides to show c₁ = c₂
+  simpa using this
+
+/-- T4 → gauge class equality on the component (basepoint equality ⇒ same class). -/
+theorem gaugeClass_eq_of_same_delta_basepoint
+  {δ : ℤ} {p q : Potential.Pot M}
+  (hp : Potential.DE (M:=M) δ p) (hq : Potential.DE (M:=M) δ q)
+  (x0 : M.U) (hbase : p x0 = q x0) :
+  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 p) =
+  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 q) := by
+  -- T4 componentwise uniqueness with basepoint equality gives equality (c = 0)
+  apply Quot.sound
+  refine ⟨0, ?_⟩
+  intro yc
+  have := Potential.T4_unique_on_component (M:=M) (δ:=δ) (p:=p) (q:=q)
+    (x0:=x0) (hbase:=hbase) yc.reachable
+  simpa [restrictToComponent] using this
+
+/-- Classical T4 restatement: existence and uniqueness of the additive constant on the component. -/
+theorem T4_unique_constant_on_component
+  {δ : ℤ} {p q : Potential.Pot M}
+  (hp : Potential.DE (M:=M) δ p) (hq : Potential.DE (M:=M) δ q) (x0 : M.U) :
+  ∃! c : ℤ, ∀ yc : Component M x0, restrictToComponent (M:=M) x0 p yc =
+                       restrictToComponent (M:=M) x0 q yc + c := by
+  -- existence from T4 uniqueness up to constant
+  rcases Potential.T4_unique_up_to_const_on_component (M:=M) (δ:=δ) (p:=p) (q:=q) hp hq (x0:=x0) with ⟨c, hc⟩
+  refine ⟨c, ?_, ?_⟩
+  · intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable
+  · intro c' hc'
+    -- uniqueness of the constant by evaluating at basepoint
+    exact gauge_constant_unique (M:=M) (x0:=x0)
+      (f := restrictToComponent (M:=M) x0 p) (g := restrictToComponent (M:=M) x0 q)
+      (c₁ := c) (c₂ := c') (h₁ := by intro yc; simpa [restrictToComponent] using hc (y:=yc.y) yc.reachable)
+      (h₂ := hc')
+
+/-- Corollary: the gauge classes of any two δ-potentials coincide on the component. -/
+theorem gaugeClass_const (x0 : M.U) {δ : ℤ} {p q : Potential.Pot M}
+  (hp : Potential.DE (M:=M) δ p) (hq : Potential.DE (M:=M) δ q) :
+  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 p) =
+  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 q) := by
+  -- from the unique-constant theorem, choose the witness and use setoid soundness
+  rcases T4_unique_constant_on_component (M:=M) (δ:=δ) (p:=p) (q:=q) (x0:=x0) hp hq with ⟨c, hc, _⟩
+  apply Quot.sound
+  exact ⟨c, hc⟩
+
+/-- Final classical correspondence (headline): for any δ, restrictions of δ-potentials
+    to the reach component are gauge equivalent (defined up to a constant). -/
+theorem classical_T4_correspondence (x0 : M.U) {δ : ℤ}
+  (p q : Potential.Pot M) (hp : Potential.DE (M:=M) δ p) (hq : Potential.DE (M:=M) δ q) :
+  GaugeEq (M:=M) x0 (restrictToComponent (M:=M) x0 p) (restrictToComponent (M:=M) x0 q) := by
+  -- directly produce the gauge witness using the unique-constant theorem
+  rcases T4_unique_constant_on_component (M:=M) (δ:=δ) (p:=p) (q:=q) (x0:=x0) hp hq with ⟨c, hc, _⟩
+  exact ⟨c, hc⟩
+
 end ClassicalBridge
 end IndisputableMonolith
 
