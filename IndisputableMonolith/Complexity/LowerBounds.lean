@@ -19,5 +19,3 @@ theorem recognition_lower_bound_sat
 end LowerBounds
 end Complexity
 end IndisputableMonolith
-
-

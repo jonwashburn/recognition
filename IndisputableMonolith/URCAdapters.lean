@@ -26,5 +26,14 @@ namespace URCAdapters
 @[simp] def routeAB_closure_report : String :=
   "URC Routes A and B: both yield B ⇒ C closure wiring (absolute layer)."
 
+@[simp] def reports : List String :=
+  [ routeA_report
+  , routeA_end_to_end_demo
+  , routeB_closure_report
+  , routeAB_report
+  , routeAB_closure_report
+  , lambda_report
+  , grand_manifest ]
+
 end URCAdapters
 end IndisputableMonolith
