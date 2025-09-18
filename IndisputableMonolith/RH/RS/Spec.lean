@@ -49,6 +49,15 @@ structure DimlessPack (L : Ledger) (B : Bridge L) : Type where
   bornRule         : Prop
   boseFermi        : Prop
 
+/-- Absolute (SI) packaging for reference displays, distinct from dimensionless pack. -/
+structure AbsolutePack (L : Ledger) (B : Bridge L) : Type where
+  c_SI        : ℝ
+  hbar_SI     : ℝ
+  G_SI        : ℝ
+  Lambda_SI   : ℝ
+  masses_SI   : List ℝ
+  energies_SI : List ℝ
+
 /-- "φ-closed" predicate (e.g., rational in φ, integer powers, etc.). -/
 class PhiClosed (φ x : ℝ) : Prop
 
