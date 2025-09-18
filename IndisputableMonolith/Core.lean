@@ -168,6 +168,10 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   have : 0 % 8 = 0 := by decide
   simp [this]
 
+@[simp] lemma extendPeriodic8_eq_mod (w : Pattern 8) (t : Nat) :
+  extendPeriodic8 w t = w ⟨t % 8, Nat.mod_lt _ (by decide)⟩ := by
+  rfl
+
 lemma extendPeriodic8_period (w : Pattern 8) (t : Nat) :
   extendPeriodic8 w (t + 8) = extendPeriodic8 w t := by
   dsimp [extendPeriodic8]
@@ -395,6 +399,15 @@ deriving Repr
 @[simp] def claimsCount : Nat := dimlessClaimsRendered.length
 @[simp] def gatesCount  : Nat := gatesRendered.length
 @[simp] def falsifiabilityCount : Nat := falsifiabilityRendered.length
+
+@[simp] lemma claimsCount_eq_two : claimsCount = 2 := by
+  simp [claimsCount, dimlessClaimsRendered]
+
+@[simp] lemma gatesCount_eq_two : gatesCount = 2 := by
+  simp [gatesCount, gatesRendered]
+
+@[simp] lemma falsifiabilityCount_eq_two : falsifiabilityCount = 2 := by
+  simp [falsifiabilityCount, falsifiabilityRendered]
 
 @[simp] def manifestStrings : List String :=
   [ "claims={" ++ String.intercalate ", " claimIds ++ "}"
