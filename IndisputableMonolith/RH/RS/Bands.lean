@@ -113,5 +113,3 @@ lemma center_in_each_sample (x : ℝ) :
 end RS
 end RH
 end IndisputableMonolith
-
-
