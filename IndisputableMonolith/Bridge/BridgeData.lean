@@ -71,6 +71,10 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
                 simpa [hself]
               simpa using this
 
+lemma lambda_rec_dimensionless_id_physical (B : BridgeData) (H : Physical B) :
+  (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G) = 1 / Real.pi :=
+  lambda_rec_dimensionless_id (B:=B) H.c_pos H.hbar_pos H.G_pos
+
 @[simp] def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
@@ -153,6 +157,50 @@ lemma K_B_pos (B : BridgeData) (H : Physical B) (hℓ : 0 < B.ell0) : 0 < K_B B 
 lemma K_B_ne_zero (B : BridgeData) (H : Physical B) (hℓ : B.ell0 ≠ 0) : K_B B ≠ 0 := by
   dsimp [K_B]
   exact div_ne_zero (ne_of_gt (lambda_rec_pos (B:=B) H)) hℓ
+
+/-- Monotonicity in k (denominator): if `0 < k1 ≤ k2` and `u>0`, the Z‑score decreases. -/
+lemma Zscore_le_of_k_le (B : BridgeData) (u_ell0 u_lrec : ℝ)
+  {k1 k2 : ℝ}
+  (hu : 0 < u_comb B u_ell0 u_lrec) (hk1 : 0 < k1) (hk12 : k1 ≤ k2) :
+  Zscore B u_ell0 u_lrec k2 ≤ Zscore B u_ell0 u_lrec k1 := by
+  -- Let Δ ≥ 0 be the absolute difference |K_A − K_B|.
+  have hΔ : 0 ≤ Real.abs (K_A B - K_B B) := abs_nonneg _
+  set u := u_comb B u_ell0 u_lrec
+  have hk2 : 0 < k2 := lt_of_lt_of_le hk1 hk12
+  have hd1 : 0 < k1 * u := mul_pos hk1 hu
+  have hd2 : 0 < k2 * u := mul_pos hk2 hu
+  have hden_le : k1 * u ≤ k2 * u := by
+    have : 0 ≤ u := le_of_lt hu
+    exact mul_le_mul_of_nonneg_right hk12 this
+  -- Use that for positive denominators, 1/(k2*u) ≤ 1/(k1*u)
+  have hinv : (1 / (k2 * u)) ≤ (1 / (k1 * u)) := inv_le_inv_of_le hd1 hd2 hden_le
+  -- Multiply both sides by Δ ≥ 0
+  have := mul_le_mul_of_nonneg_left hinv hΔ
+  -- Rewrite Z‑scores and conclude
+  unfold Zscore
+  simp [u, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] at this
+  exact this
+
+/-- Monotonicity in u (denominator): if `0 < u1 ≤ u2` and `k>0`, the Z‑score decreases. -/
+lemma Zscore_le_of_u_le (B : BridgeData) {u1_ell0 u1_lrec u2_ell0 u2_lrec : ℝ} {k : ℝ}
+  (hk : 0 < k)
+  (hu1_pos : 0 < u_comb B u1_ell0 u1_lrec)
+  (hu12 : u_comb B u1_ell0 u1_lrec ≤ u_comb B u2_ell0 u2_lrec) :
+  Zscore B u2_ell0 u2_lrec k ≤ Zscore B u1_ell0 u1_lrec k := by
+  have hΔ : 0 ≤ Real.abs (K_A B - K_B B) := abs_nonneg _
+  set u1 := u_comb B u1_ell0 u1_lrec
+  set u2 := u_comb B u2_ell0 u2_lrec
+  have hu2_pos : 0 < u2 := lt_of_lt_of_le hu1_pos hu12
+  have hd1 : 0 < k * u1 := mul_pos hk hu1_pos
+  have hd2 : 0 < k * u2 := mul_pos hk hu2_pos
+  have hden_le : k * u1 ≤ k * u2 := by
+    have hk0 : 0 ≤ k := le_of_lt hk
+    exact mul_le_mul_of_nonneg_left hu12 hk0
+  have hinv : (1 / (k * u2)) ≤ (1 / (k * u1)) := inv_le_inv_of_le hd1 hd2 hden_le
+  have := mul_le_mul_of_nonneg_left hinv hΔ
+  unfold Zscore
+  simp [u1, u2, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] at this
+  exact this
 
 /-- If `B` is physical then `τ0 = λ_rec / c` is positive. -/
 lemma tau0_pos (B : BridgeData) (H : Physical B) : 0 < tau0 B := by
