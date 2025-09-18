@@ -831,6 +831,14 @@ def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool
 def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
   fun i => if h : i ∈ M then a ⟨i, h⟩ else false
 
+@[simp] lemma extendMask_in (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∈ M) :
+  extendMask (n:=n) a M i = a ⟨i, h⟩ := by
+  simp [extendMask, h]
+
+@[simp] lemma extendMask_notin (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∉ M) :
+  extendMask (n:=n) a M i = false := by
+  simp [extendMask, h]
+
 /-- Any fixed-view decoder on a set `M` of queried indices can be fooled by a suitable `(b,R)`. -/
 theorem adversarial_failure (M : Finset (Fin n))
   (g : (({i // i ∈ M} → Bool)) → Bool) :
