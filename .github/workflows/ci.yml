@@ -91,7 +91,8 @@ jobs:
           cp IndisputableMonolith.lean IndisputableMonolith.full.lean
           head -n 6000 IndisputableMonolith.full.lean > IndisputableMonolith.lean
           lake update
-          lake build IndisputableMonolith
+          lake env -- lean -q IndisputableMonolith/Core.lean -o /dev/null
+          lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
           ./build/bin/ci_checks | sed -e 's/.*/HEAD: &/'
 
@@ -146,7 +147,8 @@ jobs:
         run: lake update
       - name: Build monolith and ci_checks
         run: |
-          lake build IndisputableMonolith
+          lake env -- lean -q IndisputableMonolith/Core.lean -o /dev/null
+          lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
       - name: Run CI checks
         run: |
