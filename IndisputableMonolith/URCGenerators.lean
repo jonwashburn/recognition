@@ -91,5 +91,18 @@ lemma verified_empty (φ : ℝ) : Verified φ {
   all_goals
     intro x hx; cases hx
 
+/-- A packaged set of generators that already satisfy verification for a given φ. -/
+structure VerifiedGenerators (φ : ℝ) where
+  C  : CertFamily
+  ok : Verified φ C
+
+/-- Trivial, always-verified generators: the empty certification family. -/
+@[simp] def demo_generators (φ : ℝ) : VerifiedGenerators φ :=
+  { C := { units := [], eightbeat := [], elprobes := [], masses := []
+         , rotation := [], outer := [], conscious := [] }
+  , ok := verified_empty φ }
+
+@[simp] def demo_generators_phi : VerifiedGenerators (0 : ℝ) := demo_generators 0
+
 end URCGenerators
 end IndisputableMonolith
