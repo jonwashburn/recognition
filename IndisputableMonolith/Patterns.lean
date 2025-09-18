@@ -28,6 +28,62 @@ structure CompleteCover (d : Nat) where
  theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
   simpa using cover_exact_pow 3
 
+/-- Cardinality of the pattern space. -/
+lemma card_pattern (d : Nat) : Fintype.card (Pattern d) = 2 ^ d := by
+  classical
+  simpa [Pattern, Fintype.card_fin] using
+    (Fintype.card_fun : Fintype.card (Fin d → Bool) = (Fintype.card Bool) ^ (Fintype.card (Fin d)))
+
+/-- No surjection to all d-bit patterns if T < 2^d. -/
+lemma no_surj_small (T d : Nat) (hT : T < 2 ^ d) :
+  ¬ ∃ f : Fin T → Pattern d, Surjective f := by
+  classical
+  intro h; rcases h with ⟨f, hf⟩
+  obtain ⟨g, hg⟩ := hf.hasRightInverse
+  have hginj : Injective g := by
+    intro y₁ y₂ hgy
+    have : f (g y₁) = f (g y₂) := by simp [hgy]
+    simpa [RightInverse, hg y₁, hg y₂] using this
+  have hcard : Fintype.card (Pattern d) ≤ Fintype.card (Fin T) :=
+    Fintype.card_le_of_injective _ hginj
+  have : 2 ^ d ≤ T := by
+    simp [Fintype.card_fin, card_pattern d] at hcard
+    simpa [Fintype.card_fin, card_pattern d] using hcard
+  exact (lt_of_le_of_lt this hT).false
+
+/-- Minimal ticks lower bound for a complete cover. -/
+lemma min_ticks_cover {d T : Nat}
+  (pass : Fin T → Pattern d) (covers : Surjective pass) : 2 ^ d ≤ T := by
+  classical
+  by_contra h
+  exact (no_surj_small T d (lt_of_not_ge h)) ⟨pass, covers⟩
+
+/-- For 3-bit patterns, any complete pass has length at least 8. -/
+lemma eight_tick_min {T : Nat}
+  (pass : Fin T → Pattern 3) (covers : Surjective pass) : 8 ≤ T := by
+  simpa using (min_ticks_cover (d := 3) (T := T) pass covers)
+
+/-- Nyquist-style obstruction: if T < 2^D, no surjection to D-bit patterns. -/
+theorem T7_nyquist_obstruction {T D : Nat}
+  (hT : T < 2 ^ D) : ¬ ∃ f : Fin T → Pattern D, Surjective f :=
+  no_surj_small T D hT
+
+/-- At threshold T=2^D there is a bijection (no aliasing). -/
+theorem T7_threshold_bijection (D : Nat) : ∃ f : Fin (2 ^ D) → Pattern D, Bijective f := by
+  classical
+  let e := (Fintype.equivFin (Pattern D))
+  have hcard : Fintype.card (Pattern D) = 2 ^ D := by simpa using card_pattern D
+  -- Manual cast equivalence between Fin (2^D) and Fin (Fintype.card (Pattern D))
+  let castTo : Fin (2 ^ D) → Fin (Fintype.card (Pattern D)) :=
+    fun i => ⟨i.1, by simpa [hcard] using i.2⟩
+  let castFrom : Fin (Fintype.card (Pattern D)) → Fin (2 ^ D) :=
+    fun j => ⟨j.1, by simpa [hcard] using j.2⟩
+  have hLeft : Function.LeftInverse castFrom castTo := by intro i; cases i; rfl
+  have hRight : Function.RightInverse castFrom castTo := by intro j; cases j; rfl
+  have hCastBij : Bijective castTo := ⟨hLeft.injective, hRight.surjective⟩
+  refine ⟨fun i => (e.symm) (castTo i), ?_⟩
+  exact (e.symm).bijective.comp hCastBij
+
 /-‑ ## T6 alias theorems -/
  theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
   cover_exact_pow d
