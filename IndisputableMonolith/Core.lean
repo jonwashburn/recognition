@@ -211,6 +211,9 @@ theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
 theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
   cover_exact_pow d
 
+  theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
+    period_exactly_8
+
   /-! ## T7 (Nyquist and threshold) thin shims -/
   theorem T7_nyquist_obstruction {T D : Nat}
     (hT : T < 2 ^ D) : ¬ ∃ f : Fin T → Pattern D, Surjective f := by
