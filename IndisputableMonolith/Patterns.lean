@@ -7,6 +7,16 @@ open Classical
 
 @[simp] def Pattern (d : Nat) := (Fin d → Bool)
 
+@[simp] lemma card_pattern (d : Nat) : Fintype.card (Pattern d) = 2 ^ d := by
+  classical
+  simpa [Pattern, Fintype.card_bool, Fintype.card_fin] using
+    (Fintype.card_fun (Fin d) Bool)
+
+lemma card_pattern_pos (d : Nat) : 0 < Fintype.card (Pattern d) := by
+  classical
+  have : 0 < (2 : Nat) ^ d := by exact pow_pos (by decide : 0 < 2) d
+  simpa [card_pattern d]
+
 structure CompleteCover (d : Nat) where
   period : ℕ
   path   : Fin period → Pattern d
@@ -19,10 +29,7 @@ structure CompleteCover (d : Nat) where
   refine ⟨{ period := Fintype.card (Pattern d)
           , path := fun i => e i
           , complete := (Fintype.equivFin (Pattern d)).symm.surjective }, ?_⟩
-  have hcard : Fintype.card (Pattern d) = 2 ^ d := by
-    simpa [Pattern, Fintype.card_bool, Fintype.card_fin] using
-      (Fintype.card_fun (Fin d) Bool)
-  simpa [hcard]
+  simpa [card_pattern d]
 
 /-- There exists an 8‑tick complete cover for 3‑bit patterns. -/
  theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by

@@ -182,6 +182,14 @@ deriving Repr
   "URC Claims: " ++ toString urcClaimsCount ++
   ", URC Gates: " ++ toString urcGatesCount
 
+/-! Zero-knobs proof bundle export (discoverable list of core dimless proofs). -/
+@[simp] def zeroKnobsExports : List String :=
+  [ "K_gate"
+  , "cone_bound"
+  , "period_exactly_8"
+  , "manifest_summary"
+  ]
+
 @[simp] def K_A_eval (_U : RSUnits) : ℝ := Constants.K
 @[simp] def K_B_eval (_U : RSUnits) : ℝ := Constants.K
 

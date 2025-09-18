@@ -36,6 +36,17 @@ structure RSUnits where
   c    : ℝ
   c_ell0_tau0 : c * tau0 = ell0
 
+/-- If τ0 ≠ 0, the units identity `c·τ0 = ℓ0` yields `c = ℓ0/τ0`. -/
+lemma RSUnits.c_eq_ell0_div_tau0 (U : RSUnits) (hτ : U.tau0 ≠ 0) :
+  U.c = U.ell0 / U.tau0 := by
+  -- a = b/τ ↔ a*τ = b
+  exact (eq_div_iff_mul_eq.mpr U.c_ell0_tau0)
+
+/-- If τ0 ≠ 0, the units identity `c·τ0 = ℓ0` yields `ℓ0/τ0 = c`. -/
+lemma RSUnits.ell0_div_tau0_eq_c (U : RSUnits) (hτ : U.tau0 ≠ 0) :
+  U.ell0 / U.tau0 = U.c := by
+  simpa [RSUnits.c_eq_ell0_div_tau0 U hτ] using (RSUnits.c_eq_ell0_div_tau0 U hτ).symm
+
 /-- Minimal global constant K placeholder. -/
 @[simp] def K : ℝ := 1
 
