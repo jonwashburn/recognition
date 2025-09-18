@@ -136,6 +136,14 @@ lemma Z_of_window_nonneg {n : Nat} (w : Pattern n) : 0 ≤ Z_of_window w := by
 def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
   { s | ∀ i : Fin n, s i.val = w i }
 
+@[simp] lemma mem_Cylinder_zero (w : Pattern 0) (s : Stream) : s ∈ Cylinder w := by
+  intro i; cases i
+
+@[simp] lemma Cylinder_zero (w : Pattern 0) : Cylinder w = Set.univ := by
+  ext s; constructor
+  · intro _; exact Set.mem_univ _
+  · intro _; exact mem_Cylinder_zero w s
+
 /-- Periodic extension of an 8‑bit window. -/
 def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   let i : Fin 8 := ⟨t % 8, Nat.mod_lt _ (by decide)⟩
