@@ -2,7 +2,7 @@ import Mathlib
 
 namespace IndisputableMonolith
 
-/‑! #### Streams: periodic extension and finite sums ‑/
+/-! #### Streams: periodic extension and finite sums -/
 namespace Streams
 
 open Classical
@@ -130,6 +130,15 @@ lemma sumFirst_eq_zero_of_all_false {m : Nat} {s : Stream}
   sumFirst m s = 0 := by
   unfold sumFirst
   have : (fun i : Fin m => (if s i.val then 1 else 0)) = (fun _ => 0) := by
+    funext i; simp [h i]
+  simp [this]
+
+/-- If all of the first `m` bits of a stream are true, the sum is `m`. -/
+lemma sumFirst_eq_m_of_all_true {m : Nat} {s : Stream}
+  (h : ∀ i : Fin m, s i.val = true) :
+  sumFirst m s = m := by
+  unfold sumFirst
+  have : (fun i : Fin m => (if s i.val then 1 else 0)) = (fun _ => (1 : Nat)) := by
     funext i; simp [h i]
   simp [this]
 
