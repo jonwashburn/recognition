@@ -162,5 +162,3 @@ def sampleW : PatternLayer.Pattern 8 := fun i => decide (i.1 % 2 = 0)
 end Examples
 
 end IndisputableMonolith
-
-

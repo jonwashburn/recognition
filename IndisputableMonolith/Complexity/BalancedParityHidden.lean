@@ -84,6 +84,14 @@ def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bo
   have := h b R
   exact hw this
 
+/-- Query lower bound (worst-case, adversarial): any universally-correct decoder
+    must inspect all `n` indices. -/
+theorem omega_n_queries
+  (M : Finset (Fin n)) (g : (({i // i ∈ M} → Bool)) → Bool)
+  (hMlt : M.card < n) :
+  ¬ (∀ (b : Bool) (R : Fin n → Bool), g (restrict (n:=n) (enc b R) M) = b) :=
+  no_universal_decoder (n:=n) M g
+
 end BalancedParityHidden
 end Complexity
 end IndisputableMonolith

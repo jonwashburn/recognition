@@ -209,10 +209,6 @@ theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
 theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
   cover_exact_pow d
 
-theorem eight_tick_min {T : Nat}
-  (pass : Fin T → Pattern 3) (covers : Surjective pass) : 8 ≤ T := by
-  simpa using Patterns.eight_tick_min (pass:=pass) (covers:=covers)
-
 /-! Recognition foundations moved to submodule -/
 
 /-! ### RS‑preserving reduction exemplar (to Vertex Cover) moved to `Complexity/*` -/
