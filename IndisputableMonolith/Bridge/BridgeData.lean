@@ -1,5 +1,5 @@
 import Mathlib
-import IndisputableMonolith.Core -- for Constants.K; minimal backref
+import IndisputableMonolith.Constants -- use Constants.K without creating a cycle
 
 namespace IndisputableMonolith
 namespace Bridge
@@ -131,6 +131,15 @@ structure Witness where
   (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
   passAt B u_ell0 u_lrec k = true := by
   simp [passAt, Zscore_zero_of_KA_eq_KB B u_ell0 u_lrec k h]
+
+lemma Zscore_nonneg
+  (B : BridgeData) (u_ell0 u_lrec k : ℝ)
+  (hk : 0 < k) (hu : 0 < u_comb B u_ell0 u_lrec) :
+  0 ≤ Zscore B u_ell0 u_lrec k := by
+  unfold Zscore
+  have hden_pos : 0 < k * (u_comb B u_ell0 u_lrec) := mul_pos hk hu
+  have hnum_nonneg : 0 ≤ Real.abs (K_A B - K_B B) := by exact abs_nonneg _
+  exact div_nonneg hnum_nonneg (le_of_lt hden_pos)
 
 end BridgeData
 

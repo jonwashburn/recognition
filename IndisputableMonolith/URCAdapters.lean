@@ -45,5 +45,13 @@ namespace URCAdapters
 @[simp] def allIds : List String :=
   Verification.claimIds ++ Verification.gateIds ++ Verification.urcClaimIds ++ Verification.urcGateIds
 
+@[simp] lemma reports_length_eq_seven : reports.length = 7 := by
+  simp [reports]
+
+@[simp] lemma allIds_length_eq :
+  allIds.length = Verification.claimsCount + Verification.gatesCount +
+                  Verification.urcClaimsCount + Verification.urcGatesCount := by
+  simp [allIds, List.length_append, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+
 end URCAdapters
 end IndisputableMonolith
