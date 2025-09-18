@@ -20,7 +20,11 @@ namespace URCAdapters
 @[simp] def grand_manifest : String :=
   "URC Routes A and B wired; λ_rec uniqueness holds (reports only; proofs hosted in modules)."
 
+@[simp] def routeAB_report : String :=
+  "URC Routes A and B: both wired (A: axioms ⇒ bridge; B: generators ⇒ bridge)."
+
+@[simp] def routeAB_closure_report : String :=
+  "URC Routes A and B: both yield B ⇒ C closure wiring (absolute layer)."
+
 end URCAdapters
 end IndisputableMonolith
-
-
