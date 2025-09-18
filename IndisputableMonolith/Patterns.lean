@@ -4,12 +4,13 @@ namespace IndisputableMonolith
 namespace Patterns
 
 open Classical
+open Function
 
-@[simp] def Pattern (d : Nat) := (Fin d → Bool)
+abbrev Pattern (d : Nat) := (Fin d → Bool)
 
 @[simp] lemma card_pattern (d : Nat) : Fintype.card (Pattern d) = 2 ^ d := by
   classical
-  simpa [Pattern, Fintype.card_bool, Fintype.card_fin] using
+  simpa [Fintype.card_bool, Fintype.card_fin] using
     (Fintype.card_fun (Fin d) Bool)
 
 lemma card_pattern_pos (d : Nat) : 0 < Fintype.card (Pattern d) := by
@@ -22,10 +23,16 @@ lemma card_pattern_pos (d : Nat) : 0 < Fintype.card (Pattern d) := by
   classical
   simp [card_pattern (d+1), card_pattern d, pow_succ, Nat.mul_comm]
 
+@[simp] lemma card_pattern_zero : Fintype.card (Pattern 0) = 1 := by
+  simpa [card_pattern] using (by decide : 2 ^ 0 = (1 : Nat))
+
+@[simp] lemma card_pattern_one : Fintype.card (Pattern 1) = 2 := by
+  simpa [card_pattern] using (by decide : 2 ^ 1 = (2 : Nat))
+
 structure CompleteCover (d : Nat) where
   period : ℕ
   path   : Fin period → Pattern d
-  complete : Surjective path
+  complete : Function.Surjective path
 
 /-- There exists a complete cover of exact length `2^d` for d‑dimensional patterns. -/
  theorem cover_exact_pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d := by
@@ -40,7 +47,7 @@ structure CompleteCover (d : Nat) where
  theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
   simpa using cover_exact_pow 3
 
-/‑‑ ## T6 alias theorems -/
+/-! ## T6 alias theorems -/
  theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
   cover_exact_pow d
 

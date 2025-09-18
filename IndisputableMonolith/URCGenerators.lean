@@ -382,6 +382,9 @@ lemma size_append (C₁ C₂ : CertFamily) :
 
 /-! ### Additional size/append helpers (stable) -/
 
+@[simp] lemma summaries_length (fs : List CertFamily) : (summaries fs).length = fs.length := by
+  simp [summaries]
+
 @[simp] lemma foldAppend_cons (C : CertFamily) (Cs : List CertFamily) :
   foldAppend (C :: Cs) = append C (foldAppend Cs) := by
   induction Cs with

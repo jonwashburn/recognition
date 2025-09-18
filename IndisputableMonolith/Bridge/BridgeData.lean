@@ -141,6 +141,15 @@ lemma Zscore_nonneg
   have hnum_nonneg : 0 ≤ Real.abs (K_A B - K_B B) := by exact abs_nonneg _
   exact div_nonneg hnum_nonneg (le_of_lt hden_pos)
 
+lemma u_comb_nonneg (B : BridgeData) {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) :
+  0 ≤ u_comb B a b := by
+  simp [u_comb, add_nonneg, ha, hb]
+
+lemma passAt_false_of_gt (B : BridgeData) (u_ell0 u_lrec k : ℝ)
+  (h : 1 < Zscore B u_ell0 u_lrec k) :
+  passAt B u_ell0 u_lrec k = false := by
+  simp [passAt, not_le.mpr h]
+
 end BridgeData
 
 end Bridge

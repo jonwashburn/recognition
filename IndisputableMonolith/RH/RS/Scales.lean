@@ -19,6 +19,9 @@ lemma B_of_pos (k : Nat) : 0 < B_of k := by
   have : 0 < (2:ℝ) := by norm_num
   simpa [B_of] using pow_pos this k
 
+@[simp] lemma B_of_nonneg (k : Nat) : 0 ≤ B_of k := by
+  exact le_of_lt (B_of_pos k)
+
 @[simp] lemma B_of_one : B_of 1 = 2 := by simp [B_of]
 
 lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
