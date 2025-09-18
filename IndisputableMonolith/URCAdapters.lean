@@ -1,4 +1,5 @@
 import Mathlib
+import IndisputableMonolith.Verification
 
 namespace IndisputableMonolith
 namespace URCAdapters
@@ -34,6 +35,9 @@ namespace URCAdapters
   , routeAB_closure_report
   , lambda_report
   , grand_manifest ]
+
+@[simp] def manifestReports : List String :=
+  Verification.manifestStrings ++ Verification.urcManifestStrings
 
 end URCAdapters
 end IndisputableMonolith
