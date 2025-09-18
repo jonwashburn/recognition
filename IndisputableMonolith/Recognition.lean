@@ -3,6 +3,23 @@ import Mathlib
 namespace IndisputableMonolith
 namespace Recognition
 
+/-! ### T1 (MP): Nothing cannot recognize itself -/
+
+abbrev Nothing := Empty
+
+/-- Minimal recognizer→recognized pairing. -/
+structure Recognize (A : Type) (B : Type) : Type where
+  recognizer : A
+  recognized : B
+
+/-- MP: It is impossible for Nothing to recognize itself. -/
+def MP : Prop := ¬ ∃ _ : Recognize Nothing Nothing, True
+
+theorem mp_holds : MP := by
+  intro h
+  rcases h with ⟨⟨r, _⟩, _⟩
+  cases r
+
 structure RecognitionStructure where
   U : Type
   R : U → U → Prop
@@ -84,5 +101,51 @@ example : chainFlux L twoStep = 0 := by
   simpa [hloop] using (chainFlux_zero_of_loop L twoStep hloop)
 
 end Demo
+
+/‑! ## Nontrivial modeling instances: concrete `AtomicTick` examples -/
+namespace ModelingExamples
+
+open Recognition
+
+/-- A simple 2‑vertex recognition structure with bidirectional relation. -/
+def SimpleStructure : Recognition.RecognitionStructure :=
+  { U := Bool
+  , R := fun a b => a ≠ b }
+
+/-- Deterministic posting schedule: the unique poster at time `t` is `(t % 2 == 1)`. -/
+def SimpleTicks : Nat → Bool → Prop := fun t v => v = (t % 2 == 1)
+
+instance : Recognition.AtomicTick SimpleStructure :=
+  { postedAt := SimpleTicks
+  , unique_post := by
+      intro t
+      refine ⟨(t % 2 == 1), rfl, ?uniq⟩
+      intro u hu
+      simpa [SimpleTicks] using hu }
+
+/-- A 3‑cycle recognition structure on `Fin 3`. -/
+def Cycle3 : Recognition.RecognitionStructure :=
+  { U := Fin 3
+  , R := fun i j => j = ⟨(i.val + 1) % 3, by
+                        have : (i.val + 1) % 3 < 3 := by
+                          have : (i.val + 1) % 3 < 3 := Nat.mod_lt _ (by decide : 0 < 3)
+                          simpa using this
+                        exact this⟩ }
+
+/-- Unique poster at time `t` is the residue class `t % 3`. -/
+def Cycle3Ticks : Nat → (Fin 3) → Prop := fun t v => v.val = t % 3
+
+instance : Recognition.AtomicTick Cycle3 :=
+  { postedAt := Cycle3Ticks
+  , unique_post := by
+      intro t
+      refine ⟨⟨t % 3, by exact Nat.mod_lt _ (by decide : 0 < 3)⟩, ?posted, ?uniq⟩
+      · rfl
+      · intro u hu
+        -- Coerce equality on values to equality in `Fin 3`.
+        apply Fin.ext
+        simpa [Cycle3Ticks] using hu }
+
+end ModelingExamples
 
 end IndisputableMonolith
