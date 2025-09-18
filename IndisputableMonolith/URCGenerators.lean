@@ -156,6 +156,234 @@ def VerifiedGenerators.merge {φ : ℝ} (G₁ G₂ : VerifiedGenerators φ) : Ve
   ", rotation=" ++ toString (rotationCount C) ++
   ", outer=" ++ toString (outerCount C) ++
   ", conscious=" ++ toString (consciousCount C)
+
+/-- Add a mass certificate to a certification family. -/
+def consMass (c : MassCert) (C : CertFamily) : CertFamily :=
+{ C with masses := c :: C.masses }
+
+/-- If a mass certificate is verified and the family is verified, the augmented family is verified. -/
+lemma verified_consMass (φ : ℝ) (c : MassCert) (C : CertFamily)
+  (hc : MassCert.verified φ c) (hC : Verified φ C) : Verified φ (consMass c C) := by
+  dsimp [Verified, consMass] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM (And.intro ?hRot (And.intro ?hOut ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx
+    -- masses is `c :: C.masses`
+    rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add a units certificate to a certification family. -/
+def consUnits (c : UnitsCert) (C : CertFamily) : CertFamily :=
+{ C with units := c :: C.units }
+
+lemma verified_consUnits (φ : ℝ) (c : UnitsCert) (C : CertFamily)
+  (hc : UnitsCert.verified c) (hC : Verified φ C) : Verified φ (consUnits c C) := by
+  dsimp [Verified, consUnits] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU' (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM (And.intro ?hRot (And.intro ?hOut ?hCons)))))
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add an eight-beat certificate to a certification family. -/
+def consEightBeat (c : EightBeatCert) (C : CertFamily) : CertFamily :=
+{ C with eightbeat := c :: C.eightbeat }
+
+lemma verified_consEightBeat (φ : ℝ) (c : EightBeatCert) (C : CertFamily)
+  (hc : EightBeatCert.verified c) (hC : Verified φ C) : Verified φ (consEightBeat c C) := by
+  dsimp [Verified, consEightBeat] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8' (And.intro ?hEL (And.intro ?hM (And.intro ?hRot (And.intro ?hOut ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add an EL probe certificate to a certification family. -/
+def consELProbe (c : ELProbe) (C : CertFamily) : CertFamily :=
+{ C with elprobes := c :: C.elprobes }
+
+lemma verified_consELProbe (φ : ℝ) (c : ELProbe) (C : CertFamily)
+  (hc : ELProbe.verified c) (hC : Verified φ C) : Verified φ (consELProbe c C) := by
+  dsimp [Verified, consELProbe] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL' (And.intro ?hM (And.intro ?hRot (And.intro ?hOut ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Filter mass certificates by a predicate; keep other lists unchanged. -/
+def filterMasses (p : MassCert → Bool) (C : CertFamily) : CertFamily :=
+{ C with masses := C.masses.filter p }
+
+lemma verified_filterMasses (φ : ℝ) (p : MassCert → Bool) (C : CertFamily)
+  (hC : Verified φ C) : Verified φ (filterMasses p C) := by
+  dsimp [Verified, filterMasses] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM' (And.intro ?hRot (And.intro ?hOut ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx
+    -- x ∈ filter p C.masses implies x ∈ C.masses
+    have hx' : x ∈ C.masses := by
+      exact List.of_mem_filter hx
+    exact hM x hx'
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add a rotation certificate to a certification family. -/
+def consRotation (c : RotationCert) (C : CertFamily) : CertFamily :=
+{ C with rotation := c :: C.rotation }
+
+lemma verified_consRotation (φ : ℝ) (c : RotationCert) (C : CertFamily)
+  (hc : RotationCert.verified c) (hC : Verified φ C) : Verified φ (consRotation c C) := by
+  dsimp [Verified, consRotation] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM (And.intro ?hRot' (And.intro ?hOut ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add an outer-budget certificate to a certification family. -/
+def consOuter (c : OuterBudgetCert) (C : CertFamily) : CertFamily :=
+{ C with outer := c :: C.outer }
+
+lemma verified_consOuter (φ : ℝ) (c : OuterBudgetCert) (C : CertFamily)
+  (hc : OuterBudgetCert.verified c) (hC : Verified φ C) : Verified φ (consOuter c C) := by
+  dsimp [Verified, consOuter] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM (And.intro ?hRot (And.intro ?hOut' ?hCons)))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hOut x hx
+  · intro x hx; exact hCons x hx
+
+/-- Add a conscious certificate to a certification family. -/
+def consConscious (c : ConsciousCert) (C : CertFamily) : CertFamily :=
+{ C with conscious := c :: C.conscious }
+
+lemma verified_consConscious (φ : ℝ) (c : ConsciousCert) (C : CertFamily)
+  (hc : ConsciousCert.verified c) (hC : Verified φ C) : Verified φ (consConscious c C) := by
+  dsimp [Verified, consConscious] at *
+  rcases hC with ⟨hU, hE8, hEL, hM, hRot, hOut, hCons⟩
+  refine And.intro ?hU (And.intro ?hE8 (And.intro ?hEL (And.intro ?hM (And.intro ?hRot (And.intro ?hOut ?hCons')))))
+  · intro x hx; exact hU x hx
+  · intro x hx; exact hE8 x hx
+  · intro x hx; exact hEL x hx
+  · intro x hx; exact hM x hx
+  · intro x hx; exact hRot x hx
+  · intro x hx; exact hOut x hx
+  · intro x hx; rcases List.mem_cons.mp hx with hx | hx
+    · simpa [hx]
+    · exact hCons x hx
+
+/-- Empty certification family constant. -/
+@[simp] def emptyFamily : CertFamily :=
+{ units := [], eightbeat := [], elprobes := [], masses := []
+, rotation := [], outer := [], conscious := [] }
+
+/-- Fold-append a list of certification families. -/
+@[simp] def foldAppend (fs : List CertFamily) : CertFamily :=
+  fs.foldl append emptyFamily
+
+lemma verified_foldl_append (φ : ℝ) (fs : List CertFamily)
+  (h : ∀ C ∈ fs, Verified φ C) : Verified φ (foldAppend fs) := by
+  induction fs with
+  | nil => simpa [foldAppend, emptyFamily] using (verified_empty φ)
+  | cons C fs ih =>
+      have hC  : Verified φ C := h C (by simp)
+      have hfs : Verified φ (foldAppend fs) :=
+        ih (by intro X hX; exact h X (by simpa [List.mem_cons] using Or.inr hX))
+      -- foldl step: (C :: fs).foldl append emptyFamily = append C (foldAppend fs)
+      simpa [foldAppend, List.foldl] using (verified_append φ C (foldAppend fs) hC hfs)
+
+/-- Cert family with a single units certificate. -/
+@[simp] def singletonUnitsFamily (c : UnitsCert) : CertFamily :=
+{ units := [c], eightbeat := [], elprobes := [], masses := []
+, rotation := [], outer := [], conscious := [] }
+
+lemma verified_singletonUnits (φ : ℝ) (c : UnitsCert)
+  (h : UnitsCert.verified c) : Verified φ (singletonUnitsFamily c) := by
+  dsimp [Verified, singletonUnitsFamily]
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; rcases List.mem_singleton.mp hx with rfl; exact h
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+
+/-- Cert family with a single eight-beat certificate. -/
+@[simp] def singletonEightBeatFamily (c : EightBeatCert) : CertFamily :=
+{ units := [], eightbeat := [c], elprobes := [], masses := []
+, rotation := [], outer := [], conscious := [] }
+
+lemma verified_singletonEightBeat (φ : ℝ) (c : EightBeatCert)
+  (h : EightBeatCert.verified c) : Verified φ (singletonEightBeatFamily c) := by
+  dsimp [Verified, singletonEightBeatFamily]
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; cases hx
+  · intro x hx; rcases List.mem_singleton.mp hx with rfl; exact h
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+
+/-- Cert family with a single EL probe. -/
+@[simp] def singletonELProbeFamily (c : ELProbe) : CertFamily :=
+{ units := [], eightbeat := [], elprobes := [c], masses := []
+, rotation := [], outer := [], conscious := [] }
+
+lemma verified_singletonELProbe (φ : ℝ) (c : ELProbe)
+  (h : ELProbe.verified c) : Verified φ (singletonELProbeFamily c) := by
+  dsimp [Verified, singletonELProbeFamily]
+  refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; rcases List.mem_singleton.mp hx with rfl; exact h
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
+  · intro x hx; cases hx
 /-- Append two certification families by concatenating their lists. -/
 def append (C₁ C₂ : CertFamily) : CertFamily :=
 { units     := C₁.units ++ C₂.units

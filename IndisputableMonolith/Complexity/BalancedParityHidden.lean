@@ -28,6 +28,20 @@ def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool
   restrict (n:=n) (enc true R) M = (fun i => bnot (restrict (n:=n) R M i)) := by
   funext i; simp [restrict, enc]
 
+/-- Encoding is involutive up to flipping the bit parameter. -/
+@[simp] lemma enc_involutive (R : Fin n → Bool) : enc false (enc true R) = R := by
+  funext i; simp [enc]
+
+/-- Restriction commutes with encoding by false (identity). -/
+@[simp] lemma restrict_enc_false_id (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (n:=n) (enc false R) M = restrict (n:=n) R M := by
+  funext i; simp [restrict, enc]
+
+/-- Restricting an encoding by true flips the restricted function. -/
+@[simp] lemma restrict_enc_true_flip (R : Fin n → Bool) (M : Finset (Fin n)) :
+  restrict (n:=n) (enc true R) M = (fun i => bnot (restrict (n:=n) R M i)) := by
+  funext i; simp [restrict, enc]
+
 /-- Extend a partial assignment on `M` to a full mask by defaulting to `false` off `M`. -/
 def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
   fun i => if h : i ∈ M then a ⟨i, h⟩ else false

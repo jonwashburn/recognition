@@ -102,6 +102,15 @@ lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
   · funext i; simp [hmod i]
   · rfl
 
+/-- The sum of the first `m` bits is at most `m`. -/
+lemma sumFirst_le_m (m : Nat) (s : Stream) : sumFirst m s ≤ m := by
+  unfold sumFirst
+  have hle : ∀ i : Fin m, (if s i.val then 1 else 0) ≤ 1 := by
+    intro i; by_cases h : s i.val <;> simp [h]
+  have : (∑ i : Fin m, (if s i.val then 1 else 0)) ≤ (∑ _i : Fin m, (1 : Nat)) :=
+    Finset.sum_le_sum (fun i _ => hle i)
+  simpa using (le_trans this (by simpa using (Finset.card_univ (α := Fin m))))
+
 lemma extendPeriodic8_in_cylinder (w : Pattern 8) : (extendPeriodic8 w) ∈ (Cylinder w) := by
   intro i
   dsimp [extendPeriodic8, Cylinder]
