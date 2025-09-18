@@ -266,6 +266,13 @@ structure UnitsRescaled (U U' : RSUnits) : Prop where
   ell0 : U'.ell0 = s * U.ell0
   cfix : U'.c = U.c
 
+lemma UnitsRescaled.refl (U : RSUnits) : UnitsRescaled U U :=
+{ s := 1
+, hs := by norm_num
+, tau0 := by simpa [one_mul]
+, ell0 := by simpa [one_mul]
+, cfix := rfl }
+
 /-- A numeric display is dimensionless if it is invariant under anchor rescalings. -/
 def Dimensionless (f : RSUnits → ℝ) : Prop := ∀ {U U'}, UnitsRescaled U U' → f U = f U'
 
