@@ -104,5 +104,9 @@ structure VerifiedGenerators (φ : ℝ) where
 
 @[simp] def demo_generators_phi : VerifiedGenerators (0 : ℝ) := demo_generators 0
 
+/-- Placeholder witness: generators determine a viable bridge policy (Prop-level stub). -/
+@[simp] def determination_by_generators {φ : ℝ}
+  (VG : VerifiedGenerators φ) : True := True.intro
+
 end URCGenerators
 end IndisputableMonolith
