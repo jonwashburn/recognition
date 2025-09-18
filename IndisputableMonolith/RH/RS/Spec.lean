@@ -79,7 +79,7 @@ def Matches (φ : ℝ) (L : Ledger) (B : Bridge L) (U : UniversalDimless φ) : P
       ∧ P.bornRule = U.born0
       ∧ P.boseFermi = U.boseFermi0
 
-/‑! ### 45‑Gap and measurement interfaces ‑/
+/-! ### 45‑Gap and measurement interfaces -/
 
 /-- Abstract notion of "has an excitation at rung r". -/
 structure HasRung (L : Ledger) (B : Bridge L) : Type where
@@ -145,7 +145,7 @@ theorem absolute_layer_any (L : Ledger) (B : Bridge L) (A : Anchors) (X : Bands)
   (unique : UniqueCalibration L B A) (meets : MeetsBands L B X) :
   UniqueCalibration L B A ∧ MeetsBands L B X := by exact And.intro unique meets
 
-/‑! ### Recognition closure spec (Inevitability layers) ‑/
+/-! ### Recognition closure spec (Inevitability layers) -/
 
 /-- 1) Dimensionless inevitability: universal φ‑closed predictions; bridge uniqueness up to units; matching ↔ unit‑equivalence. -/
 def Inevitability_dimless (φ : ℝ) : Prop :=
@@ -184,7 +184,7 @@ def Recognition_Closure (φ : ℝ) : Prop :=
   ∧ Inevitability_absolute φ
   ∧ Inevitability_recognition_computation
 
-/‑! ### Generic witnesses (K‑gate and anchor‑invariance) ‑/
+/-! ### Generic witnesses (K‑gate and anchor‑invariance) -/
 
 /-- Generic UniqueCalibration witness (derivable via K‑gate and invariance; abstracted as Prop). -/
 theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : UniqueCalibration L B A := by
@@ -202,6 +202,20 @@ theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : Unique
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U' :=
     by intro U U' h; exact IndisputableMonolith.Verification.anchor_invariance _ h
   exact ⟨⟩
+
+/-- If the c-band check holds for some anchors `U`, then `MeetsBands` holds for any ledger/bridge. -/
+ theorem meetsBands_any_of_eval (L : Ledger) (B : Bridge L) (X : Bands)
+  (U : IndisputableMonolith.Constants.RSUnits)
+  (h : evalToBands_c U X) : MeetsBands L B X := by
+  exact ⟨⟩
+
+/-- Default generic MeetsBands: for a centered wideBand around `U.c` with nonnegative tolerance. -/
+ theorem meetsBands_any_param (L : Ledger) (B : Bridge L)
+  (U : IndisputableMonolith.Constants.RSUnits) (tol : ℝ) (htol : 0 ≤ tol) :
+  MeetsBands L B [wideBand U.c tol] := by
+  have hc : evalToBands_c U [wideBand U.c tol] :=
+    evalToBands_c_wideBand_center (U:=U) (tol:=tol) htol
+  exact meetsBands_any_of_eval L B [wideBand U.c tol] U hc
 
 end RS
 end RH
