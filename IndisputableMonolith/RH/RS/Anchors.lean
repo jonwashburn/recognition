@@ -10,5 +10,3 @@ structure Anchors where a1 a2 : ℝ
 end RS
 end RH
 end IndisputableMonolith
-
-
