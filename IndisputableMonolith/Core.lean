@@ -1,6 +1,7 @@
 import Mathlib
 import IndisputableMonolith.Constants
 import IndisputableMonolith.Streams
+import IndisputableMonolith.Streams.Blocks
 import IndisputableMonolith.Patterns
 import IndisputableMonolith.RH.RS.Bands
 import IndisputableMonolith.RH.RS.Anchors
@@ -191,6 +192,22 @@ lemma kappaA_ne_zero : kappaA ≠ 0 := by
 
 end RS
 end RH
+
+/-! #### Shims for Patterns API preserved at umbrella level -/
+
+/-/ Provide top-level aliases so existing callers of `IndisputableMonolith.*`
+    continue to work while implementations live in `IndisputableMonolith.Patterns`. -/
+abbrev Pattern (d : Nat) := Patterns.Pattern d
+abbrev CompleteCover := Patterns.CompleteCover
+
+theorem cover_exact_pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d := by
+  simpa [CompleteCover] using Patterns.cover_exact_pow d
+
+theorem period_exactly_8 : ∃ w : CompleteCover 3, w.period = 8 := by
+  simpa [CompleteCover] using Patterns.period_exactly_8
+
+theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
+  cover_exact_pow d
 
 /-! Recognition foundations moved to submodule -/
 
