@@ -104,6 +104,20 @@ lemma evalToBands_c_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
     refine ⟨b, hb, ?_⟩
     simpa [Band.contains, hc.symm] using hbx
 
+/-- The centered `wideBand` around `U.c` always includes `U.c`. -/
+lemma evalToBands_c_wideBand_center
+  (U : IndisputableMonolith.Constants.RSUnits) (tol : ℝ) (htol : 0 ≤ tol) :
+  evalToBands_c U [wideBand U.c tol] := by
+  refine ⟨wideBand U.c tol, by simp, ?_⟩
+  simpa using wideBand_contains_center (x:=U.c) (ε:=tol) htol
+
+/-- Convenience: `sampleBandsFor x` contains `x`, hence satisfies `evalToBands_c` with anchors `c=x`. -/
+lemma evalToBands_c_sampleBandsFor
+  (x : ℝ) : evalToBands_c { tau0 := 1, ell0 := x, c := x, c_ell0_tau0 := by simp } (sampleBandsFor x) := by
+  refine ⟨wideBand x 1, ?_, ?_⟩
+  · simp [sampleBandsFor]
+  · simpa using wideBand_contains_center (x:=x) (ε:=1) (by norm_num)
+
 @[simp] lemma meetsBandsChecker_gen_nil (bs : Bands) :
   meetsBandsChecker_gen [] bs = false := by
   classical

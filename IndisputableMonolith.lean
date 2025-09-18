@@ -638,36 +638,7 @@ theorem T3_continuity {M} (L : Ledger M) [Conserves L] :
 
 -- Patterns lemmas moved to IndisputableMonolith/Patterns.lean
 
-/-- ## T6 (existence): there exists an exact pass of length `2^d` covering all parity patterns. -/
-theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
-  cover_exact_pow d
-
-/-- ## T6 (d=3): there exists an exact 8‑tick pass covering all 3‑bit parities. -/
-theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
-  period_exactly_8
-
-/-- ## T7 (Nyquist-style): if T < 2^D then there is no surjection to D-bit patterns. -/
-theorem T7_nyquist_obstruction {T D : Nat}
-  (hT : T < 2 ^ D) : ¬ ∃ f : Fin T → Pattern D, Surjective f :=
-  no_surj_small T D hT
-
-/-- ## T7 (threshold no-aliasing): at T = 2^D there exists a bijection (no aliasing at threshold). -/
-theorem T7_threshold_bijection (D : Nat) : ∃ f : Fin (2 ^ D) → Pattern D, Bijective f := by
-  classical
-  let e := (Fintype.equivFin (Pattern D))
-  have hcard : Fintype.card (Pattern D) = 2 ^ D := by simpa using card_pattern D
-  -- Manual cast equivalence between Fin (2^D) and Fin (Fintype.card (Pattern D))
-  let castTo : Fin (2 ^ D) → Fin (Fintype.card (Pattern D)) :=
-    fun i => ⟨i.1, by simpa [hcard] using i.2⟩
-  let castFrom : Fin (Fintype.card (Pattern D)) → Fin (2 ^ D) :=
-    fun j => ⟨j.1, by simpa [hcard] using j.2⟩
-  have hLeft : Function.LeftInverse castFrom castTo := by
-    intro i; cases i; rfl
-  have hRight : Function.RightInverse castFrom castTo := by
-    intro j; cases j; rfl
-  have hCastBij : Bijective castTo := ⟨hLeft.injective, hRight.surjective⟩
-  refine ⟨fun i => (e.symm) (castTo i), ?_⟩
-  exact (e.symm).bijective.comp hCastBij
+-- T6/T7 wrappers moved to `IndisputableMonolith/Core.lean` and `IndisputableMonolith/Patterns.lean`.
 
 /-! ## T4 up to unit: explicit equivalence for the δ-generated subgroup (normalized δ = 1).
     Mapping n•δ ↦ n, specialized here to δ = 1 for clarity. -/
