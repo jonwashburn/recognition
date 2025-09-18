@@ -84,17 +84,8 @@ lemma B_of_pos (k : Nat) : 0 < B_of k := by
 
 /-- Lower bound: `B_of k = 2^k ≥ 1`. -/
 lemma one_le_B_of (k : Nat) : (1 : ℝ) ≤ B_of k := by
-  induction k with
-  | zero => simp [B_of]
-  | succ k ih =>
-      have hmul : (2 : ℝ) ≤ 2 * B_of k := by
-        have : 2 * (1 : ℝ) ≤ 2 * B_of k := by
-          have hnonneg : 0 ≤ (2 : ℝ) := by norm_num
-          exact mul_le_mul_of_nonneg_left ih hnonneg
-        simpa using this
-      have h12 : (1 : ℝ) ≤ 2 := by norm_num
-      have : (1 : ℝ) ≤ 2 * B_of k := le_trans h12 hmul
-      simpa [B_of_succ, mul_comm] using this
+  -- delegate to canonical lemma in RS.Scales to avoid duplication
+  simpa using (IndisputableMonolith.RH.RS.one_le_B_of k)
 
 /-- Two to an integer power: 2^k for k ∈ ℤ. -/
 noncomputable def twoPowZ (k : Int) : ℝ :=

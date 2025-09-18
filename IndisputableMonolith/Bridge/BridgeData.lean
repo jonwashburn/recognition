@@ -86,6 +86,18 @@ lemma lambda_rec_dimensionless_id (B : BridgeData)
 @[simp] lemma u_comb_zero_left (B : BridgeData) (u : ℝ) : u_comb B 0 u = u := by
   simp [u_comb]
 
+@[simp] lemma u_comb_add_left (B : BridgeData) (a b c : ℝ) :
+  u_comb B (a + b) c = a + b + c := by
+  simp [u_comb, add_assoc]
+
+@[simp] lemma u_comb_add_right (B : BridgeData) (a b c : ℝ) :
+  u_comb B a (b + c) = a + (b + c) := by
+  simp [u_comb, add_assoc]
+
+@[simp] lemma u_comb_assoc (B : BridgeData) (a b c : ℝ) :
+  u_comb B (u_comb B a b) c = u_comb B a (u_comb B b c) := by
+  simp [u_comb, add_assoc]
+
 @[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
   let KA := K_A B
   let KB := K_B B

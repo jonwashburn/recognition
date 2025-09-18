@@ -182,6 +182,24 @@ deriving Repr
   "URC Claims: " ++ toString urcClaimsCount ++
   ", URC Gates: " ++ toString urcGatesCount
 
+/-! Aggregate helpers for reporting and quick checks. -/
+@[simp] def totalCount : Nat := claimsCount + gatesCount + falsifiabilityCount
+
+@[simp] lemma totalCount_eq_six : totalCount = 6 := by
+  simp [totalCount]
+
+@[simp] def manifestSet : List String := manifestStrings ++ urcManifestStrings
+
+@[simp] def allIdsV : List String := claimIds ++ gateIds ++ urcClaimIds ++ urcGateIds
+
+/-! Zero-knobs proof bundle export (discoverable list of core dimless proofs). -/
+@[simp] def zeroKnobsExports : List String :=
+  [ "K_gate"
+  , "cone_bound"
+  , "period_exactly_8"
+  , "manifest_summary"
+  ]
+
 @[simp] def K_A_eval (_U : RSUnits) : ℝ := Constants.K
 @[simp] def K_B_eval (_U : RSUnits) : ℝ := Constants.K
 
