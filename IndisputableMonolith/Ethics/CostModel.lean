@@ -58,5 +58,3 @@ theorem improves_comp_left (M : CostModel A) (C : Composable M)
 
 end Ethics
 end IndisputableMonolith
-
-
