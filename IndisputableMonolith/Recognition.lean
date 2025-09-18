@@ -1,5 +1,5 @@
 import Mathlib
-import IndisputableMonolith.LightCone
+-- LightCone is not required by the minimal Recognition core; avoid heavy deps
 
 namespace IndisputableMonolith
 namespace Recognition
