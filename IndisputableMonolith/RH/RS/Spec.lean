@@ -217,6 +217,14 @@ theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : Unique
     evalToBands_c_wideBand_center (U:=U) (tol:=tol) htol
   exact meetsBands_any_of_eval L B [wideBand U.c tol] U hc
 
+/-- Default generic MeetsBands: for `sampleBandsFor U.c` the c-band holds by construction. -/
+theorem meetsBands_any_default (L : Ledger) (B : Bridge L)
+  (U : IndisputableMonolith.Constants.RSUnits) :
+  MeetsBands L B (sampleBandsFor U.c) := by
+  have hc : evalToBands_c U (sampleBandsFor U.c) := by
+    simpa [evalToBands_c] using center_in_sampleBandsFor (x:=U.c)
+  exact meetsBands_any_of_eval L B (sampleBandsFor U.c) U hc
+
 end RS
 end RH
 end IndisputableMonolith
