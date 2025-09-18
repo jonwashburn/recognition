@@ -39,5 +39,8 @@ namespace URCAdapters
 @[simp] def manifestReports : List String :=
   Verification.manifestStrings ++ Verification.urcManifestStrings
 
+@[simp] def quickSummary : List String :=
+  [ Verification.manifestSummary, Verification.urcSummary ]
+
 end URCAdapters
 end IndisputableMonolith
