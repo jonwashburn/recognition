@@ -106,6 +106,19 @@ theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ 
 theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
   period_exactly_8
 
+/-- For any dimension `d`, the exact cover of period `2^d` has positive period. -/
+theorem T6_exist_exact_pos (d : Nat) : ∃ w : CompleteCover d, 0 < w.period := by
+  obtain ⟨w, hp⟩ := cover_exact_pow d
+  have : 0 < (2 : ℕ) ^ d := by
+    exact pow_pos (by decide : 0 < (2 : ℕ)) d
+  exact ⟨w, by simpa [hp] using this⟩
+
+/-- The 3‑bit complete cover of period 8 has positive period. -/
+theorem period_exactly_8_pos : ∃ w : CompleteCover 3, 0 < w.period := by
+  obtain ⟨w, hp⟩ := period_exactly_8
+  have : 0 < (8 : ℕ) := by decide
+  exact ⟨w, by simpa [hp] using this⟩
+
 end Patterns
 
 /‑! #### Streams: periodic extension and finite sums ‑/
