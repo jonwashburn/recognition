@@ -126,6 +126,26 @@ structure Witness where
   let Z  := (Real.abs (KA - KB)) / (k * u)
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
+@[simp] lemma witness_KA (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  (witness B u_ell0 u_lrec k).KA = K_A B := by
+  unfold witness; simp
+
+@[simp] lemma witness_KB (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  (witness B u_ell0 u_lrec k).KB = K_B B := by
+  unfold witness; simp
+
+@[simp] lemma witness_u (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  (witness B u_ell0 u_lrec k).u = u_comb B u_ell0 u_lrec := by
+  unfold witness; simp
+
+@[simp] lemma witness_Z (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  (witness B u_ell0 u_lrec k).Z = Zscore B u_ell0 u_lrec k := by
+  unfold witness Zscore; simp
+
+@[simp] lemma passAt_eq_witness_pass (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  passAt B u_ell0 u_lrec k = (witness B u_ell0 u_lrec k).pass := by
+  unfold passAt witness Zscore; simp
+
 /-- Tick from anchors via hop map `λ_rec = c · τ0`. -/
 @[simp] def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
 
@@ -201,6 +221,25 @@ lemma Zscore_le_of_u_le (B : BridgeData) {u1_ell0 u1_lrec u2_ell0 u2_lrec : ℝ}
   unfold Zscore
   simp [u1, u2, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] at this
   exact this
+
+/-- Zero Z‑score iff `K_A = K_B` (when denominator is positive). -/
+lemma Zscore_eq_zero_iff (B : BridgeData) (u_ell0 u_lrec k : ℝ)
+  (hk : 0 < k) (hu : 0 < u_comb B u_ell0 u_lrec) :
+  Zscore B u_ell0 u_lrec k = 0 ↔ K_A B = K_B B := by
+  unfold Zscore
+  have hden_pos : 0 < k * (u_comb B u_ell0 u_lrec) := mul_pos hk hu
+  constructor
+  · intro hz
+    -- a/b = 0 with b>0 ⇒ a = 0
+    have : Real.abs (K_A B - K_B B) = 0 := by
+      have := (div_eq_zero_iff (by exact ne_of_gt hden_pos)).mp hz
+      -- div_eq_zero_iff requires a ≠ 0 or denominator infinite; we provide nonzero denom
+      simpa using this
+    have : K_A B - K_B B = 0 := by simpa using abs_eq_zero.mp this
+    simpa using sub_eq_zero.mp this
+  · intro hKK
+    -- If numerators equal, quotient is zero
+    simp [hKK, div_eq_mul_inv]
 
 /-- If `B` is physical then `τ0 = λ_rec / c` is positive. -/
 lemma tau0_pos (B : BridgeData) (H : Physical B) : 0 < tau0 B := by
