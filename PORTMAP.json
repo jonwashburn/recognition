@@ -882,6 +882,14 @@
       "owner": "cursor-gpt5",
       "notes": "phi_rung_prop + URC adapter proofs/end-to-end; axiom stubs for URC/RH deps; core green"
     }
+    ,{
+      "id": "Constants:KDisplay",
+      "namespace": "IndisputableMonolith.Constants",
+      "path": "IndisputableMonolith/Constants/KDisplay.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "K constant + RSUnits display functions and lemmas; 130 lines; dependency-light"
+    }
   ]
 }
 
