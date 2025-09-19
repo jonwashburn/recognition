@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Ethics:Truth",
+      "namespace": "IndisputableMonolith.Ethics.Truth",
+      "path": "IndisputableMonolith/Ethics/Truth.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Truth closure/ledger utilities extracted"
+    },
+    {
       "id": "Ethics.Alignment:Temporal",
       "namespace": "IndisputableMonolith.Ethics.Alignment.Temporal",
       "path": "IndisputableMonolith/Ethics/Alignment/Temporal.lean",
