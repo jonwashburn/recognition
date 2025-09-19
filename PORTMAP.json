@@ -763,6 +763,14 @@
       "notes": "alias theorem using ILG.w_time_ratio_rescale"
     }
     ,{
+      "id": "TruthCore:MRDScaffold",
+      "namespace": "IndisputableMonolith.TruthCore.MRD",
+      "path": "IndisputableMonolith/TruthCore/MRD.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "ScalingModel/FundamentalProcess/EmergentMeasurement/MeasurementMap"
+    }
+    ,{
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",

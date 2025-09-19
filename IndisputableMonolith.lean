@@ -1180,51 +1180,8 @@ instance : JensenSketch Jcost :=
   , axis_upper := by intro t; exact le_of_eq rfl
   , axis_lower := by intro t; exact le_of_eq rfl }
 
-/-! ### Local EL bridge: stationarity of `t ↦ Jcost (exp t)` at 0
-
-noncomputable def Jlog (t : ℝ) : ℝ := Jcost (Real.exp t)
-
-@[simp] lemma Jlog_as_cosh (t : ℝ) : Jlog t = Real.cosh t - 1 := by
-  -- Jcost (exp t) = ((exp t + exp (-t))/2 - 1) and cosh t = (exp t + exp (-t))/2
-  dsimp [Jlog]
-  simpa [Real.cosh, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using (Jcost_exp t)
-
-lemma hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t := by
-  -- derivative of cosh is sinh; subtracting a constant keeps derivative
-  have h := Real.hasDerivAt_cosh t
-  have h' : HasDerivAt (fun t => Real.cosh t - 1) (Real.sinh t) t := by
-    simpa [sub_eq_add_neg] using h.sub_const 1
-  -- rewrite via `Jlog_as_cosh`
-  simpa [Jlog_as_cosh] using h'
-
-@[simp] lemma hasDerivAt_Jlog_zero : HasDerivAt Jlog 0 0 := by
-  simpa using (hasDerivAt_Jlog 0)
-
-@[simp] lemma deriv_Jlog_zero : deriv Jlog 0 = 0 := by
-  classical
-  simpa using (hasDerivAt_Jlog_zero).deriv
-
-@[simp] lemma Jlog_zero : Jlog 0 = 0 := by
-  dsimp [Jlog]
-  simp
-
-lemma Jlog_nonneg (t : ℝ) : 0 ≤ Jlog t := by
-  -- cosh t ≥ 1 ⇒ cosh t − 1 ≥ 0
-  dsimp [Jlog]
-  have h : 1 ≤ Real.cosh t := Real.cosh_ge_one t
-  have : 0 ≤ Real.cosh t - 1 := sub_nonneg.mpr h
-  simpa using this
-
-lemma Jlog_eq_zero_iff (t : ℝ) : Jlog t = 0 ↔ t = 0 := by
-  -- cosh t − 1 = 0 ↔ cosh t = 1 ↔ t = 0
-  dsimp [Jlog]
-  constructor
-  · intro h
-    have : Real.cosh t = 1 := by linarith
-    simpa using (Real.cosh_eq_one_iff.mp this)
-  · intro ht
-    subst ht
-    simp
+-/-! ### Local EL bridge: Jlog basics -/
+-- (Moved to IndisputableMonolith/Cost/Jlog.lean)
 
 theorem T5_EL_local_bridge : deriv Jlog 0 = 0 ∧ ∀ t : ℝ, Jlog 0 ≤ Jlog t := by
   -- Stationarity at 0 and global minimality (since cosh t ≥ 1)

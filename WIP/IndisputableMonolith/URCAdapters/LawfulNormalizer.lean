@@ -2,13 +2,13 @@ import Mathlib
 
 namespace URC
 
-structure LawfulNormalizer where
-  fixed : 1 = 1
+structure LawfulNormalizer (λ : ℝ) : Prop where
+  fixed : λ = 1
   stationary : True
   scaling : True
   invariance : True
 
-def lambda_rec_unique : Prop := ExistsUnique (fun λ : ℝ => LawfulNormalizer)
+def lambda_rec_unique : Prop := ExistsUnique (fun λ : ℝ => LawfulNormalizer λ)
 
 end URC
 
@@ -24,8 +24,9 @@ lemma lawful_normalizer_exists_unique : URC.lambda_rec_unique := by
     exact ⟨rfl, True.intro, True.intro, True.intro⟩
   · -- uniqueness: any lawful normalizer must equal 1 under these obligations
     intro λ hλ
-    cases hλ with
-    | intro hfix _ _ _ => simpa using hfix
+    cases hλ
+    intro hfix _ _ _
+    simpa using hfix
 
 end URCAdapters
 end IndisputableMonolith
