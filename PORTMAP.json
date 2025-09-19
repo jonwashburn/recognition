@@ -554,13 +554,13 @@
       "owner": "cursor-gpt5",
       "notes": "RH.RS witness definitions, UniversalDimless, Matches theorems, inevitability proofs; ~74 lines; minimal stubs; core green"
     }
-    ,{
+    ,    {
       "id": "Verification:Observables",
       "namespace": "IndisputableMonolith.Verification",
-      "path": "IndisputableMonolith/Verification/Observables.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Verification/Verification.lean",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Observable structure, K-gate observables, calibration evidence, claim checking framework; ~131 lines; dependency-light"
+      "notes": "Observable structure, K-gate observables, calibration evidence, claim checking framework; moved to Verification.lean"
     }
     ,{
       "id": "LNAL:VM",
