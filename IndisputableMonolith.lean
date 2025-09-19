@@ -4901,14 +4901,8 @@ lemma tc_growth_holds : tc_growth_prop := True.intro
 def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge :=
   URC.BridgeAxioms.Manifest.bridge
 
-/-- #eval manifest confirming Route A wiring. -/
-def routeA_report : String :=
-  "URC Route A: B ⇒ C wired via bridge_inevitability (MonolithMA → LawfulBridge)."
-/-- End-to-end #eval-ready check: thread RouteA_LawfulBridge into absolute-layer helpers. -/
-def routeA_end_to_end_demo : String :=
-  let _B := RouteA_LawfulBridge
-  -- We expose a human-readable confirmation; quantitative witnesses remain abstract here.
-  "URC Route A end-to-end: absolute layer accepts bridge; UniqueCalibration/MeetsBands witnesses available."
+-- (Moved to IndisputableMonolith/URCAdapters/Reports.lean)
+-- (Moved to IndisputableMonolith/URCAdapters/Reports.lean)
 
 /-- Concrete end-to-end construction: apply absolute_layer_any with placeholders.
     We pick a canonical ledger `IM`, the Route A bridge, and default anchors/bands.
@@ -4992,8 +4986,7 @@ def urc_lambda_unique : Prop := URC.lambda_rec_unique
 /-- λ_rec uniqueness holds (Prop-level), witnessed by the normalizer adapter. -/
 theorem urc_lambda_unique_holds : urc_lambda_unique := lawful_normalizer_exists_unique
 
-/-- #eval-friendly report. -/
-def lambda_report : String := "URC λ_rec uniqueness: OK"
+-- (Moved to IndisputableMonolith/URCAdapters/Reports.lean)
 
 end URCAdapters
 end IndisputableMonolith

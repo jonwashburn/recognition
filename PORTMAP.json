@@ -491,6 +491,14 @@
       "notes": "moved zeroKnobsExports; core green"
     },
     {
+      "id": "URCAdapters:Reports",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/Reports.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "routeA_report, lambda_report moved; core green"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",
