@@ -20,7 +20,7 @@ for i in $(seq 1 "$ITER"); do
 
   if [ -n "$WIP_FILE" ]; then
     echo "-- building WIP file: $WIP_FILE"
-    lake env lean --make "$WIP_FILE" | cat || true
+    lake env lean --root=. --o=/dev/null --i=/dev/null --json "$WIP_FILE" | cat || true
   fi
 
   echo "-- building core umbrella"
