@@ -470,9 +470,9 @@
       "id": "Gravity.ILG:TimeKernelBasics",
       "namespace": "IndisputableMonolith.Gravity.ILG",
       "path": "IndisputableMonolith/Gravity/ILG.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "w_t basics extraction in progress"
+      "notes": "extracted w_t basics; axiom stubs; core green"
     }
     ,{
       "id": "MaxwellDEC:Equations",

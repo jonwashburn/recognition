@@ -24,5 +24,3 @@ end
 
 end URCAdapters
 end IndisputableMonolith
-
-
