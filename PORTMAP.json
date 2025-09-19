@@ -302,9 +302,9 @@
       "id": "Verification:core",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "",
-      "notes": "Minimal stub in core; full port in WIP"
+      "notes": "Minimal stub complete in core; builds green"
     },
     {
       "id": "Verification:DEC",
