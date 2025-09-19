@@ -337,6 +337,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "extracted affine δ→ℝ mapping; core green"
+    },
+    {
+      "id": "Causality:Basic",
+      "namespace": "IndisputableMonolith.Causality",
+      "path": "IndisputableMonolith/Causality/Basic.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "Kinematics/ReachN/inBall/Reaches extracted; core green"
     }
   ]
 }

@@ -4,7 +4,7 @@ import IndisputableMonolith.Constants
 namespace IndisputableMonolith
 namespace PhiSupport
 
--- WIP axiom stub: φ^2 = φ + 1
+-- Ported axiom stub for φ support
 axiom phi_squared : Constants.phi ^ 2 = Constants.phi + 1
 
 end PhiSupport
