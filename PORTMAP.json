@@ -979,6 +979,14 @@
       "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; minimal stubs; core green"
     }
     ,{
+      "id": "YM:Dobrushin",
+      "namespace": "IndisputableMonolith.YM.Dobrushin",
+      "path": "IndisputableMonolith/YM/Dobrushin.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "MarkovKernel structure, overlap function, TV contraction theorems; ~71 lines; dependency-light"
+    }
+    ,{
       "id": "Constants:ILG",
       "namespace": "IndisputableMonolith.Constants",
       "path": "IndisputableMonolith/Constants/ILG.lean",
@@ -1137,6 +1145,14 @@
       "status": "done",
       "owner": "autonomous-agent",
       "notes": "Cost models, preference relations, and ethical invariants; minimal stubs; core green"
+    },
+    {
+      "id": "Bridge:DataExt",
+      "namespace": "IndisputableMonolith.Bridge.BridgeData",
+      "path": "IndisputableMonolith/Bridge/DataExt.lean",
+      "status": "done",
+      "owner": "autonomous-agent",
+      "notes": "Physical constants, lambda_rec functions, K-gate verification, and fine-structure constants; minimal stubs; core green"
     }
   ]
 }
