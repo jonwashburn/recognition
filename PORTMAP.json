@@ -1186,6 +1186,14 @@
       "owner": "cursor-gpt5",
       "notes": "Documentation and entry point manifest for IndisputableMonolith; ~20 lines; minimal dependencies; core green"
     }
+    ,{
+      "id": "RH:RS:SATSeparation",
+      "namespace": "IndisputableMonolith.RH.RS",
+      "path": "IndisputableMonolith/RH/RS/SATSeparation.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "SAT separation numbers structure and inevitability props; ~10 lines; minimal stubs"
+    }
   ]
 }
 
