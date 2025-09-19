@@ -1195,9 +1195,7 @@ end Cost
 
 -- (Moved to IndisputableMonolith/Cost/PhiFixedPointExpose.lean)
 
-namespace Constants
-
--- (Moved to IndisputableMonolith/Constants/AlphaLocked.lean)
+-- (Moved to IndisputableMonolith/Constants/KDisplay.lean)
 
 /-- Acceleration normalization used in the acceleration kernel (SI units). -/
 -- Removed hard SI numeric for Bohr radius; use BridgeData.a0_bohr for SI evaluation.
@@ -2811,8 +2809,7 @@ namespace Ribbons
 
 -- (Moved to IndisputableMonolith/Masses/Ribbons.lean)
 
-/-- Eight‑tick clock. -/
-abbrev Tick := Fin 8
+-- (Moved to IndisputableMonolith/Masses/Ribbons/Tick.lean)
 
 /-- A ribbon syllable on the eight‑tick clock. -/
 structure Ribbon where
