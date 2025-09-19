@@ -793,6 +793,14 @@
       "status": "in_progress",
       "owner": "agentE",
       "notes": "GaugeEq relation and factorization/functoriality helpers"
+    },
+    {
+      "id": "Constants:RSDisplay",
+      "namespace": "IndisputableMonolith.Constants.RSUnits",
+      "path": "IndisputableMonolith/Constants/RSDisplay.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "RSUnits display functions and K-gate theorems; minimal axioms; core green"
     }
     ,{
       "id": "TruthCore:Display",
@@ -915,6 +923,14 @@
       "notes": "phi squared and fixed point lemmas; minimal algebraic proofs; core green"
     },
     {
+      "id": "ConeExport:Theorem",
+      "namespace": "IndisputableMonolith.ConeExport",
+      "path": "IndisputableMonolith/ConeExport/Theorem.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "cone_bound_export theorem for verification-level cone bounds"
+    },
+    {
       "id": "Ablation:Harness",
       "namespace": "IndisputableMonolith.Ablation",
       "path": "IndisputableMonolith/Ablation.lean",
@@ -922,13 +938,45 @@
       "owner": "cursor-gpt5",
       "notes": "Z transformations and anchor equality proofs for ablation testing; core green"
     }
-    ,{
+    ,    {
       "id": "Masses:Ribbons",
       "namespace": "IndisputableMonolith.Masses.Ribbons",
       "path": "IndisputableMonolith/Masses/Ribbons.lean",
       "status": "in_progress",
       "owner": "cursor-gpt5",
       "notes": "Ribbon structure, Word operations, cancellation/reduction; 93 lines; dependency-light"
+    }
+    ,{
+      "id": "ClassicalBridge:T4Correspondence",
+      "namespace": "IndisputableMonolith.ClassicalBridge",
+      "path": "IndisputableMonolith/ClassicalBridge/T4Correspondence.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "T4 unique constant on component, gauge class theorems"
+    }
+    ,{
+      "id": "Constants:RSDisplay",
+      "namespace": "IndisputableMonolith.Constants.RSUnits",
+      "path": "IndisputableMonolith/Constants/RSDisplay.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Display functions tau_rec_display/lambda_kin_display and K-gate theorems; 105 lines; dependency-light"
+    }
+    ,    {
+      "id": "Recognition:Certification",
+      "namespace": "IndisputableMonolith.Recognition.Certification",
+      "path": "IndisputableMonolith/Recognition/Certification.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Interval utilities, AnchorCert structure, Valid predicate; ~127 lines; minimal Recognition deps"
+    },
+    {
+      "id": "Chain:core",
+      "namespace": "IndisputableMonolith.Chain",
+      "path": "WIP/IndisputableMonolith/Chain.lean",
+      "status": "in_progress",
+      "owner": "autonomous-agent",
+      "notes": "Chain operations, AtomicTick, Ledger, and T2/T3 theorems"
     }
   ]
 }
