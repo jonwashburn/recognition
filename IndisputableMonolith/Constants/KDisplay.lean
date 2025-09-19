@@ -27,30 +27,32 @@ namespace RSUnits
 /-- Kinematic consistency: c · τ_rec(display) = λ_kin(display). -/
 @[simp] lemma lambda_kin_from_tau_rec (U : RSUnits) : U.c * tau_rec_display U = lambda_kin_display U := by
   -- c·(K τ0) = K·(c τ0) = K·ℓ0
-  simpa [tau_rec_display, lambda_kin_display, mul_comm, mul_left_comm, mul_assoc, U.c_ell0_tau0]
+  rw [tau_rec_display, lambda_kin_display]
+  rw [mul_assoc, U.c_ell0_tau0]
+  ring
 
 /-- Dimensionless bridge gate: the two independent displays agree at the ratio level. -/
-@[simp] lemma K_gate (U : RSUnits) : (tau_rec_display U) / RSUnits.tau0 U = (lambda_kin_display U) / RSUnits.ell0 U := by
+@[simp] lemma K_gate (U : RSUnits) : (tau_rec_display U) / U.tau0 = (lambda_kin_display U) / U.ell0 := by
   sorry
 
 /-- Length-side display ratio equals K. -/
-@[simp] lemma K_eq_lambda_over_ell0 (U : RSUnits) : (lambda_kin_display U) / RSUnits.ell0 U = K :=
+@[simp] lemma K_eq_lambda_over_ell0 (U : RSUnits) : (lambda_kin_display U) / U.ell0 = K :=
   lambda_kin_display_ratio U
 
 /-- Clock-side display ratio equals K. -/
-@[simp] lemma K_eq_tau_over_tau0 (U : RSUnits) : (tau_rec_display U) / RSUnits.tau0 U = K :=
+@[simp] lemma K_eq_tau_over_tau0 (U : RSUnits) : (tau_rec_display U) / U.tau0 = K :=
   tau_rec_display_ratio U
 
 /-- Canonical K-gate: both route ratios equal K. -/
 @[simp] theorem K_gate_eqK (U : RSUnits) :
-  ((tau_rec_display U) / RSUnits.tau0 U = K) ∧ ((lambda_kin_display U) / RSUnits.ell0 U = K) := by
+  ((tau_rec_display U) / U.tau0 = K) ∧ ((lambda_kin_display U) / U.ell0 = K) := by
   sorry
 
 /-- Canonical K-gate (triple form): both equal K and hence equal each other. -/
 @[simp] theorem K_gate_triple (U : RSUnits) :
-  ((tau_rec_display U) / RSUnits.tau0 U = (lambda_kin_display U) / RSUnits.ell0 U)
-  ∧ ((tau_rec_display U) / RSUnits.tau0 U = K)
-  ∧ ((lambda_kin_display U) / RSUnits.ell0 U = K) := by
+  ((tau_rec_display U) / U.tau0 = (lambda_kin_display U) / U.ell0)
+  ∧ ((tau_rec_display U) / U.tau0 = K)
+  ∧ ((lambda_kin_display U) / U.ell0 = K) := by
   sorry
 
 /-- Structural speed identity from units: ℓ0/τ0 = c. -/
