@@ -3717,9 +3717,7 @@ namespace IndisputableMonolith
 namespace Masses
 namespace Ribbons
 
-/-- Gauge tags used in the word constructor. -/
-inductive GaugeTag | Y | T3 | Color
-deriving DecidableEq, Repr
+-- (Moved to IndisputableMonolith/Masses/Ribbons.lean)
 
 /-- Eight‑tick clock. -/
 abbrev Tick := Fin 8
