@@ -32,7 +32,7 @@ noncomputable axiom tick_evolution : Nat → Chain → Chain
 noncomputable axiom netCost : Chain → ℝ
 
 /-- Placeholder foldl operation for dependency-light extraction. -/
-noncomputable axiom foldl_chain : (Chain → Nat → Chain) → Chain → List Nat → Chain
+noncomputable axiom foldl_chain : (Nat → Chain → Chain) → Chain → List Nat → Chain
 
 /-- Packaged realization: evolution uses `Dynamics.tick_evolution`, and invariants are wired
     to `Dynamics.eight_window_balance` and `Dynamics.breath_cycle`. -/

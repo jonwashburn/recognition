@@ -350,9 +350,17 @@
       "id": "Bridge:BridgeData",
       "namespace": "IndisputableMonolith.Bridge.BridgeData",
       "path": "IndisputableMonolith/Bridge/BridgeData.lean",
-      "status": "done",
-      "owner": "",
-      "notes": "Promoted into core (minimal skeleton, axioms for proofs)"
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "BridgeData structure, lambda_rec, K_A/K_B, dimensionless identities; ~134 lines"
+    }
+    ,{
+      "id": "Bridge:BridgeData",
+      "namespace": "IndisputableMonolith.BridgeData",
+      "path": "IndisputableMonolith/Bridge/BridgeData.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "BridgeData physical constants, lambda_rec functions, K-gate verification; ~136 lines; dependency-light"
     },
     {
       "id": "LedgerUnits:delta-one",
@@ -936,7 +944,7 @@
       "path": "IndisputableMonolith/ConeExport/Theorem.lean",
       "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "cone_bound_export theorem for verification-level cone bounds; core green"
+      "notes": "cone_bound_export theorem for verification-level cone bounds; axiom stubs; core green"
     },
     {
       "id": "Ablation:Harness",
@@ -945,6 +953,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Z transformations and anchor equality proofs for ablation testing; core green"
+    },
+    {
+      "id": "Bridge:Data",
+      "namespace": "IndisputableMonolith.BridgeData",
+      "path": "IndisputableMonolith/Bridge/Data.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "BridgeData structure + physical constants and dimensionless identities"
     }
     ,    {
       "id": "Masses:Ribbons",
@@ -985,6 +1001,14 @@
       "status": "in_progress",
       "owner": "autonomous-agent",
       "notes": "Chain operations, AtomicTick, Ledger, and T2/T3 theorems"
+    }
+    ,    {
+      "id": "Gravity:Rotation",
+      "namespace": "IndisputableMonolith.Gravity.Rotation",
+      "path": "WIP/IndisputableMonolith/Gravity/Rotation.lean",
+      "status": "in_progress",
+      "owner": "autonomous-agent",
+      "notes": "Rotation curve lemmas (vrot_sq, flat curves, centripetal acceleration)"
     }
   ]
 }

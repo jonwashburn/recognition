@@ -21,3 +21,4 @@ noncomputable def GcoshScaled (t : ℝ) : ℝ := (CostDemo.Gcosh t)
 end CostDemo2
 
 end IndisputableMonolith
+
