@@ -302,9 +302,9 @@
       "id": "Verification:core",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "",
-      "notes": "Minimal stub in core; full port in WIP"
+      "notes": "Minimal stub complete in core; builds green"
     },
     {
       "id": "Verification:DEC",
@@ -321,6 +321,22 @@
       "status": "done",
       "owner": "",
       "notes": "Promoted into core (minimal skeleton, axioms for proofs)"
+    },
+    {
+      "id": "LedgerUnits:delta-one",
+      "namespace": "IndisputableMonolith.LedgerUnits",
+      "path": "IndisputableMonolith/LedgerUnits.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "extracted delta subgroup; core green"
+    },
+    {
+      "id": "UnitMapping:core",
+      "namespace": "IndisputableMonolith.UnitMapping",
+      "path": "IndisputableMonolith/UnitMapping.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "extracted affine δ→ℝ mapping; core green"
     }
   ]
 }

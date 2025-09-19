@@ -752,91 +752,10 @@ lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
 
 
 
+-- (Moved to IndisputableMonolith/LedgerUnits.lean)
 end LedgerUnits
 
-/-! ## UnitMapping: affine mappings from δ-ledger units to context scales (no numerics) -/
-namespace UnitMapping
-
-open LedgerUnits
-
-/-- Affine map from ℤ to ℝ: n ↦ slope·n + offset. -/
-structure AffineMapZ where
-  slope : ℝ
-  offset : ℝ
-
-@[simp] def apply (f : AffineMapZ) (n : ℤ) : ℝ := f.slope * (n : ℝ) + f.offset
-
-/-- Map δ-subgroup to ℝ by composing the non-canonical equivalence `toZ` with an affine map. -/
-noncomputable def mapDelta (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) : DeltaSub δ → ℝ :=
-  fun p => f.slope * ((toZ δ p) : ℝ) + f.offset
-
-lemma mapDelta_diff (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
-  (p q : DeltaSub δ) :
-  mapDelta δ hδ f p - mapDelta δ hδ f q = f.slope * (((toZ δ p) : ℤ) - (toZ δ q)) := by
-  simp only [mapDelta]
-  ring
-
-/-- Context constructors: charge (quantum `qe`), time (τ0), and action (ħ). -/
-def chargeMap (qe : ℝ) : AffineMapZ := { slope := qe, offset := 0 }
-def timeMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.tau0, offset := 0 }
-def actionMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.hbar, offset := 0 }
-
-/-- Existence of affine δ→charge mapping (no numerics). -/
-noncomputable def mapDeltaCharge (δ : ℤ) (hδ : δ ≠ 0) (qe : ℝ) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (chargeMap qe)
-
-/-- Existence of affine δ→time mapping via τ0. -/
-noncomputable def mapDeltaTime (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (timeMap U)
-
-/-- Existence of affine δ→action mapping via ħ. -/
-noncomputable def mapDeltaAction (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (actionMap U)
-
-@[simp] lemma mapDelta_fromZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ n) = f.slope * (n : ℝ) + f.offset := by
-  classical
-  simp [mapDelta, toZ_fromZ δ hδ]
-
-lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ (n+1)) - mapDelta δ hδ f (fromZ δ n) = f.slope := by
-  classical
-  simp [mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=f), add_comm, add_left_comm, add_assoc, sub_eq_add_neg, mul_add, add_comm]
-
-@[simp] lemma mapDeltaTime_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 * (n : ℝ) := by
-  classical
-  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n)
-  simpa [mapDeltaTime, timeMap, add_comm] using h
-
-lemma mapDeltaTime_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ (n+1)) - mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 := by
-  simpa [mapDeltaTime, timeMap] using
-    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n))
-
-@[simp] lemma mapDeltaAction_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaAction δ hδ U (fromZ δ n) = U.hbar * (n : ℝ) := by
-  classical
-  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n)
-  simpa [mapDeltaAction, actionMap, add_comm] using h
-
-lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaAction δ hδ U (fromZ δ (n+1)) - mapDeltaAction δ hδ U (fromZ δ n)
-    = U.hbar := by
-  simpa [mapDeltaAction, actionMap] using
-    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n))
-
-lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
-  (p q : DeltaSub δ) :
-  mapDelta δ hδ f p - mapDelta δ hδ f q
-    = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
-  classical
-  simpa using (mapDelta_diff (δ:=δ) (hδ:=hδ) (f:=f) (p:=p) (q:=q))
-end UnitMapping
+-- (Moved to IndisputableMonolith/UnitMapping.lean)
 
 /-! ## Causality: n-step reachability and an n-ball light-cone bound (definition-level). -/
 namespace Causality

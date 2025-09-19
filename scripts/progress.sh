@@ -22,3 +22,4 @@ printf "defs: %d/%d (%d%%)\n" "$submods_defs" "$total_defs" "$defs_pct"
 printf "lines: %d/%d (%d%%)\n" "$submods_lines" "$total_lines" "$lines_pct"
 
 
+

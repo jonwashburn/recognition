@@ -22,3 +22,4 @@ awk -v id="$id" -v owner="$owner" '
 sed -i '' -e "/\"id\": \"$id\"/,/}/ { s/\"status\": \"pending\"/\"status\": \"in_progress\"/; s/\"owner\": \"\"/\"owner\": \"$owner\"/ }" PORTMAP.json
 
 echo "Claimed cluster $id for $owner"
+

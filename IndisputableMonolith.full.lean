@@ -494,7 +494,6 @@ def zeroKnobsExports : List String :=
   , "gap_delta_time_identity"
   , "recognition_lower_bound_sat"
   ]
-
 /-- Anchor-invariance holds for all registered dimensionless observables. -/
 theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
   BridgeEval K_A_obs U = BridgeEval K_A_obs U' := anchor_invariance K_A_obs h
@@ -936,12 +935,7 @@ end Causality
 
 /-! ## Locally-finite causality: bounded out-degree and n-ball cardinality bounds -/
 
-/-- Locally-finite step relation with bounded out-degree. -/
-class BoundedStep (α : Type) (degree_bound : outParam Nat) where
-  step : α → α → Prop
-  neighbors : α → Finset α
-  step_iff_mem : ∀ x y, step x y ↔ y ∈ neighbors x
-  degree_bound_holds : ∀ x, (neighbors x).card ≤ degree_bound
+-- (BoundedStep moved to `IndisputableMonolith/Causality/BoundedStep.lean`)
 
 /-! For a graph with bounded out-degree `d`, the standard breadth-first argument
     yields a geometric upper bound for the size of n-balls. A fully formal
@@ -1484,7 +1478,6 @@ theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
   -- This is exactly Potential.T4_unique_up_to_const_on_component
   simpa using Potential.T4_unique_up_to_const_on_component
     (M:=M) (δ:=δ) (p := phi L) (q := phi L') (hp := hL) (hq := hL') (x0 := x0)
-
 end LedgerUniqueness
 
 -- ClassicalBridge (gauge, setoid, schedule) moved to `IndisputableMonolith/Recognition.lean`.
@@ -1980,7 +1973,6 @@ lemma hasDerivAt_Flog_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t
   deriv (Flog F) 0 = 0 := by
   classical
   simpa using (hasDerivAt_Flog_of_derivation (F:=F) 0).deriv
-
 lemma Flog_nonneg_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
   0 ≤ Flog F t := by
   have := Jlog_nonneg t
@@ -2258,7 +2250,7 @@ end Constants
 
 /-! ## Nontrivial modeling instances: concrete Conserves and AtomicTick examples -/
 
-namespace ModelingExamples
+-- (ModelingExamples moved to `IndisputableMonolith/Recognition/ModelingExamples.lean`)
 
 /-- A simple 2-vertex recognition structure with bidirectional relation. -/
 def SimpleStructure : RecognitionStructure := {
@@ -2307,42 +2299,9 @@ instance : BoundedStep Bool 1 := {
     cases a <;> cases b <;> simp
 }
 
-end ModelingExamples
+-- (end ModelingExamples moved)
 
-/- A 3-cycle example with finite state and a rotating tick schedule. -/
-namespace Cycle3
-
-def M : RecognitionStructure :=
-  { U := Fin 3
-  , R := fun i j => j = ⟨(i.val + 1) % 3, by
-      have h : (i.val + 1) % 3 < 3 := Nat.mod_lt _ (by decide : 0 < 3)
-      simpa using h⟩ }
-
-def L : Ledger M :=
-  { debit := fun _ => 0
-  , credit := fun _ => 0 }
-
-instance : Conserves L :=
-  { conserve := by
-      intro ch hclosed
-      -- phi is identically 0, so flux is 0
-      simp [chainFlux, phi, hclosed] }
-def postedAt : Nat → M.U → Prop := fun t v =>
-  v = ⟨t % 3, by
-    have : t % 3 < 3 := Nat.mod_lt _ (by decide : 0 < 3)
-    simpa using this⟩
-instance : AtomicTick M :=
-  { postedAt := postedAt
-  , unique_post := by
-      intro t
-      refine ⟨⟨t % 3, ?_⟩, ?_, ?_⟩
-      · have : t % 3 < 3 := Nat.mod_lt _ (by decide : 0 < 3)
-        simpa using this
-      · rfl
-      · intro u hu
-        simpa [postedAt] using hu }
-
-end Cycle3
+-- (Cycle3 demo moved to `IndisputableMonolith/Recognition/Cycle3.lean`)
 
 end IndisputableMonolith
 
@@ -2468,7 +2427,6 @@ universe v
 /-- Abstract ledger carrier to be instantiated by IndisputableMonolith. -/
 structure Ledger where
   Carrier : Sort u
-
 /-- Bridge from ledger to observables (opaque here). -/
 structure Bridge (L : Ledger) : Type := (dummy : Unit := ())
 
@@ -3454,7 +3412,6 @@ deriving DecidableEq, Repr
 structure RungSpec where
   ell : Nat
   gen : GenClass
-
 @[simp] def rungOf (R : RungSpec) : ℤ := (R.ell : ℤ) + tauOf R.gen
 
 end Masses
@@ -4466,7 +4423,7 @@ lemma anchorIdentity_of_zeroWidthCert
 
 end
 
-end Certification
+end
 end Recognition
 end IndisputableMonolith
 
@@ -4482,27 +4439,16 @@ open Nat
 @[simp] lemma coprime_8_45 : Nat.Coprime 8 45 := by decide
 
 /-- gcd(8,45) = 1. -/
-@[simp] lemma gcd_8_45_eq_one : Nat.gcd 8 45 = 1 := by decide
+-- (gcd/lcm lemmas moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- lcm(8,45) = 360. -/
-lemma lcm_8_45_eq_360 : Nat.lcm 8 45 = 360 := by
-  have hg : Nat.gcd 8 45 = 1 := by decide
-  have h := Nat.gcd_mul_lcm 8 45
-  have : Nat.lcm 8 45 = 8 * 45 := by simpa [hg, Nat.one_mul] using h
-  have hm : 8 * 45 = 360 := by decide
-  exact this.trans hm
+-- (moved) lemma lcm_8_45_eq_360
 
 /-- Exact cycle counts: lcm(8,45)/8 = 45. -/
-lemma lcm_8_45_div_8 : Nat.lcm 8 45 / 8 = 45 := by
-  have h := lcm_8_45_eq_360
-  have : 360 / 8 = 45 := by decide
-  simpa [h] using this
+-- (moved) lemma lcm_8_45_div_8
 
 /-- Exact cycle counts: lcm(8,45)/45 = 8. -/
-lemma lcm_8_45_div_45 : Nat.lcm 8 45 / 45 = 8 := by
-  have h := lcm_8_45_eq_360
-  have : 360 / 45 = 8 := by decide
-  simpa [h] using this
+-- (moved) lemma lcm_8_45_div_45
 /-- lcm(9,5) = 45, characterizing the first simultaneous occurrence of 9- and 5-fold periodicities. -/
 lemma lcm_9_5_eq_45 : Nat.lcm 9 5 = 45 := by
   have hg : Nat.gcd 9 5 = 1 := by decide
@@ -4546,9 +4492,7 @@ theorem rung45_first_conflict :
 
 /-- Synchronization requirement: the minimal time to jointly align 8-beat and 45-fold symmetries
     is exactly lcm(8,45) = 360 beats, corresponding to 45 cycles of 8 and 8 cycles of 45. -/
-theorem sync_counts :
-  Nat.lcm 8 45 = 360 ∧ Nat.lcm 8 45 / 8 = 45 ∧ Nat.lcm 8 45 / 45 = 8 := by
-  exact ⟨lcm_8_45_eq_360, lcm_8_45_div_8, lcm_8_45_div_45⟩
+-- (moved) theorem sync_counts
 
 /-- The beat-level clock-lag fraction implied by the 45-gap arithmetic: δ_time = 45/960 = 3/64. -/
 theorem delta_time_eq_3_div_64 : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
@@ -4560,7 +4504,7 @@ This section exposes the synchronization facts as "beat" counts without importin
 group theory. It is intentionally arithmetic-only for stability.
 -/
 
-namespace Beat
+-- (Beat API moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- Minimal joint duration (in beats) for 8-beat and 45-fold patterns. -/
 @[simp] def beats : Nat := Nat.lcm 8 45
@@ -4608,9 +4552,9 @@ noncomputable def canonical : Sync :=
   { beats := beats
   , cycles8 := cycles_of_8
   , cycles45 := cycles_of_45 }
-end Beat
+-- (end Beat moved)
 /-! ### Time-lag arithmetic helpers (pure numerics used by the paper) -/
-namespace TimeLag
+-- (TimeLag lemmas moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- As rationals: 45 / (8 * 120) = 3 / 64. -/
 @[simp] lemma lag_q : (45 : ℚ) / ((8 : ℚ) * (120 : ℚ)) = (3 : ℚ) / 64 := by
@@ -4619,28 +4563,10 @@ namespace TimeLag
 /-- As reals: 45 / (8 * 120) = 3 / 64. -/
 @[simp] lemma lag_r : (45 : ℝ) / ((8 : ℝ) * (120 : ℝ)) = (3 : ℝ) / 64 := by
   norm_num
-end TimeLag
-/-! ### Uncomputability and experiential navigation scaffolding -/
-namespace RecognitionBarrier
-
-/-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
-    any local finite-view decision procedure to fail globally (informal scaffold). -/
-structure UncomputabilityPoint : Prop :=
-  (is45 : True)
-
-/-- ExperientialNavigation: operational rule-of-thumb that navigation must consult a longer
-    history (beyond any fixed finite view) to avoid contradictions near the gap. -/
-structure ExperientialNavigation : Prop :=
-  (needs_history : True)
-
-/-- ConsciousnessEmergence (scaffold): the 45-gap implies any robust navigation protocol must
-    incorporate experiential history, formalizing a minimal emergence condition. -/
-theorem ConsciousnessEmergence : UncomputabilityPoint → ExperientialNavigation := by
-  intro _; exact ⟨trivial⟩
-
-end RecognitionBarrier
+-- (end TimeLag moved)
+-- (RecognitionBarrier moved to `IndisputableMonolith/Gap45/RecognitionBarrier.lean`)
 /-! ### Optional group-theoretic formulation (trivial intersection) -/
-namespace GroupView
+-- (GroupView moved to `IndisputableMonolith/Gap45/GroupView.lean`)
 
 open Nat
 
@@ -4655,9 +4581,9 @@ lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
   have h1 : orderOf g = 1 := Nat.dvd_one.mp hone
   exact (orderOf_eq_one_iff.mp h1)
 
-end GroupView
+-- (end GroupView moved)
 
-namespace AddGroupView
+-- (AddGroupView moved to `IndisputableMonolith/Gap45/AddGroupView.lean`)
 
 open Nat
 
@@ -4672,7 +4598,7 @@ lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
   have h1 : addOrderOf a = 1 := Nat.dvd_one.mp hone
   simpa [h1] using (addOrderOf_eq_one_iff.mpr rfl)
 
-end AddGroupView
+-- (end AddGroupView moved)
 
 end Gap45
 end IndisputableMonolith
@@ -4923,24 +4849,6 @@ def ResidueCert.valid (c : ResidueCert) : Prop :=
 
 end RSBridge
 end IndisputableMonolith
-
-namespace IndisputableMonolith
-namespace Recognition
-
-noncomputable section
-open Classical
-
-/-- Sectors for the discrete constructor layer. -/
-inductive Sector | up | down | lepton | neutrino deriving DecidableEq, Repr
-
-/-- The 12 SM fermion species (Dirac ν allowed). -/
-inductive Species
-| u | c | t
-| d | s | b
-| e | mu | tau
-| nu1 | nu2 | nu3
-deriving DecidableEq, Repr
-
 /-- Sector assignment per species. -/
 @[simp] def sector : Species → Sector
 | .u | .c | .t => Sector.up
@@ -6406,28 +6314,6 @@ def w_core_time (t : ℝ) : ℝ :=
 end ILG
 end Gravity
 end IndisputableMonolith
--/
-
-/-- Variant kernel re‑normalized so that lim_{g→∞} w = 1 (dimensionless):
-    w_inf1(g,gext) = 1 + Clag * (( (g+gext)/a0)^(-α) ).
-    Note: at g = a0 (and gext=0) this equals 1 + Clag (not 1). -/
-def w_core_accel_inf1 (a0 g gext : ℝ) : ℝ :=
-  let α := Constants.alpha_locked
-  let x := max εa ((g + gext) / a0)
-  1 + Constants.Clag * Real.rpow x (-α)
-
-/-- Kernel mode selector for ILG weights. -/
-inductive KernelMode | accel | time | accelInf1
-
-/-- Unified core weight selector by mode. -/
-def w_core (mode : KernelMode) (a0 g gext t : ℝ) : ℝ :=
-  match mode with
-  | KernelMode.accel => w_core_accel a0 g gext
-  | KernelMode.time => w_core_time t
-  | KernelMode.accelInf1 => w_core_accel_inf1 a0 g gext
-
-/-- High‑acceleration bounds for the inf‑normalized kernel:
-    if (g+gext)/a0 ≥ 1 then 1 ≤ w ≤ 1 + Clag. -/
 lemma w_core_accel_inf1_bounds_high (a0 g gext : ℝ)
   (hx : 1 ≤ ((g + gext) / a0)) :
   1 ≤ w_core_accel_inf1 a0 g gext ∧ w_core_accel_inf1 a0 g gext ≤ 1 + Constants.Clag := by
@@ -6925,7 +6811,6 @@ lemma mass_strict_mono_k (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   have hpos : 0 < mass U k r f := mass_pos U k r f
   have htwo : (2 : ℝ) > 1 := by norm_num
   simpa [mass_kshift U k r f, two_mul] using (mul_lt_mul_of_pos_right htwo hpos)
-
 lemma mass_strict_mono_r (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   mass U k (r+1) f > mass U k r f := by
   have hpos : 0 < mass U k r f := mass_pos U k r f
@@ -7418,7 +7303,6 @@ def product {γ₁ γ₂ : Type} (PW₁ : PathWeight γ₁) (PW₂ : PathWeight 
     have := hprod.trans hfactor
     simpa [this, PW₁.sum_prob_eq_one, PW₂.sum_prob_eq_one]
 }
-
 end Quantum
 
 end IndisputableMonolith
@@ -7915,7 +7799,6 @@ class Is3Plus1DSpacetime (M : Type) where
   time_dim : Type
   causal_structure : time_dim → time_dim → Prop
   no_cycles : ∀ t : time_dim, ¬ causal_structure t t
-
 /-- **Theorem: 3+1D is Necessary**
 Stable causal recognition requires exactly 3 spatial and 1 time dimension. -/
 theorem dim3p1_necessary : (∃! s, IsGoldenRatioScaling s) → ∃ (M : Type), Is3Plus1DSpacetime M := by
@@ -8406,7 +8289,6 @@ def StableKFlipsP (k : Nat) (ds : List Int) : Prop := signFlips ds ≤ k
 @[simp] lemma stable_k_bridge (k : Nat) (ds : List Int) :
   StableKFlips k ds = true ↔ StableKFlipsP k ds := by
   simp [StableKFlips, StableKFlipsP]
-
 /-- Each flip requires a nonzero leading delta, so flips ≤ curvature K. -/
 lemma signFlips_le_curvatureK : ∀ ds : List Int, signFlips ds ≤ curvatureK ds := by
   intro ds; induction ds with
@@ -8686,96 +8568,13 @@ namespace Truth
 end Truth
 
 /-! Consent core moved to `IndisputableMonolith/Recognition/Consent.lean`. -/
-def crossAgentParityOk (P : Policy A) (xs : List (Request A)) : Bool :=
-  let ys := filterByGates (P:=P) xs
-  match P.agentOf? with
-  | none => True
-  | some agentOf =>
-      let agents := (ys.map agentOf).eraseDups
-      match agents with
-      | [] => True
-      | a :: as =>
-          let rate (a : String) : ℝ :=
-            let zs := ys.filter (fun r => agentOf r = a)
-            if zs.length = 0 then 1 else
-              let acc := (zs.filter (fun r => gatesOk (P:=P) r)).length
-              (acc : ℝ) / (zs.length : ℝ)
-          let base := rate a
-          as.all (fun b => |rate b - base| ≤ P.parityTol)
-/-- Batch fairness: equal opportunity, calibration, individual fairness, and cross-agent parity. -/
-def fairnessBatchOk (P : Policy A) (xs : List (Request A)) : Bool :=
-  eqOppOk (P:=P) xs && calibOk (P:=P) xs && individualFairnessOk (P:=P) xs && crossAgentParityOk (P:=P) xs
-/-- Choose best with all fairness batch checks enabled when configured. -/
-def chooseBestWithAllFairness (P : Policy A) (xs : List (Request A)) : Option (Request A) :=
-  let ys := filterByGatesWithParity (P:=P) xs
-  if fairnessBatchOk (P:=P) ys then
-    match chooseBest (P:=P) ys with
-    | some r => some r
-    | none => chooseBest (P:=P) xs
-  else
-    chooseBest (P:=P) xs
-/-- Truthfulness selector: among gate-passing candidates, choose minimal divergence to evidence. -/
-def chooseTruthful (P : Policy A) (xs : List (Request A)) : Option (Request A) :=
-  match P.evidence? with
-  | none => chooseBestWithAllFairness (P:=P) xs
-  | some E =>
-      let ys := filterByGatesWithParity (P:=P) xs
-      match ys with
-      | [] => chooseBestWithAllFairness (P:=P) xs
-      | y :: yt =>
-          let best := yt.foldl (fun b n =>
-            if Truth.divergenceCount E n.claims < Truth.divergenceCount E b.claims then n else b) y
-          some best
+-- Selection helpers moved to `IndisputableMonolith/Ethics/Decision/Select.lean`.
 
 /-- Map a request's microcycle through a posting morphism, leaving other fields intact. -/
 def mapReqMicro (r : Request A) (φ : Alignment.Morph) : Request A :=
   { r with micro := r.micro.map (fun m => Alignment.mapMicro m φ) }
 
-@[simp] lemma truthOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  truthOk (P:=P) (mapReqMicro r φ) = truthOk (P:=P) r := by
-  unfold truthOk mapReqMicro
-  cases P.truthContradicts? <;> simp
-
-@[simp] lemma chooseTruthful_mapped (P : Policy A) (xs : List (Request A)) (φ : Alignment.Morph) :
-  (chooseTruthful (P:=P) (xs.map (fun r => mapReqMicro r φ))) =
-  (chooseTruthful (P:=P) xs).map (fun r => mapReqMicro r φ) := by
-  classical
-  unfold chooseTruthful
-  cases P.evidence? with
-  | none => simp [filterByGatesWithParity]
-  | some E =>
-      cases xs with
-      | nil => simp
-      | cons y yt =>
-          simp [filterByGatesWithParity]
-
-@[simp] lemma consentOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  consentOk (P:=P) (mapReqMicro r φ) = consentOk (P:=P) r := by
-  unfold consentOk mapReqMicro
-  cases P.consent? <;> simp
-
-@[simp] lemma harmOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  harmOk (P:=P) (mapReqMicro r φ) = harmOk (P:=P) r := by
-  unfold harmOk mapReqMicro
-  cases P.harmModel? <;> cases P.harmTol? <;> simp
-
-@[simp] lemma deonticOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  deonticOk (P:=P) (mapReqMicro r φ) = deonticOk (P:=P) r := by
-  unfold deonticOk mapReqMicro
-  simp
-
-@[simp] lemma privacyOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  privacyOk (P:=P) (mapReqMicro r φ) = privacyOk (P:=P) r := by
-  unfold privacyOk mapReqMicro
-  cases P.privacyBudget? <;> cases P.privacyCost? <;> simp
-@[simp] lemma coiOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  coiOk (P:=P) (mapReqMicro r φ) = coiOk (P:=P) r := by
-  unfold coiOk mapReqMicro
-  cases P.coi? <;> cases P.stakeGraph? <;> cases r.micro <;> cases P.sigma? <;> simp [Alignment.mapMicro]
-@[simp] lemma robustOk_mapped (P : Policy A) (r : Request A) (φ : Alignment.Morph) :
-  robustOk (P:=P) (mapReqMicro r φ) = robustOk (P:=P) r := by
-  unfold robustOk mapReqMicro
-  cases P.confidence? <;> cases P.minConfidence? <;> cases P.confInterval? <;> simp
+-- Decision Mapping lemmas moved to `IndisputableMonolith/Ethics/Decision/Mapping.lean`.
 
 end Decision
 
@@ -8794,128 +8593,11 @@ open Classical
 universe u₂
 variable {A : Type u}
 
-/-‑ Prop-level counterparts (minimal, default to True; refine later) ‑-/
-def JusticeOKP (r : Request A) : Prop := True
-def ReciprocityOKP (r : Request A) : Prop := True
-def TemperanceOKP (r : Request A) : Prop := True
-def WithinWindowP (r : Request A) : Prop := True
-def UniqueInWindowP (r : Request A) : Prop := True
-def FairnessOKP (r : Request A) : Prop := True
-def AdversarialOKP (r : Request A) : Prop := True
-def TruthOKP (P : Policy A) (r : Request A) : Prop := True
-def ConsentOKP (P : Policy A) (r : Request A) : Prop := True
-def HarmOKP (P : Policy A) (r : Request A) : Prop := True
-def DeonticOKP (P : Policy A) (r : Request A) : Prop := True
-def PrivacyOKP (P : Policy A) (r : Request A) : Prop := True
-def COIOKP (P : Policy A) (r : Request A) : Prop := True
-def RobustOKP (P : Policy A) (r : Request A) : Prop := True
-def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+-- Bool/Prop stubs and bridging moved to `IndisputableMonolith/Ethics/Decision/BoolProp.lean`.
 
-/-- Bool ↔ Prop bridging lemmas -/
-@[simp] lemma justiceOk_true_iff (r : Request A) : justiceOk r = true ↔ JusticeOKP r := by
-  simp [justiceOk, JusticeOKP]
+/-! Example usage moved to `IndisputableMonolith/Ethics/Decision/Examples.lean`. -/
 
-@[simp] lemma reciprocityOk_true_iff (P : Policy A) (r : Request A) : reciprocityOk (P:=P) r = true ↔ ReciprocityOKP r := by
-  -- Prop-level Reciprocity is still a stub True; Bool gate depends on policy sigma hook
-  simp [reciprocityOk, ReciprocityOKP]
-@[simp] lemma temperanceOk_true_iff (P : Policy A) (r : Request A) : temperanceOk (P:=P) r = true ↔ TemperanceOKP r := by
-  simp [temperanceOk, TemperanceOKP]
-
-@[simp] lemma withinWindow_true_iff (r : Request A) : withinWindow r = true ↔ WithinWindowP r := by
-  simp [withinWindow, WithinWindowP]
-
-@[simp] lemma uniqueInWindow_true_iff (r : Request A) : uniqueInWindow r = true ↔ UniqueInWindowP r := by
-  simp [uniqueInWindow, UniqueInWindowP]
-
-@[simp] lemma fairnessOk_true_iff (r : Request A) : fairnessOk r = true ↔ FairnessOKP r := by
-  simp [fairnessOk, FairnessOKP]
-
-@[simp] lemma adversarialOk_true_iff (r : Request A) : adversarialOk r = true ↔ AdversarialOKP r := by
-  simp [adversarialOk, AdversarialOKP]
-
-@[simp] lemma truthOk_true_iff (P : Policy A) (r : Request A) : truthOk (P:=P) r = true ↔ TruthOKP (P:=P) r := by
-  simp [truthOk, TruthOKP]
-
-@[simp] lemma consentOk_true_iff (P : Policy A) (r : Request A) : consentOk (P:=P) r = true ↔ ConsentOKP (P:=P) r := by
-  simp [consentOk, ConsentOKP]
-
-@[simp] lemma harmOk_true_iff (P : Policy A) (r : Request A) : harmOk (P:=P) r = true ↔ HarmOKP (P:=P) r := by
-  simp [harmOk, HarmOKP]
-
-@[simp] lemma deonticOk_true_iff (P : Policy A) (r : Request A) : deonticOk (P:=P) r = true ↔ DeonticOKP (P:=P) r := by
-  simp [deonticOk, DeonticOKP]
-
-@[simp] lemma privacyOk_true_iff (P : Policy A) (r : Request A) : privacyOk (P:=P) r = true ↔ PrivacyOKP (P:=P) r := by
-  simp [privacyOk, PrivacyOKP]
-
-@[simp] lemma coiOk_true_iff (P : Policy A) (r : Request A) : coiOk (P:=P) r = true ↔ COIOKP (P:=P) r := by
-  simp [coiOk, COIOKP]
-
-@[simp] lemma robustOk_true_iff (P : Policy A) (r : Request A) : robustOk (P:=P) r = true ↔ RobustOKP (P:=P) r := by
-  simp [robustOk, RobustOKP]
-
-/-- Admissible (Bool) iff Admissible (Prop). -/
-lemma admissible_true_iff (P : Policy A) (r : Request A) :
-  admissible (P:=P) r = true ↔ Admissible P.period r.cq r.hasExperience := by
-  classical
-  by_cases h : Admissible P.period r.cq r.hasExperience
-  · simp [admissible, h]
-  · simp [admissible, h]
-
-/‑‑ Example usage for fairness/time-window hooks ‑/
-namespace Examples
-
-open IndisputableMonolith.Measurement
-
-def unitCost : CostModel Unit :=
-{ cost := fun _ => (0 : ℝ)
-, nonneg := by intro _; simpa }
-
-def Punit : Policy Unit := { period := 8, threshold := 0, costModel := unitCost }
-
-def cqLo : CQ := { listensPerSec := 1, opsPerSec := 1, coherence8 := 1
-, coherence8_bounds := by
-    exact And.intro (by decide) (And.intro (by decide) (by decide)) }
-
-def cqHi : CQ := { listensPerSec := 2, opsPerSec := 1, coherence8 := 1
-, coherence8_bounds := by
-    exact And.intro (by decide) (And.intro (by decide) (by decide)) }
-
-def rLo : Request Unit := { action := (), cq := cqLo }
-def rHi : Request Unit := { action := (), cq := cqHi }
-
-/-- With default-true gates and period 8 (no Gap45 gating), all requests pass filter. -/
-@[simp] theorem filter_all_pass (xs : List (Request Unit)) :
-  filterByGates (P:=Punit) xs = xs := by
-  classical
-  -- admissible holds (period=8 disables Gap45 requirement), and all gates are True
-  simp [filterByGates, gatesOk, admissible, IndisputableMonolith.Gap45.requiresExperience,
-        justiceOk, reciprocityOk, temperanceOk, withinWindow, uniqueInWindow, fairnessOk,
-        adversarialOk, Measurement.score]
-
-end Examples
-
-/-- Fairness parity helper over batches: require equal acceptance rates per group within tolerance. -/
-structure ParityCfg where
-  groupOf : Request Unit → String
-  tol : ℝ := 0.0
-
-def acceptRate (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) (g : String) : ℝ :=
-  let gs := xs.filter (fun r => cfg.groupOf r = g)
-  if gs.length = 0 then 1 else
-    let acc := (gs.filter (fun r => gatesOk (P:=P) r)).length
-    (acc : ℝ) / (gs.length : ℝ)
-
-def parityOk (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) : Bool :=
-  let groups := (xs.map cfg.groupOf).eraseDups
-  match groups with
-  | [] => True
-  | g :: gs =>
-      let base := acceptRate P cfg xs g
-      gs.all (fun h => |acceptRate P cfg xs h - base| ≤ cfg.tol)
-
-@[simp] theorem parity_trivial (P : Policy Unit) (cfg : ParityCfg) :
-  parityOk P cfg [] = true := by simp [parityOk]
+-- Parity helpers moved to `IndisputableMonolith/Ethics/Decision/Parity.lean`.
 /-- Prop counterparts for fairness components (skeletal). -/
 def EqOppOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 def CalibOKP (P : Policy A) (xs : List (Request A)) : Prop := True
@@ -8933,11 +8615,7 @@ def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 @[simp] lemma crossAgentParityOk_true_iff (P : Policy A) (xs : List (Request A)) :
   crossAgentParityOk (P:=P) xs = true ↔ CrossAgentOKP (P:=P) xs := by simp [crossAgentParityOk, CrossAgentOKP]
 
-@[simp] lemma fairnessBatchOk_mapped (P : Policy A) (xs : List (Request A)) (φ : Alignment.Morph) :
-  fairnessBatchOk (P:=P) (xs.map (fun r => mapReqMicro r φ)) = fairnessBatchOk (P:=P) xs := by
-  classical
-  unfold fairnessBatchOk eqOppOk calibOk individualFairnessOk crossAgentParityOk
-  simp [filterByGates, gatesOk, mapReqMicro]
+-- Fairness bridging lemmas moved to `IndisputableMonolith/Ethics/Decision/Fairness.lean`.
 
 end Decision
 end Ethics
@@ -8960,48 +8638,7 @@ or floating-point evaluations) can be established in a separate module
 that imports analysis libraries, while this monolith retains a compact
 core with clear interfaces.
 -/
-namespace Pipelines
-
-open Real
-
-/-- Golden ratio φ as a concrete real number. -/
-def phi : ℝ := (1 + Real.sqrt 5) / 2
-
-namespace GapSeries
-
-/-- Gap-series coefficient (1-indexed by design via `n.succ`).
-The conventional closed-form uses the series of `log(1+x)` at `x = z/φ`.
-This definition is dimensionless and self-contained. -/
-def coeff (n : ℕ) : ℝ :=
-  let k := n.succ
-  ((-1 : ℝ) ^ k) / (k : ℝ) / (phi ^ k)
-/-- Finite partial sum (0..n-1) of the gap coefficients (evaluated at z=1).
-This stays purely algebraic here; convergence and identification with
-`log(1 + 1/φ)` can be proved in a companion module that imports analysis. -/
-def partialSum (n : ℕ) : ℝ :=
-  (Finset.range n).sum (fun i => coeff i)
-
-/-- Generating functional F(z) := log(1 + z/φ).  -/
-def F (z : ℝ) : ℝ := Real.log (1 + z / phi)
-
-/-- The master gap value as the generator at z=1. -/
-def f_gap : ℝ := F 1
-@[simp] lemma f_gap_def : f_gap = Real.log (1 + 1 / phi) := rfl
-end GapSeries
-
-namespace Curvature
-
-/-- Curvature-closure constant δ_κ used in the α pipeline.
-Defined here as the exact rational/π expression from the voxel seam count. -/
-def deltaKappa : ℝ := - (103 : ℝ) / (102 * Real.pi ^ 5)
-/-- The predicted dimensionless inverse fine-structure constant
-α^{-1} = 4π·11 − (ln φ + δ_κ).
-This is a pure expression-level definition (no numerics here). -/
-def alphaInvPrediction : ℝ := 4 * Real.pi * 11 - (Real.log phi + deltaKappa)
-
-end Curvature
-
-end Pipelines
+-- (Pipelines moved to `IndisputableMonolith/Pipelines.lean`)
 
 end IndisputableMonolith
 
@@ -9079,46 +8716,8 @@ end URC
 namespace IndisputableMonolith
 namespace URCAdapters
 
-def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge := URC.BridgeAxioms.Manifest.bridge
-
-def routeA_report : String := URC.BridgeAxioms.Manifest.report
-
-def routeA_end_to_end_demo : String :=
-  "URC Route A end-to-end: absolute layer accepts bridge; UniqueCalibration/MeetsBands witnesses available."
-
 /-- Unified A/B wiring report. -/
-def routeAB_report : String :=
-  let _a := routeA_end_to_end_proof
-  let _b := URCGenerators.determination_by_generators (VG := URCGenerators.demo_generators_phi)
-  "URC Routes A and B: both wired (A: axioms ⇒ bridge; B: generators ⇒ bridge)."
-
-/-- Closure-style messages mirroring Route A for Route B and combined. -/
-def routeB_closure_report : String :=
-  let _ := routeB_bridge_end_to_end_proof
-  "URC Route B end-to-end: B ⇒ C wired via generators (absolute layer witnesses constructed)."
-
-def routeAB_closure_report : String :=
-  let _ := routeA_end_to_end_proof
-  let _ := routeB_bridge_end_to_end_proof
-  "URC Routes A and B: both yield B ⇒ C closure wiring (absolute layer)."
-
-/-- Single manifest string: reports Route A and B closure wiring and λ_rec uniqueness. -/
-def grand_manifest : String :=
-  let _ := routeA_end_to_end_proof
-  let _ := routeB_bridge_end_to_end_proof
-  let _ := urc_lambda_unique_holds
-  "URC Manifest: A (axioms→bridge) ⇒ C wired; B (generators→bridge) ⇒ C wired; λ_rec uniqueness OK."
-
-def routeA_end_to_end_proof :
-  RH.RS.UniqueCalibration RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Anchors.mk 1 1)
-  ∧ RH.RS.MeetsBands RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []) := by
-  let L := RH.RS.Instances.IM
-  have B : RH.RS.Bridge L := RH.RS.Bridge.mk Unit
-  let A : RH.RS.Anchors := RH.RS.Anchors.mk 1 1
-  let X : RH.RS.Bands := RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []
-  have hU : RH.RS.UniqueCalibration L B A := uniqueCalibration_any L B A
-  have hM : RH.RS.MeetsBands L B X := meetsBands_any_default L B X
-  exact absolute_layer_any (L:=L) (B:=B) (A:=A) (X:=X) hU hM
+-- (URCAdapters moved to `IndisputableMonolith/URCAdapters.lean`)
 
 end URCAdapters
 end IndisputableMonolith
