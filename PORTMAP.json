@@ -806,9 +806,9 @@
       "id": "TruthCore:MRD.Scaling",
       "namespace": "IndisputableMonolith.TruthCore.MRD",
       "path": "IndisputableMonolith/TruthCore/MRD/Scaling.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "ScalingModel, predicted_ratio, rescale lemma"
+      "notes": "ScalingModel, predicted_ratio, rescale lemma; extracted and green"
     }
     ,{
       "id": "Verification:KGateBridge",
