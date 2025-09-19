@@ -438,9 +438,17 @@
       "id": "MaxwellDEC:scaffold",
       "namespace": "IndisputableMonolith.MaxwellDEC",
       "path": "IndisputableMonolith/MaxwellDEC.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "Replaced by MaxwellDEC:Equations entry; promoted and green"
+    }
+    ,{
+      "id": "LedgerUniqueness:core",
+      "namespace": "IndisputableMonolith.LedgerUniqueness",
+      "path": "IndisputableMonolith/LedgerUniqueness.lean",
       "status": "in_progress",
       "owner": "agentE",
-      "notes": "Simplex/DForm/coboundary/Hodge/Equations PEC scaffold"
+      "notes": "IsAffine and uniqueness scaffold (axiom stubs)"
     }
     ,{
       "id": "Verification:RenderedIndex",
@@ -449,6 +457,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "Rendered index extracted; core green"
+    },
+    {
+      "id": "Verification:Manifest",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Manifest.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Falsifiable + manifest strings/id helpers"
     },
     {
       "id": "RSBridge:Anchor",

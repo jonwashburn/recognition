@@ -399,50 +399,7 @@ theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
 theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
   BridgeEval K_B_obs U = BridgeEval K_B_obs U' := anchor_invariance K_B_obs h
 
-/-- Rendered falsifiability item tying a failure condition to a guarding lemma. -/
-structure Falsifiable where
-  id          : String
-  wouldFailIf : String
-  guardedBy   : String
-deriving Repr
-
-/-- List of falsifiability conditions with guarding lemmas. -/
-def falsifiabilityRendered : List Falsifiable :=
-  [ { id := "KGateMismatch"
-    , wouldFailIf := "K_A ≠ K_B"
-    , guardedBy := "Constants.RSUnits.K_gate / Verification.K_gate_bridge"
-    }
-  , { id := "ConeViolation"
-    , wouldFailIf := "∃ n,x,y: rad y − rad x > c · (time y − time x)"
-    , guardedBy := "LightCone.StepBounds.cone_bound / Verification.cone_bound_export"
-    }
-  , { id := "DropPlus4PreservesResidue"
-    , wouldFailIf := "AnchorEq Z_dropPlus4"
-    , guardedBy := "Recognition.Ablation.dropPlus4_contradiction"
-    }
-  , { id := "DropQ4PreservesResidue"
-    , wouldFailIf := "AnchorEq Z_dropQ4"
-    , guardedBy := "Recognition.Ablation.dropQ4_contradiction"
-    }
-  , { id := "Break6QPreservesResidue"
-    , wouldFailIf := "AnchorEq Z_break6Q"
-    , guardedBy := "Recognition.Ablation.break6Q_contradiction"
-    }
-  ]
-
-/-- Machine-readable manifest: claims, gates, and knobs count. -/
-structure RenderedManifest where
-  claims         : List RenderedClaim
-  gates          : List GateSpec
-  falsifiability : List Falsifiable
-  knobs          : Nat
-deriving Repr
-
-def manifest : RenderedManifest :=
-{ claims := dimlessClaimsRendered
-, gates  := gatesRendered
-, falsifiability := falsifiabilityRendered
-, knobs  := knobsCount }
+/-! ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean) -/
 
 end Verification
 
@@ -642,7 +599,6 @@ noncomputable def kOf (δ : ℤ) (p : DeltaSub δ) : Nat := Int.toNat (toZ δ p)
 @[simp] lemma kOf_fromNat (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
   kOf δ (fromNat δ m) = m := by
   simp [kOf, fromNat, toZ_fromZ δ hδ, Int.toNat_natCast]
-
 lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
   kOf δ (fromNat δ (m+1)) = kOf δ (fromNat δ m) + 1 := by
   simp only [kOf, fromNat, toZ_fromZ δ hδ, Int.natCast_add, Int.natCast_one]
@@ -1938,7 +1894,6 @@ theorem meetsBands_any_param (L : Ledger) (B : Bridge L)
   have hChk : meetsBandsChecker_gen U (sampleBandsFor U tol) :=
     And.intro hc (And.intro hKA (And.intro hKB hGate))
   exact meetsBands_any_of_checker (L:=L) (B:=B) (X:=sampleBandsFor U tol) ⟨U, hChk⟩
-
 universe v
 
 /-- Abstract ledger carrier to be instantiated by IndisputableMonolith. -/
@@ -3230,7 +3185,6 @@ lemma massCanon_ratio_lepton_mue :
                           - (Recognition.r Recognition.Species.e : ℝ)) := by
   exact massCanon_ratio_equalZ (i:=Recognition.Species.mu) (j:=Recognition.Species.e)
     (Recognition.equalZ_lepton_family.left)
-
 lemma massCanon_ratio_lepton_taumu :
   massCanon (i := Recognition.Species.tau) / massCanon (i := Recognition.Species.mu)
     = Recognition.PhiPow ((Recognition.r Recognition.Species.tau : ℝ)
@@ -3879,7 +3833,6 @@ lemma zeroWidthCert_valid : Valid zeroWidthCert := by
       intro i; dsimp [zeroWidthCert, Igap, memI]; simp
   , Ires_in_Igap := by
       intro i; dsimp [zeroWidthCert, Igap]; constructor <;> simp }
-
 /-- Exact anchor identity from the zero-width certificate: any residue inside the
     certified intervals equals `Fgap ∘ Z`. -/
 lemma anchorIdentity_of_zeroWidthCert
@@ -4527,7 +4480,6 @@ lemma PhiPow_nat (n : Nat) : PhiPow (n) = (Constants.phi) ^ n := by
 lemma mass_ratio_scale_free {M0 M1 : ℝ} {i j : Species} (hZ : Z i = Z j) :
   mass M0 i / mass M0 j = mass M1 i / mass M1 j := by
   simp [mass_ratio_phiPow (M0 := M0) hZ, mass_ratio_phiPow (M0 := M1) hZ]
-
 /-- Concrete lepton ratios at the anchor (equal‑Z family): μ/e and τ/μ. -/
 lemma mass_ratio_mu_e (M0 : ℝ) :
   mass M0 .mu / mass M0 .e = (Constants.phi) ^ (11 : Nat) := by
@@ -5031,79 +4983,7 @@ theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
 theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
   BridgeEval K_B_obs U = BridgeEval K_B_obs U' := anchor_invariance K_B_obs h
 
-/-! ### Falsifiability manifest (rendered "would fail if …" conditions) -/
-
-/-- Rendered falsifiability item tying a failure condition to a guarding lemma. -/
-structure Falsifiable where
-  id          : String
-  wouldFailIf : String
-  guardedBy   : String
-deriving Repr
-
-/-- List of falsifiability conditions with guarding lemmas. -/
-def falsifiabilityRendered : List Falsifiable :=
-  [ { id := "KGateMismatch"
-    , wouldFailIf := "K_A ≠ K_B"
-    , guardedBy := "Constants.RSUnits.K_gate / Verification.K_gate_bridge"
-    }
-  , { id := "ConeViolation"
-    , wouldFailIf := "∃ n,x,y: rad y − rad x > c · (time y − time x)"
-    , guardedBy := "LightCone.StepBounds.cone_bound / Verification.cone_bound_export"
-    }
-  , { id := "DropPlus4PreservesResidue"
-    , wouldFailIf := "AnchorEq Z_dropPlus4"
-    , guardedBy := "Recognition.Ablation.dropPlus4_contradiction"
-    }
-  , { id := "DropQ4PreservesResidue"
-    , wouldFailIf := "AnchorEq Z_dropQ4"
-    , guardedBy := "Recognition.Ablation.dropQ4_contradiction"
-    }
-  , { id := "Break6QPreservesResidue"
-    , wouldFailIf := "AnchorEq Z_break6Q"
-    , guardedBy := "Recognition.Ablation.break6Q_contradiction"
-    }
-  ]
-
-/-- Machine-readable manifest: claims, gates, and knobs count. -/
-structure RenderedManifest where
-  claims         : List RenderedClaim
-  gates          : List GateSpec
-  falsifiability : List Falsifiable
-  knobs          : Nat
-deriving Repr
-
-def manifest : RenderedManifest :=
-{ claims := dimlessClaimsRendered
-, gates  := gatesRendered
-, falsifiability := falsifiabilityRendered
-, knobs  := knobsCount }
-
-/-- #eval-ready: extract claim ids. -/
-def claimIds : List String := dimlessClaimsRendered.map (fun c => c.id)
-
-/-- #eval-ready: extract gate ids. -/
-def gateIds : List String := gatesRendered.map (fun g => g.id)
-
-/-- #eval-ready: render manifest as a compact string list. -/
-def manifestStrings : List String :=
-  [ s!"claims={ {String.intercalate ", " claimIds} }"
-  , s!"gates={ {String.intercalate ", " gateIds} }"
-  , s!"knobs={ {toString knobsCount} }"
-  ]
-
-/-- #eval-ready: URC-only ids (placeholders now). -/
-def urcClaimIds : List String :=
-  [ "URC.lawful_physical", "URC.lawful_computational", "URC.lawful_ethical"
-  , "URC.lambda_rec_unique", "URC.AE_skeleton" ]
-
-def urcGateIds : List String :=
-  [ "URC.CertificatesGate", "URC.FixedPointT" ]
-
-def urcManifestStrings : List String :=
-  [ s!"urc_claims={ {String.intercalate ", " urcClaimIds} }"
-  , s!"urc_gates={ {String.intercalate ", " urcGateIds} }" ]
-end Verification
-end IndisputableMonolith
+/-! ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean) -/
 
 /-- ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
 namespace IndisputableMonolith
@@ -5170,7 +5050,6 @@ lemma eightbeat_holds : eightbeat_prop := by simpa using IndisputableMonolith.pe
 def EL_prop : Prop :=
   (deriv IndisputableMonolith.Jlog 0 = 0)
   ∧ (∀ t : ℝ, IndisputableMonolith.Jlog 0 ≤ IndisputableMonolith.Jlog t)
-
 lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_zero, fun t => IndisputableMonolith.EL_global_min t⟩
 
 /-- Recognition lower bound (SAT exemplar) as a Prop. -/
