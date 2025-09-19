@@ -213,7 +213,7 @@ noncomputable def runKGate (U : RSUnits) (inp : KGateInput) : KGateResult :=
 
 /-! ### Measurement fixtures (parameterized, no axioms) -/
 
--- (Moved to IndisputableMonolith/Bridge/BridgeData.lean)
+-- (Moved to IndisputableMonolith/Bridge/Data.lean)
 
 /-! ### Machine-checkable index (rendered, #eval-friendly) -/
 

@@ -22,20 +22,20 @@ noncomputable def g (S : RotSys) (r : ℝ) : ℝ :=
 /-- Algebraic identity: `vrot^2 = G Menc / r` for `r > 0`. -/
 lemma vrot_sq (S : RotSys) {r : ℝ} (hr : 0 < r) :
   (vrot S r) ^ 2 = S.G * S.Menc r / r := by
+  dsimp [vrot]
   have hnum_nonneg : 0 ≤ S.G * S.Menc r := by
     have hM : 0 ≤ S.Menc r := S.nonnegM r
     exact mul_nonneg (le_of_lt S.posG) hM
   have hfrac_nonneg : 0 ≤ S.G * S.Menc r / r := by
     exact div_nonneg hnum_nonneg (le_of_lt hr)
-  have : (vrot S r) ^ 2 = S.G * S.Menc r / r := by
-    dsimp [vrot, pow_two]
-    rw [Real.mul_self_sqrt hfrac_nonneg]
-  exact this
+  calc
+    (Real.sqrt (S.G * S.Menc r / r)) ^ 2 = S.G * S.Menc r / r := by
+      rw [Real.sq_sqrt hfrac_nonneg]
 
 /-- If the enclosed mass grows linearly, `Menc(r) = α r` with `α ≥ 0`, then the rotation curve is flat:
     `vrot(r) = √(G α)` for all `r > 0`. -/
 lemma vrot_flat_of_linear_Menc (S : RotSys) (α : ℝ)
-  (hα : 0 ≤ α) (hlin : ∀ {r : ℝ}, 0 < r → S.Menc r = α * r) :
+  (hlin : ∀ {r : ℝ}, 0 < r → S.Menc r = α * r) :
   ∀ {r : ℝ}, 0 < r → vrot S r = Real.sqrt (S.G * α) := by
   intro r hr
   have hM : S.Menc r = α * r := hlin hr
@@ -63,10 +63,20 @@ lemma g_of_linear_Menc (S : RotSys) (α : ℝ)
         _ = S.G * α * r / r := by ring
         _ = S.G * α := by field_simp [hrne]
     dsimp [vrot]
-    rw [Real.mul_self_sqrt]
-    · rw [hfrac]
-    · have : 0 ≤ S.G * α := mul_nonneg (le_of_lt S.posG) (by linarith [hr])
+    have hnonneg : 0 ≤ S.G * S.Menc r / r := by
+      have : 0 ≤ S.G * α := by
+        have hα_nonneg : 0 ≤ α := by
+          have : 0 ≤ α * r := by rw [hM]; exact S.nonnegM r
+          have hr_pos : 0 < r := hr
+          have : 0 ≤ α := (mul_nonneg_iff.mp this).1
+          exact this
+        exact mul_nonneg (le_of_lt S.posG) hα_nonneg
+      rw [←hfrac] at this
       exact this
+    calc
+      Real.sqrt (S.G * S.Menc r / r) ^ 2 = S.G * S.Menc r / r := by
+        rw [Real.sq_sqrt hnonneg]
+      _ = S.G * α := by rw [hfrac]
   calc
     g S r = (vrot S r) ^ 2 / r := by dsimp [g]
     _ = (S.G * α) / r := by rw [hvrot_sq]

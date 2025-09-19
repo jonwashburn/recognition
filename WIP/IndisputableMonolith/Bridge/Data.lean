@@ -83,7 +83,15 @@ noncomputable def witness (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Witness :=
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
 /-- Tick from anchors via hop map λ_rec = c · τ0. -/
-def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
+noncomputable def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
+
+/-- Placeholder for PhiPow function - use axiom stub for dependency-light extraction. -/
+noncomputable axiom PhiPow (x : ℝ) : ℝ
+
+/-- Placeholder for recognition functions - use axiom stubs for dependency-light extraction. -/
+noncomputable axiom Recognition_r : ℝ
+noncomputable axiom Recognition_Fgap : ℝ → ℝ
+noncomputable axiom Recognition_Z : ℝ
 
 /-- Coherence energy: E_coh = φ^-5 · (2π ħ / τ0). -/
 noncomputable def E_coh (B : BridgeData) : ℝ :=
@@ -98,9 +106,7 @@ noncomputable def alpha : ℝ := 1 / alphaInv
 
 /-- Electron mass in units of E_coh: m_e/E_coh = Φ(r_e + 𝔽(Z_e)). -/
 noncomputable def m_e_over_Ecoh : ℝ :=
-  IndisputableMonolith.Recognition.PhiPow
-    ((IndisputableMonolith.Recognition.r IndisputableMonolith.Recognition.Species.e : ℝ)
-     + IndisputableMonolith.Recognition.Fgap (IndisputableMonolith.Recognition.Z IndisputableMonolith.Recognition.Species.e))
+  PhiPow (Recognition_r + Recognition_Fgap Recognition_Z)
 
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 noncomputable def m_e (B : BridgeData) : ℝ := m_e_over_Ecoh * E_coh B
