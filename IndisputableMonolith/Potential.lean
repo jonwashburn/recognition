@@ -111,5 +111,3 @@ lemma diff_in_deltaSub {δ : ℤ} {p : Pot M}
 
 end Potential
 end IndisputableMonolith
-
-

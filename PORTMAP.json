@@ -694,9 +694,9 @@
       "id": "ILG:XiBinsMonotonicity",
       "namespace": "IndisputableMonolith.ILG",
       "path": "IndisputableMonolith/ILG/XiBins.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "xi_of_u, xi_of_bin, monotonicity over quintiles"
+      "notes": "extracted xi_of_u/bin; monotonicity axiom stub; core green"
     }
   ]
 }

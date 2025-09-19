@@ -1,4 +1,5 @@
 import Mathlib
+open scoped BigOperators
 
 namespace IndisputableMonolith
 namespace ClassicalBridge
@@ -11,7 +12,7 @@ structure CoarseGrain (α : Type) where
 
 /-- Riemann sum over the first `n` embedded cells for an observable `f`. -/
 def RiemannSum (CG : CoarseGrain α) (f : α → ℝ) (n : Nat) : ℝ :=
-  ∑ i in Finset.range n, f (CG.embed i) * CG.vol (CG.embed i)
+  (Finset.range n).sum (fun i => f (CG.embed i) * CG.vol (CG.embed i))
 
 /-- Statement schema for the continuum continuity equation (divergence form in the limit). -/
 structure ContinuityEquation (α : Type) where

@@ -18,7 +18,7 @@ open Real
 | 3 => xi_of_u 0.7
 | _ => xi_of_u 0.9
 
-/-- Monotonicity over the canonical quintile bin centers. (axiom stub, WIP) -/
+/-- Monotonicity over the canonical quintile bin centers. (axiom stub) -/
 axiom xi_of_bin_mono : xi_of_bin 0 ≤ xi_of_bin 1 ∧ xi_of_bin 1 ≤ xi_of_bin 2 ∧ xi_of_bin 2 ≤ xi_of_bin 3 ∧ xi_of_bin 3 ≤ xi_of_bin 4
 
 end

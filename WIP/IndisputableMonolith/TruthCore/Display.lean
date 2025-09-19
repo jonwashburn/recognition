@@ -1,8 +1,7 @@
 import Mathlib
 import IndisputableMonolith.Constants
 import IndisputableMonolith.Verification
-import IndisputableMonolith.Verification.DEC
-import WIP.IndisputableMonolith.Constants.KDisplay
+-- Avoid importing heavier DEC modules; we provide a local minimal skeleton below.
 
 namespace IndisputableMonolith
 namespace TruthCore
@@ -16,7 +15,7 @@ namespace DEC
 
 universe u
 
-structure CochainSpace (A : Type u) where
+structure CochainSpace (A : Type u) [Zero A] where
   d0 : A → A
   d1 : A → A
   d2 : A → A
@@ -25,7 +24,7 @@ structure CochainSpace (A : Type u) where
 
 namespace CochainSpace
 
-variable {A : Type u}
+variable {A : Type u} [Zero A]
 
 def F (X : CochainSpace A) (A1 : A) : A := X.d1 A1
 
@@ -40,7 +39,7 @@ end DEC
 
 namespace DECExports
 
-variable {A : Type}
+variable {A : Type} [Zero A]
 
 /-- dd=0 exporter: both successive coboundaries vanish. -/
 theorem dec_dd_eq_zero (X : DEC.CochainSpace A) :
@@ -56,8 +55,10 @@ end DECExports
 
 /-! ### Display identity (dimensionless speed ratio) -/
 
-/-- Local WIP axiom: display-speed identity λ_kin/τ_rec = c. -/
+/-- Local WIP declarations for displays (keep it minimal and axiomatized). -/
 namespace Constants.RSUnits
+@[simp] noncomputable def tau_rec_display (U : RSUnits) : ℝ := K * U.tau0
+@[simp] noncomputable def lambda_kin_display (U : RSUnits) : ℝ := K * U.ell0
 axiom display_speed_eq_c (U : RSUnits) :
   (lambda_kin_display U) / (tau_rec_display U) = U.c
 end Constants.RSUnits
