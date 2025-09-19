@@ -61,12 +61,11 @@ structure KGateResult where
 noncomputable def runKGate (U : RSUnits) (inp : KGateInput) : KGateResult :=
   let KA : ℝ := BridgeEval K_A_obs U
   let KB : ℝ := inp.KB
-  let ucomb : ℝ := inp.u_ell0 + inp.u_lrec -- placeholder aggregator; details can be refined
+  let ucomb : ℝ := IndisputableMonolith.Verification.uComb inp.u_ell0 inp.u_lrec inp.rho
   let lhs : ℝ := Real.abs (KA - KB)
   let rhs : ℝ := inp.k * ucomb
   let ok : Bool := decide (lhs ≤ rhs)
   { pass := ok
-  , witness := if ok then "PASS" else "FAIL" -- Simplified to avoid string interpolation issues
-  }
+  , witness := if ok then "|K_A − K_B| ≤ k·u_comb (ρ)" else "|K_A − K_B| > k·u_comb (ρ)" }
 
 end IndisputableMonolith
