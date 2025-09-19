@@ -329,14 +329,6 @@
       "status": "done",
       "owner": "agentE",
       "notes": "extracted delta subgroup; core green"
-    },
-    {
-      "id": "UnitMapping:core",
-      "namespace": "IndisputableMonolith.UnitMapping",
-      "path": "IndisputableMonolith/UnitMapping.lean",
-      "status": "done",
-      "owner": "agentE",
-      "notes": "extracted affine δ→ℝ mapping; core green"
     }
   ]
 }
