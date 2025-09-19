@@ -1,12 +1,15 @@
 import Mathlib
 import IndisputableMonolith.Core
+import IndisputableMonolith.Verification.Observables
 
 namespace IndisputableMonolith
 
-/-- Axiom stubs for dependencies - depends on Core module. -/
-axiom StatementType : Type
-axiom Observable : Type
-axiom RSUnits : Type
+/-- Minimal statement classification for verification claims. -/
+inductive StatementType
+| eq
+| le
+| generic
+deriving DecidableEq, Repr
 
 /-- Status of a claim: proven, failed, or unchecked. -/
 inductive ClaimStatus
@@ -31,7 +34,7 @@ def dimensionless_claim (id : String) (stype : StatementType)
 
 /-- Evaluate a claim under anchors; due to invariance, result is anchor-independent. -/
 @[simp] def Claim.value (c : Claim) (U : RSUnits) : ℝ :=
-  sorry -- WIP: depends on BridgeEval function
+  BridgeEval c.expr U
 
 /-- Check an equality claim by proof; returns updated status. -/
 def Claim.checkEq (c : Claim) (U : RSUnits) (_h : c.value U = c.target) : Claim :=
@@ -56,12 +59,12 @@ structure KGateResult where
 
 /-- K-gate checker: dimensionless bridge gate |K_A − K_B| ≤ k·u_comb. -/
 noncomputable def runKGate (U : RSUnits) (inp : KGateInput) : KGateResult :=
-  let KA : ℝ := sorry -- WIP: depends on BridgeEval K_A_obs U
+  let KA : ℝ := BridgeEval K_A_obs U
   let KB : ℝ := inp.KB
   let ucomb : ℝ := inp.u_ell0 + inp.u_lrec -- placeholder aggregator; details can be refined
-  let lhs : ℝ := sorry -- WIP: depends on Real.abs function
+  let lhs : ℝ := Real.abs (KA - KB)
   let rhs : ℝ := inp.k * ucomb
-  let ok : Bool := decide (sorry ≤ rhs) -- WIP: depends on Real.abs and comparison
+  let ok : Bool := decide (lhs ≤ rhs)
   { pass := ok
   , witness := if ok then "PASS" else "FAIL" -- Simplified to avoid string interpolation issues
   }

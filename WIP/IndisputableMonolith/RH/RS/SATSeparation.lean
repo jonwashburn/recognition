@@ -5,7 +5,8 @@ namespace RH
 namespace RS
 
 /-- Minimal Ledger stub for SAT separation extraction. -/
-axiom Ledger : Type
+structure Ledger where
+  dummy : Unit := ()
 
 /-! 4) Recognition–Computation inevitability (SAT exemplar): RS forces a fundamental separation. -/
 Minimal SAT separation placeholders to keep the spec syntactically complete in WIP. -/

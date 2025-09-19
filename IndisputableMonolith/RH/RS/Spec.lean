@@ -116,26 +116,39 @@ class UniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) : Prop
 class MeasurementRealityBridge (L : Ledger) : Prop
 
 /-- General 45‑gap consequences constructor from a rung‑45 witness and a no‑multiples hypothesis. -/
-axiom fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
+theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
   (hasR : HasRung L B)
   (h45 : hasR.rung 45)
   (hNoMul : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)) :
-  ∃ (F : FortyFiveConsequences L B), True
+  ∃ (F : FortyFiveConsequences L B), True := by
+  refine ⟨{
+      hasR := hasR
+    , delta_time_lag := (3 : ℚ) / 64
+    , delta_is_3_over_64 := rfl
+    , rung45_exists := h45
+    , no_multiples := hNoMul
+    , sync_lcm_8_45_360 := True
+    }, trivial⟩
 
 /-- 45‑gap consequence for any ledger/bridge given a rung‑45 witness and no‑multiples.
     This provides a non‑IM branch to satisfy the 45‑gap spec. -/
-axiom fortyfive_gap_spec_any_with_witness (φ : ℝ) :
+theorem fortyfive_gap_spec_any_with_witness (φ : ℝ) :
   ∀ (L : Ledger) (B : Bridge L),
     CoreAxioms L → BridgeIdentifiable L → UnitsEqv L →
     HasRung L B → FortyFiveGapHolds L B →
     (True) → (True) →
-      ∃ (F : FortyFiveConsequences L B), True
+      ∃ (F : FortyFiveConsequences L B), True := by
+  intro L B _core _id _units hasR holds _ _
+  -- Build the consequences from the provided witnesses
+  refine fortyfive_gap_consequences_any L B hasR holds.rung45 holds.no_multiples
 
 /-- 45‑gap consequence for any ledger/bridge derived directly from the class witnesses. -/
-axiom fortyfive_gap_spec_any (φ : ℝ) :
+theorem fortyfive_gap_spec_any (φ : ℝ) :
   ∀ (L : Ledger) (B : Bridge L),
     CoreAxioms L → BridgeIdentifiable L → UnitsEqv L → FortyFiveGapHolds L B →
-      ∃ (F : FortyFiveConsequences L B), True
+      ∃ (F : FortyFiveConsequences L B), True := by
+  intro L B _core _id _units holds
+  refine fortyfive_gap_consequences_any L B holds.hasR holds.rung45 holds.no_multiples
 
 /-- General absolute‑layer bundling: package UniqueCalibration and MeetsBands under obligations. -/
 theorem absolute_layer_any (L : Ledger) (B : Bridge L) (A : Anchors) (X : Bands)
@@ -224,6 +237,18 @@ theorem meetsBands_any_default (L : Ledger) (B : Bridge L)
   have hc : evalToBands_c U (sampleBandsFor U.c) := by
     simpa [evalToBands_c] using center_in_sampleBandsFor (x:=U.c)
   exact meetsBands_any_of_eval L B (sampleBandsFor U.c) U hc
+
+/-! ### Default instances wiring (minimal witnesses) -/
+
+/-- Default UniqueCalibration instance from the generic witness. -/
+noncomputable instance defaultUniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) :
+  UniqueCalibration L B A := uniqueCalibration_any L B A
+
+/-- Default MeetsBands instance specialized to the canonical `sampleBandsFor U.c`. -/
+noncomputable instance defaultMeetsBandsSample
+  (L : Ledger) (B : Bridge L) (U : IndisputableMonolith.Constants.RSUnits) :
+  MeetsBands L B (sampleBandsFor U.c) :=
+  meetsBands_any_default L B U
 
 end RS
 end RH

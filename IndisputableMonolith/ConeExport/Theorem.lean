@@ -1,41 +1,36 @@
 import Mathlib
-import IndisputableMonolith.Core
+import IndisputableMonolith.Causality.Reach
+import IndisputableMonolith.LightCone
+import IndisputableMonolith.Constants
 
 /-!
 Cone Bound Export Theorem
 
 This module contains the verification-level cone bound theorem that exports
 the discrete light-cone bound without the step count parameter.
-
-Note: Using axiom stubs for dependency-light extraction.
 -/
 
-namespace IndisputableMonolith.ConeExport
+namespace IndisputableMonolith
+namespace ConeExport
 
-/-- Placeholder for kinematics type - use axiom stub for dependency-light extraction. -/
-axiom Kinematics (α : Type) : Type
+open Constants
 
-/-- Placeholder for step bounds predicate - use axiom stub for dependency-light extraction. -/
-axiom StepBounds {α : Type} (K : Kinematics α) (U : Constants.RSUnits) (time rad : α → ℝ) : Prop
+section
 
-/-- Placeholder for reach predicate - use axiom stub for dependency-light extraction. -/
-axiom ReachN {α : Type} (K : Kinematics α) (n : Nat) (x y : α) : Prop
-
-/-- Placeholder for cone bound lemma - use axiom stub for dependency-light extraction. -/
-axiom cone_bound {α : Type} (K : Kinematics α) (U : Constants.RSUnits) (time rad : α → ℝ)
-  (H : StepBounds K U time rad) {n x y} (h : ReachN K n x y) :
-  rad y - rad x ≤ U.c * (time y - time x)
+variable {α : Type _}
+variable (K : Causality.Kinematics α)
+variable (U : Constants.RSUnits)
+variable (time rad : α → ℝ)
 
 /-- Verification-level cone bound: if per-step bounds hold, any `n`-step reach obeys
     `rad y - rad x ≤ U.c * (time y - time x)` with no `n` in the statement. -/
 theorem cone_bound_export
-  {α : Type _}
-  (K : Kinematics α)
-  (U : Constants.RSUnits)
-  (time rad : α → ℝ)
-  (H : StepBounds K U time rad)
-  {n x y} (h : ReachN K n x y) :
+  (H : LightCone.StepBounds K U time rad)
+  {n x y} (h : Causality.ReachN K n x y) :
   rad y - rad x ≤ U.c * (time y - time x) := by
-  exact cone_bound K U time rad H h
+  simpa using (LightCone.StepBounds.cone_bound (K:=K) (U:=U) (time:=time) (rad:=rad) H h)
 
-end IndisputableMonolith.ConeExport
+end
+
+end ConeExport
+end IndisputableMonolith

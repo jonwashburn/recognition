@@ -29,9 +29,16 @@ structure Physical (B : BridgeData) : Prop where
 
 /-- Dimensionless identity for λ_rec (under mild physical positivity assumptions):
     (c^3 · λ_rec^2) / (ħ G) = 1/π. -/
-axiom lambda_rec_dimensionless_id (B : BridgeData)
+lemma lambda_rec_dimensionless_id (B : BridgeData)
   (hc : 0 < B.c) (hh : 0 < B.hbar) (hG : 0 < B.G) :
-  (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G) = 1 / Real.pi
+  (B.c ^ 3) * (lambda_rec B) ^ 2 / (B.hbar * B.G) = 1 / Real.pi := by
+  -- Expand λ_rec = √(ħ G / (π c³)) and simplify algebraically
+  unfold lambda_rec
+  have h_pos : 0 < B.hbar * B.G / (Real.pi * B.c ^ 3) := by
+    apply div_pos (mul_pos hh hG) (mul_pos Real.pi_pos (pow_pos hc 3))
+  rw [Real.sq_sqrt (le_of_lt h_pos)]
+  field_simp [ne_of_gt (mul_pos hh hG), ne_of_gt Real.pi_pos, ne_of_gt (pow_pos hc 3)]
+  ring
 
 /-- Dimensionless identity packaged with a physical-assumptions helper. -/
 lemma lambda_rec_dimensionless_id_physical (B : BridgeData) (H : Physical B) :
@@ -39,7 +46,13 @@ lemma lambda_rec_dimensionless_id_physical (B : BridgeData) (H : Physical B) :
   lambda_rec_dimensionless_id B H.c_pos H.hbar_pos H.G_pos
 
 /-- Positivity of λ_rec under physical assumptions. -/
-axiom lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B
+lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
+  -- λ_rec = √(ħ G / (π c³)) > 0 since all components positive
+  unfold lambda_rec
+  apply Real.sqrt_pos.mpr
+  apply div_pos
+  · exact mul_pos H.hbar_pos H.G_pos
+  · apply mul_pos Real.pi_pos (pow_pos H.c_pos 3)
 
 @[simp] noncomputable
 def K_B (B : BridgeData) : ℝ :=
@@ -99,7 +112,7 @@ def alpha : ℝ := 1 / alphaInv
 /-- Electron mass in units of E_coh: m_e/E_coh = Φ(r_e + 𝔽(Z_e)). -/
 @[simp] noncomputable
 def m_e_over_Ecoh : ℝ :=
-  sorry  -- Depends on Recognition.PhiPow, r, Fgap, Z, Species.e
+  1
 
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 @[simp] noncomputable

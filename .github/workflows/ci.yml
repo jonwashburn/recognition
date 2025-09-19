@@ -36,6 +36,12 @@ jobs:
           lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
           ./build/bin/ci_checks | sed -e 's/.*/HEAD: &/'
+      - name: CI guard (no sorry/admit, report axiom count)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          chmod +x scripts/ci_guard.sh
+          ./scripts/ci_guard.sh
 
   full_quick:
     name: Full quick checks (lean) — allow failure
@@ -62,3 +68,9 @@ jobs:
           lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
           ./build/bin/ci_checks | sed -e 's/.*/FULL: &/'
+      - name: CI guard (no sorry/admit, report axiom count)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          chmod +x scripts/ci_guard.sh
+          ./scripts/ci_guard.sh

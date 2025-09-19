@@ -61,14 +61,14 @@ theorem improves_comp_left (M : CostModel A) (C : Composable M)
 
 /-- CQ alignment at threshold θ ∈ [0,1]: score ≥ θ. -/
 /- Placeholder for Measurement.CQ dependency -/
-axiom CQ : Type
-axiom score : CQ → ℝ
+variable (CQ : Type)
+variable (score : CQ → ℝ)
 def CQAligned (θ : ℝ) (c : CQ) : Prop :=
   0 ≤ θ ∧ θ ≤ 1 ∧ score c ≥ θ
 
 /-- Ethical admissibility under 45‑gap: either no experience required, or the plan includes experience. -/
 /- Placeholder for Gap45 dependency -/
-axiom requiresExperience : CQ → Nat → Prop
+variable (requiresExperience : CQ → Nat → Prop)
 def Admissible (period : Nat) (c : CQ) (hasExperience : Prop) : Prop :=
   ¬ requiresExperience c period ∨ hasExperience
 

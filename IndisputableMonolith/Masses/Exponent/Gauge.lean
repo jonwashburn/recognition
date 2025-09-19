@@ -6,9 +6,6 @@ namespace Exponent
 
 def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
 
--- WIP helper axiom to avoid importing extra algebraic lemmas
-axiom inv_mul_cancel' (c : ℝ) (hc : c ≠ 0) : c⁻¹ * c = 1
-
 @[simp] lemma gauge_refl (m : ℝ) : GaugeEq m m := ⟨1, by norm_num, by simp⟩
 
 @[simp] lemma gauge_symm {a b : ℝ} : GaugeEq a b → GaugeEq b a := by
@@ -16,7 +13,7 @@ axiom inv_mul_cancel' (c : ℝ) (hc : c ≠ 0) : c⁻¹ * c = 1
   refine ⟨c⁻¹, inv_ne_zero hc, ?_⟩
   have h1 : c⁻¹ * a = b := by
     have : c⁻¹ * a = (c⁻¹ * c) * b := by simpa [mul_assoc, h]
-    simpa [inv_mul_cancel' c hc] using this
+    simpa [inv_mul_cancel hc] using this
   simpa [mul_comm] using h1.symm
 
 @[simp] lemma gauge_trans {a b c : ℝ} : GaugeEq a b → GaugeEq b c → GaugeEq a c := by

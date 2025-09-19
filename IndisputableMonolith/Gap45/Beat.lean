@@ -1,7 +1,14 @@
 import Mathlib
+import IndisputableMonolith.Measurement
 
 namespace IndisputableMonolith
 namespace Gap45
+
+/-! Gap45 gating rule: experience is required exactly when the plan period is not
+    a multiple of 8. This captures the Source.txt policy that 8-beat alignment
+    disables Gap45 gating. -/
+@[simp] def requiresExperience (_c : IndisputableMonolith.Measurement.CQ) (period : Nat) : Prop :=
+  ¬ (8 ∣ period)
 
 @[simp] lemma gcd_8_45_eq_one : Nat.gcd 8 45 = 1 := by decide
 

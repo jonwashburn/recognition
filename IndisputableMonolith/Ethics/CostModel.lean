@@ -1,4 +1,6 @@
 import Mathlib
+import IndisputableMonolith.Measurement
+import IndisputableMonolith.Gap45.Beat
 
 namespace IndisputableMonolith
 namespace Ethics
@@ -60,15 +62,15 @@ theorem improves_comp_left (M : CostModel A) (C : Composable M)
   exact C.strict_mono_left a b x h
 
 /-- CQ alignment at threshold θ ∈ [0,1]: score ≥ θ. -/
-/- Placeholder for Measurement.CQ dependency -/
-axiom CQ : Type
-axiom score : CQ → ℝ
+/- Placeholder removed: use concrete CQ and score from Measurement. -/
+abbrev CQ := IndisputableMonolith.Measurement.CQ
+@[simp] abbrev score (c : CQ) : ℝ := IndisputableMonolith.Measurement.score c
 def CQAligned (θ : ℝ) (c : CQ) : Prop :=
   0 ≤ θ ∧ θ ≤ 1 ∧ score c ≥ θ
 
 /-- Ethical admissibility under 45‑gap: either no experience required, or the plan includes experience. -/
-/- Placeholder for Gap45 dependency -/
-axiom requiresExperience : CQ → Nat → Prop
+/- Placeholder removed: use Gap45 gating rule (experience required iff 8 ∤ period). -/
+abbrev requiresExperience : CQ → Nat → Prop := IndisputableMonolith.Gap45.requiresExperience
 def Admissible (period : Nat) (c : CQ) (hasExperience : Prop) : Prop :=
   ¬ requiresExperience c period ∨ hasExperience
 
