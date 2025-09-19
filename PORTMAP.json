@@ -406,9 +406,9 @@
       "id": "Bridge:TauAndEcoh",
       "namespace": "IndisputableMonolith.Bridge",
       "path": "IndisputableMonolith/Bridge/Displays.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "tau0 and E_coh display helpers (noncomputable)"
+      "notes": "moved tau0_from_lambda and E_coh (local phi); core green"
     }
     ,{
       "id": "TruthCore:TimeKernelRescale",
@@ -865,14 +865,6 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Flog def + EL equivalence theorems; axiom stubs for Jlog deps; core green"
-    }
-    ,{
-      "id": "URCAdapters:PhiRung",
-      "namespace": "IndisputableMonolith.URCAdapters",
-      "path": "IndisputableMonolith/URCAdapters/PhiRung.lean",
-      "status": "in_progress",
-      "owner": "cursor-gpt5",
-      "notes": "phi_rung_prop + URC adapter proofs/end-to-end; 60 lines; dependency-light"
     }
   ]
 }
