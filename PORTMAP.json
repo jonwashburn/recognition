@@ -14,9 +14,9 @@
       "id": "Masses:AnchorPolicy",
       "namespace": "IndisputableMonolith.Masses.AnchorPolicy",
       "path": "IndisputableMonolith/Masses/AnchorPolicy.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "AnchorPolicy + Z_* wrappers + ResidueLaw/SectorLaw"
+      "notes": "AnchorPolicy + Z_* + ResidueLaw/SectorLaw; noncomputable log φ; core green"
     },
     {
       "id": "Ethics.Decision:Parity",
