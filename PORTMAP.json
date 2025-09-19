@@ -411,6 +411,14 @@
       "notes": "moved dimensionless_const; dependency-light; core green"
     }
     ,{
+      "id": "Verification:Claims",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Claims.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "moved Claim types and proof-based checkers; core green"
+    }
+    ,{
       "id": "Causality:ConeBound",
       "namespace": "IndisputableMonolith.Causality.ConeBound",
       "path": "IndisputableMonolith/Causality/ConeBound.lean",

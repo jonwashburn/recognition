@@ -160,11 +160,7 @@ lemma dimensionless_const (c : ℝ) : Dimensionless (fun (_ : RSUnits) => c) := 
 -- (Moved to IndisputableMonolith/Verification/ConeExport.lean) -/
 /-! ### Machine-readable claims ledger and K-gate -/
 
-/--- Statement type for claims: equality or inequality. -/
-inductive StatementType
-| eq
-| le
-deriving DecidableEq, Repr
+-- (Moved to IndisputableMonolith/Verification/Claims.lean)
 
 /-- Status of a claim: proven, failed, or unchecked. -/
 inductive ClaimStatus
@@ -4935,10 +4931,7 @@ theorem cone_bound_export
 end ConeExport
 /-! ### Machine-readable claims ledger and K-gate -/
 
-/--- Statement type for claims: equality or inequality. -/
-inductive StatementType
-| eq
-| le
+-- (Moved to IndisputableMonolith/Verification/Claims.lean)
 deriving DecidableEq, Repr
 
 /-- Status of a claim: proven, failed, or unchecked. -/
