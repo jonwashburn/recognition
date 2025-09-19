@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2025-09-19T00:00:00Z",
+  "updatedAt": "2025-09-19T03:00:00Z",
   "clusters": [
     {
       "id": "URCGenerators:VerifiedGenerators",
@@ -109,10 +109,10 @@
     {
       "id": "RH.RS:Spec",
       "namespace": "IndisputableMonolith.RH.RS.Spec",
-      "path": "WIP/IndisputableMonolith/RH/RS/Spec.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/RH/RS/Spec.lean",
+      "status": "done",
       "owner": "",
-      "notes": "Quarantined to WIP pending port"
+      "notes": "Promoted into core (stubbed), builds green"
     },
     {
       "id": "Verification:core",
