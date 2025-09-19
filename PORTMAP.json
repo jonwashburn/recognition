@@ -334,9 +334,9 @@
       "id": "RS.Witness:minimal",
       "namespace": "IndisputableMonolith.RH.RS.Witness",
       "path": "IndisputableMonolith/RH/RS/Witness.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Minimal RS Witness scaffolding (True props); extraction in progress"
+      "notes": "Extracted Witness scaffold; True props; core green"
     },
     {
       "id": "UnitMapping:core",
@@ -345,6 +345,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "extracted affine δ→ℝ mapping; core green"
+    },
+    {
+      "id": "PhiSupport:phi-squared",
+      "namespace": "IndisputableMonolith.PhiSupport",
+      "path": "IndisputableMonolith/PhiSupport.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "extracted phi_squared axiom stub; core green"
     },
     {
       "id": "Causality:Basic",
