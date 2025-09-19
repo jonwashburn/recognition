@@ -400,83 +400,11 @@ deriving Repr
 
 end BridgeData
 
-/-! ### Machine-checkable index (rendered, #eval-friendly) -/
+/-! ### Machine-checkable index (rendered, #eval-friendly)
+-- (Moved to IndisputableMonolith/Verification/Rendered.lean) -/
 
 /-- Rendered summary of a dimensionless, anchor-invariant claim. -/
-structure RenderedClaim where
-  id        : String
-  statement : String
-  proved    : Bool
-deriving Repr
 
-/-- List of core dimensionless claims with their proof references. -/
-def dimlessClaimsRendered : List RenderedClaim :=
-  [ { id := "K_A_ratio", statement := "tau_rec/τ0 = K (anchor-invariant)", proved := true }
-  , { id := "K_B_ratio", statement := "lambda_kin/ℓ0 = K (anchor-invariant)", proved := true }
-  , { id := "K_gate",    statement := "(tau_rec/τ0) = (lambda_kin/ℓ0)", proved := true }
-  , { id := "display_speed_identity", statement := "λ_kin/τ_rec = c", proved := true }
-  , { id := "gap_delta_time_identity", statement := "δ_time = 3/64", proved := true }
-  , { id := "dec_dd_eq_zero", statement := "d∘d = 0 (DEC)", proved := true }
-  , { id := "dec_bianchi", statement := "Bianchi dF = 0 (DEC)", proved := true }
-  , { id := "eight_tick_min", statement := "8 ≤ minimal period", proved := true }
-  , { id := "period_exactly_8", statement := "∃ cover with period = 8", proved := true }
-  , { id := "quantum_ifaces", statement := "Born/Bose–Fermi ifaces from PathWeight", proved := true }
-  , { id := "sat_lower_bound", statement := "SAT recognition lower bound (Ω(n) queries)", proved := true }
-  , { id := "URC.lawful_physical", statement := "LawfulPhysical obligations (units, φ‑rung, eight‑beat, EL)", proved := false }
-  , { id := "URC.lawful_computational", statement := "LawfulComputational (recognition lower bounds; RS-preserving)", proved := false }
-  , { id := "URC.lawful_ethical", statement := "LawfulEthical invariants (monotonicity/symmetry)", proved := true }
-  , { id := "URC.lambda_rec_unique", statement := "∃! λ_rec normalizer aligning J_log, Tr, EthicsCost", proved := true }
-  , { id := "URC.AE_skeleton", statement := "URC Theorem (A)–(E) skeleton present", proved := true }
-  , { id := "URC.C_uniqueness", statement := "Uniqueness up to gauge (units, φ‑rung)", proved := true }
-  , { id := "URC.D_no_cheat", statement := "No‑cheat invariants (8‑beat, EL, Tr lower bounds)", proved := true }
-  ]
-
-/-- Rendered summary of a gate: input slots and symbolic output. -/
-structure GateSpec where
-  id      : String
-  inputs  : List String
-  output  : String
-deriving Repr
-
-/-- Bridge-level gates (parameterized, no axioms) with symbolic witnesses. -/
-def gatesRendered : List GateSpec :=
-  [ { id := "KGate"
-    , inputs := ["u(ℓ0)", "u(λ_rec)", "k", "(optional) ρ", "K_B"]
-    , output := "Z = |K_A - K_B| / (k · (u_ell0 + u_lrec)); passAt = (Z ≤ 1)"
-    }
-  , { id := "BandsChecker"
-    , inputs := ["cBand: [lo,hi]", "K identities", "KGate"]
-    , output := "Pass if c ∈ cBand ∧ K_A=K ∧ K_B=K ∧ (K_A=K_B)"
-    }
-  , { id := "TwoLandings"
-    , inputs := ["Route A (time-first)", "Route B (length-first)"]
-    , output := "Calibrations agree up to units equivalence (UnitsEqv)"
-    }
-  , { id := "URC.CertificatesGate"
-    , inputs := ["MassCert", "RotationCert", "OuterBudgetCert", "RecogCostCert", "EthicsCert"]
-    , output := "All certificates pass under lawful bridges"
-    }
-  , { id := "URC.FixedPointT"
-    , inputs := ["LawfulPhysical", "LawfulComputational", "LawfulEthical", "λ_rec>0", "Certificates"]
-    , output := "Ledger' = T(inputs); check Ledger' = Ledger (fixed point)"
-    }
-  , { id := "URC.A_to_B"
-    , inputs := ["passesAll", "(hu,hφ,he8,hEL,hTr) obligations"]
-    , output := "B: units/φ‑rung/8‑beat/EL/Tr‑LB bundle holds"
-    }
-  , { id := "URC.B_to_C"
-    , inputs := ["B: units, φ‑rung, eight‑beat, EL, Tr-lower-bounds"]
-    , output := "C: uniqueness up to gauge (placeholder)"
-    }
-  , { id := "URC.C_to_D"
-    , inputs := ["C"]
-    , output := "D: no‑cheat invariants (placeholder)"
-    }
-  , { id := "URC.D_to_E"
-    , inputs := ["D"]
-    , output := "E: fixed‑point closure (T I = T I)"
-    }
-  ]
 
 /-- Canonical "no knobs" count at the proof layer (dimensionless theorems). -/
 def knobsCount : Nat := 0
@@ -752,91 +680,10 @@ lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
 
 
 
+-- (Moved to IndisputableMonolith/LedgerUnits.lean)
 end LedgerUnits
 
-/-! ## UnitMapping: affine mappings from δ-ledger units to context scales (no numerics) -/
-namespace UnitMapping
-
-open LedgerUnits
-
-/-- Affine map from ℤ to ℝ: n ↦ slope·n + offset. -/
-structure AffineMapZ where
-  slope : ℝ
-  offset : ℝ
-
-@[simp] def apply (f : AffineMapZ) (n : ℤ) : ℝ := f.slope * (n : ℝ) + f.offset
-
-/-- Map δ-subgroup to ℝ by composing the non-canonical equivalence `toZ` with an affine map. -/
-noncomputable def mapDelta (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) : DeltaSub δ → ℝ :=
-  fun p => f.slope * ((toZ δ p) : ℝ) + f.offset
-
-lemma mapDelta_diff (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
-  (p q : DeltaSub δ) :
-  mapDelta δ hδ f p - mapDelta δ hδ f q = f.slope * (((toZ δ p) : ℤ) - (toZ δ q)) := by
-  simp only [mapDelta]
-  ring
-
-/-- Context constructors: charge (quantum `qe`), time (τ0), and action (ħ). -/
-def chargeMap (qe : ℝ) : AffineMapZ := { slope := qe, offset := 0 }
-def timeMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.tau0, offset := 0 }
-def actionMap (U : Constants.RSUnits) : AffineMapZ := { slope := U.hbar, offset := 0 }
-
-/-- Existence of affine δ→charge mapping (no numerics). -/
-noncomputable def mapDeltaCharge (δ : ℤ) (hδ : δ ≠ 0) (qe : ℝ) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (chargeMap qe)
-
-/-- Existence of affine δ→time mapping via τ0. -/
-noncomputable def mapDeltaTime (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (timeMap U)
-
-/-- Existence of affine δ→action mapping via ħ. -/
-noncomputable def mapDeltaAction (δ : ℤ) (hδ : δ ≠ 0) (U : Constants.RSUnits) : DeltaSub δ → ℝ :=
-  mapDelta δ hδ (actionMap U)
-
-@[simp] lemma mapDelta_fromZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ n) = f.slope * (n : ℝ) + f.offset := by
-  classical
-  simp [mapDelta, toZ_fromZ δ hδ]
-
-lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ (n+1)) - mapDelta δ hδ f (fromZ δ n) = f.slope := by
-  classical
-  simp [mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=f), add_comm, add_left_comm, add_assoc, sub_eq_add_neg, mul_add, add_comm]
-
-@[simp] lemma mapDeltaTime_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 * (n : ℝ) := by
-  classical
-  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n)
-  simpa [mapDeltaTime, timeMap, add_comm] using h
-
-lemma mapDeltaTime_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ (n+1)) - mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 := by
-  simpa [mapDeltaTime, timeMap] using
-    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n))
-
-@[simp] lemma mapDeltaAction_fromZ (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaAction δ hδ U (fromZ δ n) = U.hbar * (n : ℝ) := by
-  classical
-  have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n)
-  simpa [mapDeltaAction, actionMap, add_comm] using h
-
-lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
-  (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaAction δ hδ U (fromZ δ (n+1)) - mapDeltaAction δ hδ U (fromZ δ n)
-    = U.hbar := by
-  simpa [mapDeltaAction, actionMap] using
-    (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=actionMap U) (n:=n))
-
-lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
-  (p q : DeltaSub δ) :
-  mapDelta δ hδ f p - mapDelta δ hδ f q
-    = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
-  classical
-  simpa using (mapDelta_diff (δ:=δ) (hδ:=hδ) (f:=f) (p:=p) (q:=q))
-end UnitMapping
+-- (Moved to IndisputableMonolith/UnitMapping.lean)
 
 /-! ## Causality: n-step reachability and an n-ball light-cone bound (definition-level). -/
 namespace Causality
@@ -875,63 +722,7 @@ end Causality
 
 /-! Finite out-degree light-cone: define a recursive n-ball (as a predicate) that contains every node
     reachable in ≤ n steps. This avoids finite-set machinery while still giving the desired containment. -/
-namespace Causality
-
-variable {α : Type}
-
-/-- `ballP K x n y` means y is within ≤ n steps of x via `K.step`.
-    This is the graph-theoretic n-ball as a predicate on vertices. -/
-def ballP (K : Kinematics α) (x : α) : Nat → α → Prop
-| 0, y => y = x
-| Nat.succ n, y => ballP K x n y ∨ ∃ z, ballP K x n z ∧ K.step z y
-
-lemma ballP_mono {K : Kinematics α} {x : α} {n m : Nat}
-  (hnm : n ≤ m) : {y | ballP K x n y} ⊆ {y | ballP K x m y} := by
-  induction hnm with
-  | refl => intro y hy; exact (by simpa using hy)
-  | @step m hm ih =>
-      intro y hy
-      -- lift membership from n to n+1 via the left disjunct
-      exact Or.inl (ih hy)
-
-lemma reach_mem_ballP {K : Kinematics α} {x y : α} :
-  ∀ {n}, ReachN K n x y → ballP K x n y := by
-  intro n h; induction h with
-  | zero => simp [ballP]
-  | @succ n x y z hxy hyz ih =>
-      -- y is in ballP K x n; step y→z puts z into the next shell
-      exact Or.inr ⟨y, ih, hyz⟩
-
-lemma inBall_subset_ballP {K : Kinematics α} {x y : α} {n : Nat} :
-  inBall K x n y → ballP K x n y := by
-  intro ⟨k, hk, hreach⟩
-  have : ballP K x k y := reach_mem_ballP (K:=K) (x:=x) (y:=y) hreach
-  -- monotonicity in the radius
-  have mono := ballP_mono (K:=K) (x:=x) hk
-  exact mono this
-
-lemma ballP_subset_inBall {K : Kinematics α} {x y : α} :
-  ∀ {n}, ballP K x n y → inBall K x n y := by
-  intro n
-  induction n generalizing y with
-  | zero =>
-      intro hy
-      -- at radius 0, membership means y = x
-      rcases hy with rfl
-      exact ⟨0, le_rfl, ReachN.zero⟩
-  | succ n ih =>
-      intro hy
-      cases hy with
-      | inl hy' =>
-          -- lift inclusion from n to n+1
-          rcases ih hy' with ⟨k, hk, hkreach⟩
-          exact ⟨k, Nat.le_trans hk (Nat.le_succ _), hkreach⟩
-      | inr h' =>
-          rcases h' with ⟨z, hz, hstep⟩
-          rcases ih hz with ⟨k, hk, hkreach⟩
-          exact ⟨k + 1, Nat.succ_le_succ hk, ReachN.succ hkreach hstep⟩
-
-end Causality
+-- (Moved to IndisputableMonolith/Causality/BallP.lean)
 
 /-! ## Locally-finite causality: bounded out-degree and n-ball cardinality bounds -/
 
@@ -3798,9 +3589,7 @@ namespace IndisputableMonolith
 namespace Masses
 namespace Ribbons
 
-/-- Gauge tags used in the word constructor. -/
-inductive GaugeTag | Y | T3 | Color
-deriving DecidableEq, Repr
+-- (Moved to IndisputableMonolith/Masses/Ribbons.lean)
 
 /-- Eight‑tick clock. -/
 abbrev Tick := Fin 8

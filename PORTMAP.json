@@ -354,6 +354,54 @@
       "owner": "agentE",
       "notes": "extracted ballP + lemmas; core green"
     }
+    ,{
+      "id": "Verification:ConeExport",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/ConeExport.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "export of cone_bound; dependency-light; core green"
+    }
+    ,{
+      "id": "PhiSupport:phi_squared",
+      "namespace": "IndisputableMonolith.PhiSupport",
+      "path": "IndisputableMonolith/PhiSupport.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "proved phi_squared; removed axiom; core green"
+    }
+    ,{
+      "id": "Causality:ConeBound",
+      "namespace": "IndisputableMonolith.ConeBound",
+      "path": "IndisputableMonolith/Causality/ConeBound.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "BFS n-balls and cardinality bounds"
+    }
+    ,{
+      "id": "Verification:RenderedIndex",
+      "namespace": "IndisputableMonolith.Verification.Rendered",
+      "path": "IndisputableMonolith/Verification/Rendered.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "Rendered index extracted; core green"
+    },
+    {
+      "id": "RSBridge:Anchor",
+      "namespace": "IndisputableMonolith.RSBridge",
+      "path": "IndisputableMonolith/RSBridge/Anchor.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "Fermion anchor block extracted; noncomputable log/exp; core green"
+    },
+    {
+      "id": "Causality:ReachN",
+      "namespace": "IndisputableMonolith.Causality",
+      "path": "IndisputableMonolith/Causality/Reach.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "Kinematics, ReachN, inBall, ballP; extracted and green"
+    }
   ]
 }
 
