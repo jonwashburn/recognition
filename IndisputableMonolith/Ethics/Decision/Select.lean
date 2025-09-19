@@ -49,5 +49,3 @@ def chooseTruthful (P : Policy A) (xs : List (Request A)) : Option (Request A) :
 end Decision
 end Ethics
 end IndisputableMonolith
-
-
