@@ -928,8 +928,7 @@ theorem classical_T4_correspondence (x0 : M.U) {δ : ℤ}
 
 end ClassicalBridge
 
-/-! ## Cost uniqueness via a compact averaging/exp-axis interface. -/
-namespace Cost
+-- (Moved to IndisputableMonolith/Cost/JcostCore.lean)
 
 noncomputable def Jcost (x : ℝ) : ℝ := (x + x⁻¹) / 2 - 1
 

@@ -731,6 +731,14 @@
       "notes": "Expose phi_fixed_point into Cost namespace"
     },
     {
+      "id": "Constants:RSUnitsHelpers",
+      "namespace": "IndisputableMonolith.Constants",
+      "path": "IndisputableMonolith/Constants/RSUnitsHelpers.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "c_pos and c_mul_tau0_eq_ell0 helpers"
+    },
+    {
       "id": "Cost:Demo",
       "namespace": "IndisputableMonolith.CostDemo",
       "path": "IndisputableMonolith/Cost/Demo.lean",
