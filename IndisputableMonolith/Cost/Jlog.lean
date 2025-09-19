@@ -12,5 +12,3 @@ noncomputable def Jlog (t : ℝ) : ℝ := ((Real.exp t + Real.exp (-t)) / 2) - 1
 
 end Cost
 end IndisputableMonolith
-
-

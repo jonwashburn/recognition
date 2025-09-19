@@ -786,6 +786,14 @@
       "owner": "cursor-gpt5",
       "notes": "CostModel, Prefer, Composable framework extracted; axiom stubs for CQ/Measurement deps; core green"
     }
+    ,{
+      "id": "Ablation:Harness",
+      "namespace": "IndisputableMonolith.Ablation",
+      "path": "IndisputableMonolith/Ablation.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Integer charge/word transforms and contradiction lemmas; 104 lines; self-contained"
+    }
   ]
 }
 
