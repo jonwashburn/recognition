@@ -73,5 +73,3 @@ lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPer
 
 end LNAL
 end IndisputableMonolith
-
-

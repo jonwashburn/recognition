@@ -40,5 +40,3 @@ noncomputable def kernel3x3_with_bridge :
 end
 end YM
 end IndisputableMonolith
-
-

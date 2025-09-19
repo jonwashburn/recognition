@@ -384,7 +384,7 @@
       "path": "IndisputableMonolith/Causality/ConeBound.lean",
       "status": "in_progress",
       "owner": "agentE",
-      "notes": "BFS n-balls and cardinality bounds"
+      "notes": "BFS finset ball and cardinality bounds"
     }
     ,{
       "id": "Verification:RenderedIndex",
@@ -409,6 +409,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "Kinematics, ReachN, inBall, ballP; extracted and green"
+    }
+    ,{
+      "id": "Causality:ConeBound",
+      "namespace": "IndisputableMonolith.Causality.ConeBound",
+      "path": "IndisputableMonolith/Causality/ConeBound.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "BFS finset ball and cardinality bounds"
     }
   ]
 }
