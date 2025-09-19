@@ -1086,9 +1086,9 @@
       "id": "Masses:AnchorPolicy",
       "namespace": "IndisputableMonolith.Masses.AnchorPolicy",
       "path": "IndisputableMonolith/Masses/AnchorPolicy.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "AnchorPolicy structure, Z charge functions, and residue/sector law structures"
+      "notes": "AnchorPolicy structure, Z charge functions, and residue/sector law structures; core green"
     }
     ,    {
       "id": "Gravity:Rotation",
