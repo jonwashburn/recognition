@@ -659,6 +659,14 @@
       "notes": "extracted T4 lemmas; dependency-light; core green"
     },
     {
+      "id": "ClassicalBridge:CoarseGrain",
+      "namespace": "IndisputableMonolith.ClassicalBridge",
+      "path": "IndisputableMonolith/ClassicalBridge/CoarseGrain.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "CoarseGrain/RiemannSum/ContinuityEquation placeholder export"
+    },
+    {
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",
@@ -681,6 +689,14 @@
       "status": "in_progress",
       "owner": "cursor-gpt5",
       "notes": "dec_dd/ bianchi wrappers and display_speed_identity"
+    }
+    ,{
+      "id": "ILG:XiBinsMonotonicity",
+      "namespace": "IndisputableMonolith.ILG",
+      "path": "IndisputableMonolith/ILG/XiBins.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "xi_of_u, xi_of_bin, monotonicity over quintiles"
     }
   ]
 }
