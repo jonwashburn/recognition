@@ -11,6 +11,22 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Ethics.Alignment:Temporal",
+      "namespace": "IndisputableMonolith.Ethics.Alignment.Temporal",
+      "path": "IndisputableMonolith/Ethics/Alignment/Temporal.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Temporal concatenation lemmas extracted"
+    },
+    {
+      "id": "Recognition:Cycle3",
+      "namespace": "IndisputableMonolith.Recognition.Cycle3",
+      "path": "IndisputableMonolith/Recognition/Cycle3.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Cycle3 demo extracted"
+    },
+    {
       "id": "Causality:BoundedStep",
       "namespace": "IndisputableMonolith.Causality.BoundedStep",
       "path": "IndisputableMonolith/Causality/BoundedStep.lean",

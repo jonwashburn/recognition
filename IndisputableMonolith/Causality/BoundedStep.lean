@@ -10,5 +10,3 @@ class BoundedStep (α : Type) (degree_bound : outParam Nat) where
   degree_bound_holds : ∀ x, (neighbors x).card ≤ degree_bound
 
 end IndisputableMonolith
-
-
