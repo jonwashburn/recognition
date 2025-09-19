@@ -2,7 +2,7 @@ import Mathlib
 
 namespace IndisputableMonolith
 
-/-- ## Electromagnetism (strict bridge skeleton via DEC)
+/-! ## Electromagnetism (strict bridge skeleton via DEC)
     Minimal, admit-free cochain skeleton sufficient to state Bianchi (dF=0),
     gauge invariance of F=dA, and current conservation from Ampère (d(*F)=J ⇒ dJ=0).
     This abstracts the discrete complex and avoids committing to a particular
@@ -78,7 +78,7 @@ end CochainSpace
 
 end DEC
 
-/-- ## Electromagnetism (4D covariant DEC instance, typed)
+/-! ## Electromagnetism (4D covariant DEC instance, typed)
     Typed 4D cochain complex C⁰..C⁴ with d₀..d₃ and dd=0, plus a Maxwell model
     with a 2-form Hodge placeholder ⋆ : C² → C². Proves Bianchi, gauge invariance,
     and current conservation in the typed setting. -/
@@ -143,8 +143,7 @@ variable [AddCommMonoid C0] [AddCommMonoid C1] [AddCommMonoid C2]
 variable [AddCommMonoid C3] [AddCommMonoid C4]
 
 def J (M : MaxwellModel4D C0 C1 C2 C3 C4) (A : C1) : C3 :=
-  M.toComplex4D.d2 (M.star2 (M.toComplex4D.d1 A)
-)
+  M.toComplex4D.d2 (M.star2 (M.toComplex4D.d1 A))
 
 theorem current_conservation (M : MaxwellModel4D C0 C1 C2 C3 C4) (A : C1) :
   M.toComplex4D.d3 (M.J A) = 0 := by

@@ -638,36 +638,7 @@ theorem T3_continuity {M} (L : Ledger M) [Conserves L] :
 
 -- Patterns lemmas moved to IndisputableMonolith/Patterns.lean
 
-/-- ## T6 (existence): there exists an exact pass of length `2^d` covering all parity patterns. -/
-theorem T6_exist_exact_2pow (d : Nat) : ∃ w : CompleteCover d, w.period = 2 ^ d :=
-  cover_exact_pow d
-
-/-- ## T6 (d=3): there exists an exact 8‑tick pass covering all 3‑bit parities. -/
-theorem T6_exist_8 : ∃ w : CompleteCover 3, w.period = 8 :=
-  period_exactly_8
-
-/-- ## T7 (Nyquist-style): if T < 2^D then there is no surjection to D-bit patterns. -/
-theorem T7_nyquist_obstruction {T D : Nat}
-  (hT : T < 2 ^ D) : ¬ ∃ f : Fin T → Pattern D, Surjective f :=
-  no_surj_small T D hT
-
-/-- ## T7 (threshold no-aliasing): at T = 2^D there exists a bijection (no aliasing at threshold). -/
-theorem T7_threshold_bijection (D : Nat) : ∃ f : Fin (2 ^ D) → Pattern D, Bijective f := by
-  classical
-  let e := (Fintype.equivFin (Pattern D))
-  have hcard : Fintype.card (Pattern D) = 2 ^ D := by simpa using card_pattern D
-  -- Manual cast equivalence between Fin (2^D) and Fin (Fintype.card (Pattern D))
-  let castTo : Fin (2 ^ D) → Fin (Fintype.card (Pattern D)) :=
-    fun i => ⟨i.1, by simpa [hcard] using i.2⟩
-  let castFrom : Fin (Fintype.card (Pattern D)) → Fin (2 ^ D) :=
-    fun j => ⟨j.1, by simpa [hcard] using j.2⟩
-  have hLeft : Function.LeftInverse castFrom castTo := by
-    intro i; cases i; rfl
-  have hRight : Function.RightInverse castFrom castTo := by
-    intro j; cases j; rfl
-  have hCastBij : Bijective castTo := ⟨hLeft.injective, hRight.surjective⟩
-  refine ⟨fun i => (e.symm) (castTo i), ?_⟩
-  exact (e.symm).bijective.comp hCastBij
+-- T6/T7 wrappers moved to `IndisputableMonolith/Core.lean` and `IndisputableMonolith/Patterns.lean`.
 
 /-! ## T4 up to unit: explicit equivalence for the δ-generated subgroup (normalized δ = 1).
     Mapping n•δ ↦ n, specialized here to δ = 1 for clarity. -/
@@ -1516,84 +1487,7 @@ theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
 
 end LedgerUniqueness
 
-/-- ## ClassicalBridge: explicit classical correspondences without sorries.
-    - T3 bridge: `Conserves` is the discrete continuity equation on closed chains.
-    - T4 bridge: potentials modulo additive constants on a reach component (gauge classes).
- -/
-namespace ClassicalBridge
-
-open Potential Causality
-
-variable {M : RecognitionStructure}
-
-/-- The reach component of a basepoint `x0`. -/
-structure Component (M : RecognitionStructure) (x0 : M.U) where
-  y : M.U
-  reachable : Reaches (Potential.Kin M) x0 y
-abbrev PotOnComp (M : RecognitionStructure) (x0 : M.U) := Component M x0 → ℤ
-/-- Restrict a potential to the reach component of `x0`. -/
-def restrictToComponent (x0 : M.U) (p : Potential.Pot M) : PotOnComp M x0 :=
-  fun yc => p yc.y
-
-/-- Equality up to an additive constant on a component (classical gauge freedom). -/
-def GaugeEq (x0 : M.U) (f g : PotOnComp M x0) : Prop := ∃ c : ℤ, ∀ yc, f yc = g yc + c
-
-lemma gauge_refl (x0 : M.U) (f : PotOnComp M x0) : GaugeEq (M:=M) x0 f f :=
-  ⟨0, by intro yc; simp⟩
-
-lemma gauge_symm (x0 : M.U) {f g : PotOnComp M x0}
-  (h : GaugeEq (M:=M) x0 f g) : GaugeEq (M:=M) x0 g f := by
-  rcases h with ⟨c, hc⟩
-  refine ⟨-c, ?_⟩
-  intro yc
-  -- add (−c) to both sides of (g yc + c = f yc)
-  have := congrArg (fun t => t + (-c)) (hc yc).symm
-  simpa [add_assoc, add_comm, add_left_comm] using this
-
-lemma gauge_trans (x0 : M.U) {f g h : PotOnComp M x0}
-  (hfg : GaugeEq (M:=M) x0 f g) (hgh : GaugeEq (M:=M) x0 g h) :
-  GaugeEq (M:=M) x0 f h := by
-  rcases hfg with ⟨c₁, hc₁⟩
-  rcases hgh with ⟨c₂, hc₂⟩
-  refine ⟨c₁ + c₂, ?_⟩
-  intro yc
-  calc
-    f yc = g yc + c₁ := hc₁ yc
-    _ = (h yc + c₂) + c₁ := by simpa [hc₂ yc]
-    _ = h yc + (c₂ + c₁) := by simp [add_assoc, add_comm, add_left_comm]
-    _ = h yc + (c₁ + c₂) := by simpa [add_comm]
-
-/-- Setoid for gauge equivalence on a component. -/
-def gaugeSetoid (x0 : M.U) : Setoid (PotOnComp M x0) where
-  r := GaugeEq (M:=M) x0
-  iseqv := ⟨gauge_refl (M:=M) x0, gauge_symm (M:=M) x0, gauge_trans (M:=M) x0⟩
-
-/-- Gauge class (potential modulo additive constants) on a reach component. -/
-abbrev GaugeClass (x0 : M.U) := Quot (gaugeSetoid (M:=M) x0)
-
-/-- T4 → gauge class equality on the component (classical statement: potential is defined up to a constant).
-    If two δ-potentials agree at `x0`, their restrictions to the reach component of `x0`
-    define the same gauge class. -/
-theorem gaugeClass_eq_of_same_delta_basepoint
-  {δ : ℤ} {p q : Potential.Pot M}
-  (hp : Potential.DE (M:=M) δ p) (hq : Potential.DE (M:=M) δ q)
-  (x0 : M.U) (hbase : p x0 = q x0) :
-  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 p) =
-  Quot.mk (gaugeSetoid (M:=M) x0) (restrictToComponent (M:=M) x0 q) := by
-  -- T4 componentwise uniqueness with basepoint equality gives equality (c = 0)
-  apply Quot.sound
-  refine ⟨0, ?_⟩
-  intro yc
-  have := Potential.T4_unique_on_component (M:=M) (δ:=δ) (p:=p) (q:=q)
-    (x0:=x0) (hbase:=hbase) yc.reachable
-  simpa [restrictToComponent] using this
-
-/-- T3 bridge (alias): `Conserves` is the discrete continuity equation on closed chains. -/
-abbrev DiscreteContinuity (L : Ledger M) : Prop := Conserves L
-
-theorem continuity_of_conserves {L : Ledger M} [Conserves L] : DiscreteContinuity (M:=M) L := inferInstance
-
-end ClassicalBridge
+-- ClassicalBridge (gauge, setoid, schedule) moved to `IndisputableMonolith/Recognition.lean`.
 
 namespace ClassicalBridge
 
@@ -1678,25 +1572,7 @@ averaging over an integer number of 8‑tick passes recovers the integer window 
 
 -- PatternLayer/MeasurementLayer moved to IndisputableMonolith/Streams/Blocks.lean
 
-/-! ## Examples (witnesses)
-`#eval` witnesses: for a simple 8‑bit window, the integer window count `Z` equals
-the averaged instrument observation over `k` aligned windows, as in DNARP Eq. (blockSum=Z at T=8k).
--/
-
-namespace Examples
-
-open PatternLayer MeasurementLayer
-
-/-- Example 8‑bit window: ones at even indices (Z=4). -/
-def sampleW : PatternLayer.Pattern 8 := fun i => decide (i.1 % 2 = 0)
-
--- Z over the 8‑bit window (should be 4)
-#eval PatternLayer.Z_of_window sampleW
-
--- Averaged observation over k=3 aligned blocks equals Z (should also be 4)
-#eval MeasurementLayer.observeAvg8 3 (PatternLayer.extendPeriodic8 sampleW)
-
-end Examples
+-- Examples for Pattern/Measurement moved to `IndisputableMonolith/Streams/Blocks.lean`.
 
 namespace Measurement
 open IndisputableMonolith.Dynamics
@@ -2481,8 +2357,7 @@ namespace RH
 namespace RS
 /-! ### General bundling (ledger-agnostic) -/
 
-/-- Measurement anchors placeholder. -/
-structure Anchors where a1 a2 : ℝ
+-- Anchors/Bands/Spec are provided by submodules imported via Core
 
 /-- Abstract notion of "has an excitation at rung r". -/
 structure HasRung (L : Ledger) (B : Bridge L) : Type where
@@ -2503,41 +2378,6 @@ class FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Prop where
   no_multiples : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)
 
 /-! Measurement–Reality bridging (prediction → certified measurement bands). -/
-
-structure Band where lo hi : ℝ
-
-structure Bands where
-  cBand        : Band
-  hbarBand     : Band
-  GBand        : Band
-  LambdaBand   : Band
-  massesBand   : List Band
-  energiesBand : List Band
-
-/-- Simple interval membership. -/
-def Band.contains (b : Band) (x : ℝ) : Prop := b.lo ≤ x ∧ x ≤ b.hi
-
-/-- A convenient symmetric band with center±tol. -/
-def wideBand (center tol : ℝ) : Band := { lo := center - tol, hi := center + tol }
-
-/-- Sample Bands builder from anchors `U` with a tolerance for c; other bands are placeholders. -/
-def sampleBandsFor (U : IndisputableMonolith.Constants.RSUnits) (tol : ℝ) : Bands :=
-{ cBand := wideBand U.c tol
-, hbarBand := { lo := 0, hi := 1e99 }
-, GBand := { lo := 0, hi := 1e99 }
-, LambdaBand := { lo := -1e99, hi := 1e99 }
-, massesBand := []
-, energiesBand := [] }
-
--- (alias lives later against canonical RH.RS.evalToBands_c)
-
-/-- Generic K‑gate aware bands checker (ledger‑agnostic). -/
-def meetsBandsChecker_gen (U : IndisputableMonolith.Constants.RSUnits) (X : Bands) : Prop :=
-  evalToBands_c U X
-  ∧ (IndisputableMonolith.Constants.RSUnits.tau_rec_display U) / U.tau0 = IndisputableMonolith.Constants.K
-  ∧ (IndisputableMonolith.Constants.RSUnits.lambda_kin_display U) / U.ell0 = IndisputableMonolith.Constants.K
-  ∧ (IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
-      = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U)
 
 /-- Obligations as Prop‑classes to avoid trivialization. -/
 class MeetsBands (L : Ledger) (B : Bridge L) (X : Bands) : Prop
@@ -6067,14 +5907,7 @@ lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_ze
 /-- Recognition lower bound (SAT exemplar) as a Prop. -/
 -- moved to Core
 
-/-- RS‑preserving reduction existence as a Prop. -/
-def rs_pres_prop : Prop :=
-  Nonempty (IndisputableMonolith.Complexity.RSPreserving
-              IndisputableMonolith.Complexity.RSVC.ConstraintInstance
-              IndisputableMonolith.Complexity.VertexCover.Instance)
-
-lemma rs_pres_holds : rs_pres_prop :=
-  ⟨IndisputableMonolith.Complexity.RSVC.rs_preserving_RS2VC⟩
+-- (RS-preserving existence moved to Complexity/RSVC.)
 
 /-- Simple computation growth placeholder (e.g., O(n log n) abstracted as a Prop). -/
 def tc_growth_prop : Prop := True
@@ -6247,18 +6080,7 @@ theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
   (B : BridgeData) (Tdyn : ℝ) : ℝ :=
   IndisputableMonolith.Gravity.ILG.w_t_display P B Tdyn
 
-/-- SAT recognition lower bound (dimensionless): any universally-correct fixed-view
-    decoder over fewer than n queried indices is impossible. -/
-theorem recognition_lower_bound_sat
-  (n : ℕ) (M : Finset (Fin n))
-  (g : (({i // i ∈ M} → Bool)) → Bool)
-  (hMlt : M.card < n) :
-  ¬ (∀ (b : Bool) (R : Fin n → Bool),
-        g (Complexity.BalancedParityHidden.restrict
-              (Complexity.BalancedParityHidden.enc b R) M) = b) := by
-  classical
-  simpa using
-    (Complexity.BalancedParityHidden.omega_n_queries (n:=n) M g hMlt)
+-- (SAT recognition lower bound moved to Complexity/BalancedParityHidden.)
 
 /-- Audit: SI evaluation must go through BridgeData. This marker theorem is used as a guard
     in code review to avoid accidental direct numerics at the proof layer. -/
@@ -8863,67 +8685,7 @@ namespace Truth
 
 end Truth
 
-/-! ### Consent: time-windowed grants with scope and revocation -/
-
-structure ConsentWindow (A : Type u) where
-  scope : A → Bool
-  tStart : Nat
-  tEnd? : Option Nat := none
-  revokedAt? : Option Nat := none
-
-namespace ConsentWindow
-
-def activeAt {A} (w : ConsentWindow A) (t : Nat) : Bool :=
-  (w.tStart ≤ t) && (match w.tEnd? with | none => True | some te => t ≤ te)
-  && (match w.revokedAt? with | none => True | some tr => t < tr)
-
-def permitsAt {A} (w : ConsentWindow A) (t : Nat) (a : A) : Bool :=
-  activeAt w t && w.scope a
-
-def revokeAt {A} (w : ConsentWindow A) (r : Nat) : ConsentWindow A :=
-  { w with revokedAt? := some (match w.revokedAt? with | none => r | some tr => Nat.min tr r) }
-
-@[simp] lemma revoke_narrows_active {A} (w : ConsentWindow A) (r t : Nat) :
-  activeAt (revokeAt w r) t → activeAt w t := by
-  unfold activeAt revokeAt
-  intro h
-  -- simplify boolean structure conservatively
-  by_cases h1 : w.tEnd? = none
-  · cases w.tEnd? <;> simp [h1] at h ⊢
-  · cases w.tEnd? <;> simp at h ⊢
-@[simp] lemma revoke_narrows_perm {A} (w : ConsentWindow A) (r t : Nat) (a : A) :
-  permitsAt (revokeAt w r) t a → permitsAt w t a := by
-  unfold permitsAt
-  intro h
-  have := revoke_narrows_active (w:=w) (r:=r) (t:=t) (by exact And.left h)
-  -- conservative boolean reasoning
-  have hs : w.scope a = true ∨ w.scope a = false := by
-    by_cases hh : w.scope a = true <;> [exact Or.inl hh, exact Or.inr hh]
-  cases hs with
-  | inl htrue =>
-      simp [permitsAt, htrue] at h ⊢
-      cases h with
-      | intro hact _ =>
-          simpa [htrue] using And.intro this rfl
-  | inr hfalse => simp [permitsAt, hfalse] at h
-
-end ConsentWindow
-
-structure ConsentLedger (A : Type u) where
-  windows : List (ConsentWindow A)
-
-namespace ConsentLedger
-
-def permits {A} (L : ConsentLedger A) (t : Nat) (a : A) : Bool :=
-  L.windows.any (fun w => ConsentWindow.permitsAt w t a)
-
-@[simp] lemma permits_append {A} (L1 L2 : List (ConsentWindow A)) (t : Nat) (a : A) :
-  (ConsentLedger.permits { windows := L1 ++ L2 } t a)
-  = (ConsentLedger.permits { windows := L1 } t a
-     || ConsentLedger.permits { windows := L2 } t a) := by
-  unfold ConsentLedger.permits
-  simp [List.any_append]
-end ConsentLedger
+/-! Consent core moved to `IndisputableMonolith/Recognition/Consent.lean`. -/
 def crossAgentParityOk (P : Policy A) (xs : List (Request A)) : Bool :=
   let ys := filterByGates (P:=P) xs
   match P.agentOf? with
@@ -9243,92 +9005,7 @@ end Pipelines
 
 end IndisputableMonolith
 
-namespace IndisputableMonolith
-namespace Complexity
-
-noncomputable section
-open Classical
-
-/-- Complexity pair (functions of input size). -/
-structure ComplexityPair where
-  Tc : ℕ → ℕ
-  Tr : ℕ → ℕ
-deriving Repr
-
-/-- RS-preserving reduction scaffold: relates complexities up to monotone envelopes. -/
-structure RSPreserving (A B : Type) where
-  sizeA : A → ℕ
-  sizeB : B → ℕ
-  reduce : A → B
-  TcBound : (ℕ → ℕ) → Prop := fun _ => True
-  TrBound : (ℕ → ℕ) → Prop := fun _ => True
-deriving Repr
-
-/-- Balanced-parity hidden-mask encoding over length-n bitstrings as functions `Fin n → Bool`. -/
-namespace BalancedParityHidden
-
-variable {n : ℕ} [DecidableEq (Fin n)]
-
-/-- Hidden mask encoder: bit b with mask R is `R` if b=false and `bnot ∘ R` if b=true. -/
-def enc (b : Bool) (R : Fin n → Bool) : Fin n → Bool :=
-  fun i => if b then bnot (R i) else R i
-
-/-- Restrict a full word to a queried index set `M`. -/
-def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool :=
-  fun i => f i.val
-
-/-- Extend a partial assignment on `M` to a full mask by defaulting to `false` off `M`. -/
-def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
-  fun i => if h : i ∈ M then a ⟨i, h⟩ else false
-/-- Any fixed-view decoder on a set `M` of queried indices can be fooled by a suitable (b,R). -/
-theorem adversarial_failure (M : Finset (Fin n))
-  (g : (({i // i ∈ M} → Bool)) → Bool) :
-  ∃ (b : Bool) (R : Fin n → Bool),
-    g (restrict (enc b R) M) ≠ b := by
-  classical
-  -- Pick an arbitrary local view `a` and force the decoder to predict `b' := g a`.
-  let a : {i // i ∈ M} → Bool := fun _ => false
-  let b' : Bool := g a
-  -- Choose the true bit to be the opposite of the decoder's prediction.
-  let b : Bool := bnot b'
-  -- Choose the mask so that the restricted encoding equals `a`.
-  let R : Fin n → Bool :=
-    if b = false then extendMask a M else extendMask (fun i => bnot (a i)) M
-  have hRestr : restrict (enc b R) M = a := by
-    funext i
-    dsimp [restrict, enc, R, extendMask]
-    by_cases b = false
-    · simp [h, dif_pos i.property]
-    · have hb : b = true := by cases b <;> simp_all
-      simp [hb, dif_pos i.property]
-  refine ⟨b, R, ?_⟩
-  -- The decoder outputs `g a = b' = bnot b`, hence it is wrong.
-  have := hRestr
-  have : g (restrict (enc b R) M) = b' := by simpa [this]
-  have : g (restrict (enc b R) M) ≠ b := by
-    cases b <;> simp [this]
-  exact this
-
-/-- If a decoder is correct for all (b,R) while querying only `M`, contradiction. -/
-theorem no_universal_decoder (M : Finset (Fin n))
-  (g : (({i // i ∈ M} → Bool)) → Bool) :
-  ¬ (∀ (b : Bool) (R : Fin n → Bool), g (restrict (enc b R) M) = b) := by
-  intro h
-  rcases adversarial_failure (n:=n) M g with ⟨b, R, hw⟩
-  have := h b R
-  exact hw (by simpa using this)
-
-/-- Query lower bound (worst-case, adversarial): any universally-correct decoder must inspect all n indices. -/
-theorem omega_n_queries
-  (M : Finset (Fin n)) (g : (({i // i ∈ M} → Bool)) → Bool)
-  (hMlt : M.card < n) :
-  ¬ (∀ (b : Bool) (R : Fin n → Bool), g (restrict (enc b R) M) = b) :=
-  no_universal_decoder (n:=n) M g
-
-end BalancedParityHidden
-
-end Complexity
-end IndisputableMonolith
+-- (Complexity scaffolding moved to submodules.)
 
 /-- ###############################################################
      URC Route A: Axioms ⇒ Bridge (single-file embedding)
@@ -9446,74 +9123,4 @@ def routeA_end_to_end_proof :
 end URCAdapters
 end IndisputableMonolith
 
-/-- ### RS-preserving reduction exemplar (to Vertex Cover) -/
-namespace IndisputableMonolith
-namespace Complexity
-
-namespace VertexCover
-
-/-- Vertex Cover instance over `Nat` vertices. -/
-structure Instance where
-  vertices : List Nat
-  edges    : List (Nat × Nat)
-  k        : Nat
-deriving Repr
-
-/-- A set `S` covers an edge `(u,v)` if it contains `u` or `v`. -/
-def InCover (S : List Nat) (v : Nat) : Prop := v ∈ S
-
-def EdgeCovered (S : List Nat) (e : Nat × Nat) : Prop :=
-  InCover S e.fst ∨ InCover S e.snd
-
-/-- `S` covers all edges of instance `I`. -/
-def Covers (S : List Nat) (I : Instance) : Prop :=
-  ∀ e, e ∈ I.edges → EdgeCovered S e
-
-/-- There exists a vertex cover of size ≤ k. -/
-def HasCover (I : Instance) : Prop :=
-  ∃ S : List Nat, S.length ≤ I.k ∧ Covers S I
-
-/-- A trivial example with no edges is always covered by the empty set. -/
-def example : Instance := { vertices := [1], edges := [], k := 0 }
-
-lemma example_hasCover : HasCover example := by
-  refine ⟨[], by decide, ?_⟩
-  intro e he
-  cases he
-
-end VertexCover
-
-namespace RSVC
-
-/-- RS constraint instance mapped to edges to be covered. -/
-structure ConstraintInstance where
-  vertices    : List Nat
-  constraints : List (Nat × Nat)
-  k           : Nat
-deriving Repr
-
-/-- Forgetful map to a Vertex Cover instance. -/
-@[simp] def toVC (A : ConstraintInstance) : VertexCover.Instance :=
-{ vertices := A.vertices, edges := A.constraints, k := A.k }
-
-/-- RS recognizer: instance is accepted iff its Vertex Cover image has a cover. -/
-def Recognizes (A : ConstraintInstance) : Prop :=
-  VertexCover.HasCover (toVC A)
-
-/-- The reduction from RS constraints to Vertex Cover (identity on fields). -/
-@[simp] def reduceRS2VC : ConstraintInstance → VertexCover.Instance := toVC
-
-/-- Correctness is immediate from the definition. -/
-@[simp] theorem reduce_correct (A : ConstraintInstance) :
-  Recognizes A ↔ VertexCover.HasCover (reduceRS2VC A) := Iff.rfl
-
-/-- RS‑preserving wrapper bundling sizes and the reduction map. -/
-def rs_preserving_RS2VC : RSPreserving ConstraintInstance VertexCover.Instance :=
-{ sizeA := fun a => a.vertices.length + a.constraints.length
-, sizeB := fun b => b.vertices.length + b.edges.length
-, reduce := reduceRS2VC }
-
-end RSVC
-
-end Complexity
-end IndisputableMonolith
+-- (RSVC/VertexCover exemplar moved to submodules.)

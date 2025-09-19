@@ -11,7 +11,6 @@ structure ConstraintInstance where
   vertices    : List Nat
   constraints : List (Nat × Nat)
   k           : Nat
-  deriving Repr
 
 /-- Forgetful map to a Vertex Cover instance. -/
 @[simp] def toVC (A : ConstraintInstance) : VertexCover.Instance :=
@@ -35,7 +34,6 @@ structure RSPreserving (A B : Type) where
   reduce : A → B
   TcBound : (ℕ → ℕ) → Prop := fun _ => True
   TrBound : (ℕ → ℕ) → Prop := fun _ => True
-  deriving Repr
 
 /-- RS‑preserving wrapper bundling sizes and the reduction map. -/
 def rs_preserving_RS2VC : RSPreserving ConstraintInstance VertexCover.Instance :=
@@ -51,7 +49,7 @@ namespace IndisputableMonolith
 
 /-- RS‑preserving reduction existence as a Prop. -/
 def rs_pres_prop : Prop :=
-  Nonempty (Complexity.RSPreserving
+  Nonempty (Complexity.RSVC.RSPreserving
               Complexity.RSVC.ConstraintInstance
               Complexity.VertexCover.Instance)
 

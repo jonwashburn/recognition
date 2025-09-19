@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2025-09-18T00:00:00Z",
+  "updatedAt": "2025-09-19T00:00:00Z",
   "clusters": [
     {
       "id": "URCGenerators:VerifiedGenerators",
@@ -78,33 +78,65 @@
       "id": "Patterns:core",
       "namespace": "IndisputableMonolith",
       "path": "IndisputableMonolith/Patterns.lean",
-      "status": "pending",
+      "status": "done",
       "owner": "",
-      "notes": "Choose next 100–250 line stable block"
+      "notes": "Core patterns ported and green"
     },
     {
       "id": "Streams:core",
       "namespace": "IndisputableMonolith",
       "path": "IndisputableMonolith/Streams.lean",
-      "status": "pending",
+      "status": "done",
       "owner": "",
-      "notes": "Choose next 100–250 line stable block"
+      "notes": "Streams + Blocks ported and green"
     },
     {
       "id": "RH.RS:Anchors",
       "namespace": "IndisputableMonolith.RH.RS",
       "path": "IndisputableMonolith/RH/RS/Anchors.lean",
-      "status": "pending",
+      "status": "done",
       "owner": "",
-      "notes": "Small lemmas only"
+      "notes": "Anchors ported and green"
     },
     {
       "id": "RH.RS:Bands",
       "namespace": "IndisputableMonolith.RH.RS",
       "path": "IndisputableMonolith/RH/RS/Bands.lean",
-      "status": "pending",
+      "status": "done",
       "owner": "",
-      "notes": "Small lemmas only"
+      "notes": "Bands ported and green"
+    },
+    {
+      "id": "RH.RS:Spec",
+      "namespace": "IndisputableMonolith.RH.RS.Spec",
+      "path": "WIP/IndisputableMonolith/RH/RS/Spec.lean",
+      "status": "in_progress",
+      "owner": "",
+      "notes": "Quarantined to WIP pending port"
+    },
+    {
+      "id": "Verification:core",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification.lean",
+      "status": "in_progress",
+      "owner": "",
+      "notes": "Minimal stub in core; full port in WIP"
+    },
+    {
+      "id": "Verification:DEC",
+      "namespace": "IndisputableMonolith.Verification.DEC",
+      "path": "WIP/IndisputableMonolith/Verification/DEC.lean",
+      "status": "in_progress",
+      "owner": "",
+      "notes": "Quarantined to WIP pending port"
+    },
+    {
+      "id": "Bridge:BridgeData",
+      "namespace": "IndisputableMonolith.Bridge.BridgeData",
+      "path": "WIP/IndisputableMonolith/Bridge/BridgeData.lean",
+      "status": "in_progress",
+      "owner": "",
+      "notes": "Quarantined to WIP pending port"
     }
   ]
 }

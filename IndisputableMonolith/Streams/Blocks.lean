@@ -41,7 +41,6 @@ lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
   sumFirst n s = Z_of_window w := by
   classical
   unfold sumFirst Z_of_window Cylinder at *
-  ext1
   have : (fun i : Fin n => (if s i.val then 1 else 0)) =
          (fun i : Fin n => (if w i then 1 else 0)) := by
     funext i; simpa [hs i]
@@ -54,11 +53,12 @@ lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
   unfold sumFirst Z_of_window extendPeriodic8
   have hmod : ∀ i : Fin 8, (i.val % 8) = i.val := by
     intro i; exact Nat.mod_eq_of_lt i.isLt
-  refine
-    (congrArg (fun f => ∑ i : Fin 8, f i) ?_)
-    ▸ rfl
-    funext i
-  simpa [hmod i]
+  have hfun :
+    (fun i : Fin 8 => (if w ⟨i.val % 8, Nat.mod_lt _ (by decide)⟩ then 1 else 0))
+    = (fun i : Fin 8 => (if w i then 1 else 0)) := by
+      funext i; simp [hmod i]
+  have := congrArg (fun f => ∑ i : Fin 8, f i) hfun
+  simpa using this
 
 end PatternLayer
 
@@ -70,6 +70,10 @@ open Finset PatternLayer
 /-- Sum of one 8‑tick sub‑block starting at index `j*8`. -/
 def subBlockSum8 (s : Stream) (j : Nat) : Nat :=
   ∑ i : Fin 8, (if s (j * 8 + i.val) then 1 else 0)
+
+/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
+def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
+  ∑ j : Fin k, subBlockSum8 s j.val
 
 /-- On any stream lying in the cylinder of an 8‑bit window, the aligned
     first block sum (j=0; T=8k alignment) equals the window integer `Z`. -/
@@ -89,12 +93,7 @@ lemma blockSum_equals_Z_on_cylinder_first (w : Pattern 8) {s : Stream}
   (hs : s ∈ PatternLayer.Cylinder w) :
   blockSumAligned8 1 s = Z_of_window w := by
   classical
-  unfold blockSumAligned8
-  simpa using firstBlockSum_eq_Z_on_cylinder w (s:=s) hs
-
-/-- Aligned block sum over `k` copies of the 8‑tick window (so instrument length `T=8k`). -/
-def blockSumAligned8 (k : Nat) (s : Stream) : Nat :=
-  ∑ j : Fin k, subBlockSum8 s j.val
+  simp [blockSumAligned8, firstBlockSum_eq_Z_on_cylinder w (s:=s) hs]
 
 /-- On periodic extensions of a window, each 8‑sub‑block sums to `Z`. -/
 lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
@@ -103,19 +102,22 @@ lemma subBlockSum8_periodic_eq_Z (w : Pattern 8) (j : Nat) :
   unfold subBlockSum8 Z_of_window extendPeriodic8
   have hmod : ∀ i : Fin 8, ((j * 8 + i.val) % 8) = i.val := by
     intro i
-    have : i.val < 8 := i.isLt
-    simpa [Nat.add_comm, Nat.mul_comm, Nat.mod_eq_of_lt this, Nat.mul_mod]
-      using (by
-        have : (j * 8) % 8 = 0 := by simpa using Nat.mul_mod j 8 8
-        calc
-          (j * 8 + i.val) % 8
-              = ((j * 8) % 8 + i.val % 8) % 8 := by
-                    simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.mul_comm] using Nat.add_mod (j*8) i.val 8
-          _   = (0 + i.val) % 8 := by simpa [this, Nat.mod_eq_of_lt i.isLt]
-          _   = i.val % 8 := by simp
-          _   = i.val := by simpa [Nat.mod_eq_of_lt i.isLt])
-  refine (congrArg (fun f => ∑ i : Fin 8, f i) ?_)
-  funext i; simpa [hmod i]
+    have hi : i.val < 8 := i.isLt
+    have h0 : (j * 8) % 8 = 0 := by simpa using Nat.mul_mod j 8 8
+    calc
+      (j * 8 + i.val) % 8
+          = ((j * 8) % 8 + i.val % 8) % 8 := by
+                simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.mul_comm]
+                  using (Nat.add_mod (j*8) i.val 8)
+      _   = (0 + i.val) % 8 := by simpa [h0, Nat.mod_eq_of_lt hi]
+      _   = i.val % 8 := by simp
+      _   = i.val := by simpa [Nat.mod_eq_of_lt hi]
+  have hfun :
+    (fun i : Fin 8 => (if w ⟨(j*8 + i.val) % 8, Nat.mod_lt _ (by decide)⟩ then 1 else 0))
+    = (fun i : Fin 8 => (if w i then 1 else 0)) := by
+      funext i; simp [hmod i]
+  have := congrArg (fun f => ∑ i : Fin 8, f i) hfun
+  simpa using this
 
 /-- For `s = extendPeriodic8 w`, summing `k` aligned 8‑blocks yields `k * Z(w)`. -/
 lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
@@ -124,11 +126,12 @@ lemma blockSumAligned8_periodic (w : Pattern 8) (k : Nat) :
   unfold blockSumAligned8
   have hconst : ∀ j : Fin k, subBlockSum8 (extendPeriodic8 w) j.val = Z_of_window w := by
     intro j; simpa using subBlockSum8_periodic_eq_Z w j.val
-  have : (∑ _j : Fin k, Z_of_window w) = k * Z_of_window w := by
-    simpa using (Finset.card_univ : Fintype.card (Fin k) = k) ▸ (by
-      simpa using (Finset.sum_const_natural (s:=Finset.univ) (a:=Z_of_window w)))
-  have := congrArg (fun f => ∑ j : Fin k, f j) (funext hconst)
-  simpa using this.trans this
+  have hsum : (∑ _j : Fin k, Z_of_window w) = k * Z_of_window w := by
+    simpa using
+      (Finset.card_univ : Fintype.card (Fin k) = k) ▸
+      (by simpa using (Finset.sum_const_natural (s:=Finset.univ) (a:=Z_of_window w)))
+  have hmap := congrArg (fun f => ∑ j : Fin k, f j) (funext hconst)
+  simpa using hmap.trans hsum
 
 /-- Averaged (per‑window) observation equals `Z` on periodic extensions. -/
 def observeAvg8 (k : Nat) (s : Stream) : Nat :=

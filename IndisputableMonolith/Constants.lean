@@ -7,23 +7,24 @@ namespace Constants
 noncomputable def phi : ℝ := (1 + Real.sqrt 5) / 2
 
 lemma phi_pos : 0 < phi := by
-  have h0 : (0 : ℝ) ≤ Real.sqrt 5 := Real.sqrt_nonneg _
-  have h1 : (0 : ℝ) < 1 := by norm_num
-  have hge : (1 : ℝ) ≤ 1 + Real.sqrt 5 := by
-    have := h0
-    have : 1 + 0 ≤ 1 + Real.sqrt 5 := add_le_add_left this 1
-    simpa [one_add, add_comm] using this
-  have : 0 < 1 + Real.sqrt 5 := lt_of_lt_of_le h1 hge
   have htwo : 0 < (2 : ℝ) := by norm_num
-  simpa [phi] using (div_pos this htwo)
+  -- Use that √5 > 0
+  have hroot_pos : 0 < Real.sqrt 5 := by
+    have : (0 : ℝ) < 5 := by norm_num
+    simpa using Real.sqrt_pos.mpr this
+  have hnum_pos : 0 < 1 + Real.sqrt 5 := by exact add_pos_of_pos_of_nonneg (by norm_num) (le_of_lt hroot_pos)
+  simpa [phi] using (div_pos hnum_pos htwo)
 
 lemma one_lt_phi : 1 < phi := by
-  have hroot : Real.sqrt 1 < Real.sqrt 5 := by
-    simpa [Real.sqrt_one] using (Real.sqrt_lt_sqrt (by norm_num) (by norm_num : (1 : ℝ) < 5))
-  have hsum : (1 : ℝ) + 1 < 1 + Real.sqrt 5 := add_lt_add_left hroot 1
   have htwo : 0 < (2 : ℝ) := by norm_num
-  have := (div_lt_div_of_pos_right hsum htwo)
-  simpa [phi, Real.sqrt_one] using this
+  have hsqrt_gt : Real.sqrt 1 < Real.sqrt 5 := by
+    simpa [Real.sqrt_one] using (Real.sqrt_lt_sqrt (by norm_num) (by norm_num : (1 : ℝ) < 5))
+  have h2lt : (2 : ℝ) < 1 + Real.sqrt 5 := by
+    have h1lt : (1 : ℝ) < Real.sqrt 5 := by simpa [Real.sqrt_one] using hsqrt_gt
+    linarith
+  have hdiv : (2 : ℝ) / 2 < (1 + Real.sqrt 5) / 2 := (div_lt_div_of_pos_right h2lt htwo)
+  have hone_lt : 1 < (1 + Real.sqrt 5) / 2 := by simpa using hdiv
+  simpa [phi] using hone_lt
 
 lemma phi_ge_one : 1 ≤ phi := le_of_lt one_lt_phi
 lemma phi_ne_zero : phi ≠ 0 := ne_of_gt phi_pos

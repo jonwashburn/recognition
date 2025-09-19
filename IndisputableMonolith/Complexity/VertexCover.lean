@@ -7,7 +7,6 @@ namespace Complexity
 structure ComplexityPair where
   Tc : ℕ → ℕ
   Tr : ℕ → ℕ
-  deriving Repr
 
 namespace VertexCover
 
@@ -33,12 +32,12 @@ def HasCover (I : Instance) : Prop :=
   ∃ S : List Nat, S.length ≤ I.k ∧ Covers S I
 
 /-- A trivial example with no edges is always covered by the empty set. -/
-def example : Instance := { vertices := [1], edges := [], k := 0 }
+@[simp] def trivialInstance : Instance := { vertices := [1], edges := [], k := 0 }
 
-lemma example_hasCover : HasCover example := by
+lemma trivial_hasCover : HasCover trivialInstance := by
   refine ⟨[], by decide, ?_⟩
   intro e he
-  cases he
+  simpa using he
 
 @[simp] lemma InCover_cons {x : Nat} {xs : List Nat} : InCover (x :: xs) x := by
   simp [InCover]
@@ -48,16 +47,16 @@ lemma example_hasCover : HasCover example := by
 
 lemma EdgeCovered_comm (S : List Nat) (u v : Nat) :
   EdgeCovered S (u, v) ↔ EdgeCovered S (v, u) := by
-  simp [EdgeCovered, Or_comm]
+  simp [EdgeCovered, Or.comm]
 
 lemma Covers_nil_edges (S : List Nat) (I : Instance) (h_edges : I.edges = []) : Covers S I := by
   intro e he
-  simpa [Covers, h_edges] using he.elim
+  simpa [Covers, h_edges] using he
 
 lemma hasCover_of_nil_edges (I : Instance) (h_edges : I.edges = []) : HasCover I := by
   refine ⟨[], by simp, ?_⟩
   intro e he
-  simpa [Covers, h_edges] using he.elim
+  simpa [Covers, h_edges] using he
 
 end VertexCover
 

@@ -6,14 +6,14 @@ namespace BalancedParityHidden
 
 variable {n : ℕ} [DecidableEq (Fin n)]
 
-/-- Hidden mask encoder: bit b with mask R is `R` if b=false and `bnot ∘ R` if b=true. -/
+/-- Hidden mask encoder: bit b with mask R is `R` if b=false and `not ∘ R` if b=true. -/
 def enc (b : Bool) (R : Fin n → Bool) : Fin n → Bool :=
-  fun i => if b then bnot (R i) else R i
+  fun i => if b then ! (R i) else R i
 
 @[simp] lemma enc_false (R : Fin n → Bool) : enc (n:=n) false R = R := by
   funext i; simp [enc]
 
-@[simp] lemma enc_true (R : Fin n → Bool) : enc (n:=n) true R = (fun i => bnot (R i)) := by
+@[simp] lemma enc_true (R : Fin n → Bool) : enc (n:=n) true R = (fun i => ! (R i)) := by
   funext i; simp [enc]
 
 /-- Restrict a full word to a queried index set `M`. -/
@@ -25,23 +25,23 @@ def restrict (f : Fin n → Bool) (M : Finset (Fin n)) : {i // i ∈ M} → Bool
   funext i; simp [restrict, enc]
 
 @[simp] lemma restrict_enc_true (R : Fin n → Bool) (M : Finset (Fin n)) :
-  restrict (n:=n) (enc true R) M = (fun i => bnot (restrict (n:=n) R M i)) := by
+  restrict (n:=n) (enc true R) M = (fun i => ! (restrict (n:=n) R M i)) := by
   funext i; simp [restrict, enc]
 
 /-- Extend a partial assignment on `M` to a full mask by defaulting to `false` off `M`. -/
-def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bool :=
+def extendMask (M : Finset (Fin n)) (a : {i // i ∈ M} → Bool) : Fin n → Bool :=
   fun i => if h : i ∈ M then a ⟨i, h⟩ else false
 
-@[simp] lemma extendMask_in (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∈ M) :
-  extendMask (n:=n) a M i = a ⟨i, h⟩ := by
+@[simp] lemma extendMask_in (M : Finset (Fin n)) (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∈ M) :
+  extendMask (n:=n) M a i = a ⟨i, h⟩ := by
   simp [extendMask, h]
 
-@[simp] lemma extendMask_notin (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∉ M) :
-  extendMask (n:=n) a M i = false := by
+@[simp] lemma extendMask_notin (M : Finset (Fin n)) (a : {i // i ∈ M} → Bool) {i : Fin n} (h : i ∉ M) :
+  extendMask (n:=n) M a i = false := by
   simp [extendMask, h]
 
-@[simp] lemma restrict_extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) :
-  restrict (n:=n) (extendMask (n:=n) a M) M = a := by
+@[simp] lemma restrict_extendMask (M : Finset (Fin n)) (a : {i // i ∈ M} → Bool) :
+  restrict (n:=n) (extendMask (n:=n) M a) M = a := by
   funext i
   simp [restrict, extendMask]
 
@@ -55,24 +55,27 @@ def extendMask (a : {i // i ∈ M} → Bool) (M : Finset (Fin n)) : Fin n → Bo
   let a : {i // i ∈ M} → Bool := fun _ => false
   let b' : Bool := g a
   -- Choose the true bit to be the opposite of the decoder's prediction.
-  let b : Bool := bnot b'
+  let b : Bool := ! b'
   -- Choose the mask so that the restricted encoding equals `a`.
   let R : Fin n → Bool :=
-    if b = false then extendMask a M else extendMask (fun i => bnot (a i)) M
+    if b then extendMask M (fun i => ! (a i)) else extendMask M a
   have hRestr : restrict (n:=n) (enc b R) M = a := by
     funext i
     dsimp [restrict, enc, R, extendMask]
-    by_cases hbf : b = false
-    · -- Then `R = extendMask a M`, and restriction is exactly `a` on `M`.
-      simp [hbf, dif_pos i.property]
-    · have hb : b = true := by cases b <;> simp_all
-      -- Then `R = extendMask (bnot ∘ a) M`, and restriction cancels the bnot.
+    by_cases hb : b
+    · -- b = true
+      simp [hb, dif_pos i.property]
+    · -- b = false
       simp [hb, dif_pos i.property]
   refine ⟨b, R, ?_⟩
-  -- The decoder outputs `g a = b' = bnot b`, hence it is wrong.
-  have : g (restrict (n:=n) (enc b R) M) = b' := by simpa [hRestr]
-  have hbrel : b = bnot b' := rfl
-  cases b <;> simp [hbrel, this]
+  have hval' : g (restrict (n:=n) (enc b R) M) = g a := by
+    simpa [hRestr]
+  have hval : g (restrict (n:=n) (enc b R) M) = b' := by
+    simpa [b'] using hval'
+  have hbrel : b = ! b' := rfl
+  have ne : b' ≠ ! b' := by cases b' <;> decide
+  have : g (restrict (n:=n) (enc b R) M) ≠ ! b' := by simpa [hval]
+  simpa [hbrel]
 
 /-- If a decoder is correct for all `(b,R)` while querying only `M`, contradiction. -/
  theorem no_universal_decoder (M : Finset (Fin n))
@@ -109,7 +112,5 @@ theorem recognition_lower_bound_sat
   classical
   simpa using
     (Complexity.BalancedParityHidden.omega_n_queries (n:=n) M g hMlt)
-
-end IndisputableMonolith
 
 end IndisputableMonolith

@@ -2,7 +2,7 @@ import Mathlib
 
 namespace IndisputableMonolith
 
-/‑! #### Streams: periodic extension and finite sums ‑/
+/-! #### Streams: periodic extension and finite sums -/
 namespace Streams
 
 open Classical
@@ -31,12 +31,12 @@ def Cylinder {n : Nat} (w : Pattern n) : Set Stream :=
   { s | ∀ i : Fin n, s i.val = w i }
 
 @[simp] lemma mem_Cylinder_zero (w : Pattern 0) (s : Stream) : s ∈ Cylinder w := by
-  intro i; cases i
+  intro i; exact (Fin.elim0 i)
 
 @[simp] lemma Cylinder_zero (w : Pattern 0) : Cylinder w = Set.univ := by
   ext s; constructor
   · intro _; exact Set.mem_univ _
-  · intro _; exact mem_Cylinder_zero w s
+  · intro _; simpa using (mem_Cylinder_zero w s)
 
 /-- Periodic extension of an 8‑bit window. -/
 def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
@@ -44,9 +44,7 @@ def extendPeriodic8 (w : Pattern 8) : Stream := fun t =>
   w i
 
 @[simp] lemma extendPeriodic8_zero (w : Pattern 8) : extendPeriodic8 w 0 = w ⟨0, by decide⟩ := by
-  dsimp [extendPeriodic8]
-  have : 0 % 8 = 0 := by decide
-  simp [this]
+  simp [extendPeriodic8]
 
 @[simp] lemma extendPeriodic8_eq_mod (w : Pattern 8) (t : Nat) :
   extendPeriodic8 w t = w ⟨t % 8, Nat.mod_lt _ (by decide)⟩ := by
@@ -84,12 +82,17 @@ lemma sumFirst_eq_Z_on_cylinder {n : Nat} (w : Pattern n)
 /-- For an 8‑bit window extended periodically, the first‑8 sum equals `Z`. -/
 lemma sumFirst8_extendPeriodic_eq_Z (w : Pattern 8) :
   sumFirst 8 (extendPeriodic8 w) = Z_of_window w := by
+  classical
   unfold sumFirst Z_of_window extendPeriodic8
   have hmod : ∀ i : Fin 8, (i.val % 8) = i.val := by
     intro i; exact Nat.mod_eq_of_lt i.isLt
-  refine (congrArg (fun f => ∑ i : Fin 8, f i) ?_)?_;
-  · funext i; simp [hmod i]
-  · rfl
+  have hfun :
+    (fun i : Fin 8 => (if w ⟨i.val % 8, Nat.mod_lt _ (by decide)⟩ then 1 else 0))
+    = (fun i : Fin 8 => (if w i then 1 else 0)) := by
+      funext i; simp [hmod i]
+  -- Now the two sums are definitionally equal by hfun.
+  have := congrArg (fun f => ∑ i : Fin 8, f i) hfun
+  simpa using this
 
 lemma extendPeriodic8_in_cylinder (w : Pattern 8) : (extendPeriodic8 w) ∈ (Cylinder w) := by
   intro i
