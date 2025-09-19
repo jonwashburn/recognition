@@ -20,18 +20,18 @@ noncomputable def URC.LawfulPhysical : Type := Unit
 noncomputable def URC.Instances.lawfulPhysical_from_monolith (a b c d : Prop) : URC.LawfulPhysical := ()
 noncomputable def URC.LawfulComputational : Type := Unit
 noncomputable def URC.Instances.lawfulComputational_from_monolith (a b : Prop) : URC.LawfulComputational := ()
-noncomputable def RH.RS.Inevitability_dimless : ℝ → Prop := fun _ => True
-noncomputable def RH.RS.Witness.inevitability_dimless_partial : ∀ φ, RH.RS.Inevitability_dimless φ := fun _ => True
+noncomputable def RH.RS.Inevitability_dimless (φ : ℝ) : Prop := True
+noncomputable def RH.RS.Witness.inevitability_dimless_partial (φ : ℝ) : RH.RS.Inevitability_dimless φ := True
 noncomputable def URC.Certificates : Type := Unit
 noncomputable def URC.Inputs : Type := Unit
-noncomputable def URC.AE.A : URC.Inputs → Prop := fun _ => True
-noncomputable def URC.AE.B : URC.Inputs → Prop := fun _ => True
-noncomputable def URC.AE.C : URC.Inputs → Prop := fun _ => True
-noncomputable def URC.AE.D : URC.Inputs → Prop := fun _ => True
-noncomputable def URC.AE.E : URC.Inputs → Prop := fun _ => True
-noncomputable def URC.AE.B_to_C : ∀ I hB, URC.AE.C I := fun _ _ => True
-noncomputable def URC.AE.C_to_D : ∀ I hC, URC.AE.D I := fun _ _ => True
-noncomputable def URC.AE.D_to_E : ∀ I hD, URC.AE.E I := fun _ _ => True
+noncomputable def URC.AE.A (I : URC.Inputs) : Prop := True
+noncomputable def URC.AE.B (I : URC.Inputs) : Prop := True
+noncomputable def URC.AE.C (I : URC.Inputs) : Prop := True
+noncomputable def URC.AE.D (I : URC.Inputs) : Prop := True
+noncomputable def URC.AE.E (I : URC.Inputs) : Prop := True
+noncomputable def URC.AE.B_to_C (I : URC.Inputs) (hB : URC.AE.B I) : URC.AE.C I := True
+noncomputable def URC.AE.C_to_D (I : URC.Inputs) (hC : URC.AE.C I) : URC.AE.D I := True
+noncomputable def URC.AE.D_to_E (I : URC.Inputs) (hD : URC.AE.D I) : URC.AE.E I := True
 noncomputable def URC.lambda_rec_unique : Prop := True
 
 /-- φ‑rung step as a Prop on canonical units masses. -/
