@@ -347,6 +347,14 @@
       "notes": "Kinematics/ReachN/inBall/Reaches extracted; core green"
     },
     {
+      "id": "YM:Kernel",
+      "namespace": "IndisputableMonolith.YM",
+      "path": "IndisputableMonolith/YM/Kernel.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "TransferKernel/MatrixView bridge extracted; core green"
+    },
+    {
       "id": "Causality:BallP",
       "namespace": "IndisputableMonolith.Causality",
       "path": "IndisputableMonolith/Causality/BallP.lean",
