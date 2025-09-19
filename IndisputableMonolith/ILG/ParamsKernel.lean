@@ -56,7 +56,7 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
       -- small positive guard
       have : (1e-12 : ℝ) > 0 := by norm_num
       simpa [εr] using this
-    exact lt_of_le_of_lt (le_max_left _ _) this
+    exact lt_max_of_lt_left this
   have hbase_nonneg : 0 ≤ (max 0 r) / max εr r0 := by
     have : 0 ≤ max 0 r := le_max_left _ _
     exact div_nonneg this (le_of_lt hden_pos)

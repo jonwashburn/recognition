@@ -17,6 +17,8 @@ axiom RSUnits_pos_c (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.c
 axiom RSUnits_pos_tau0 (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.tau0
 axiom RSUnits_pos_ell0 (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.ell0
 axiom c_mul_tau0_eq_ell0 (U : IndisputableMonolith.Constants.RSUnits) : U.c * U.tau0 = U.ell0
+/-- Axiom stub for K positivity - depends on Constants module. -/
+axiom Constants_K_pos : 0 < IndisputableMonolith.Constants.K
 
 /-- Clock-side display definition: τ_rec(display) = K · τ0. -/
 noncomputable def tau_rec_display (U : IndisputableMonolith.Constants.RSUnits) : ℝ :=
@@ -81,19 +83,22 @@ noncomputable def lambda_kin_display (U : IndisputableMonolith.Constants.RSUnits
 /-- Structural speed identity from units: ℓ0/τ0 = c. -/
 @[simp] lemma ell0_div_tau0_eq_c (U : IndisputableMonolith.Constants.RSUnits) :
   U.ell0 / U.tau0 = U.c := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  have hτ : U.tau0 ≠ 0 := ne_of_gt (RSUnits_pos_tau0 U)
+  have : U.ell0 = U.c * U.tau0 := c_mul_tau0_eq_ell0 U
+  simpa [this, div_mul_cancel _ hτ]
 
 /-- Display speed equals structural speed: (λ_kin/τ_rec) = c. -/
 @[simp] lemma display_speed_eq_c_of_nonzero (U : IndisputableMonolith.Constants.RSUnits)
   (hτ : tau_rec_display U ≠ 0) : (lambda_kin_display U) / (tau_rec_display U) = U.c := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  have : U.c * tau_rec_display U = lambda_kin_display U := lambda_kin_from_tau_rec U
+  have hτ_rec_ne : tau_rec_display U ≠ 0 := hτ
+  simpa [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc, inv_mul_cancel hτ_rec_ne]
 
 /-- Strengthen display-speed equality: remove nonzero hypothesis by proving positivity. -/
 lemma tau_rec_display_pos (U : IndisputableMonolith.Constants.RSUnits) : 0 < tau_rec_display U := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  have hK : 0 < IndisputableMonolith.Constants.K := Constants_K_pos
+  have hτ : 0 < U.tau0 := RSUnits_pos_tau0 U
+  exact mul_pos hK hτ
 
 @[simp] lemma tau_rec_display_ne_zero (U : IndisputableMonolith.Constants.RSUnits) :
   tau_rec_display U ≠ 0 := ne_of_gt (tau_rec_display_pos U)
