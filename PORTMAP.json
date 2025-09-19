@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Masses:KernelTypes",
+      "namespace": "IndisputableMonolith.Masses",
+      "path": "IndisputableMonolith/Masses/KernelTypes.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "GaugeSkeleton/Completion/WordLength/GenClass/tauOf/RungSpec/rungOf"
+    },
+    {
       "id": "Masses:AnchorPolicy",
       "namespace": "IndisputableMonolith.Masses.AnchorPolicy",
       "path": "IndisputableMonolith/Masses/AnchorPolicy.lean",
@@ -534,9 +542,9 @@
       "id": "URCAdapters:EthicsAdapter",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/EthicsAdapter.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "ethics_invariants_prop/holds + lawfulEthical"
+      "notes": "ethics_invariants_prop/holds + lawfulEthical moved; core green"
     },
     {
       "id": "Verification:AuditSI",

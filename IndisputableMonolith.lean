@@ -4930,14 +4930,7 @@ def lawfulComputational : URC.LawfulComputational :=
     (recog_lb_prop)
     (rs_pres_prop)
 
-/-- Ethics invariants (thin Prop): replace with concrete `Ethics` invariants when ready. -/
-def ethics_invariants_prop : Prop := IndisputableMonolith.Ethics.Invariants.All
-
-lemma ethics_invariants_holds : ethics_invariants_prop := IndisputableMonolith.Ethics.Invariants.all_holds
-
-/-- Minimal ethical adapter. -/
-def lawfulEthical : URC.LawfulEthical :=
-  URC.Instances.lawfulEthical_from_monolith ethics_invariants_prop
+-- (Moved to IndisputableMonolith/URCAdapters/EthicsAdapter.lean)
 
 /-- Tiny aggregator: if URC.B holds for inputs derived from the monolith and certificates pass,
     we supply the `Inevitability_dimless` witness (re-using existing partial lemma). -/
