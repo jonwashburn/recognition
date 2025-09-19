@@ -29,28 +29,28 @@ structure AffineMapZ where
 
 /-- Map δ-subgroup to ℝ by composing the (stubbed) projection `toZ` with an affine map. -/
 noncomputable def mapDelta (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) : DeltaSub δ → ℝ :=
-  fun p => f.slope * ((toZ δ p) : ℝ) + f.offset
+  fun p => f.slope * ((LedgerUnits.toZ δ p) : ℝ) + f.offset
 
 lemma mapDelta_diff (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
   (p q : DeltaSub δ) :
   mapDelta δ hδ f p - mapDelta δ hδ f q
-    = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
+    = f.slope * ((LedgerUnits.toZ δ p - LedgerUnits.toZ δ q : ℤ) : ℝ) := by
   classical
   calc
     mapDelta δ hδ f p - mapDelta δ hδ f q
-        = (f.slope * (toZ δ p : ℝ) + f.offset)
-            - (f.slope * (toZ δ q : ℝ) + f.offset) := by
+        = (f.slope * (LedgerUnits.toZ δ p : ℝ) + f.offset)
+            - (f.slope * (LedgerUnits.toZ δ q : ℝ) + f.offset) := by
               simp [mapDelta]
-    _   = f.slope * (toZ δ p : ℝ)
-            - f.slope * (toZ δ q : ℝ) := by
+    _   = f.slope * (LedgerUnits.toZ δ p : ℝ)
+            - f.slope * (LedgerUnits.toZ δ q : ℝ) := by
               ring
-    _   = f.slope * ((toZ δ p : ℝ)
-            - (toZ δ q : ℝ)) := by
+    _   = f.slope * ((LedgerUnits.toZ δ p : ℝ)
+            - (LedgerUnits.toZ δ q : ℝ)) := by
               simpa [mul_sub]
-    _   = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
-              have hcast : ((toZ δ p - toZ δ q : ℤ) : ℝ)
-                  = (toZ δ p : ℝ) - (toZ δ q : ℝ) := by
-                    simpa using (Int.cast_sub (toZ δ p) (toZ δ q))
+    _   = f.slope * ((LedgerUnits.toZ δ p - LedgerUnits.toZ δ q : ℤ) : ℝ) := by
+              have hcast : ((LedgerUnits.toZ δ p - LedgerUnits.toZ δ q : ℤ) : ℝ)
+                  = (LedgerUnits.toZ δ p : ℝ) - (LedgerUnits.toZ δ q : ℝ) := by
+                    simpa using (Int.cast_sub (LedgerUnits.toZ δ p) (LedgerUnits.toZ δ q))
               simpa [hcast]
 
 /-- Context constructors: charge (quantum `qe`) and time (τ0). -/
@@ -73,19 +73,19 @@ noncomputable def mapDeltaAction (δ : ℤ) (hδ : δ ≠ 0) (hbar : ℝ) : Delt
   mapDelta δ hδ (actionMap hbar)
 
 @[simp] lemma mapDelta_fromZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ n) = f.slope * (n : ℝ) + f.offset := by
+  mapDelta δ hδ f (LedgerUnits.fromZ δ n) = f.slope * (n : ℝ) + f.offset := by
   classical
-  simp [mapDelta]
+  simp [mapDelta, LedgerUnits.toZ_fromZ δ hδ]
 
 lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
-  mapDelta δ hδ f (fromZ δ (n+1)) - mapDelta δ hδ f (fromZ δ n) = f.slope := by
+  mapDelta δ hδ f (LedgerUnits.fromZ δ (n+1)) - mapDelta δ hδ f (LedgerUnits.fromZ δ n) = f.slope := by
   classical
   calc
-    mapDelta δ hδ f (fromZ δ (n+1))
-      - mapDelta δ hδ f (fromZ δ n)
+    mapDelta δ hδ f (LedgerUnits.fromZ δ (n+1))
+      - mapDelta δ hδ f (LedgerUnits.fromZ δ n)
         = (f.slope * ((n+1 : ℤ) : ℝ) + f.offset)
             - (f.slope * (n : ℝ) + f.offset) := by
-              simp [mapDelta]
+              simp [mapDelta, LedgerUnits.toZ_fromZ]
     _   = f.slope * ((n+1 : ℤ) : ℝ) - f.slope * (n : ℝ) := by
               ring
     _   = f.slope * ((n : ℝ) + 1) - f.slope * (n : ℝ) := by
@@ -95,27 +95,27 @@ lemma mapDelta_step (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ) (n : ℤ) :
 
 @[simp] lemma mapDeltaTime_fromZ (δ : ℤ) (hδ : δ ≠ 0)
   (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 * (n : ℝ) := by
+  mapDeltaTime δ hδ U (LedgerUnits.fromZ δ n) = U.tau0 * (n : ℝ) := by
   classical
   have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n)
   simpa [mapDeltaTime, timeMap, add_comm] using h
 
 lemma mapDeltaTime_step (δ : ℤ) (hδ : δ ≠ 0)
   (U : Constants.RSUnits) (n : ℤ) :
-  mapDeltaTime δ hδ U (fromZ δ (n+1)) - mapDeltaTime δ hδ U (fromZ δ n) = U.tau0 := by
+  mapDeltaTime δ hδ U (LedgerUnits.fromZ δ (n+1)) - mapDeltaTime δ hδ U (LedgerUnits.fromZ δ n) = U.tau0 := by
   simpa [mapDeltaTime, timeMap] using
     (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=timeMap U) (n:=n))
 
 @[simp] lemma mapDeltaAction_fromZ (δ : ℤ) (hδ : δ ≠ 0)
   (hbar : ℝ) (n : ℤ) :
-  mapDeltaAction δ hδ hbar (fromZ δ n) = hbar * (n : ℝ) := by
+  mapDeltaAction δ hδ hbar (LedgerUnits.fromZ δ n) = hbar * (n : ℝ) := by
   classical
   have h := mapDelta_fromZ (δ:=δ) (hδ:=hδ) (f:=actionMap hbar) (n:=n)
   simpa [mapDeltaAction, actionMap, add_comm] using h
 
 lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
   (hbar : ℝ) (n : ℤ) :
-  mapDeltaAction δ hδ hbar (fromZ δ (n+1)) - mapDeltaAction δ hδ hbar (fromZ δ n)
+  mapDeltaAction δ hδ hbar (LedgerUnits.fromZ δ (n+1)) - mapDeltaAction δ hδ hbar (LedgerUnits.fromZ δ n)
     = hbar := by
   simpa [mapDeltaAction, actionMap] using
     (mapDelta_step (δ:=δ) (hδ:=hδ) (f:=actionMap hbar) (n:=n))
@@ -123,7 +123,7 @@ lemma mapDeltaAction_step (δ : ℤ) (hδ : δ ≠ 0)
 lemma mapDelta_diff_toZ (δ : ℤ) (hδ : δ ≠ 0) (f : AffineMapZ)
   (p q : DeltaSub δ) :
   mapDelta δ hδ f p - mapDelta δ hδ f q
-    = f.slope * ((toZ δ p - toZ δ q : ℤ) : ℝ) := by
+    = f.slope * ((LedgerUnits.toZ δ p - LedgerUnits.toZ δ q : ℤ) : ℝ) := by
   classical
   simpa using (mapDelta_diff (δ:=δ) (hδ:=hδ) (f:=f) (p:=p) (q:=q))
 
