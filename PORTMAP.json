@@ -953,6 +953,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "cone_bound_export theorem for verification-level cone bounds; axiom stubs; core green"
+    }
+    ,{
+      "id": "VoxelWalks",
+      "namespace": "IndisputableMonolith.VoxelWalks",
+      "path": "IndisputableMonolith/VoxelWalks.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; dependency-light"
     },
     {
       "id": "Ablation:Harness",

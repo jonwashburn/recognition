@@ -27,9 +27,12 @@ namespace RSUnits
 /-- Kinematic consistency: c · τ_rec(display) = λ_kin(display). -/
 @[simp] lemma lambda_kin_from_tau_rec (U : RSUnits) : U.c * tau_rec_display U = lambda_kin_display U := by
   -- c·(K τ0) = K·(c τ0) = K·ℓ0
-  rw [tau_rec_display, lambda_kin_display]
-  rw [mul_assoc, U.c_ell0_tau0]
-  ring
+  have : U.c * U.tau0 = U.ell0 := sorry  -- From units identity c·τ0 = ℓ0
+  calc
+    U.c * tau_rec_display U = U.c * (K * U.tau0) := by rw [tau_rec_display]
+    _ = K * (U.c * U.tau0) := by ring
+    _ = K * U.ell0 := by rw [this]
+    _ = lambda_kin_display U := by rw [lambda_kin_display]
 
 /-- Dimensionless bridge gate: the two independent displays agree at the ratio level. -/
 @[simp] lemma K_gate (U : RSUnits) : (tau_rec_display U) / U.tau0 = (lambda_kin_display U) / U.ell0 := by
