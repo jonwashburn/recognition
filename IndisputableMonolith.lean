@@ -77,18 +77,7 @@ lemma phi_squared : phi ^ 2 = phi + 1 := by
   simpa [this] using by
     ring
 
-/-- φ = 1 + 1/φ. -/
-lemma phi_fixed_point : phi = 1 + 1 / phi := by
-  -- From φ^2 = φ + 1 and φ ≠ 0
-  have hpos : 0 < phi := phi_pos
-  have hne : phi ≠ 0 := ne_of_gt hpos
-  have hsq : phi ^ 2 = phi + 1 := phi_squared
-  -- Divide both sides by φ
-  have := congrArg (fun x => x / phi) hsq
-  have : (phi ^ 2) / phi = (phi + 1) / phi := this
-  have : phi = 1 + 1 / phi := by
-    simpa [pow_two, mul_comm, mul_left_comm, mul_assoc, div_eq_mul_inv] using this
-  simpa [add_comm, add_left_comm, add_assoc] using this
+-- (Moved to IndisputableMonolith/PhiSupport.lean)
 
 end Constants
 
@@ -998,6 +987,7 @@ structure PEC (β : Type) where
 end MaxwellDEC
 
 /-- LNAL machine scaffold (6 registers, 16 opcodes, 1024-breath). -/
+-- (Moved to IndisputableMonolith/LNAL.lean)
 namespace LNAL
 
 abbrev Reg := Fin 6

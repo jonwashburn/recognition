@@ -361,6 +361,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "extracted ballP + lemmas; core green"
+    },
+    {
+      "id": "LNAL:scaffold",
+      "namespace": "IndisputableMonolith.LNAL",
+      "path": "IndisputableMonolith/LNAL.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "6-register machine scaffold"
     }
     ,{
       "id": "Verification:ConeExport",
@@ -377,6 +385,22 @@
       "status": "done",
       "owner": "agentE",
       "notes": "proved phi_squared; removed axiom; core green"
+    }
+    ,{
+      "id": "Verification:Calibration",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Calibration.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "CalibrationEvidence moved; dependency-light; core green"
+    }
+    ,{
+      "id": "PhiSupport:phi_fixed_point",
+      "namespace": "IndisputableMonolith.PhiSupport",
+      "path": "IndisputableMonolith/PhiSupport.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "added phi_fixed_point corollary; core green"
     }
     ,{
       "id": "Causality:ConeBound",

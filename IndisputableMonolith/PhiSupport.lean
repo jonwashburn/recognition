@@ -28,5 +28,17 @@ namespace PhiSupport
   simpa [hdef, hsq_div, hplus, two_mul, add_comm, add_left_comm, add_assoc] using by
     ring
 
+/-- φ = 1 + 1/φ as a direct algebraic corollary of φ^2 = φ + 1 and φ ≠ 0. -/
+@[simp] theorem phi_fixed_point : Constants.phi = 1 + 1 / Constants.phi := by
+  have hsq : Constants.phi ^ 2 = Constants.phi + 1 := phi_squared
+  have hpos : 0 < Constants.phi := IndisputableMonolith.Constants.phi_pos
+  have hne : Constants.phi ≠ 0 := ne_of_gt hpos
+  have := congrArg (fun x => x / Constants.phi) hsq
+  -- Simplify both sides after dividing by φ
+  -- (φ^2)/φ = φ and (φ+1)/φ = 1 + 1/φ
+  have : Constants.phi = 1 + 1 / Constants.phi := by
+    simpa [pow_two, mul_comm, mul_left_comm, mul_assoc, div_eq_mul_inv] using this
+  simpa [add_comm, add_left_comm, add_assoc] using this
+
 end PhiSupport
 end IndisputableMonolith
