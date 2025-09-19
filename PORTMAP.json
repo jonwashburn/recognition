@@ -326,17 +326,17 @@
       "id": "LedgerUnits:delta-one",
       "namespace": "IndisputableMonolith.LedgerUnits",
       "path": "IndisputableMonolith/LedgerUnits.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Delta subgroup, fromZ/toZ, kOf/rungOf, δ=1 equiv"
+      "notes": "extracted delta subgroup; core green"
     },
     {
       "id": "UnitMapping:core",
       "namespace": "IndisputableMonolith.UnitMapping",
       "path": "IndisputableMonolith/UnitMapping.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "UnitMapping shard extracted"
+      "notes": "extracted affine δ→ℝ mapping; core green"
     }
   ]
 }
