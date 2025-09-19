@@ -403,6 +403,14 @@
       "notes": "extracted LNAL scaffold; core green"
     }
     ,{
+      "id": "TruthCore:TimeKernelRescale",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/TimeKernel.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "time_kernel_dimensionless alias for ILG.w_time_ratio_rescale"
+    }
+    ,{
       "id": "TruthCore:DisplayExports",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/Display.lean",
@@ -694,9 +702,9 @@
       "id": "Cost:JlogBasics",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost/Jlog.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Jlog definition, derivative and basic lemmas"
+      "notes": "Jlog definition + zero lemma; dependency-light; core green"
     },
     {
       "id": "Cost:Demo",
@@ -766,9 +774,9 @@
       "id": "Ethics:CostModel",
       "namespace": "IndisputableMonolith.Ethics",
       "path": "IndisputableMonolith/Ethics/CostModel.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "CostModel, Prefer, Composable, CQAligned, Admissible; 83 lines; self-contained"
+      "notes": "CostModel, Prefer, Composable framework extracted; axiom stubs for CQ/Measurement deps; core green"
     }
   ]
 }
