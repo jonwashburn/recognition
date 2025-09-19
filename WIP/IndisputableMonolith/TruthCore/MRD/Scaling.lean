@@ -39,5 +39,3 @@ end
 end MRD
 end TruthCore
 end IndisputableMonolith
-
-

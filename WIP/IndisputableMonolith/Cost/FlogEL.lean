@@ -52,7 +52,7 @@ lemma Flog_eq_zero_iff_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (
 theorem T5_EL_equiv_general {F : ℝ → ℝ} [AveragingDerivation F] :
   deriv (Flog F) 0 = 0 ∧ (∀ t : ℝ, Flog F 0 ≤ Flog F t) ∧ (∀ t : ℝ, Flog F t = 0 ↔ t = 0) := by
   refine ⟨deriv_Flog_zero_of_derivation (F:=F), ?_, ?_⟩
-  · intro t; simpa [Flog, Real.exp_zero] using (Jlog_nonneg t)
+  · intro t; simpa [Flog] using (Flog_nonneg_of_derivation (F:=F) t)
   · intro t; simpa [Flog_eq_Jlog_pt (F:=F) t] using (Jlog_eq_zero_iff t)
 
 end Cost
