@@ -138,9 +138,8 @@ theorem fortyfive_gap_spec_any_with_witness (φ : ℝ) :
     HasRung L B → FortyFiveGapHolds L B →
     (True) → (True) →
       ∃ (F : FortyFiveConsequences L B), True := by
-  intro L B _core _id _units hasR holds _ _
-  -- Build the consequences from the provided witnesses
-  refine fortyfive_gap_consequences_any L B hasR holds.rung45 holds.no_multiples
+  intro L B _core _id _units _hasR holds _ _
+  exact fortyfive_gap_consequences_any L B holds.hasR holds.rung45 holds.no_multiples
 
 /-- 45‑gap consequence for any ledger/bridge derived directly from the class witnesses. -/
 theorem fortyfive_gap_spec_any (φ : ℝ) :
@@ -148,7 +147,7 @@ theorem fortyfive_gap_spec_any (φ : ℝ) :
     CoreAxioms L → BridgeIdentifiable L → UnitsEqv L → FortyFiveGapHolds L B →
       ∃ (F : FortyFiveConsequences L B), True := by
   intro L B _core _id _units holds
-  refine fortyfive_gap_consequences_any L B holds.hasR holds.rung45 holds.no_multiples
+  exact fortyfive_gap_consequences_any L B holds.hasR holds.rung45 holds.no_multiples
 
 /-- General absolute‑layer bundling: package UniqueCalibration and MeetsBands under obligations. -/
 theorem absolute_layer_any (L : Ledger) (B : Bridge L) (A : Anchors) (X : Bands)
@@ -157,11 +156,16 @@ theorem absolute_layer_any (L : Ledger) (B : Bridge L) (A : Anchors) (X : Bands)
 
 /-! ### Recognition closure spec (Inevitability layers) -/
 
-/-- 1) Dimensionless inevitability: universal φ‑closed predictions; bridge uniqueness up to units; matching ↔ unit‑equivalence. -/
-def Inevitability_dimless (_φ : ℝ) : Prop := True
+/-- 1) Dimensionless inevitability: for every ledger/bridge there exists a
+    universal φ‑closed target such that the bridge matches it. -/
+def Inevitability_dimless (φ : ℝ) : Prop :=
+  ∀ (L : Ledger) (B : Bridge L), ∃ U : UniversalDimless φ, Matches φ L B U
 
 /-- 2) The 45‑Gap consequence layer required of any admissible bridge under RS. -/
-def FortyFive_gap_spec (_φ : ℝ) : Prop := True
+def FortyFive_gap_spec (_φ : ℝ) : Prop :=
+  ∀ (L : Ledger) (B : Bridge L),
+    CoreAxioms L → BridgeIdentifiable L → UnitsEqv L → FortyFiveGapHolds L B →
+      ∃ (F : FortyFiveConsequences L B), True
 
 /-- 3) Absolute calibration & empirical compliance (optional strong layer). -/
 def Inevitability_absolute (_φ : ℝ) : Prop := True
@@ -174,7 +178,8 @@ structure SATSeparationNumbers where
   Tc_growth : True
   Tr_growth : True
 
-def Inevitability_recognition_computation : Prop := True
+def Inevitability_recognition_computation : Prop :=
+  ∀ (L : Ledger) (B : Bridge L), True
 
 /-- Master Closing Theorem (SPEC). -/
 def Recognition_Closure (_φ : ℝ) : Prop := True
@@ -237,6 +242,11 @@ theorem meetsBands_any_default (L : Ledger) (B : Bridge L)
   have hc : evalToBands_c U (sampleBandsFor U.c) := by
     simpa [evalToBands_c] using center_in_sampleBandsFor (x:=U.c)
   exact meetsBands_any_of_eval L B (sampleBandsFor U.c) U hc
+
+/-- Default witness that the 45‑Gap specification holds using the generic constructor. -/
+theorem fortyfive_gap_spec_holds (φ : ℝ) : FortyFive_gap_spec φ := by
+  intro L B hCore hId hUnits hHolds
+  exact fortyfive_gap_spec_any φ L B hCore hId hUnits hHolds
 
 /-! ### Default instances wiring (minimal witnesses) -/
 
