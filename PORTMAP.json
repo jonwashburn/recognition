@@ -558,9 +558,9 @@
       "id": "Constants:KDisplay",
       "namespace": "IndisputableMonolith.Constants.KDisplay",
       "path": "IndisputableMonolith/Constants/KDisplay.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "tau_rec_display, lambda_kin_display, K gate"
+      "notes": "tau_rec_display, lambda_kin_display, K gate; minimal stubs; core green"
     }
     ,{
       "id": "Verification:RenderedIndex",
