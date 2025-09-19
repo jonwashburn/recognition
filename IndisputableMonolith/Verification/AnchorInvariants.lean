@@ -12,5 +12,3 @@ theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
 
 end Verification
 end IndisputableMonolith
-
-
