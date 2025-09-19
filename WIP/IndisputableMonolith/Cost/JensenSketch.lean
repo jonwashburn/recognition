@@ -79,9 +79,7 @@ instance (G : ℝ → ℝ) [LogModel G] : SymmUnit (F_ofLog G) :=
       have hlog : Real.log (x⁻¹) = - Real.log x := by
         simpa using Real.log_inv hx
       dsimp [F_ofLog]
-      have he : G (Real.log x) = G (- Real.log x) := by
-        have := LogModel.even_log (G:=G) (Real.log x)
-        rw [this].symm
+      have he : G (Real.log x) = G (- Real.log x) := LogModel.even_log (G:=G) (Real.log x)
       rw [hlog, he]
     , unit0 := by
       dsimp [F_ofLog]

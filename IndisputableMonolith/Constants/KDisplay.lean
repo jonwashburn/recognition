@@ -8,12 +8,6 @@ namespace Constants
 
 /-! ### Dimensionless bridge ratio K and display equalities -/
 
-/-- Golden-ratio based dimensionless bridge constant: K = 2π / (8 ln φ). -/
-@[simp] noncomputable def K : ℝ := (2 * Real.pi) / (8 * Real.log phi)
-
-/-- Helper: extract positive c from RSUnits. -/
-@[simp] lemma c_pos (U : RSUnits) : 0 < RSUnits.c U := RSUnits.pos_c U
-
 namespace RSUnits
 
 /-- Clock-side display definition: τ_rec(display) = K · τ0. -/
