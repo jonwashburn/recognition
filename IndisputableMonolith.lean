@@ -2506,6 +2506,7 @@ end RH
     amplitude core. We encode the analytic master term and fixed factors, with
     proofs at the algebraic level; measure-theoretic/continuum correspondences
     are bridged in papers. -/
+-- (Moved to IndisputableMonolith/VoxelWalks.lean)
 namespace IndisputableMonolith
 namespace VoxelWalks
 

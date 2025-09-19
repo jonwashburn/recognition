@@ -10,5 +10,3 @@ lemma tc_growth_holds : tc_growth_prop := True.intro
 
 end URCAdapters
 end IndisputableMonolith
-
-

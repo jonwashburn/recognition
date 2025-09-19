@@ -523,6 +523,14 @@
       "notes": "tc_growth_prop and lemma moved; core green"
     },
     {
+      "id": "URCAdapters:EthicsAdapter",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/EthicsAdapter.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "ethics_invariants_prop/holds + lawfulEthical"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",
