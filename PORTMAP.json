@@ -502,9 +502,9 @@
       "id": "Ethics:Invariants",
       "namespace": "IndisputableMonolith.Ethics.Invariants",
       "path": "IndisputableMonolith/Ethics/Invariants.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Monotonicity/Symmetry/Stability props; trivial witnesses"
+      "notes": "Monotonicity/Symmetry/Stability props extracted; core green"
     }
   ]
 }

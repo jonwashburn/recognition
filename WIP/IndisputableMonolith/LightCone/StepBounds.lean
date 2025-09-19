@@ -1,5 +1,4 @@
 import Mathlib
-import IndisputableMonolith.Causality.Reach
 import IndisputableMonolith.Constants
 
 namespace IndisputableMonolith
@@ -7,7 +6,16 @@ namespace LightCone
 
 variable {α : Type}
 
-structure StepBounds (K : Causality.Kinematics α)
+-- Minimal local Kinematics/ReachN for WIP to avoid external dependency
+namespace Local
+structure Kinematics (α : Type) where
+  step : α → α → Prop
+inductive ReachN {α} (K : Kinematics α) : Nat → α → α → Prop
+| zero {x} : ReachN K 0 x x
+| succ {n x y z} : ReachN K n x y → K.step y z → ReachN K (n+1) x z
+end Local
+
+structure StepBounds (K : Local.Kinematics α)
     (U : IndisputableMonolith.Constants.RSUnits)
     (time rad : α → ℝ) : Prop where
   step_time : ∀ {y z}, K.step y z → time z = time y + U.tau0
@@ -15,13 +23,13 @@ structure StepBounds (K : Causality.Kinematics α)
 
 namespace StepBounds
 
-variable {K : Causality.Kinematics α}
+variable {K : Local.Kinematics α}
 variable {U : IndisputableMonolith.Constants.RSUnits}
 variable {time rad : α → ℝ}
 
 lemma reach_time_eq
   (H : StepBounds K U time rad) :
-  ∀ {n x y}, Causality.ReachN K n x y → time y = time x + (n : ℝ) * U.tau0 := by
+  ∀ {n x y}, Local.ReachN K n x y → time y = time x + (n : ℝ) * U.tau0 := by
   intro n x y h
   induction h with
   | zero => simp
@@ -41,7 +49,7 @@ lemma reach_time_eq
 
 lemma reach_rad_le
   (H : StepBounds K U time rad) :
-  ∀ {n x y}, Causality.ReachN K n x y → rad y ≤ rad x + (n : ℝ) * U.ell0 := by
+  ∀ {n x y}, Local.ReachN K n x y → rad y ≤ rad x + (n : ℝ) * U.ell0 := by
   intro n x y h
   induction h with
   | zero => simp
@@ -61,7 +69,7 @@ lemma reach_rad_le
 
 lemma cone_bound
   (H : StepBounds K U time rad)
-  {n x y} (h : Causality.ReachN K n x y) :
+  {n x y} (h : Local.ReachN K n x y) :
   rad y - rad x ≤ U.c * (time y - time x) := by
   have ht := H.reach_time_eq (K:=K) (U:=U) (time:=time) (rad:=rad) h
   have hr := H.reach_rad_le  (K:=K) (U:=U) (time:=time) (rad:=rad) h
