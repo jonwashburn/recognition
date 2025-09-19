@@ -55,5 +55,3 @@ lemma Clag_pos : 0 < Clag := by
 
 end Constants
 end IndisputableMonolith
-
-

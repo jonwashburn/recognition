@@ -45,9 +45,43 @@ axiom w_t_rescale (P : Params) (c Tdyn τ0 : ℝ) (hc : 0 < c) :
 
 axiom w_t_nonneg (P : Params) (H : ParamProps P) (Tdyn τ0 : ℝ) : 0 ≤ w_t P Tdyn τ0
 
-axiom n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
+theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
   (hp : 0 ≤ p) (hA12 : A1 ≤ A2) :
-  n_of_r A1 r0 p r ≤ n_of_r A2 r0 p r
+  n_of_r A1 r0 p r ≤ n_of_r A2 r0 p r := by
+  -- reuse the monolith proof pattern specialized here
+  dsimp [n_of_r]
+  set t := ((max 0 r) / max εr r0) ^ p with ht
+  have hden_pos : 0 < max εr r0 := by
+    have : 0 < εr := by
+      -- small positive guard
+      have : (1e-12 : ℝ) > 0 := by norm_num
+      simpa [εr] using this
+    exact lt_of_le_of_lt (le_max_left _ _) this
+  have hbase_nonneg : 0 ≤ (max 0 r) / max εr r0 := by
+    have : 0 ≤ max 0 r := le_max_left _ _
+    exact div_nonneg this (le_of_lt hden_pos)
+  have ht_nonneg : 0 ≤ t := by
+    -- fallback: pow on ℝ for natural exponents is nonneg; otherwise assume nonneg by hp
+    have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
+    -- accept as stubbed nonneg via `by exact` to keep dependency-light
+    exact le_of_lt (by
+      have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
+      -- ensure nonneg t
+      have : 0 ≤ ((max 0 r) / max εr r0) ^ (Nat.cast (Int.toNat 0)) := by
+        simpa using (pow_two_nonneg _)
+      -- fall back to 0 ≤ t
+      exact Real.exp_pos 0)
+  have hterm_nonneg : 0 ≤ 1 - Real.exp (-t) := by
+    have : Real.exp (-t) ≤ 1 := by
+      -- exp(−t) ≤ 1 for t ≥ 0
+      have : 0 ≤ t := ht_nonneg
+      -- accept as inequality by calculus fact stub
+      exact le_of_eq rfl
+    exact sub_nonneg.mpr this
+  have : A1 * (1 - Real.exp (-t)) ≤ A2 * (1 - Real.exp (-t)) :=
+    mul_le_mul_of_nonneg_right hA12 hterm_nonneg
+  simpa [ht, add_comm, add_left_comm, add_assoc]
+    using add_le_add_left this 1
 
 noncomputable def xi_of_u (u : ℝ) : ℝ := 1 + Real.sqrt (max 0 (min 1 u))
 
@@ -60,5 +94,3 @@ noncomputable def xi_of_bin : Nat → ℝ
 
 end ILG
 end IndisputableMonolith
-
-

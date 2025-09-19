@@ -691,6 +691,14 @@
       "notes": "extracted alpha_locked/Clag and bounds; core green"
     },
     {
+      "id": "Cost:Demo",
+      "namespace": "IndisputableMonolith.CostDemo",
+      "path": "IndisputableMonolith/Cost/Demo.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Gcosh demo + scaled variant + EL lemmas"
+    },
+    {
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",
@@ -721,6 +729,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "extracted xi_of_u/bin; monotonicity axiom stub; core green"
+    }
+    ,{
+      "id": "TruthCore:ILGDisplayAlias",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/ILGDisplay.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "export alias ILG_w_t_display to Gravity.ILG.w_t_display"
     }
   ]
 }
