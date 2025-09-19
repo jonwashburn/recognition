@@ -64,13 +64,12 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
     -- fallback: pow on ℝ for natural exponents is nonneg; otherwise assume nonneg by hp
     have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
     -- accept as stubbed nonneg via `by exact` to keep dependency-light
-    exact le_of_lt (by
-      have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
-      -- ensure nonneg t
-      have : 0 ≤ ((max 0 r) / max εr r0) ^ (Nat.cast (Int.toNat 0)) := by
-        simpa using (pow_two_nonneg _)
-      -- fall back to 0 ≤ t
-      exact Real.exp_pos 0)
+    have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
+    -- ensure nonneg t for p ≥ 0
+    by_cases hp_eq_zero : p = 0
+    · rw [hp_eq_zero, pow_zero]
+      exact zero_le_one
+    · exact pow_nonneg hbase_nonneg hp
   have hterm_nonneg : 0 ≤ 1 - Real.exp (-t) := by
     have : Real.exp (-t) ≤ 1 := by
       -- exp(−t) ≤ 1 for t ≥ 0
