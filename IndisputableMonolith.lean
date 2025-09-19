@@ -55,5 +55,7 @@ end IndisputableMonolith
 /-- ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
 -- (Moved to IndisputableMonolith/Ethics/Invariants.lean)
 
+-- (Moved to IndisputableMonolith/Verification/Claims.lean)
+
 /-! ### URC Adapters (Monolith → URC obligations) -/
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)

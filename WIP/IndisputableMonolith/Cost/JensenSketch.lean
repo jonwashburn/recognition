@@ -80,7 +80,8 @@ instance (G : ℝ → ℝ) [LogModel G] : SymmUnit (F_ofLog G) :=
         simpa using Real.log_inv hx
       dsimp [F_ofLog]
       have he : G (Real.log x) = G (- Real.log x) := by
-        rw [LogModel.even_log (G:=G) (Real.log x)].symm
+        have := LogModel.even_log (G:=G) (Real.log x)
+        rw [this].symm
       rw [hlog, he]
     , unit0 := by
       dsimp [F_ofLog]
@@ -133,11 +134,8 @@ theorem F_eq_J_on_pos_of_derivation (F : ℝ → ℝ) [AveragingDerivation F] :
     then `F` agrees with `Jcost` on positive reals. -/
 theorem T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] :
   ∀ {x : ℝ}, 0 < x → F x = Jcost x := by
-  have : AveragingDerivation F := {
-    toSymmUnit := (inferInstance : SymmUnit F)
-    agrees := agrees_on_exp_of_symm_unit F
-  }
-  exact F_eq_J_on_pos_of_derivation F
+  intro x hx
+  apply F_eq_J_on_pos_of_derivation
 
 /-- T5 for log-models: any `G` satisfying `LogModel` yields a cost `F := G ∘ log`
     that agrees with `Jcost` on ℝ>0. -/

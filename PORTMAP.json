@@ -542,9 +542,9 @@
       "id": "ILG:NOfRMono",
       "namespace": "IndisputableMonolith.ILG",
       "path": "IndisputableMonolith/ILG/NOfRMono.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "n_of_r radial shape factor + monotonicity axiom; ~22 lines; dependency-light"
+      "notes": "n_of_r radial shape factor + monotonicity axiom; ~22 lines; minimal stubs; core green"
     }
     ,{
       "id": "Constants:KDisplay",
@@ -926,9 +926,9 @@
       "id": "Constants:KDisplay",
       "namespace": "IndisputableMonolith.Constants",
       "path": "IndisputableMonolith/Constants/KDisplay.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "K constant + RSUnits display functions and lemmas; 130 lines; dependency-light"
+      "notes": "K constant + RSUnits display functions and K-gate theorems; 130 lines; axiom stubs for phi/RSUnits deps; core green"
     }
     ,    {
       "id": "PhiSupport:Lemmas",

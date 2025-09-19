@@ -32,7 +32,9 @@ namespace RSUnits
 
 /-- Clock-side ratio: τ_rec(display)/τ0 = K. -/
 @[simp] lemma tau_rec_display_ratio (U : RSUnits) : (tau_rec_display U) / RSUnits.tau0 U = K := by
-  sorry
+  dsimp [tau_rec_display]
+  have hτ : RSUnits.tau0 U ≠ 0 := ne_of_gt (RSUnits.pos_tau0 U)
+  simpa [div_mul_cancel K hτ]
 
 /-- Length-side ratio: λ_kin(display)/ℓ0 = K. -/
 @[simp] lemma lambda_kin_display_ratio (U : RSUnits) : (lambda_kin_display U) / RSUnits.ell0 U = K := by
@@ -41,7 +43,7 @@ namespace RSUnits
 /-- Kinematic consistency: c · τ_rec(display) = λ_kin(display). -/
 @[simp] lemma lambda_kin_from_tau_rec (U : RSUnits) : RSUnits.c U * tau_rec_display U = lambda_kin_display U := by
   -- c·(K τ0) = K·(c τ0) = K·ℓ0
-  simpa [tau_rec_display, lambda_kin_display, mul_comm, mul_left_comm, mul_assoc, c_mul_tau0_eq_ell0 U]
+  simpa [tau_rec_display, lambda_kin_display, mul_comm, mul_left_comm, mul_assoc, U.c_ell0_tau0]
 
 /-- Dimensionless bridge gate: the two independent displays agree at the ratio level. -/
 @[simp] lemma K_gate (U : RSUnits) : (tau_rec_display U) / RSUnits.tau0 U = (lambda_kin_display U) / RSUnits.ell0 U := by
