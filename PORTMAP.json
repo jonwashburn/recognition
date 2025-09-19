@@ -731,6 +731,14 @@
       "notes": "Gcosh demo extracted; dependency-light; core green"
     },
     {
+      "id": "Cost:JcostCore",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/JcostCore.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Jcost def + typeclasses (SymmUnit, Averaging*, Jensen*) + theorems"
+    },
+    {
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",
@@ -787,6 +795,14 @@
       "notes": "ScalingModel/FundamentalProcess/EmergentMeasurement/MeasurementMap"
     }
     ,{
+      "id": "TruthCore:MRD.Scaling",
+      "namespace": "IndisputableMonolith.TruthCore.MRD",
+      "path": "IndisputableMonolith/TruthCore/MRD/Scaling.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "ScalingModel, predicted_ratio, rescale lemma"
+    }
+    ,{
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
@@ -809,6 +825,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Integer charge transforms and contradiction lemmas extracted; axiom stubs for Species/Sector deps; core green"
+    }
+    ,{
+      "id": "Cost:PhiFixedPointExpose",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/PhiFixedPointExpose.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "Expose phi_fixed_point into Cost namespace; axiom stubs for Constants deps; core green"
     }
   ]
 }

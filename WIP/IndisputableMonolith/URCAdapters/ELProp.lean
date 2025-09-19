@@ -1,18 +1,3 @@
-import Mathlib
-
-namespace IndisputableMonolith
-namespace URCAdapters
-
-/-- EL stationarity and minimality on the log axis (stubbed Prop for WIP). -/
-def EL_prop : Prop := True
-
-lemma EL_holds : EL_prop := True.intro
-
-end URCAdapters
-end IndisputableMonolith
-
-import Mathlib
-
 namespace IndisputableMonolith
 namespace URCAdapters
 
@@ -33,6 +18,3 @@ def EL_prop : Prop :=
 lemma EL_holds : EL_prop := by exact ⟨EL_stationary_at_zero, EL_global_min⟩
 
 end
-
-end URCAdapters
-end IndisputableMonolith
