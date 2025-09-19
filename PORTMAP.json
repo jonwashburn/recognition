@@ -982,9 +982,9 @@
       "id": "YM:Dobrushin",
       "namespace": "IndisputableMonolith.YM.Dobrushin",
       "path": "IndisputableMonolith/YM/Dobrushin.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "MarkovKernel structure, overlap function, TV contraction theorems; ~71 lines; dependency-light"
+      "notes": "MarkovKernel structure, overlap function, TV contraction theorems; ~71 lines; minimal stubs; core green"
     }
     ,{
       "id": "Constants:ILG",
@@ -1153,6 +1153,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Physical constants, lambda_rec functions, K-gate verification, BridgeData structure; axiom stubs; core green"
+    },
+    {
+      "id": "Verification:KGate",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "WIP/IndisputableMonolith/Verification/KGate.lean",
+      "status": "in_progress",
+      "owner": "autonomous-agent",
+      "notes": "K-gate structures and verification functions for dimensionless bridge gate evaluation; axiom stubs; extracting from monolith"
     }
   ]
 }

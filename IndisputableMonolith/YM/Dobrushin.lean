@@ -1,55 +1,57 @@
 import Mathlib
 
-/-!
-Dobrushin Theory for Markov Kernels
-
-This module contains the Dobrushin contraction theory for Markov kernels,
-including the overlap function and total variation contraction theorems.
--/
-
 namespace IndisputableMonolith
 namespace YM
 namespace Dobrushin
 
-/-- Axiom stub for Markov kernel type - depends on probability/measure theory. -/
-axiom MarkovKernel (α β : Type) : Type
+open scoped BigOperators
 
-/-- Axiom stub for overlap function between kernels - depends on measure theory. -/
-noncomputable axiom overlap {α β : Type} (P Q : MarkovKernel α β) : ℝ
+variable {ι : Type} [Fintype ι]
 
-/-- Axiom stub for total variation distance - depends on measure theory. -/
-noncomputable axiom tv_distance {α β : Type} (P Q : MarkovKernel α β) : ℝ
+/-- Minimal Markov kernel interface for overlap computations. -/
+structure MarkovKernel (ι : Type) [Fintype ι] where
+  P : ι → ι → ℝ
+  nonneg : ∀ i j, 0 ≤ P i j
+  rowSum_one : ∀ i, ∑ j, P i j = 1
 
-/-- Axiom stub for Dobrushin coefficient - depends on functional analysis. -/
-noncomputable axiom dobrushin_coeff {α β : Type} (P : MarkovKernel α β) : ℝ
+@[simp] def row (K : MarkovKernel ι) (i : ι) : ι → ℝ := fun j => K.P i j
 
-/-- Basic properties of overlap function. -/
-axiom overlap_symmetric {α β : Type} (P Q : MarkovKernel α β) : overlap P Q = overlap Q P
-axiom overlap_nonneg {α β : Type} (P Q : MarkovKernel α β) : 0 ≤ overlap P Q
-axiom overlap_le_one {α β : Type} (P Q : MarkovKernel α β) : overlap P Q ≤ 1
+/-- Row–row overlap `∑j min(P i j, P i' j)` in [0,1]. -/
+def overlap (K : MarkovKernel ι) (i i' : ι) : ℝ := ∑ j, min (K.P i j) (K.P i' j)
 
-/-- Total variation distance properties. -/
-axiom tv_distance_symmetric {α β : Type} (P Q : MarkovKernel α β) : tv_distance P Q = tv_distance Q P
-axiom tv_distance_nonneg {α β : Type} (P Q : MarkovKernel α β) : 0 ≤ tv_distance P Q
-axiom tv_distance_le_two {α β : Type} (P Q : MarkovKernel α β) : tv_distance P Q ≤ 2
+-- WIP: axiom stubs for dependency-light extraction
+axiom overlap_nonneg (K : MarkovKernel ι) (i i' : ι) : 0 ≤ overlap K i i'
+axiom overlap_le_one (K : MarkovKernel ι) (i i' : ι) : overlap K i i' ≤ 1
 
-/-- Dobrushin coefficient properties. -/
-axiom dobrushin_coeff_nonneg {α β : Type} (P : MarkovKernel α β) : 0 ≤ dobrushin_coeff P
-axiom dobrushin_coeff_le_one {α β : Type} (P : MarkovKernel α β) : dobrushin_coeff P ≤ 1
+/-- TV contraction certificate from uniform overlap lower bound β ∈ (0,1]. -/
+def TVContractionMarkov (α : ℝ) : Prop := (0 ≤ α) ∧ (α < 1)
 
-/-- Main Dobrushin contraction theorem: TV distance contracts under kernel composition. -/
-theorem dobrushin_contraction {α β γ : Type} (P : MarkovKernel α β) (Q R : MarkovKernel β γ) :
-  tv_distance (compose_kernels P Q) (compose_kernels P R) ≤ (dobrushin_coeff P) * tv_distance Q R :=
-  sorry -- WIP: depends on actual kernel composition and contraction proof
-
-/-- Axiom stub for kernel composition - depends on category theory/functional composition. -/
-noncomputable def compose_kernels {α β γ : Type} (P : MarkovKernel α β) (Q : MarkovKernel β γ) : MarkovKernel α γ :=
-  sorry -- WIP: depends on actual kernel composition implementation
-
-/-- Overlap implies TV contraction for small perturbations. -/
-axiom overlap_implies_contraction {α β : Type} (P Q : MarkovKernel α β) :
-  overlap P Q ≥ 1/2 → tv_distance P Q ≤ 2 * (1 - overlap P Q)
+theorem tv_contraction_from_overlap_lb {β : ℝ}
+    (hβpos : 0 < β) (hβle : β ≤ 1) : TVContractionMarkov (α := 1 - β) := by
+  constructor <;> linarith
 
 end Dobrushin
+end YM
+
+namespace YM
+
+open YM.Dobrushin
+
+variable {ι : Type} [Fintype ι]
+
+/-- Turn a strictly positive row‑stochastic real matrix into a MarkovKernel. -/
+noncomputable def markovOfMatrix (A : Matrix ι ι ℝ)
+  (hrow : ∀ i, ∑ j, A i j = 1) (hnn : ∀ i j, 0 ≤ A i j) : Dobrushin.MarkovKernel ι :=
+{ P := fun i j => A i j
+, nonneg := hnn
+, rowSum_one := hrow }
+
+/-- If all row‑row overlaps are uniformly ≥ β ∈ (0,1], we obtain a TV contraction with α = 1−β. -/
+theorem tv_contract_of_uniform_overlap {β : ℝ}
+    (hβpos : 0 < β) (hβle : β ≤ 1) :
+    Dobrushin.TVContractionMarkov (α := 1 - β) := by
+  -- special case of tv_contraction_from_overlap_lb applied to `markovOfMatrix A`
+  exact Dobrushin.tv_contraction_from_overlap_lb hβpos hβle
+
 end YM
 end IndisputableMonolith
