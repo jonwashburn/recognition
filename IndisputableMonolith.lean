@@ -935,12 +935,7 @@ end Causality
 
 /-! ## Locally-finite causality: bounded out-degree and n-ball cardinality bounds -/
 
-/-- Locally-finite step relation with bounded out-degree. -/
-class BoundedStep (α : Type) (degree_bound : outParam Nat) where
-  step : α → α → Prop
-  neighbors : α → Finset α
-  step_iff_mem : ∀ x y, step x y ↔ y ∈ neighbors x
-  degree_bound_holds : ∀ x, (neighbors x).card ≤ degree_bound
+-- (BoundedStep moved to `IndisputableMonolith/Causality/BoundedStep.lean`)
 
 /-! For a graph with bounded out-degree `d`, the standard breadth-first argument
     yields a geometric upper bound for the size of n-balls. A fully formal

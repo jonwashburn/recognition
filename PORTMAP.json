@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Causality:BoundedStep",
+      "namespace": "IndisputableMonolith.Causality.BoundedStep",
+      "path": "IndisputableMonolith/Causality/BoundedStep.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "BoundedStep class extracted"
+    },
+    {
       "id": "Recognition:ModelingExamples",
       "namespace": "IndisputableMonolith.Recognition.ModelingExamples",
       "path": "IndisputableMonolith/Recognition/ModelingExamples.lean",

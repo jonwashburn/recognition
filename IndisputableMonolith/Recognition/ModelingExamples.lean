@@ -55,5 +55,3 @@ instance : BoundedStep Bool 1 := {
 
 end ModelingExamples
 end IndisputableMonolith
-
-
