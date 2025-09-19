@@ -3,6 +3,14 @@
   "updatedAt": "2025-09-19T03:00:00Z",
   "clusters": [
     {
+      "id": "Pipelines:core",
+      "namespace": "IndisputableMonolith.Pipelines",
+      "path": "IndisputableMonolith/Pipelines.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Moved from monolith; noncomputable defs; core unaffected"
+    },
+    {
       "id": "URCGenerators:VerifiedGenerators",
       "namespace": "IndisputableMonolith.URCGenerators",
       "path": "IndisputableMonolith/URCGenerators.lean",
