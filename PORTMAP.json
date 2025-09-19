@@ -958,9 +958,9 @@
       "id": "VoxelWalks",
       "namespace": "IndisputableMonolith.VoxelWalks",
       "path": "IndisputableMonolith/VoxelWalks.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; dependency-light"
+      "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; minimal stubs; core green"
     },
     {
       "id": "Ablation:Harness",

@@ -12,6 +12,12 @@ Note: Using axiom stubs for dependency-light extraction.
 
 namespace IndisputableMonolith.Constants.RSUnits
 
+/-- Axiom stubs for RSUnits positivity - depends on Constants module. -/
+axiom RSUnits_pos_c (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.c
+axiom RSUnits_pos_tau0 (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.tau0
+axiom RSUnits_pos_ell0 (U : IndisputableMonolith.Constants.RSUnits) : 0 < U.ell0
+axiom c_mul_tau0_eq_ell0 (U : IndisputableMonolith.Constants.RSUnits) : U.c * U.tau0 = U.ell0
+
 /-- Clock-side display definition: τ_rec(display) = K · τ0. -/
 noncomputable def tau_rec_display (U : IndisputableMonolith.Constants.RSUnits) : ℝ :=
   IndisputableMonolith.Constants.K * U.tau0
@@ -23,26 +29,28 @@ noncomputable def lambda_kin_display (U : IndisputableMonolith.Constants.RSUnits
 /-- Clock-side ratio: τ_rec(display)/τ0 = K. -/
 @[simp] lemma tau_rec_display_ratio (U : IndisputableMonolith.Constants.RSUnits) :
   (tau_rec_display U) / U.tau0 = IndisputableMonolith.Constants.K := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  dsimp [tau_rec_display]
+  have hτ : U.tau0 ≠ 0 := ne_of_gt (RSUnits_pos_tau0 U)
+  simpa [div_mul_cancel IndisputableMonolith.Constants.K hτ]
 
 /-- Length-side ratio: λ_kin(display)/ℓ0 = K. -/
 @[simp] lemma lambda_kin_display_ratio (U : IndisputableMonolith.Constants.RSUnits) :
   (lambda_kin_display U) / U.ell0 = IndisputableMonolith.Constants.K := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  dsimp [lambda_kin_display]
+  have hℓ : U.ell0 ≠ 0 := ne_of_gt (RSUnits_pos_ell0 U)
+  simpa [div_mul_cancel IndisputableMonolith.Constants.K hℓ]
 
 /-- Kinematic consistency: c · τ_rec(display) = λ_kin(display). -/
 @[simp] lemma lambda_kin_from_tau_rec (U : IndisputableMonolith.Constants.RSUnits) :
   U.c * tau_rec_display U = lambda_kin_display U := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  -- c·(K τ0) = K·(c τ0) = K·ℓ0
+  dsimp [tau_rec_display, lambda_kin_display]
+  simpa [mul_comm, mul_left_comm, mul_assoc, c_mul_tau0_eq_ell0 U]
 
 /-- Dimensionless bridge gate: the two independent displays agree at the ratio level. -/
 @[simp] lemma K_gate (U : IndisputableMonolith.Constants.RSUnits) :
   (tau_rec_display U) / U.tau0 = (lambda_kin_display U) / U.ell0 := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  simpa [tau_rec_display_ratio U, lambda_kin_display_ratio U]
 
 /-- Length-side display ratio equals K. -/
 @[simp] lemma K_eq_lambda_over_ell0 (U : IndisputableMonolith.Constants.RSUnits) :
@@ -65,8 +73,10 @@ noncomputable def lambda_kin_display (U : IndisputableMonolith.Constants.RSUnits
   ((tau_rec_display U) / U.tau0 = (lambda_kin_display U) / U.ell0)
   ∧ ((tau_rec_display U) / U.tau0 = IndisputableMonolith.Constants.K)
   ∧ ((lambda_kin_display U) / U.ell0 = IndisputableMonolith.Constants.K) := by
-  -- Use axiom stub for dependency-light extraction
-  sorry
+  refine And.intro ?hEq (And.intro ?hTau ?hLambda)
+  · exact K_gate U
+  · exact tau_rec_display_ratio U
+  · exact lambda_kin_display_ratio U
 
 /-- Structural speed identity from units: ℓ0/τ0 = c. -/
 @[simp] lemma ell0_div_tau0_eq_c (U : IndisputableMonolith.Constants.RSUnits) :
