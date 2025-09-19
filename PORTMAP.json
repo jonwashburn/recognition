@@ -403,6 +403,14 @@
       "notes": "extracted LNAL scaffold; core green"
     }
     ,{
+      "id": "TruthCore:DisplayExports",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/Display.lean",
+      "status": "in_progress",
+      "owner": "agentG",
+      "notes": "DEC dd=0/Bianchi exporters + display_speed_identity"
+    }
+    ,{
       "id": "URCAdapters:ELProp",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/ELProp.lean",
@@ -662,9 +670,9 @@
       "id": "ClassicalBridge:CoarseGrain",
       "namespace": "IndisputableMonolith.ClassicalBridge",
       "path": "IndisputableMonolith/ClassicalBridge/CoarseGrain.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "CoarseGrain/RiemannSum/ContinuityEquation placeholder export"
+      "notes": "extracted coarse-grain schema; dependency-light; core green"
     },
     {
       "id": "Measurement:Realization",

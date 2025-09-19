@@ -24,5 +24,3 @@ axiom xi_of_bin_mono : xi_of_bin 0 ≤ xi_of_bin 1 ∧ xi_of_bin 1 ≤ xi_of_bin
 end
 end ILG
 end IndisputableMonolith
-
-

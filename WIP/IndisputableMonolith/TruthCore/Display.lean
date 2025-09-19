@@ -55,13 +55,22 @@ end DECExports
 
 /-! ### Display identity (dimensionless speed ratio) -/
 
+end TruthCore
+
 /-- Local WIP declarations for displays (keep it minimal and axiomatized). -/
-namespace Constants.RSUnits
+namespace IndisputableMonolith
+namespace Constants
+namespace RSUnits
 @[simp] noncomputable def tau_rec_display (U : RSUnits) : ℝ := K * U.tau0
 @[simp] noncomputable def lambda_kin_display (U : RSUnits) : ℝ := K * U.ell0
 axiom display_speed_eq_c (U : RSUnits) :
   (lambda_kin_display U) / (tau_rec_display U) = U.c
-end Constants.RSUnits
+end RSUnits
+end Constants
+end IndisputableMonolith
+
+namespace IndisputableMonolith
+namespace TruthCore
 
 /-- Alias: time-kernel ratio is dimensionless (invariant under common rescaling). -/
 theorem display_speed_identity (U : Constants.RSUnits) :
