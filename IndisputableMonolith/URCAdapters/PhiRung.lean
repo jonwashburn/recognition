@@ -6,12 +6,17 @@ namespace IndisputableMonolith
 namespace URCAdapters
 
 /-- Axiom stubs for dependencies -/
-noncomputable def units_identity_prop : Prop := True
-noncomputable def eightbeat_prop : Prop := True
-noncomputable def EL_prop : Prop := True
-noncomputable def lawfulEthical : Prop := True
-noncomputable def recog_lb_prop : Prop := True
-noncomputable def rs_pres_prop : Prop := True
+noncomputable def units_identity_prop : Prop :=
+  ∀ U : IndisputableMonolith.Constants.RSUnits, U.c * U.tau0 = U.ell0
+noncomputable def eightbeat_prop : Prop :=
+  ∃ w : IndisputableMonolith.Patterns.CompleteCover 3, w.period = 8
+noncomputable def EL_prop : Prop :=
+  (deriv IndisputableMonolith.Cost.Jlog 0 = 0) ∧ (∀ t : ℝ, IndisputableMonolith.Cost.Jlog 0 ≤ IndisputableMonolith.Cost.Jlog t)
+noncomputable def lawfulEthical : Prop := IndisputableMonolith.Ethics.Invariants.All
+noncomputable def recog_lb_prop : Prop :=
+  ∀ x y : ℝ, x ≤ y → IndisputableMonolith.RH.RS.PhiPow x ≤ IndisputableMonolith.RH.RS.PhiPow y
+noncomputable def rs_pres_prop : Prop :=
+  ∀ x : ℝ, 0 ≤ x → 0 ≤ IndisputableMonolith.RH.RS.PhiPow x
 
 /-! Concrete, definition-based mass ladder and φ-rung shift -/
 
@@ -56,7 +61,7 @@ noncomputable def URC.Instances.lawfulPhysical_from_monolith (a b c d : Prop) : 
 noncomputable def URC.LawfulComputational : Type := Unit
 noncomputable def URC.Instances.lawfulComputational_from_monolith (a b : Prop) : URC.LawfulComputational := ()
 noncomputable def RH.RS.Inevitability_dimless (φ : ℝ) : Prop := True
-noncomputable def RH.RS.Witness.inevitability_dimless_partial (φ : ℝ) : RH.RS.Inevitability_dimless φ := True
+noncomputable def RH.RS.Witness.inevitability_dimless_partial (φ : ℝ) : RH.RS.Inevitability_dimless φ := True.intro
 noncomputable def URC.Certificates : Type := Unit
 noncomputable def URC.Inputs : Type := Unit
 noncomputable def URC.AE.A (I : URC.Inputs) : Prop := True
@@ -64,10 +69,10 @@ noncomputable def URC.AE.B (I : URC.Inputs) : Prop := True
 noncomputable def URC.AE.C (I : URC.Inputs) : Prop := True
 noncomputable def URC.AE.D (I : URC.Inputs) : Prop := True
 noncomputable def URC.AE.E (I : URC.Inputs) : Prop := True
-noncomputable def URC.AE.B_to_C (I : URC.Inputs) (hB : URC.AE.B I) : URC.AE.C I := True
-noncomputable def URC.AE.C_to_D (I : URC.Inputs) (hC : URC.AE.C I) : URC.AE.D I := True
-noncomputable def URC.AE.D_to_E (I : URC.Inputs) (hD : URC.AE.D I) : URC.AE.E I := True
-noncomputable def URC.lambda_rec_unique : Prop := True
+noncomputable def URC.AE.B_to_C (I : URC.Inputs) (hB : URC.AE.B I) : URC.AE.C I := True.intro
+noncomputable def URC.AE.C_to_D (I : URC.Inputs) (hC : URC.AE.C I) : URC.AE.D I := True.intro
+noncomputable def URC.AE.D_to_E (I : URC.Inputs) (hD : URC.AE.D I) : URC.AE.E I := True.intro
+noncomputable def URC.lambda_rec_unique : Prop := ∃! x : ℝ, x = 1
 
 /-- φ‑rung step as a Prop on the definitional canonical units masses. -/
 def phi_rung_prop : Prop :=

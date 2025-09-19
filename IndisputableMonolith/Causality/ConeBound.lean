@@ -32,7 +32,43 @@ noncomputable def ballFS (x : α) : Nat → Finset α
     let prev := ballFS x n
     prev ∪ prev.biUnion (fun z => B.neighbors z)
 
-axiom mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y
+theorem mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y := by
+  intro n
+  induction n with
+  | zero =>
+    dsimp [ballFS, ballP]
+    constructor
+    · intro hy; simpa using hy
+    · intro hy; simpa using hy
+  | succ n ih =>
+    dsimp [ballFS, ballP]
+    constructor
+    · intro hy
+      have : y ∈ ballFS (α:=α) x n ∨ y ∈ (ballFS (α:=α) x n).biUnion (fun z => B.neighbors z) := by
+        simpa using Finset.mem_union.mp hy
+      cases this with
+      | inl hy_prev => exact Or.inl (by simpa using (ih.mp hy_prev))
+      | inr hy_union =>
+        rcases Finset.mem_biUnion.mp hy_union with ⟨z, hz, hyz⟩
+        refine Or.inr ?_;
+        refine ⟨z, ?_, ?_⟩
+        · exact (ih.mp hz)
+        · simpa [KB]
+    · intro hy
+      cases hy with
+      | inl hy0 =>
+        have : y ∈ ballFS (α:=α) x n := by simpa using (ih.mpr hy0)
+        exact by
+          have := Finset.mem_union.mpr (Or.inl this)
+          simpa
+      | inr hy1 =>
+        rcases hy1 with ⟨z, hz, hstep⟩
+        have hz' : z ∈ ballFS (α:=α) x n := by simpa using (ih.mpr hz)
+        have hy_union : y ∈ (ballFS (α:=α) x n).biUnion (fun z => B.neighbors z) := by
+          exact Finset.mem_biUnion.mpr ⟨z, hz', by simpa [KB] using hstep⟩
+        exact by
+          have := Finset.mem_union.mpr (Or.inr hy_union)
+          simpa
 theorem card_singleton {x : α} : ({x} : Finset α).card = 1 :=
   Finset.card_singleton x
 theorem card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card :=

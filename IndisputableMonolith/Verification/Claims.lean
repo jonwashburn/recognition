@@ -4,8 +4,12 @@ import IndisputableMonolith.Verification.Observables
 
 namespace IndisputableMonolith
 
-/-- Axiom stub for statement classification. -/
-axiom StatementType : Type
+/-- Minimal statement classification for verification claims. -/
+inductive StatementType
+| eq
+| le
+| generic
+deriving DecidableEq, Repr
 
 /-- Status of a claim: proven, failed, or unchecked. -/
 inductive ClaimStatus
