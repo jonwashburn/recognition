@@ -16,5 +16,3 @@ def lawfulEthical : URC.LawfulEthical :=
 
 end URCAdapters
 end IndisputableMonolith
-
-

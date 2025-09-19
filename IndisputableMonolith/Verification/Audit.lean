@@ -21,5 +21,3 @@ theorem audit_SI_via_bridge_only : True := by trivial
 
 end Verification
 end IndisputableMonolith
-
-

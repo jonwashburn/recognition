@@ -2769,24 +2769,7 @@ namespace IndisputableMonolith
 namespace Masses
 
 /-- Anchor policy record to parameterize the closed‑form anchor residue. -/
-structure AnchorPolicy where
-  lambda : ℝ
-  kappa  : ℝ
-/-- Canonical single‑anchor policy: λ = log φ, κ = φ. -/
-@[simp] def anchorPolicyA : AnchorPolicy := { lambda := Real.log Constants.phi, kappa := Constants.phi }
-/-- Charge/sector wrappers for the integer Z map at the anchor (Paper 1). -/
-@[simp] def Z_quark (Q : ℤ) : ℤ := 4 + (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
-@[simp] def Z_lepton (Q : ℤ) : ℤ := (6 * Q) ^ (2 : Nat) + (6 * Q) ^ (4 : Nat)
-@[simp] def Z_neutrino : ℤ := 0
-
-/-- Sector‑level residue law (symbolic interface; no kernels in Lean). -/
-structure ResidueLaw where
-  f : ℝ → ℝ
-
-/-- Bundle of sector params and a residue law; pure interface. -/
-structure SectorLaw where
-  params  : SectorParams
-  residue : ResidueLaw
+-- (Moved to IndisputableMonolith/Masses/AnchorPolicy.lean)
 
 /-- Optional symbolic defaults (placeholders). Replace in scripts, not in Lean. -/
 @[simp] def sectorDefaults : SectorB → SectorParams
