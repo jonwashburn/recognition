@@ -1155,12 +1155,12 @@
       "notes": "Physical constants, lambda_rec functions, K-gate verification, BridgeData structure; axiom stubs; core green"
     },
     {
-      "id": "Verification:KGate",
-      "namespace": "IndisputableMonolith.Verification",
-      "path": "WIP/IndisputableMonolith/Verification/KGate.lean",
-      "status": "in_progress",
+      "id": "Bridge:Basic",
+      "namespace": "IndisputableMonolith.BridgeData",
+      "path": "IndisputableMonolith/Bridge/Basic.lean",
+      "status": "done",
       "owner": "autonomous-agent",
-      "notes": "K-gate structures and verification functions for dimensionless bridge gate evaluation; axiom stubs; extracting from monolith"
+      "notes": "BridgeData structure with physical constants, lambda_rec, K-gate functions, dimensionless identities, and electron mass calculations; axiom stubs; core green"
     }
   ]
 }
