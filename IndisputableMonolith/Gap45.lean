@@ -125,60 +125,11 @@ end Beat
 
 -- (Moved to IndisputableMonolith/Gap45/TimeLag.lean)
 
-/-- Uncomputability and experiential navigation scaffolding. -/
-namespace RecognitionBarrier
+-- (Moved to IndisputableMonolith/Gap45/RecognitionBarrier.lean)
 
-/-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
-    any local finite-view decision procedure to fail globally (informal scaffold). -/
-structure UncomputabilityPoint : Prop :=
-  (is45 : True)
+-- (Moved to IndisputableMonolith/Gap45/GroupView.lean)
 
-/-- ExperientialNavigation: operational rule-of-thumb that navigation must consult a longer
-    history (beyond any fixed finite view) to avoid contradictions near the gap. -/
-structure ExperientialNavigation : Prop :=
-  (needs_history : True)
-
-/-- ConsciousnessEmergence (scaffold): the 45-gap implies any robust navigation protocol must
-    incorporate experiential history, formalizing a minimal emergence condition. -/
-theorem ConsciousnessEmergence : UncomputabilityPoint → ExperientialNavigation := by
-  intro _; exact ⟨trivial⟩
-
-end RecognitionBarrier
-
-/-- Optional group-theoretic formulation (trivial intersection). -/
-namespace GroupView
-
-open Nat
-
-/-- If an element `g` has both 8‑power and 45‑power equal to identity in a group,
-its order divides `gcd(8,45)=1`, hence `g = 1`. -/
-lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
-  (h8 : g ^ 8 = 1) (h45 : g ^ 45 = 1) : g = 1 := by
-  have h8d : orderOf g ∣ 8 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=8)).2 h8
-  have h45d : orderOf g ∣ 45 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=45)).2 h45
-  have hgcd : orderOf g ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
-  have hone : orderOf g ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
-  have h1 : orderOf g = 1 := Nat.dvd_one.mp hone
-  exact (orderOf_eq_one_iff.mp h1)
-
-end GroupView
-
-namespace AddGroupView
-
-open Nat
-
-/-- Additive version: if `(8) • a = 0` and `(45) • a = 0`, then the additive order of `a`
-divides `gcd(8,45)=1`, hence `a = 0`. -/
-lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
-  (h8 : (8 : ℕ) • a = 0) (h45 : (45 : ℕ) • a = 0) : a = 0 := by
-  have h8d : addOrderOf a ∣ 8 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=8)).2 h8
-  have h45d : addOrderOf a ∣ 45 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=45)).2 h45
-  have hgcd : addOrderOf a ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
-  have hone : addOrderOf a ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
-  have h1 : addOrderOf a = 1 := Nat.dvd_one.mp hone
-  simpa [h1] using (addOrderOf_eq_one_iff.mpr rfl)
-
-end AddGroupView
+-- (Moved to IndisputableMonolith/Gap45/AddGroupView.lean)
 
 end Gap45
 end IndisputableMonolith
@@ -310,60 +261,11 @@ end Beat
 
 -- (Moved to IndisputableMonolith/Gap45/TimeLag.lean)
 
-/-- Uncomputability and experiential navigation scaffolding. -/
-namespace RecognitionBarrier
+-- (Moved to IndisputableMonolith/Gap45/RecognitionBarrier.lean)
 
-/-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
-    any local finite-view decision procedure to fail globally (informal scaffold). -/
-structure UncomputabilityPoint : Prop :=
-  (is45 : True)
+-- (Moved to IndisputableMonolith/Gap45/GroupView.lean)
 
-/-- ExperientialNavigation: operational rule-of-thumb that navigation must consult a longer
-    history (beyond any fixed finite view) to avoid contradictions near the gap. -/
-structure ExperientialNavigation : Prop :=
-  (needs_history : True)
-
-/-- ConsciousnessEmergence (scaffold): the 45-gap implies any robust navigation protocol must
-    incorporate experiential history, formalizing a minimal emergence condition. -/
-theorem ConsciousnessEmergence : UncomputabilityPoint → ExperientialNavigation := by
-  intro _; exact ⟨trivial⟩
-
-end RecognitionBarrier
-
-/-- Optional group-theoretic formulation (trivial intersection). -/
-namespace GroupView
-
-open Nat
-
-/-- If an element `g` has both 8‑power and 45‑power equal to identity in a group,
-its order divides `gcd(8,45)=1`, hence `g = 1`. -/
-lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
-  (h8 : g ^ 8 = 1) (h45 : g ^ 45 = 1) : g = 1 := by
-  have h8d : orderOf g ∣ 8 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=8)).2 h8
-  have h45d : orderOf g ∣ 45 := (orderOf_dvd_iff_pow_eq_one (g:=g) (n:=45)).2 h45
-  have hgcd : orderOf g ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
-  have hone : orderOf g ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
-  have h1 : orderOf g = 1 := Nat.dvd_one.mp hone
-  exact (orderOf_eq_one_iff.mp h1)
-
-end GroupView
-
-namespace AddGroupView
-
-open Nat
-
-/-- Additive version: if `(8) • a = 0` and `(45) • a = 0`, then the additive order of `a`
-divides `gcd(8,45)=1`, hence `a = 0`. -/
-lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
-  (h8 : (8 : ℕ) • a = 0) (h45 : (45 : ℕ) • a = 0) : a = 0 := by
-  have h8d : addOrderOf a ∣ 8 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=8)).2 h8
-  have h45d : addOrderOf a ∣ 45 := (addOrderOf_dvd_iff_nsmul_eq_zero (a:=a) (n:=45)).2 h45
-  have hgcd : addOrderOf a ∣ Nat.gcd 8 45 := Nat.dvd_gcd h8d h45d
-  have hone : addOrderOf a ∣ 1 := by simpa [gcd_8_45_eq_one] using hgcd
-  have h1 : addOrderOf a = 1 := Nat.dvd_one.mp hone
-  simpa [h1] using (addOrderOf_eq_one_iff.mpr rfl)
-
-end AddGroupView
+-- (Moved to IndisputableMonolith/Gap45/AddGroupView.lean)
 
 end Gap45
 end IndisputableMonolith
