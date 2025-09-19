@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Recognition:ModelingExamples",
+      "namespace": "IndisputableMonolith.Recognition.ModelingExamples",
+      "path": "IndisputableMonolith/Recognition/ModelingExamples.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "SimpleStructure demo extracted"
+    },
+    {
       "id": "Quantum:core",
       "namespace": "IndisputableMonolith.Quantum",
       "path": "IndisputableMonolith/Quantum.lean",
@@ -25,6 +33,22 @@
       "status": "done",
       "owner": "",
       "notes": "Extracted from monolith; placeholder wiring; core unaffected"
+    },
+    {
+      "id": "Gap45:GroupView",
+      "namespace": "IndisputableMonolith.Gap45.GroupView",
+      "path": "IndisputableMonolith/Gap45/GroupView.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Group-theoretic trivial intersection lemma extracted"
+    },
+    {
+      "id": "Gap45:AddGroupView",
+      "namespace": "IndisputableMonolith.Gap45.AddGroupView",
+      "path": "IndisputableMonolith/Gap45/AddGroupView.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Additive trivial intersection lemma extracted"
     },
     {
       "id": "Gap45:Beat",

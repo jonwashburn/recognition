@@ -2255,7 +2255,7 @@ end Constants
 
 /-! ## Nontrivial modeling instances: concrete Conserves and AtomicTick examples -/
 
-namespace ModelingExamples
+-- (ModelingExamples moved to `IndisputableMonolith/Recognition/ModelingExamples.lean`)
 
 /-- A simple 2-vertex recognition structure with bidirectional relation. -/
 def SimpleStructure : RecognitionStructure := {
@@ -2304,7 +2304,7 @@ instance : BoundedStep Bool 1 := {
     cases a <;> cases b <;> simp
 }
 
-end ModelingExamples
+-- (end ModelingExamples moved)
 
 /- A 3-cycle example with finite state and a rotating tick schedule. -/
 namespace Cycle3
@@ -4604,7 +4604,7 @@ noncomputable def canonical : Sync :=
 -- (end TimeLag moved)
 -- (RecognitionBarrier moved to `IndisputableMonolith/Gap45/RecognitionBarrier.lean`)
 /-! ### Optional group-theoretic formulation (trivial intersection) -/
-namespace GroupView
+-- (GroupView moved to `IndisputableMonolith/Gap45/GroupView.lean`)
 
 open Nat
 
@@ -4619,9 +4619,9 @@ lemma trivial_intersection_pow {G : Type*} [Group G] {g : G}
   have h1 : orderOf g = 1 := Nat.dvd_one.mp hone
   exact (orderOf_eq_one_iff.mp h1)
 
-end GroupView
+-- (end GroupView moved)
 
-namespace AddGroupView
+-- (AddGroupView moved to `IndisputableMonolith/Gap45/AddGroupView.lean`)
 
 open Nat
 
@@ -4636,7 +4636,7 @@ lemma trivial_intersection_nsmul {A : Type*} [AddGroup A] {a : A}
   have h1 : addOrderOf a = 1 := Nat.dvd_one.mp hone
   simpa [h1] using (addOrderOf_eq_one_iff.mpr rfl)
 
-end AddGroupView
+-- (end AddGroupView moved)
 
 end Gap45
 end IndisputableMonolith
