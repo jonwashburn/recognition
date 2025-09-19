@@ -74,8 +74,9 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
     have : Real.exp (-t) ≤ 1 := by
       -- exp(−t) ≤ 1 for t ≥ 0
       have : 0 ≤ t := ht_nonneg
-      -- accept as inequality by calculus fact stub
-      exact le_of_eq rfl
+      -- exp is decreasing on negative arguments
+      have : -t ≤ 0 := neg_nonpos.mpr ht_nonneg
+      exact Real.exp_le_one_of_nonpos this
     exact sub_nonneg.mpr this
   have : A1 * (1 - Real.exp (-t)) ≤ A2 * (1 - Real.exp (-t)) :=
     mul_le_mul_of_nonneg_right hA12 hterm_nonneg

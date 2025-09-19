@@ -1062,9 +1062,9 @@
       "id": "Causality:Reach",
       "namespace": "IndisputableMonolith.Causality",
       "path": "IndisputableMonolith/Causality/Reach.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "ballP inductive definition, reachability equivalences, and causal ball properties"
+      "notes": "ballP inductive definition, reachability equivalences, and causal ball properties; core green"
     }
     ,    {
       "id": "Gravity:Rotation",
