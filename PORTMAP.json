@@ -133,10 +133,10 @@
     {
       "id": "Bridge:BridgeData",
       "namespace": "IndisputableMonolith.Bridge.BridgeData",
-      "path": "WIP/IndisputableMonolith/Bridge/BridgeData.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Bridge/BridgeData.lean",
+      "status": "done",
       "owner": "",
-      "notes": "Quarantined to WIP pending port"
+      "notes": "Promoted into core (minimal skeleton, axioms for proofs)"
     }
   ]
 }
