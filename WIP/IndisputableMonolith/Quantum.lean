@@ -11,7 +11,7 @@ structure PathWeight (γ : Type) where
   cost_additive : ∀ a b, C (comp a b) = C a + C b
   prob : γ → ℝ := fun g => Real.exp (-(C g))
   normSet : Finset γ
-  sum_prob_eq_one : ∑ g in normSet, prob g = 1
+  sum_prob_eq_one : Finset.sum normSet (fun g => prob g) = 1
 
 lemma prob_comp {γ} (PW : PathWeight γ) (a b : γ) :
   PW.prob (PW.comp a b) = PW.prob a * PW.prob b := by

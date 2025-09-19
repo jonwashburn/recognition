@@ -4477,27 +4477,16 @@ open Nat
 @[simp] lemma coprime_8_45 : Nat.Coprime 8 45 := by decide
 
 /-- gcd(8,45) = 1. -/
-@[simp] lemma gcd_8_45_eq_one : Nat.gcd 8 45 = 1 := by decide
+-- (gcd/lcm lemmas moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- lcm(8,45) = 360. -/
-lemma lcm_8_45_eq_360 : Nat.lcm 8 45 = 360 := by
-  have hg : Nat.gcd 8 45 = 1 := by decide
-  have h := Nat.gcd_mul_lcm 8 45
-  have : Nat.lcm 8 45 = 8 * 45 := by simpa [hg, Nat.one_mul] using h
-  have hm : 8 * 45 = 360 := by decide
-  exact this.trans hm
+-- (moved) lemma lcm_8_45_eq_360
 
 /-- Exact cycle counts: lcm(8,45)/8 = 45. -/
-lemma lcm_8_45_div_8 : Nat.lcm 8 45 / 8 = 45 := by
-  have h := lcm_8_45_eq_360
-  have : 360 / 8 = 45 := by decide
-  simpa [h] using this
+-- (moved) lemma lcm_8_45_div_8
 
 /-- Exact cycle counts: lcm(8,45)/45 = 8. -/
-lemma lcm_8_45_div_45 : Nat.lcm 8 45 / 45 = 8 := by
-  have h := lcm_8_45_eq_360
-  have : 360 / 45 = 8 := by decide
-  simpa [h] using this
+-- (moved) lemma lcm_8_45_div_45
 /-- lcm(9,5) = 45, characterizing the first simultaneous occurrence of 9- and 5-fold periodicities. -/
 lemma lcm_9_5_eq_45 : Nat.lcm 9 5 = 45 := by
   have hg : Nat.gcd 9 5 = 1 := by decide
@@ -4541,9 +4530,7 @@ theorem rung45_first_conflict :
 
 /-- Synchronization requirement: the minimal time to jointly align 8-beat and 45-fold symmetries
     is exactly lcm(8,45) = 360 beats, corresponding to 45 cycles of 8 and 8 cycles of 45. -/
-theorem sync_counts :
-  Nat.lcm 8 45 = 360 ∧ Nat.lcm 8 45 / 8 = 45 ∧ Nat.lcm 8 45 / 45 = 8 := by
-  exact ⟨lcm_8_45_eq_360, lcm_8_45_div_8, lcm_8_45_div_45⟩
+-- (moved) theorem sync_counts
 
 /-- The beat-level clock-lag fraction implied by the 45-gap arithmetic: δ_time = 45/960 = 3/64. -/
 theorem delta_time_eq_3_div_64 : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
@@ -4555,7 +4542,7 @@ This section exposes the synchronization facts as "beat" counts without importin
 group theory. It is intentionally arithmetic-only for stability.
 -/
 
-namespace Beat
+-- (Beat API moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- Minimal joint duration (in beats) for 8-beat and 45-fold patterns. -/
 @[simp] def beats : Nat := Nat.lcm 8 45
@@ -4603,9 +4590,9 @@ noncomputable def canonical : Sync :=
   { beats := beats
   , cycles8 := cycles_of_8
   , cycles45 := cycles_of_45 }
-end Beat
+-- (end Beat moved)
 /-! ### Time-lag arithmetic helpers (pure numerics used by the paper) -/
-namespace TimeLag
+-- (TimeLag lemmas moved to `IndisputableMonolith/Gap45/Beat.lean`)
 
 /-- As rationals: 45 / (8 * 120) = 3 / 64. -/
 @[simp] lemma lag_q : (45 : ℚ) / ((8 : ℚ) * (120 : ℚ)) = (3 : ℚ) / 64 := by
@@ -4614,26 +4601,8 @@ namespace TimeLag
 /-- As reals: 45 / (8 * 120) = 3 / 64. -/
 @[simp] lemma lag_r : (45 : ℝ) / ((8 : ℝ) * (120 : ℝ)) = (3 : ℝ) / 64 := by
   norm_num
-end TimeLag
-/-! ### Uncomputability and experiential navigation scaffolding -/
-namespace RecognitionBarrier
-
-/-- UncomputabilityPoint: a rung at which concurrent constraints (e.g., 9- and 5-fold) force
-    any local finite-view decision procedure to fail globally (informal scaffold). -/
-structure UncomputabilityPoint : Prop :=
-  (is45 : True)
-
-/-- ExperientialNavigation: operational rule-of-thumb that navigation must consult a longer
-    history (beyond any fixed finite view) to avoid contradictions near the gap. -/
-structure ExperientialNavigation : Prop :=
-  (needs_history : True)
-
-/-- ConsciousnessEmergence (scaffold): the 45-gap implies any robust navigation protocol must
-    incorporate experiential history, formalizing a minimal emergence condition. -/
-theorem ConsciousnessEmergence : UncomputabilityPoint → ExperientialNavigation := by
-  intro _; exact ⟨trivial⟩
-
-end RecognitionBarrier
+-- (end TimeLag moved)
+-- (RecognitionBarrier moved to `IndisputableMonolith/Gap45/RecognitionBarrier.lean`)
 /-! ### Optional group-theoretic formulation (trivial intersection) -/
 namespace GroupView
 

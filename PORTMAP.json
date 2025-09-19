@@ -19,6 +19,22 @@
       "notes": "Extracted from monolith; placeholder wiring; core unaffected"
     },
     {
+      "id": "Gap45:Beat",
+      "namespace": "IndisputableMonolith.Gap45.Beat",
+      "path": "IndisputableMonolith/Gap45/Beat.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Beat/time-lag arithmetic extracted; dependency-light; core unaffected"
+    },
+    {
+      "id": "Gap45:RecognitionBarrier",
+      "namespace": "IndisputableMonolith.Gap45.RecognitionBarrier",
+      "path": "IndisputableMonolith/Gap45/RecognitionBarrier.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted minimal scaffold; dependency-light; core unaffected"
+    },
+    {
       "id": "TruthCore:MRD",
       "namespace": "IndisputableMonolith.TruthCore.MRD",
       "path": "IndisputableMonolith/TruthCore/MRD.lean",
