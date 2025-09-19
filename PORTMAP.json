@@ -755,6 +755,14 @@
       "notes": "abbrev Tick := Fin 8"
     },
     {
+      "id": "Masses:Ribbons.WordAbbrev",
+      "namespace": "IndisputableMonolith.Masses.Ribbons",
+      "path": "IndisputableMonolith/Masses/Ribbons/Word.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "abbrev Word := List Ribbon"
+    },
+    {
       "id": "Cost:Demo",
       "namespace": "IndisputableMonolith.CostDemo",
       "path": "IndisputableMonolith/Cost/Demo.lean",
@@ -898,13 +906,13 @@
       "owner": "cursor-gpt5",
       "notes": "K constant + RSUnits display functions and lemmas; 130 lines; dependency-light"
     }
-    ,{
+    ,    {
       "id": "PhiSupport:Lemmas",
       "namespace": "IndisputableMonolith.PhiSupport",
       "path": "IndisputableMonolith/PhiSupport/Lemmas.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "phi squared and fixed point lemmas; minimal algebraic proofs"
+      "notes": "phi squared and fixed point lemmas; minimal algebraic proofs; core green"
     }
   ]
 }
