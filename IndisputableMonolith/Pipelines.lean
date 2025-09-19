@@ -47,5 +47,3 @@ end Curvature
 
 end Pipelines
 end IndisputableMonolith
-
-

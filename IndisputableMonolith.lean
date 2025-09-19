@@ -17,12 +17,10 @@ open Classical Function
 open Real Complex
 open scoped BigOperators
 
--- (Moved to IndisputableMonolith/Recognition/Certification.lean)end IndisputableMonolith
-
--- (Moved to IndisputableMonolith/Recognition/Certification.lean)end IndisputableMonolith
-
--- (Moved to IndisputableMonolith/Recognition/Certification.lean)end IndisputableMonolith
--- (Moved to IndisputableMonolith/Gravity/Rotation.lean)end Gravity
+-- (Moved to IndisputableMonolith/Recognition/Certification.lean)
+-- (Moved to IndisputableMonolith/Recognition/Certification.lean)
+-- (Moved to IndisputableMonolith/Recognition/Certification.lean)
+-- (Moved to IndisputableMonolith/Gravity/Rotation.lean)
 end IndisputableMonolith
 
 -- (Removed duplicate later `Constants` block; canonicalized above.)

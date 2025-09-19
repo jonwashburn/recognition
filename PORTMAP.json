@@ -550,9 +550,9 @@
       "id": "LNAL:VM",
       "namespace": "IndisputableMonolith.LNAL",
       "path": "IndisputableMonolith/LNAL/VM.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "LNAL virtual machine with 6 registers, instruction set, program execution; ~74 lines; dependency-light"
+      "notes": "LNAL virtual machine with 6 registers, instruction set, program execution; ~74 lines; minimal stubs; core green"
     }
     ,{
       "id": "Constants:KDisplay",
@@ -1025,6 +1025,14 @@
       "status": "done",
       "owner": "autonomous-agent",
       "notes": "Chain operations, AtomicTick, Ledger, and T2/T3 theorems; minimal Recognition stubs; core green"
+    },
+    {
+      "id": "Pipelines:core",
+      "namespace": "IndisputableMonolith.Pipelines",
+      "path": "IndisputableMonolith/Pipelines.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "GapSeries, Curvature modules with golden ratio, gap coefficients, and fine-structure predictions; core green"
     }
     ,    {
       "id": "Gravity:Rotation",
