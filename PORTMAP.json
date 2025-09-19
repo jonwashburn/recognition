@@ -982,9 +982,9 @@
       "id": "Verification:Claims",
       "namespace": "IndisputableMonolith",
       "path": "IndisputableMonolith/Verification/Claims.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Claim, KGateInput, KGateResult structures and claim evaluation functions"
+      "notes": "Claim, KGateInput, KGateResult structures and claim evaluation functions; moved to Verification.lean"
     }
     ,    {
       "id": "Recognition:Certification",

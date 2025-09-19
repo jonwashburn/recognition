@@ -20,7 +20,7 @@ structure Claim where
   status    : ClaimStatus := .unchecked
 
 /-- Smart constructor that only accepts anchor-invariant expressions. -/
-def dimensionless_claim (id : String) (stype : StatementType)
+def dimensionless_claim (id : String) (stype : @StatementType)
   (expr : Observable) (target : ℝ) (tol : Option ℝ := none) : Claim :=
 { id := id, stype := stype, expr := expr, target := target, tol := tol, status := .unchecked }
 
@@ -51,14 +51,14 @@ structure KGateResult where
 
 /-- K-gate checker: dimensionless bridge gate |K_A − K_B| ≤ k·u_comb. -/
 noncomputable def runKGate (U : RSUnits) (inp : KGateInput) : KGateResult :=
-  let KA := sorry -- WIP: depends on BridgeEval K_A_obs U
-  let KB := inp.KB
-  let ucomb := inp.u_ell0 + inp.u_lrec -- placeholder aggregator; details can be refined
-  let lhs := sorry -- WIP: depends on Real.abs function
-  let rhs := inp.k * ucomb
-  let ok  := decide (sorry ≤ rhs) -- WIP: depends on Real.abs and comparison
+  let KA : ℝ := sorry -- WIP: depends on BridgeEval K_A_obs U
+  let KB : ℝ := inp.KB
+  let ucomb : ℝ := inp.u_ell0 + inp.u_lrec -- placeholder aggregator; details can be refined
+  let lhs : ℝ := sorry -- WIP: depends on Real.abs function
+  let rhs : ℝ := inp.k * ucomb
+  let ok : Bool := decide (sorry ≤ rhs) -- WIP: depends on Real.abs and comparison
   { pass := ok
-  , witness := s!"K-gate check: {(if ok then "PASS" else "FAIL")}" -- Simplified to avoid string interpolation issues
+  , witness := if ok then "PASS" else "FAIL" -- Simplified to avoid string interpolation issues
   }
 
 end IndisputableMonolith
