@@ -20,7 +20,7 @@ class AveragingAgree (F : ℝ → ℝ) : Prop where
 class AveragingDerivation (F : ℝ → ℝ) : Prop extends SymmUnit F where
   agrees : ∀ t : ℝ, F (Real.exp t) = Jcost (Real.exp t)
 
-class AveragingBounds (F : ℝ → ℝ) extends SymmUnit F : Prop where
+class AveragingBounds (F : ℝ → ℝ) : Prop extends SymmUnit F where
   upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
   lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
 

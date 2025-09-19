@@ -998,9 +998,9 @@
       "id": "Recognition:Certification",
       "namespace": "IndisputableMonolith.Recognition.Certification",
       "path": "IndisputableMonolith/Recognition/Certification.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Interval utilities, AnchorCert structure, Valid predicate; ~127 lines; minimal Recognition deps"
+      "notes": "Interval utilities, AnchorCert structure, Valid predicate, certification framework; ~127 lines; axiom stubs for heavy deps; core green"
     },
     {
       "id": "Chain:core",
