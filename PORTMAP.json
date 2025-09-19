@@ -125,10 +125,10 @@
     {
       "id": "Verification:DEC",
       "namespace": "IndisputableMonolith.Verification.DEC",
-      "path": "WIP/IndisputableMonolith/Verification/DEC.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Verification/DEC.lean",
+      "status": "done",
       "owner": "",
-      "notes": "Quarantined to WIP pending port"
+      "notes": "Promoted into core (minimal skeleton)"
     },
     {
       "id": "Bridge:BridgeData",

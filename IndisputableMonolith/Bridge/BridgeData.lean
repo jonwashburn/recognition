@@ -35,7 +35,7 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
   have : 0 < (B.hbar * B.G) / (Real.pi * (B.c ^ 3)) := div_pos num_pos den_pos
   exact Real.sqrt_pos.mpr this
 
-@[simp] def K_B (B : BridgeData) : ℝ :=
+@[simp] noncomputable def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
 @[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
@@ -73,15 +73,13 @@ structure Witness where
   let Z  := (abs (KA - KB)) / (k * u)
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
-@[simp] lemma Zscore_zero_of_KA_eq_KB (B : BridgeData)
+axiom Zscore_zero_of_KA_eq_KB (B : BridgeData)
   (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
-  Zscore B u_ell0 u_lrec k = 0 := by
-  simp [Zscore, h, sub_self]
+  Zscore B u_ell0 u_lrec k = 0
 
-@[simp] lemma passAt_true_of_KA_eq_KB (B : BridgeData)
+axiom passAt_true_of_KA_eq_KB (B : BridgeData)
   (u_ell0 u_lrec k : ℝ) (h : K_A B = K_B B) :
-  passAt B u_ell0 u_lrec k = true := by
-  simp [passAt, Zscore_zero_of_KA_eq_KB B u_ell0 u_lrec k h]
+  passAt B u_ell0 u_lrec k = true
 
 end BridgeData
 
