@@ -32,5 +32,3 @@ def ReciprocitySigma0WP (m : Microcycle) (S : SigmaModel) : Prop :=
   ∀ s v, (s, v) ∈ sigmaBalances m S → v = 0
 
 end IndisputableMonolith
-
-
