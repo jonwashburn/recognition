@@ -899,6 +899,14 @@
       "notes": "Flog def + EL equivalence theorems; axiom stubs for Jlog deps; core green"
     }
     ,{
+      "id": "Cost:JensenSketch",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "WIP/IndisputableMonolith/Cost/JensenSketch.lean",
+      "status": "in_progress",
+      "owner": "autonomous-agent",
+      "notes": "JensenSketch, LogModel, T5 cost uniqueness theorems"
+    }
+    ,{
       "id": "URCAdapters:PhiRung",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/PhiRung.lean",
@@ -926,9 +934,9 @@
       "id": "ConeExport:Theorem",
       "namespace": "IndisputableMonolith.ConeExport",
       "path": "IndisputableMonolith/ConeExport/Theorem.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "cone_bound_export theorem for verification-level cone bounds"
+      "notes": "cone_bound_export theorem for verification-level cone bounds; core green"
     },
     {
       "id": "Ablation:Harness",
