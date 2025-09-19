@@ -70,5 +70,3 @@ end TimeLag
 
 end Gap45
 end IndisputableMonolith
-
-
