@@ -454,9 +454,9 @@
       "id": "LightCone:StepBounds",
       "namespace": "IndisputableMonolith.LightCone.StepBounds",
       "path": "IndisputableMonolith/LightCone/StepBounds.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Per-step bounds and cone bound lemmas"
+      "notes": "Extracted StepBounds and cone_bound; standalone green; core green"
     }
     ,{
       "id": "Verification:RenderedIndex",

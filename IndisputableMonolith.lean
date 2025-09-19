@@ -380,18 +380,7 @@ end BridgeData
 def knobsCount : Nat := 0
 @[simp] theorem no_knobs_proof_layer : knobsCount = 0 := rfl
 
-/-- Zero-knobs proof bundle export: lists core dimensionless proofs (discoverable). -/
-def zeroKnobsExports : List String :=
-  [ "K_gate"
-  , "cone_bound"
-  , "eight_tick_min"
-  , "period_exactly_8"
-  , "dec_dd_eq_zero"
-  , "dec_bianchi"
-  , "display_speed_identity"
-  , "gap_delta_time_identity"
-  , "recognition_lower_bound_sat"
-  ]
+-- (Moved to IndisputableMonolith/Verification/Knobs.lean)
 /-- Anchor-invariance holds for all registered dimensionless observables. -/
 -- (Moved to IndisputableMonolith/Verification/AnchorInvariants.lean)
 
@@ -638,13 +627,9 @@ variable {α : Type}
 
 /-- Per-step timing and spatial bounds for a kinematics `K` under units `U`.
     `time` is a clock display and `rad` is a nonnegative radial distance display. -/
-structure StepBounds (K : Causality.Kinematics α)
-    (U : IndisputableMonolith.Constants.RSUnits)
-    (time rad : α → ℝ) : Prop where
-  step_time : ∀ {y z}, K.step y z → time z = time y + U.tau0
-  step_rad  : ∀ {y z}, K.step y z → rad z ≤ rad y + U.ell0
+-- (Moved to IndisputableMonolith/LightCone/StepBounds.lean)
 
-namespace StepBounds
+-- (Moved to IndisputableMonolith/LightCone/StepBounds.lean)
 
 variable {K : Causality.Kinematics α}
 variable {U : IndisputableMonolith.Constants.RSUnits}
@@ -715,7 +700,7 @@ lemma cone_bound
     simpa [IndisputableMonolith.Constants.c_mul_tau0_eq_ell0 U]
   simpa [hτ, hcτ, mul_left_comm, mul_assoc] using hℓ
 
-end StepBounds
+-- (Moved to IndisputableMonolith/LightCone/StepBounds.lean)
 
 end LightCone
 
