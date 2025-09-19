@@ -403,6 +403,14 @@
       "notes": "extracted LNAL scaffold; core green"
     }
     ,{
+      "id": "Bridge:TauAndEcoh",
+      "namespace": "IndisputableMonolith.Bridge",
+      "path": "IndisputableMonolith/Bridge/Displays.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "tau0 and E_coh display helpers (noncomputable)"
+    }
+    ,{
       "id": "TruthCore:TimeKernelRescale",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/TimeKernel.lean",
