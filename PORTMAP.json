@@ -19,6 +19,14 @@
       "notes": "Parity helpers extracted"
     },
     {
+      "id": "Ethics.Decision:Mapping",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Mapping",
+      "path": "IndisputableMonolith/Ethics/Decision/Mapping.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "mapReqMicro and mapping lemmas extracted"
+    },
+    {
       "id": "Ethics.Decision:BoolProp",
       "namespace": "IndisputableMonolith.Ethics.Decision.BoolProp",
       "path": "IndisputableMonolith/Ethics/Decision/BoolProp.lean",

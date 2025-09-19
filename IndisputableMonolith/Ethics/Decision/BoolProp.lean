@@ -91,5 +91,3 @@ lemma admissible_true_iff (P : Policy A) (r : Request A) :
 end Decision
 end Ethics
 end IndisputableMonolith
-
-
