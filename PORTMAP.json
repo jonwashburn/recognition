@@ -915,6 +915,14 @@
       "notes": "Integer charge transforms and contradiction lemmas extracted; axiom stubs for Species/Sector deps; core green"
     }
     ,{
+      "id": "Cost:FixedPoint",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/FixedPoint.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "phi_is_cost_fixed_point axiom; golden ratio fixed point identity; ~12 lines; minimal stubs; core green"
+    }
+    ,{
       "id": "Cost:PhiFixedPointExpose",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost/PhiFixedPointExpose.lean",
