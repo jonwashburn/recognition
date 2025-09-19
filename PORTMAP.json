@@ -483,6 +483,14 @@
       "notes": "moved KA/KB anchor invariance theorems; core green"
     },
     {
+      "id": "Verification:ZeroKnobs",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Knobs.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "zeroKnobsExports list"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",

@@ -45,7 +45,9 @@ lemma reach_time_eq
                   (n : ℝ) * U.tau0 + U.tau0
                       = (n : ℝ) * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
                   _ = ((n : ℝ) + 1) * U.tau0 := by simpa [add_mul, one_mul]
-              simpa [this]
+              simp [this]
+        _ = time x + ((Nat.succ n : ℝ) * U.tau0) := by
+              simpa [Nat.cast_add, Nat.cast_one]
 
 lemma reach_rad_le
   (H : StepBounds K U time rad) :
@@ -65,7 +67,9 @@ lemma reach_rad_le
                   (n : ℝ) * U.ell0 + U.ell0
                       = (n : ℝ) * U.ell0 + 1 * U.ell0 := by simpa [one_mul]
                   _ = ((n : ℝ) + 1) * U.ell0 := by simpa [add_mul, one_mul]
-              simpa [this]
+              simp [this]
+        _ = rad x + ((Nat.succ n : ℝ) * U.ell0) := by
+              simpa [Nat.cast_add, Nat.cast_one]
 
 lemma cone_bound
   (H : StepBounds K U time rad)
@@ -74,16 +78,15 @@ lemma cone_bound
   have ht := H.reach_time_eq (K:=K) (U:=U) (time:=time) (rad:=rad) h
   have hr := H.reach_rad_le  (K:=K) (U:=U) (time:=time) (rad:=rad) h
   have hτ : time y - time x = (n : ℝ) * U.tau0 := by
-    have := ht
-    -- rearrange: time y = time x + n*τ0 → time y - time x = n*τ0
-    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using sub_eq_of_eq_add' this
+    have := congrArg (fun t => t - time x) ht
+    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using this
   have hℓ : rad y - rad x ≤ (n : ℝ) * U.ell0 := by
     have := hr
     -- rearrange ≤ to a difference inequality
     have := sub_le_iff_le_add'.mpr this
     simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc]
   -- In minimal RSUnits, ell0 = c * tau0 is available as the supplied field
-  have hcτ : U.ell0 = U.c * U.tau0 := U.c_ell0_tau0
+  have hcτ : U.ell0 = U.c * U.tau0 := by simpa using (U.c_ell0_tau0).symm
   simpa [hτ, hcτ, mul_left_comm, mul_assoc] using hℓ
 
 end StepBounds
