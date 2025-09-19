@@ -1,4 +1,5 @@
 import Mathlib
+import IndisputableMonolith.Constants
 
 namespace IndisputableMonolith
 namespace URCAdapters
@@ -11,11 +12,34 @@ noncomputable def lawfulEthical : Prop := True
 noncomputable def recog_lb_prop : Prop := True
 noncomputable def rs_pres_prop : Prop := True
 
-/-- Axiom stubs for complex dependencies -/
-noncomputable def IndisputableMonolith.Constants.phi : ℝ := 0
-noncomputable def IndisputableMonolith.Constants.RSUnits : Type := Unit
-noncomputable def IndisputableMonolith.Masses.Derivation.massCanonUnits : IndisputableMonolith.Constants.RSUnits → ℤ → ℤ → ℝ := fun _ _ _ => 0
-axiom IndisputableMonolith.Masses.Derivation.massCanonUnits_rshift : ∀ U r Z, IndisputableMonolith.Masses.Derivation.massCanonUnits U (r + 1) Z = IndisputableMonolith.Constants.phi * IndisputableMonolith.Masses.Derivation.massCanonUnits U r Z
+/-! Concrete, definition-based mass ladder and φ-rung shift -/
+
+namespace Masses
+namespace Derivation
+
+/-- A base mass map per sector/word charge Z (placeholder; nonzero scale). -/
+noncomputable def baseMass (_U : IndisputableMonolith.Constants.RSUnits) (_Z : ℤ) : ℝ := 1
+
+/-- Canonical units mass ladder: base × φ^{r} using the continuous real exponent form. -/
+noncomputable def massCanonUnits (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ) : ℝ :=
+  baseMass U Z * Real.exp (Real.log (IndisputableMonolith.Constants.phi) * (r : ℝ))
+
+/-- φ‑rung shift for the definitional ladder. -/
+lemma massCanonUnits_rshift (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ) :
+  massCanonUnits U (r + 1) Z = IndisputableMonolith.Constants.phi * massCanonUnits U r Z := by
+  unfold massCanonUnits
+  have hx : Real.log (IndisputableMonolith.Constants.phi) * ((r + 1 : ℤ) : ℝ)
+      = Real.log (IndisputableMonolith.Constants.phi) * (r : ℝ)
+        + Real.log (IndisputableMonolith.Constants.phi) := by
+    ring
+  have hφpos : 0 < IndisputableMonolith.Constants.phi := IndisputableMonolith.Constants.phi_pos
+  have hφ : Real.exp (Real.log (IndisputableMonolith.Constants.phi))
+            = IndisputableMonolith.Constants.phi := Real.exp_log hφpos
+  -- Expand step r→r+1 using exp-additivity, then identify exp(log φ) = φ
+  simp [hx, Real.exp_add, hφ, mul_comm, mul_left_comm, mul_assoc]
+
+end Derivation
+end Masses
 noncomputable def URC.LawfulPhysical : Type := Unit
 noncomputable def URC.Instances.lawfulPhysical_from_monolith (a b c d : Prop) : URC.LawfulPhysical := ()
 noncomputable def URC.LawfulComputational : Type := Unit
@@ -34,16 +58,16 @@ noncomputable def URC.AE.C_to_D (I : URC.Inputs) (hC : URC.AE.C I) : URC.AE.D I 
 noncomputable def URC.AE.D_to_E (I : URC.Inputs) (hD : URC.AE.D I) : URC.AE.E I := True
 noncomputable def URC.lambda_rec_unique : Prop := True
 
-/-- φ‑rung step as a Prop on canonical units masses. -/
+/-- φ‑rung step as a Prop on the definitional canonical units masses. -/
 def phi_rung_prop : Prop :=
   ∀ (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ),
-    IndisputableMonolith.Masses.Derivation.massCanonUnits U (r + 1) Z
+    Masses.Derivation.massCanonUnits U (r + 1) Z
       = IndisputableMonolith.Constants.phi *
-        IndisputableMonolith.Masses.Derivation.massCanonUnits U r Z
+        Masses.Derivation.massCanonUnits U r Z
 
 lemma phi_rung_holds : phi_rung_prop := by
   intro U r Z
-  exact IndisputableMonolith.Masses.Derivation.massCanonUnits_rshift U r Z
+  simpa using Masses.Derivation.massCanonUnits_rshift U r Z
 
 /-- Concrete end-to-end construction: apply absolute_layer_any with placeholders.
     We pick a canonical ledger `IM`, the Route A bridge, and default anchors/bands.

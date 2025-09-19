@@ -98,19 +98,23 @@ structure VerifiedGenerators (φ : ℝ) where
   fam : CertFamily
   ok  : Verified φ fam
 
-/-- Minimal Prop-level obligations induced by generators. -/
-def UnitsProp : Prop := True
-def EightBeatProp : Prop := True
-def ELProp : Prop := True
-def PhiRungProp : Prop := True
+/--- Minimal Prop-level obligations induced by generators (now the actual per-family Verified predicates). -/
+def UnitsProp (C : CertFamily) : Prop := ∀ c ∈ C.units, UnitsCert.verified c
+def EightBeatProp (C : CertFamily) : Prop := ∀ c ∈ C.eightbeat, EightBeatCert.verified c
+def ELProp (C : CertFamily) : Prop := ∀ c ∈ C.elprobes, ELProbe.verified c
+def PhiRungProp (φ : ℝ) (C : CertFamily) : Prop := ∀ c ∈ C.masses, MassCert.verified φ c
 
-/-- Route B Lawfulness bundle (Prop-only, abstract hooks). -/
-def LawfulBridge : Prop := UnitsProp ∧ EightBeatProp ∧ ELProp ∧ PhiRungProp ∧ True
+/--- Route B Lawfulness bundle, tied to a concrete certificate family and φ. -/
+def LawfulBridge (φ : ℝ) (C : CertFamily) : Prop :=
+  UnitsProp C ∧ EightBeatProp C ∧ ELProp C ∧ PhiRungProp φ C ∧ True
 
-/-- Generators imply a trivial lawful-bridge bundle (placeholders true). -/
+/-- Generators imply a lawful-bridge bundle by unpacking the Verified proof. -/
 theorem determination_by_generators {φ : ℝ}
-  (VG : VerifiedGenerators φ) : LawfulBridge := by
-  exact And.intro True.intro (And.intro True.intro (And.intro True.intro (And.intro True.intro True.intro)))
+  (VG : VerifiedGenerators φ) : LawfulBridge φ VG.fam := by
+  rcases VG with ⟨C, hC⟩
+  dsimp [LawfulBridge, UnitsProp, EightBeatProp, ELProp, PhiRungProp] at *
+  rcases hC with ⟨hu, he8, hel, hm, hrot, hout, hcons⟩
+  exact And.intro hu (And.intro he8 (And.intro hel (And.intro hm True.intro)))
 
 /-- A tiny demo family: empty certificate sets verify vacuously. -/
 def demo_generators (φ : ℝ) : VerifiedGenerators φ :=

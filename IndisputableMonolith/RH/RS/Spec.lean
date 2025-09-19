@@ -225,6 +225,18 @@ theorem meetsBands_any_default (L : Ledger) (B : Bridge L)
     simpa [evalToBands_c] using center_in_sampleBandsFor (x:=U.c)
   exact meetsBands_any_of_eval L B (sampleBandsFor U.c) U hc
 
+/-! ### Default instances wiring (minimal witnesses) -/
+
+/-- Default UniqueCalibration instance from the generic witness. -/
+noncomputable instance defaultUniqueCalibration (L : Ledger) (B : Bridge L) (A : Anchors) :
+  UniqueCalibration L B A := uniqueCalibration_any L B A
+
+/-- Default MeetsBands instance specialized to the canonical `sampleBandsFor U.c`. -/
+noncomputable instance defaultMeetsBandsSample
+  (L : Ledger) (B : Bridge L) (U : IndisputableMonolith.Constants.RSUnits) :
+  MeetsBands L B (sampleBandsFor U.c) :=
+  meetsBands_any_default L B U
+
 end RS
 end RH
 end IndisputableMonolith
