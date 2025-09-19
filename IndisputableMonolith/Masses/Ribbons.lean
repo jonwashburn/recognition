@@ -51,10 +51,23 @@ def ringSeq (tag : GaugeTag) (n : Nat) : Word :=
     { start := t, dir := d, bit := 1, tag := tag })
 
 /-- One left‑to‑right cancellation pass: drop the first adjacent cancelling pair if present. -/
-def rewriteOnce : Word → Word := sorry
+def rewriteOnce : Word → Word :=
+  fun w =>
+    match w with
+    | [] => []
+    | a :: [] => [a]
+    | a :: b :: rest =>
+      if cancels a b then rest else a :: rewriteOnce (b :: rest)
 
 /-- Normalization via bounded passes: at most length passes strictly reduce on success. -/
-def normalForm (w : Word) : Word := sorry
+def normalForm (w : Word) : Word :=
+  let rec normalize (current : Word) (passes : Nat) : Word :=
+    if passes = 0 then current
+    else
+      let next := rewriteOnce current
+      if next.length = current.length then current
+      else normalize next (passes - 1)
+  normalize w w.length
 
 /-- Reduced length ℓ(W) as length of the normal form. -/
 @[simp] def ell (w : Word) : Nat := (normalForm w).length
@@ -87,7 +100,10 @@ abbrev Torsion8 := ZMod 8
 
 /-- Canonical pure mass from word, generation class, and charge. -/
 @[simp] noncomputable def massCanonFromWord (isQuark : Bool) (Q6 : ℤ)
-  (gen : Derivation.GenClass) (w : Word) : ℝ := sorry
+  (gen : Derivation.GenClass) (w : Word) : ℝ :=
+  let r := rungFrom gen w
+  let Z := Z_of_charge isQuark Q6
+  Derivation.massCanonPure r Z
 
 end Ribbons
 end Masses

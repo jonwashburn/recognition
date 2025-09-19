@@ -11,7 +11,7 @@ structure RecognitionStructure where
 structure Chain (M : RecognitionStructure) where
   n : Nat
   f : Fin (n+1) → M.U
-  ok : ∀ i : Fin n, M.R (f i.castSucc) (f i.succ) := sorry
+  ok : ∀ i : Fin n, M.R (f i.castSucc) (f i.succ)
 
 namespace Chain
 

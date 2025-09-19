@@ -66,8 +66,13 @@ def step (P : Program) (s : State) : State :=
 
 -- Removed trivial lemma step_self
 
-lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod :=
-  sorry -- WIP: proof requires additional assumptions about breath bounds
+lemma breath_lt_period (P : Program) (s : State) : (step P s).breath < breathPeriod := by
+  -- By definition, breath' = (breath + 1) % breathPeriod, which is always < breathPeriod
+  dsimp [step]
+  by_cases hH : s.halted
+  · -- If halted, step returns s unchanged, but we still bump breath below
+    simp [hH, bumpBreath, Nat.mod_lt] -- requires breathPeriod ≠ 0; true since 1024 > 0
+  · simp [hH, bumpBreath, Nat.mod_lt]
 
 end LNAL
 end IndisputableMonolith

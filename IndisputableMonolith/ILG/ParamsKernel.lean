@@ -38,12 +38,43 @@ noncomputable def n_of_r (A r0 p : ℝ) (r : ℝ) : ℝ :=
 @[simp] noncomputable def w_t_display (P : Params) (_B : Unit) (Tdyn : ℝ) : ℝ :=
   w_t P Tdyn 1
 
-axiom w_t_ref (P : Params) (τ0 : ℝ) : w_t P τ0 τ0 = 1
+lemma w_t_ref (P : Params) (τ0 : ℝ) : w_t P τ0 τ0 = 1 := by
+  -- w_t P τ0 τ0 = 1 + P.Clag * (1^P.alpha - 1) = 1 + P.Clag * 0 = 1
+  simp [w_t]
+  ring
 
-axiom w_t_rescale (P : Params) (c Tdyn τ0 : ℝ) (hc : 0 < c) :
-  w_t P (c * Tdyn) (c * τ0) = w_t P Tdyn τ0
+lemma w_t_rescale (P : Params) (c Tdyn τ0 : ℝ) (hc : 0 < c) :
+  w_t P (c * Tdyn) (c * τ0) = w_t P Tdyn τ0 := by
+  -- w_t scales as (Tdyn/τ0)^alpha, so (c*Tdyn)/(c*τ0) = Tdyn/τ0
+  simp [w_t]
+  congr 2
+  rw [div_mul_eq_div_mul_one_div, div_mul_eq_div_mul_one_div]
+  simp [mul_div_cancel_left₀ _ (ne_of_gt hc)]
 
-axiom w_t_nonneg (P : Params) (H : ParamProps P) (Tdyn τ0 : ℝ) : 0 ≤ w_t P Tdyn τ0
+lemma w_t_nonneg (P : Params) (H : ParamProps P) (Tdyn τ0 : ℝ) : 0 ≤ w_t P Tdyn τ0 := by
+  -- w_t = 1 + P.Clag * (t^α - 1) where t ≥ εt > 0
+  -- Since P.Clag ≥ 0 and t^α ≥ εt^α > 0, we need to show this is ≥ 0
+  simp [w_t]
+  have h_t_pos : 0 < max εt (Tdyn / τ0) := by
+    apply lt_max_of_lt_left
+    simp [εt]
+    norm_num
+  have h_rpow_pos : 0 < Real.rpow (max εt (Tdyn / τ0)) P.alpha := by
+    exact Real.rpow_pos_of_pos h_t_pos P.alpha
+  -- The key insight: for any t > 0 and α ≥ 0, we have 1 + Clag*(t^α - 1) ≥ 1 - Clag ≥ 0
+  have h_bound : Real.rpow (max εt (Tdyn / τ0)) P.alpha - 1 ≥ -1 := by
+    -- t^α ≥ 0 implies t^α - 1 ≥ -1
+    have : 0 ≤ Real.rpow (max εt (Tdyn / τ0)) P.alpha := le_of_lt h_rpow_pos
+    linarith
+  have : P.Clag * (Real.rpow (max εt (Tdyn / τ0)) P.alpha - 1) ≥ P.Clag * (-1) := by
+    exact mul_le_mul_of_nonneg_left h_bound H.Clag_nonneg
+  have : P.Clag * (Real.rpow (max εt (Tdyn / τ0)) P.alpha - 1) ≥ -P.Clag := by
+    simpa [mul_neg, mul_one] using this
+  have : 1 + P.Clag * (Real.rpow (max εt (Tdyn / τ0)) P.alpha - 1) ≥ 1 - P.Clag := by
+    linarith
+  -- Since P.Clag ≤ 1, we have 1 - P.Clag ≥ 0
+  have : 0 ≤ 1 - P.Clag := by linarith [H.Clag_le_one]
+  linarith
 
 theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
   (hp : 0 ≤ p) (hA12 : A1 ≤ A2) :
@@ -63,14 +94,13 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
   have ht_nonneg : 0 ≤ t := by
     -- for p ≥ 0, (positive)^p ≥ 0
     have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
-    -- stub for rpow nonneg
-    sorry
+    exact Real.rpow_nonneg this hp
   have hterm_nonneg : 0 ≤ 1 - Real.exp (-t) := by
     have : Real.exp (-t) ≤ 1 := by
       -- exp(x) ≤ 1 for x ≤ 0
       have : -t ≤ 0 := neg_nonpos.mpr ht_nonneg
       -- for x ≤ 0, exp(x) ≤ 1
-      sorry  -- exp monotonicity fact
+      exact Real.exp_le_one_of_nonpos this
     exact sub_nonneg.mpr this
   have : A1 * (1 - Real.exp (-t)) ≤ A2 * (1 - Real.exp (-t)) :=
     mul_le_mul_of_nonneg_right hA12 hterm_nonneg

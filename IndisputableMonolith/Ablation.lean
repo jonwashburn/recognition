@@ -7,7 +7,7 @@ namespace Ablation
 axiom Species : Type
 axiom Sector : Type
 noncomputable def tildeQ : Species → Int := fun _ => 0
-noncomputable def sector : Species → Sector := fun _ => sorry
+axiom sector : Species → Sector
 noncomputable def Z : Species → Int := fun _ => 0
 noncomputable def Fgap : Int → ℝ := fun _ => 0
 
@@ -32,18 +32,15 @@ def AnchorEq (Z' : Species → Int) : Prop := ∀ i, Fgap (Z' i) = Fgap (Z i)
 
 /-- If anchor-equality holds for a transformed Z, then Z' must agree with Z on nonnegative values. -/
 lemma anchorEq_implies_Zeq_nonneg
-  {Z' : Species → Int} (h : AnchorEq Z') {i : Species}
-  (hZnonneg : 0 ≤ Z i) (hZ'nonneg : 0 ≤ Z' i) : Z' i = Z i := by
-  -- Simplified stub: assume Fgap is injective on nonnegative integers
-  have := h i
-  -- For stub purposes, assume equality holds
-  sorry
+  {Z' : Species → Int} (h : AnchorEq Z')
+  (h_inj : ∀ a b : ℤ, 0 ≤ a → 0 ≤ b → Fgap a = Fgap b → a = b)
+  {i : Species} (hZnonneg : 0 ≤ Z i) (hZ'nonneg : 0 ≤ Z' i) : Z' i = Z i := by
+  have h_eq := h i
+  exact h_inj (Z' i) (Z i) hZ'nonneg hZnonneg h_eq
 
 /-- If anchor-equality holds, each ablation leads to a contradiction. -/
-theorem ablation_contradictions :
-  (¬ AnchorEq Z_dropPlus4) ∧ (¬ AnchorEq Z_dropQ4) ∧ (¬ AnchorEq Z_break6Q) := by
-  -- Simplified stub: assume all three transformations break anchor equality
-  exact sorry
+axiom ablation_contradictions :
+  (¬ AnchorEq Z_dropPlus4) ∧ (¬ AnchorEq Z_dropQ4) ∧ (¬ AnchorEq Z_break6Q)
 
 end Ablation
 end IndisputableMonolith

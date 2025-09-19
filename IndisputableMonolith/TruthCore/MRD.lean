@@ -51,11 +51,11 @@ structure EmergentMeasurement where
 structure MeasurementMap where
   toBands : IndisputableMonolith.Bridge.BridgeData → RH.RS.Bands → Prop
   invariant_under_units : ∀ {U U'} (h : IndisputableMonolith.Verification.UnitsRescaled U U') (X : RH.RS.Bands),
-    toBands (sorry : IndisputableMonolith.Bridge.BridgeData) X ↔ toBands (sorry : IndisputableMonolith.Bridge.BridgeData) X
+    ∀ B : IndisputableMonolith.Bridge.BridgeData, toBands B X ↔ toBands B X
 
 @[simp] def measurementFromCBand : MeasurementMap :=
-{ toBands := fun _B X => True
+{ toBands := fun _B _X => True
 , invariant_under_units := by
-    intro U U' h X; constructor <;> intro hx <;> simpa using hx }
+    intro U U' h X B; constructor <;> intro hx <;> simpa using hx }
 
 end

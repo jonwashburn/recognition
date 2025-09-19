@@ -1,51 +1,25 @@
 import Mathlib
+import IndisputableMonolith.Cost.JcostCore
 
 namespace IndisputableMonolith
 namespace Cost
 
-/-- Forward declarations for dependency-light compilation -/
-noncomputable def Jcost (x : ℝ) : ℝ := (x + x⁻¹) / 2 - 1
-
-structure CostRequirements (F : ℝ → ℝ) : Prop where
-  symmetric : ∀ {x}, 0 < x → F x = F x⁻¹
-  unit0 : F 1 = 0
-
-class SymmUnit (F : ℝ → ℝ) : Prop where
-  symmetric : ∀ {x}, 0 < x → F x = F x⁻¹
-  unit0 : F 1 = 0
-
-class AveragingAgree (F : ℝ → ℝ) : Prop where
-  agrees : ∀ t : ℝ, F (Real.exp t) = Jcost (Real.exp t)
-
-class AveragingDerivation (F : ℝ → ℝ) : Prop extends SymmUnit F where
-  agrees : ∀ t : ℝ, F (Real.exp t) = Jcost (Real.exp t)
-
-class AveragingBounds (F : ℝ → ℝ) : Prop extends SymmUnit F where
-  upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
-  lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
-
-def mkAveragingBounds (F : ℝ → ℝ)
-  (symm : SymmUnit F)
-  (upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t))
-  (lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)) :
-  AveragingBounds F :=
-{ toSymmUnit := symm, upper := upper, lower := lower }
+-- Use canonical definitions from JcostCore; do not redefine them locally
 
 @[simp] lemma Jcost_exp (t : ℝ) :
-  Jcost (Real.exp t) = ((Real.exp t) + (Real.exp (-t))) / 2 - 1 := by
-  have h : (Real.exp t)⁻¹ = Real.exp (-t) := by
-    symm; simp [Real.exp_neg t]
-  simp [Jcost, h]
+  Jcost (Real.exp t) = ((Real.exp t) + (Real.exp (-t))) / 2 - 1 :=
+  IndisputableMonolith.Cost.Jcost_exp t
 
-class JensenSketch (F : ℝ → ℝ) : Prop extends SymmUnit F where
-  axis_upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
-  axis_lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
+-- Reuse JensenSketch from core
+open IndisputableMonolith.Cost
 
-instance (priority := 95) averagingBounds_of_jensen {F : ℝ → ℝ} [JensenSketch F] :
-  AveragingBounds F :=
-  mkAveragingBounds F (symm := (inferInstance : SymmUnit F))
-    (upper := JensenSketch.axis_upper (F:=F))
-    (lower := JensenSketch.axis_lower (F:=F))
+instance (priority := 95) averagingAgree_of_jensen {F : ℝ → ℝ} [JensenSketch F] :
+  AveragingAgree F :=
+  ⟨by
+    intro t
+    have hu := JensenSketch.axis_upper (F:=F) t
+    have hl := JensenSketch.axis_lower (F:=F) t
+    exact le_antisymm_iff.mp ⟨hu, hl⟩⟩
 
 /-- Concrete template to build a `JensenSketch` instance from exp-axis bounds proven via
     strict convexity/averaging on the log-axis. Provide symmetry (`SymmUnit F`) and the
@@ -134,7 +108,7 @@ theorem F_eq_J_on_pos_of_derivation (F : ℝ → ℝ) [AveragingDerivation F] :
     then `F` agrees with `Jcost` on positive reals. -/
 theorem T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] :
   ∀ {x : ℝ}, 0 < x → F x = Jcost x :=
-  sorry  -- Would require full typeclass derivation chain
+  F_eq_J_on_pos (hAgree := (averagingAgree_of_jensen (F:=F)).agrees)
 
 /-- T5 for log-models: any `G` satisfying `LogModel` yields a cost `F := G ∘ log`
     that agrees with `Jcost` on ℝ>0. -/
@@ -142,26 +116,7 @@ theorem T5_for_log_model {G : ℝ → ℝ} [LogModel G] :
   ∀ {x : ℝ}, 0 < x → F_ofLog G x = Jcost x :=
   T5_cost_uniqueness_on_pos (F:=F_ofLog G)
 
-@[simp] theorem Jcost_agrees_on_exp : AgreesOnExp Jcost := by
-  intro t; rfl
-
-instance : AveragingAgree Jcost := ⟨Jcost_agrees_on_exp⟩
-
-/-- Jcost satisfies symmetry and unit normalization. -/
-instance : SymmUnit Jcost :=
-  { symmetric := sorry  -- Would need Jcost_symm from JcostCore
-  , unit0 := sorry }    -- Would need Jcost_unit0 from JcostCore
-
-/-- Concrete averaging-derivation instance for the canonical cost `Jcost`. -/
-instance : AveragingDerivation Jcost :=
-  { toSymmUnit := (inferInstance : SymmUnit Jcost)
-  , agrees := Jcost_agrees_on_exp }
-
-/-- Trivial Jensen sketch instance for `Jcost`: its exp-axis bounds hold by reflexivity. -/
-instance : JensenSketch Jcost :=
-  { toSymmUnit := (inferInstance : SymmUnit Jcost)
-  , axis_upper := by intro t; exact le_of_eq rfl
-  , axis_lower := by intro t; exact le_of_eq rfl }
+-- Canonical instances for Jcost exist in JcostCore; no duplication here
 
 end Cost
 end IndisputableMonolith

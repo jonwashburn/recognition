@@ -81,7 +81,14 @@ theorem AE_chain_and_export (φ : ℝ) (C : URC.Certificates)
   (hA : URC.AE.A (I0 C)) (hB : URC.AE.B (I0 C)) :
   URC.AE.C (I0 C) ∧ URC.AE.D (I0 C) ∧ URC.AE.E (I0 C)
   ∧ RH.RS.Inevitability_dimless φ := by
-  sorry
+  -- Chain B→C→D→E using the provided transformations
+  have hC := URC.AE.B_to_C (I0 C) hB
+  have hD := URC.AE.C_to_D (I0 C) hC
+  have hE := URC.AE.D_to_E (I0 C) hD
+  -- Apply the strengthening to get inevitability
+  have hInev := strengthen_to_Recognition_Closure φ hB
+  -- Combine all results
+  exact ⟨hC, hD, hE, hInev⟩
 
 /-- URC manifest hook: λ_rec uniqueness is declared (Prop-level). -/
 def urc_lambda_unique : Prop := URC.lambda_rec_unique
