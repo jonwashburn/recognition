@@ -1,6 +1,5 @@
 import Mathlib
 
-/-- Minimal URC stubs for dependency-light build. -/
 namespace URC
 
 structure LawfulNormalizer (x : ℝ) : Prop where

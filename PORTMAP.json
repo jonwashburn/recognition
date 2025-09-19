@@ -862,9 +862,9 @@
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "lawful_normalizer_exists_unique lemma; dependency-light"
+      "notes": "lawful_normalizer_exists_unique lemma with minimal URC stubs; core green"
     }
     ,{
       "id": "Ethics:CostModel",
@@ -981,10 +981,10 @@
     {
       "id": "Verification:Core",
       "namespace": "IndisputableMonolith.Verification",
-      "path": "IndisputableMonolith/Verification/Core.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Verification.lean",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "UnitsRescaled, Observable, K_A/K_B_obs, CalibrationEvidence structures and K-gate verification"
+      "notes": "UnitsRescaled, Observable, K_A/K_B_obs, CalibrationEvidence structures and K-gate verification; moved to Verification.lean"
     }
     ,    {
       "id": "Recognition:Certification",
