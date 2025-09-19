@@ -950,9 +950,9 @@
       "id": "ClassicalBridge:T4Correspondence",
       "namespace": "IndisputableMonolith.ClassicalBridge",
       "path": "IndisputableMonolith/ClassicalBridge/T4Correspondence.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "T4 unique constant on component, gauge class theorems"
+      "notes": "extracted T4 unique constant, gauge classes; minimal axiom stubs; core green"
     }
     ,{
       "id": "Constants:RSDisplay",

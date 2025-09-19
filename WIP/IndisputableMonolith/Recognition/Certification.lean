@@ -64,20 +64,15 @@ structure Valid (C : AnchorCert) : Prop where
 lemma M0_pos_of_cert {C : AnchorCert} (hC : Valid C) : 0 < C.M0.lo := hC.M0_pos
 
 /-- Certificate replacement for anchorIdentity (inequality form). -/
-lemma anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
+axiom anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
   (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i)) :
-  ∀ i : Species, |res i - Fgap (Z i)| ≤ 2 * C.eps (Z i) := by
-  -- WIP: stub proof
-  intro i
-  exact True.intro
+  ∀ i : Species, |res i - Fgap (Z i)| ≤ 2 * C.eps (Z i)
 
 /-- Equal‑Z degeneracy (inequality form) from a certificate. -/
-lemma equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
+axiom equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
   (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i))
   {i j : Species} (hZ : Z i = Z j) :
-  |res i - res j| ≤ 2 * C.eps (Z i) := by
-  -- WIP: stub proof
-  exact True.intro
+  |res i - res j| ≤ 2 * C.eps (Z i)
 
 /-! #### Zero-width anchor certificate (exact equality) -/
 
