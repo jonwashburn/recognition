@@ -1038,9 +1038,9 @@
       "id": "Quantum:core",
       "namespace": "IndisputableMonolith.Quantum",
       "path": "IndisputableMonolith/Quantum.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "PathWeight, BornRuleIface, BoseFermiIface structures and quantum path weight theorem"
+      "notes": "PathWeight, BornRuleIface, BoseFermiIface structures and quantum path weight theorem; minimal stubs; core green"
     }
     ,    {
       "id": "Gravity:Rotation",

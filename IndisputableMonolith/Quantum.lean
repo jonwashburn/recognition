@@ -11,7 +11,8 @@ structure PathWeight (γ : Type) where
   cost_additive : ∀ a b, C (comp a b) = C a + C b
   prob : γ → ℝ := fun g => Real.exp (-(C g))
   normSet : Finset γ
-  sum_prob_eq_one : ∑ g in normSet, prob g = 1
+  sum_prob_eq_one : Finset.sum normSet (fun g => prob g) = 1
+-- (prob_comp omitted in WIP minimal stub)
 
 structure BornRuleIface (γ : Type) (PW : PathWeight γ) : Prop where
   normalized : True
@@ -21,11 +22,9 @@ structure BoseFermiIface (γ : Type) (PW : PathWeight γ) : Prop where
   perm_invariant : True
   symmetrization : True
 
-theorem rs_pathweight_iface (γ : Type) (PW : PathWeight γ) :
+ theorem rs_pathweight_iface (γ : Type) (PW : PathWeight γ) :
   BornRuleIface γ PW ∧ BoseFermiIface γ PW := by
   exact ⟨⟨True.intro, True.intro⟩, ⟨True.intro, True.intro⟩⟩
 
 end Quantum
 end IndisputableMonolith
-
-
