@@ -21,39 +21,33 @@ open scoped BigOperators
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)
 -- (Moved to IndisputableMonolith/Gravity/Rotation.lean)
-end IndisputableMonolith
 
 -- (Removed duplicate later `Constants` block; canonicalized above.)
-end IndisputableMonolith
 
 -- (Removed later duplicate `Verification` block; canonicalized above.)
 
 -- (Moved to IndisputableMonolith/Verification/Verification.lean)
-/-! ### Measurement fixtures (parameterized, no axioms) -/
 
+-- ### Measurement fixtures (parameterized, no axioms)
 -- (Moved to IndisputableMonolith/Bridge/Data.lean)
 
-/-! ### Machine-checkable index (rendered, #eval-friendly) -/
-
+-- ### Machine-checkable index (rendered, #eval-friendly)
 -- (Moved to IndisputableMonolith/Verification/Rendered.lean)
-
 -- (Moved to IndisputableMonolith/Verification/Rendered.lean)
-
 -- (Moved to IndisputableMonolith/Verification/Rendered.lean)
-
 -- (Moved to IndisputableMonolith/Verification/Rendered.lean)
 
 -- (Moved to IndisputableMonolith/Verification.lean)
 
-/-- Anchor-invariance holds for all registered dimensionless observables. -/
+-- Anchor-invariance holds for all registered dimensionless observables.
 -- (Moved to IndisputableMonolith/Verification.lean)
 
-/-! ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean) -/
+-- ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean)
 
-/-- ### Ethics invariants (thin Prop layer; refine with concrete lemmas later) -/
+-- ### Ethics invariants (thin Prop layer; refine with concrete lemmas later)
 -- (Moved to IndisputableMonolith/Ethics/Invariants.lean)
 
 -- (Moved to IndisputableMonolith/Verification/Claims.lean)
 
-/-! ### URC Adapters (Monolith → URC obligations) -/
+-- ### URC Adapters (Monolith → URC obligations)
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)
