@@ -31,14 +31,9 @@ lemma alpha_locked_pos : 0 < alpha_locked := by
   have hφ : 1 < phi := one_lt_phi
   have hφpos : 0 < phi := phi_pos
   have hlt : 1 / phi < 1 := by
-    -- Since 1 < phi and both positive, taking inverses reverses inequality: (1/phi) < 1
     have h0 : 0 < (1 : ℝ) := by norm_num
-    have : 0 < phi := hφpos
-    have hinv : phi⁻¹ < (1 : ℝ) := by
-      have := inv_lt_of_lt_mul_of_pos_left (a:=phi) (b:=1) (c:=phi) ?h hφpos
-      · simpa using this
-    · have : 1 < phi := hφ; simpa [one_mul] using (lt_of_le_of_lt (le_of_eq (by simp)) this)
-    simpa [one_div] using hinv
+    have : 1 / phi < 1 / 1 := one_div_lt_one_div_of_lt h0 hφ
+    simpa [one_div] using this
   have : 0 < 1 - 1 / phi := sub_pos.mpr hlt
   have htwo : 0 < (2 : ℝ) := by norm_num
   exact div_pos this htwo

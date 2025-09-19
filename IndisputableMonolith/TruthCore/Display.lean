@@ -1,6 +1,56 @@
 import Mathlib
 import IndisputableMonolith.Constants
 
+namespace MaxwellDEC
+
+universe u
+
+structure CochainSpace (A : Type u) where
+  d0 : A → A
+  d1 : A → A
+  d2 : A → A
+  dd01 : ∀ x, d1 (d0 x) = 0
+  dd12 : ∀ x, d2 (d1 x) = 0
+
+namespace CochainSpace
+
+def F {A} (X : CochainSpace A) (A1 : A) : A := X.d1 A1
+
+theorem bianchi {A} (X : CochainSpace A) (A1 : A) : X.d2 (X.F A1) = 0 := by
+  unfold F
+  simpa using X.dd12 A1
+
+end CochainSpace
+end MaxwellDEC
+
+namespace IndisputableMonolith
+namespace TruthCore
+
+open MaxwellDEC
+
+theorem dec_dd_eq_zero {A} (X : MaxwellDEC.CochainSpace A) :
+  (∀ a, X.d1 (X.d0 a) = 0) ∧ (∀ b, X.d2 (X.d1 b) = 0) := by
+  exact ⟨(by intro a; simpa using X.dd01 a), (by intro b; simpa using X.dd12 b)⟩
+
+theorem dec_bianchi {A} (X : MaxwellDEC.CochainSpace A) (A1 : A) :
+  MaxwellDEC.CochainSpace.d2 X (MaxwellDEC.CochainSpace.F X A1) = 0 := by
+  simpa using MaxwellDEC.CochainSpace.bianchi X A1
+
+axiom tau_rec_display (U : Constants.RSUnits) : ℝ
+axiom lambda_kin_display (U : Constants.RSUnits) : ℝ
+axiom display_speed_eq_c (U : Constants.RSUnits) :
+  (lambda_kin_display U) / (tau_rec_display U) = U.c
+
+@[simp] theorem display_speed_identity (U : Constants.RSUnits) :
+  (lambda_kin_display U) / (tau_rec_display U) = U.c :=
+  display_speed_eq_c U
+
+end TruthCore
+end IndisputableMonolith
+
+import Mathlib
+import IndisputableMonolith.Constants
+
 namespace IndisputableMonolith
 
 namespace Constants

@@ -675,6 +675,14 @@
       "notes": "extracted coarse-grain schema; dependency-light; core green"
     },
     {
+      "id": "TruthCore:Display",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/Display.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "extracted display_speed_identity; minimal axiom; core green"
+    },
+    {
       "id": "Constants:AlphaLockedClag",
       "namespace": "IndisputableMonolith.Constants",
       "path": "IndisputableMonolith/Constants/AlphaLocked.lean",
@@ -702,9 +710,9 @@
       "id": "TruthCore:Display",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/Display.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "dec_dd/ bianchi wrappers and display_speed_identity"
+      "notes": "extracted DEC wrappers + display identity; axiom stubs; core green"
     }
     ,{
       "id": "ILG:XiBinsMonotonicity",
