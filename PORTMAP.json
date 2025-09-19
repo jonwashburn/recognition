@@ -547,6 +547,14 @@
       "notes": "n_of_r radial shape factor + monotonicity axiom; ~22 lines; minimal stubs; core green"
     }
     ,{
+      "id": "LNAL:VM",
+      "namespace": "IndisputableMonolith.LNAL",
+      "path": "IndisputableMonolith/LNAL/VM.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "LNAL virtual machine with 6 registers, instruction set, program execution; ~74 lines; dependency-light"
+    }
+    ,{
       "id": "Constants:KDisplay",
       "namespace": "IndisputableMonolith.Constants.KDisplay",
       "path": "IndisputableMonolith/Constants/KDisplay.lean",
@@ -790,9 +798,9 @@
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",
-      "status": "in_progress",
-      "owner": "agentE",
-      "notes": "Realization struct and lnalRealization helper"
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "Realization struct and lnalRealization helper; axiom stubs for Dynamics deps; core green"
     },
     {
       "id": "Masses:ExponentKernel",
