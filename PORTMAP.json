@@ -331,36 +331,12 @@
       "notes": "extracted delta subgroup; core green"
     },
     {
-      "id": "RS.Witness:minimal",
-      "namespace": "IndisputableMonolith.RH.RS.Witness",
-      "path": "IndisputableMonolith/RH/RS/Witness.lean",
-      "status": "done",
-      "owner": "agentE",
-      "notes": "Extracted Witness scaffold; True props; core green"
-    },
-    {
       "id": "UnitMapping:core",
       "namespace": "IndisputableMonolith.UnitMapping",
       "path": "IndisputableMonolith/UnitMapping.lean",
       "status": "done",
       "owner": "agentE",
       "notes": "extracted affine δ→ℝ mapping; core green"
-    },
-    {
-      "id": "PhiSupport:phi-squared",
-      "namespace": "IndisputableMonolith.PhiSupport",
-      "path": "IndisputableMonolith/PhiSupport.lean",
-      "status": "done",
-      "owner": "agentE",
-      "notes": "extracted phi_squared axiom stub; core green"
-    },
-    {
-      "id": "Causality:Basic",
-      "namespace": "IndisputableMonolith.Causality",
-      "path": "IndisputableMonolith/Causality/Basic.lean",
-      "status": "done",
-      "owner": "agentE",
-      "notes": "Kinematics/ReachN/inBall/Reaches extracted; core green"
     }
   ]
 }
