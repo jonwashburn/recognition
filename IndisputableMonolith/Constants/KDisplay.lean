@@ -93,7 +93,8 @@ lemma tau_rec_display_pos (U : RSUnits) : 0 < tau_rec_display U := by
 
 @[simp] lemma display_speed_eq_c (U : RSUnits) :
   (lambda_kin_display U) / (tau_rec_display U) = RSUnits.c U := by
-  sorry
+  have hτ : tau_rec_display U ≠ 0 := tau_rec_display_ne_zero U
+  exact display_speed_eq_c_of_nonzero U hτ
 
 end RSUnits
 
