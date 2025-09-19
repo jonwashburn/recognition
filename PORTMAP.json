@@ -539,6 +539,14 @@
       "notes": "Params, ParamProps, w_t, n_of_r, xi_of_bin"
     }
     ,{
+      "id": "ILG:NOfRMono",
+      "namespace": "IndisputableMonolith.ILG",
+      "path": "IndisputableMonolith/ILG/NOfRMono.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "n_of_r radial shape factor + monotonicity axiom; ~22 lines; dependency-light"
+    }
+    ,{
       "id": "Constants:KDisplay",
       "namespace": "IndisputableMonolith.Constants.KDisplay",
       "path": "IndisputableMonolith/Constants/KDisplay.lean",
@@ -646,9 +654,9 @@
       "id": "URCAdapters:ELProp",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/ELProp.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "EL_prop/EL_holds (stubbed True)"
+      "notes": "EL_prop/EL_holds with Jlog axioms for stationarity and global minimum; dependency-light; core green"
     },
     {
       "id": "RSBridge:Anchor",
@@ -1005,10 +1013,10 @@
     {
       "id": "Chain:core",
       "namespace": "IndisputableMonolith.Chain",
-      "path": "WIP/IndisputableMonolith/Chain.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Chain.lean",
+      "status": "done",
       "owner": "autonomous-agent",
-      "notes": "Chain operations, AtomicTick, Ledger, and T2/T3 theorems"
+      "notes": "Chain operations, AtomicTick, Ledger, and T2/T3 theorems; minimal Recognition stubs; core green"
     }
     ,    {
       "id": "Gravity:Rotation",

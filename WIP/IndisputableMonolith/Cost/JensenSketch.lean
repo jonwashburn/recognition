@@ -37,7 +37,7 @@ def mkAveragingBounds (F : ℝ → ℝ)
     symm; simp [Real.exp_neg t]
   simp [Jcost, h]
 
-class JensenSketch (F : ℝ → ℝ) extends SymmUnit F : Prop where
+class JensenSketch (F : ℝ → ℝ) : Prop extends SymmUnit F where
   axis_upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
   axis_lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
 
@@ -80,9 +80,8 @@ instance (G : ℝ → ℝ) [LogModel G] : SymmUnit (F_ofLog G) :=
         simpa using Real.log_inv hx
       dsimp [F_ofLog]
       have he : G (Real.log x) = G (- Real.log x) := by
-        simpa using (LogModel.even_log (G:=G) (Real.log x)).symm
-      simpa [hlog]
-        using he
+        rw [LogModel.even_log (G:=G) (Real.log x)].symm
+      rw [hlog, he]
     , unit0 := by
       dsimp [F_ofLog]
       simpa [Real.log_one] using (LogModel.base0 (G:=G)) }
@@ -133,8 +132,12 @@ theorem F_eq_J_on_pos_of_derivation (F : ℝ → ℝ) [AveragingDerivation F] :
 /-- T5 (cost uniqueness on ℝ_{>0}): if `F` satisfies the JensenSketch obligations,
     then `F` agrees with `Jcost` on positive reals. -/
 theorem T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] :
-  ∀ {x : ℝ}, 0 < x → F x = Jcost x :=
-  F_eq_J_on_pos_of_derivation F
+  ∀ {x : ℝ}, 0 < x → F x = Jcost x := by
+  have : AveragingDerivation F := {
+    toSymmUnit := (inferInstance : SymmUnit F)
+    agrees := agrees_on_exp_of_symm_unit F
+  }
+  exact F_eq_J_on_pos_of_derivation F
 
 /-- T5 for log-models: any `G` satisfying `LogModel` yields a cost `F := G ∘ log`
     that agrees with `Jcost` on ℝ>0. -/
