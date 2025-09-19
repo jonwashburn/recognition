@@ -977,6 +977,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; minimal stubs; core green"
+    }
+    ,{
+      "id": "Constants:ILG",
+      "namespace": "IndisputableMonolith.Constants",
+      "path": "IndisputableMonolith/Constants/ILG.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "alpha_locked/Clag constants and positivity axioms; ~22 lines; minimal stubs; core green"
     },
     {
       "id": "Ablation:Harness",
@@ -1121,6 +1129,14 @@
       "status": "done",
       "owner": "autonomous-agent",
       "notes": "Rotation curve lemmas (vrot_sq, flat curves, centripetal acceleration); minimal stubs; core green"
+    },
+    {
+      "id": "Ethics:Core",
+      "namespace": "IndisputableMonolith.Ethics",
+      "path": "WIP/IndisputableMonolith/Ethics/Core.lean",
+      "status": "in_progress",
+      "owner": "autonomous-agent",
+      "notes": "Cost models, preference relations, and ethical invariants; extracting from monolith"
     }
   ]
 }
