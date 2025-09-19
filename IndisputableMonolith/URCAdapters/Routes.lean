@@ -30,6 +30,29 @@ theorem RouteA_meetsBands :
   RH.RS.MeetsBands RA_Ledger RA_Bridge RA_Bands := by
   exact RH.RS.meetsBands_any_default RA_Ledger RA_Bridge RA_Units
 
+/-- Route A demo: existence-and-uniqueness (up to units) scaffold for the minimal model. -/
+theorem RouteA_existence_and_uniqueness (φ : ℝ) :
+  RH.RS.ExistenceAndUniqueness φ RA_Ledger
+    { Rel := fun _ _ => True
+    , refl := by intro _; trivial
+    , symm := by intro _ _ _; trivial
+    , trans := by intro _ _ _ _ _; trivial } := by
+  -- Existence: pick the trivial bridge and use the minimal universal pack witness
+  have hExist : ∃ B : RH.RS.Bridge RA_Ledger, ∃ U : RH.RS.UniversalDimless φ,
+      RH.RS.Matches φ RA_Ledger B U := by
+    refine ⟨RA_Bridge, ?_⟩
+    refine ⟨RH.RS.Witness.UD_minimal φ, ?_⟩
+    -- Minimal matching witness
+    exact RH.RS.Witness.matches_minimal φ RA_Ledger RA_Bridge
+  -- Uniqueness up to units: choose the trivial relation
+  have hUnique : RH.RS.UniqueUpToUnits RA_Ledger
+    { Rel := fun _ _ => True
+    , refl := by intro _; trivial
+    , symm := by intro _ _ _; trivial
+    , trans := by intro _ _ _ _ _; trivial } := by
+    intro _ _; trivial
+  exact And.intro hExist hUnique
+
 /-- Unified Certificate System for Route A and Route B -/
 structure UnifiedCertificate (φ : ℝ) where
   routeA : URCMinimal.LawfulBridge

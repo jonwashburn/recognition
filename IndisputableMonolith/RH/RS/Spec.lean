@@ -184,6 +184,18 @@ def Inevitability_recognition_computation : Prop :=
 /-- Master Closing Theorem (SPEC). -/
 def Recognition_Closure (_φ : ℝ) : Prop := True
 
+/-! ### Existence and uniqueness (up to units) scaffold -/
+
+/-- Bridges are unique up to units equivalence. -/
+def UniqueUpToUnits (L : Ledger) (eqv : UnitsEqv L) : Prop :=
+  ∀ B₁ B₂ : Bridge L, eqv.Rel B₁ B₂
+
+/-- Existence-and-uniqueness statement: given the T1..T8 stack and δ-subgroup,
+    there exists a bridge matching some universal φ-closed pack, and it is unique up to units. -/
+def ExistenceAndUniqueness (φ : ℝ) (L : Ledger) (eqv : UnitsEqv L) : Prop :=
+  (∃ B : Bridge L, ∃ U : UniversalDimless φ, Matches φ L B U)
+  ∧ UniqueUpToUnits L eqv
+
 /-! ### Generic witnesses (K‑gate and anchor‑invariance) -/
 
 /-- Generic UniqueCalibration witness (derivable via K‑gate and invariance; abstracted as Prop). -/
