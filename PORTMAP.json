@@ -427,6 +427,22 @@
       "notes": "BFS finset ball and cardinality bounds; core green"
     }
     ,{
+      "id": "MaxwellDEC:Equations",
+      "namespace": "IndisputableMonolith.MaxwellDEC",
+      "path": "IndisputableMonolith/MaxwellDEC.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "extracted Maxwell DEC scaffold; True stubs; core green"
+    }
+    ,{
+      "id": "MaxwellDEC:scaffold",
+      "namespace": "IndisputableMonolith.MaxwellDEC",
+      "path": "IndisputableMonolith/MaxwellDEC.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Simplex/DForm/coboundary/Hodge/Equations PEC scaffold"
+    }
+    ,{
       "id": "Verification:RenderedIndex",
       "namespace": "IndisputableMonolith.Verification.Rendered",
       "path": "IndisputableMonolith/Verification/Rendered.lean",
@@ -454,9 +470,9 @@
       "id": "Causality:ConeBound",
       "namespace": "IndisputableMonolith.Causality.ConeBound",
       "path": "IndisputableMonolith/Causality/ConeBound.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "BFS finset ball and cardinality bounds"
+      "notes": "BFS finset ball and cardinality bounds; core green"
     }
   ]
 }
