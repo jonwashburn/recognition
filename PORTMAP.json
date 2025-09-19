@@ -350,17 +350,9 @@
       "id": "Bridge:BridgeData",
       "namespace": "IndisputableMonolith.Bridge.BridgeData",
       "path": "IndisputableMonolith/Bridge/BridgeData.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "BridgeData structure, lambda_rec, K_A/K_B, dimensionless identities; ~134 lines"
-    }
-    ,{
-      "id": "Bridge:BridgeData",
-      "namespace": "IndisputableMonolith.BridgeData",
-      "path": "IndisputableMonolith/Bridge/BridgeData.lean",
-      "status": "in_progress",
-      "owner": "cursor-gpt5",
-      "notes": "BridgeData physical constants, lambda_rec functions, K-gate verification; ~136 lines; dependency-light"
+      "notes": "BridgeData structure, lambda_rec, K_A/K_B, dimensionless identities; ~134 lines; axiom stubs for Constants/Recognition; core green"
     },
     {
       "id": "LedgerUnits:delta-one",
