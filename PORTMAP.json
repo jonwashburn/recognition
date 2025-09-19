@@ -474,13 +474,13 @@
       "owner": "agentE",
       "notes": "moved dimensionless_const; dependency-light; core green"
     }
-    ,{
+    ,    {
       "id": "Verification:Claims",
-      "namespace": "IndisputableMonolith.Verification",
+      "namespace": "IndisputableMonolith",
       "path": "IndisputableMonolith/Verification/Claims.lean",
       "status": "done",
-      "owner": "agentE",
-      "notes": "moved Claim types and proof-based checkers; core green"
+      "owner": "cursor-gpt5",
+      "notes": "Claim, KGateInput, KGateResult structures and claim evaluation functions; axiom stubs; core green"
     }
     ,{
       "id": "Causality:ConeBound",

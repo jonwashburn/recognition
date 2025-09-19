@@ -1,18 +1,10 @@
 import Mathlib
+import IndisputableMonolith.Core
+
+open IndisputableMonolith.Constants
 
 namespace IndisputableMonolith
 namespace Constants
-
-/-- Axiom stubs for dependencies -/
-noncomputable def phi : ℝ := 0
-axiom one_lt_phi : 1 < phi
-noncomputable def RSUnits : Type := Unit
-noncomputable def RSUnits.pos_c (U : RSUnits) : 0 < RSUnits.c U := sorry
-noncomputable def RSUnits.c (U : RSUnits) : ℝ := 1
-noncomputable def RSUnits.pos_tau0 (U : RSUnits) : 0 < RSUnits.tau0 U := sorry
-noncomputable def RSUnits.tau0 (U : RSUnits) : ℝ := 1
-noncomputable def RSUnits.ell0 (U : RSUnits) : ℝ := 1
-axiom c_mul_tau0_eq_ell0 : ∀ U : RSUnits, RSUnits.c U * RSUnits.tau0 U = RSUnits.ell0 U
 
 /-! ### Dimensionless bridge ratio K and display equalities -/
 
