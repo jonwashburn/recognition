@@ -40,5 +40,3 @@ def hasCycle (G : StakeGraph) (nodes : List Stakeholder) : Bool :=
 end StakeGraph
 end Ethics
 end IndisputableMonolith
-
-
