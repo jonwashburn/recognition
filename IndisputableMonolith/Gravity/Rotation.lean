@@ -64,17 +64,7 @@ lemma g_of_linear_Menc (S : RotSys) (α : ℝ)
         _ = S.G * α := by field_simp [hrne]
     dsimp [vrot]
     have hnonneg : 0 ≤ S.G * S.Menc r / r := by
-      have : 0 ≤ S.G * α := by
-        have hα_nonneg : 0 ≤ α := by
-          have : 0 ≤ α * r := by rw [hM]; exact S.nonnegM r
-          have hr_pos : 0 < r := hr
-          have : 0 ≤ α ∧ 0 ≤ r ∨ α ≤ 0 ∧ r ≤ 0 := mul_nonneg_iff.mp this
-          cases this with
-          | inl h => exact h.1
-          | inr h => contradiction
-        exact mul_nonneg (le_of_lt S.posG) hα_nonneg
-      rw [←hfrac] at this
-      exact this
+      exact div_nonneg (mul_nonneg (le_of_lt S.posG) (S.nonnegM r)) (le_of_lt hr)
     calc
       Real.sqrt (S.G * S.Menc r / r) ^ 2 = S.G * S.Menc r / r := by
         rw [Real.sq_sqrt hnonneg]

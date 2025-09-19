@@ -1006,9 +1006,9 @@
       "id": "Gravity:Rotation",
       "namespace": "IndisputableMonolith.Gravity.Rotation",
       "path": "IndisputableMonolith/Gravity/Rotation.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Rotation curve lemmas (vrot_sq, flat curves, centripetal acceleration); ~50 lines; dependency-light"
+      "notes": "Rotation curve lemmas (vrot_sq, flat curves, centripetal acceleration); extracted with full proofs; core green"
     }
   ]
 }
