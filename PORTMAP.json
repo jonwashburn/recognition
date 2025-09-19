@@ -490,6 +490,14 @@
       "owner": "agentE",
       "notes": "BFS finset ball and cardinality bounds; core green"
     }
+    ,{
+      "id": "Ethics:Invariants",
+      "namespace": "IndisputableMonolith.Ethics.Invariants",
+      "path": "IndisputableMonolith/Ethics/Invariants.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Monotonicity/Symmetry/Stability props; trivial witnesses"
+    }
   ]
 }
 

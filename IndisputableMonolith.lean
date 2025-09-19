@@ -631,7 +631,6 @@ end LedgerUnits
 
 /-! ## ConeBound: computable BFS balls and equivalence to `ballP` (no sorries). -/
 -- (Moved to IndisputableMonolith/Causality/ConeBound.lean)
-namespace ConeBound
 
 open Causality
 open scoped BigOperators
@@ -4842,105 +4841,18 @@ end BridgeData
 
 /-! ### Machine-checkable index (rendered, #eval-friendly) -/
 
-/-- Rendered summary of a dimensionless, anchor-invariant claim. -/
-structure RenderedClaim where
-  id        : String
-  statement : String
-  proved    : Bool
-deriving Repr
+-- (Moved to IndisputableMonolith/Verification/Rendered.lean)
 
-/-- List of core dimensionless claims with their proof references. -/
-def dimlessClaimsRendered : List RenderedClaim :=
-  [ { id := "K_A_ratio", statement := "tau_rec/τ0 = K (anchor-invariant)", proved := true }
-  , { id := "K_B_ratio", statement := "lambda_kin/ℓ0 = K (anchor-invariant)", proved := true }
-  , { id := "K_gate",    statement := "(tau_rec/τ0) = (lambda_kin/ℓ0)", proved := true }
-  , { id := "display_speed_identity", statement := "λ_kin/τ_rec = c", proved := true }
-  , { id := "gap_delta_time_identity", statement := "δ_time = 3/64", proved := true }
-  , { id := "dec_dd_eq_zero", statement := "d∘d = 0 (DEC)", proved := true }
-  , { id := "dec_bianchi", statement := "Bianchi dF = 0 (DEC)", proved := true }
-  , { id := "eight_tick_min", statement := "8 ≤ minimal period", proved := true }
-  , { id := "period_exactly_8", statement := "∃ cover with period = 8", proved := true }
-  , { id := "quantum_ifaces", statement := "Born/Bose–Fermi ifaces from PathWeight", proved := true }
-  , { id := "sat_lower_bound", statement := "SAT recognition lower bound (Ω(n) queries)", proved := true }
-  , { id := "URC.lawful_physical", statement := "LawfulPhysical obligations (units, φ‑rung, eight‑beat, EL)", proved := false }
-  , { id := "URC.lawful_computational", statement := "LawfulComputational (recognition lower bounds; RS-preserving)", proved := false }
-  , { id := "URC.lawful_ethical", statement := "LawfulEthical invariants (monotonicity/symmetry)", proved := true }
-  , { id := "URC.lambda_rec_unique", statement := "∃! λ_rec normalizer aligning J_log, Tr, EthicsCost", proved := true }
-  , { id := "URC.AE_skeleton", statement := "URC Theorem (A)–(E) skeleton present", proved := true }
-  , { id := "URC.C_uniqueness", statement := "Uniqueness up to gauge (units, φ‑rung)", proved := true }
-  , { id := "URC.D_no_cheat", statement := "No‑cheat invariants (8‑beat, EL, Tr lower bounds)", proved := true }
-  ]
+-- (Moved to IndisputableMonolith/Verification/Rendered.lean)
 
-/-- Rendered summary of a gate: input slots and symbolic output. -/
-structure GateSpec where
-  id      : String
-  inputs  : List String
-  output  : String
-deriving Repr
+-- (Moved to IndisputableMonolith/Verification/Rendered.lean)
 
-/-- Bridge-level gates (parameterized, no axioms) with symbolic witnesses. -/
-def gatesRendered : List GateSpec :=
-  [ { id := "KGate"
-    , inputs := ["u(ℓ0)", "u(λ_rec)", "k", "(optional) ρ", "K_B"]
-    , output := "Z = |K_A - K_B| / (k · (u_ell0 + u_lrec)); passAt = (Z ≤ 1)"
-    }
-  , { id := "BandsChecker"
-    , inputs := ["cBand: [lo,hi]", "K identities", "KGate"]
-    , output := "Pass if c ∈ cBand ∧ K_A=K ∧ K_B=K ∧ (K_A=K_B)"
-    }
-  , { id := "TwoLandings"
-    , inputs := ["Route A (time-first)", "Route B (length-first)"]
-    , output := "Calibrations agree up to units equivalence (UnitsEqv)"
-    }
-  , { id := "URC.CertificatesGate"
-    , inputs := ["MassCert", "RotationCert", "OuterBudgetCert", "RecogCostCert", "EthicsCert"]
-    , output := "All certificates pass under lawful bridges"
-    }
-  , { id := "URC.FixedPointT"
-    , inputs := ["LawfulPhysical", "LawfulComputational", "LawfulEthical", "λ_rec>0", "Certificates"]
-    , output := "Ledger' = T(inputs); check Ledger' = Ledger (fixed point)"
-    }
-  , { id := "URC.A_to_B"
-    , inputs := ["passesAll", "(hu,hφ,he8,hEL,hTr) obligations"]
-    , output := "B: units/φ‑rung/8‑beat/EL/Tr‑LB bundle holds"
-    }
-  , { id := "URC.B_to_C"
-    , inputs := ["B: units, φ‑rung, eight‑beat, EL, Tr-lower-bounds"]
-    , output := "C: uniqueness up to gauge (placeholder)"
-    }
-  , { id := "URC.C_to_D"
-    , inputs := ["C"]
-    , output := "D: no‑cheat invariants (placeholder)"
-    }
-  , { id := "URC.D_to_E"
-    , inputs := ["D"]
-    , output := "E: fixed‑point closure (T I = T I)"
-    }
-  ]
+-- (Moved to IndisputableMonolith/Verification/Rendered.lean)
 
-/-- Canonical "no knobs" count at the proof layer (dimensionless theorems). -/
-def knobsCount : Nat := 0
-@[simp] theorem no_knobs_proof_layer : knobsCount = 0 := rfl
-
-/-- Zero-knobs proof bundle export: lists core dimensionless proofs (discoverable). -/
-def zeroKnobsExports : List String :=
-  [ "K_gate"
-  , "cone_bound"
-  , "eight_tick_min"
-  , "period_exactly_8"
-  , "dec_dd_eq_zero"
-  , "dec_bianchi"
-  , "display_speed_identity"
-  , "gap_delta_time_identity"
-  , "recognition_lower_bound_sat"
-  ]
+-- (Moved to IndisputableMonolith/Verification.lean)
 
 /-- Anchor-invariance holds for all registered dimensionless observables. -/
-theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
-  BridgeEval K_A_obs U = BridgeEval K_A_obs U' := anchor_invariance K_A_obs h
-
-theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
-  BridgeEval K_B_obs U = BridgeEval K_B_obs U' := anchor_invariance K_B_obs h
+-- (Moved to IndisputableMonolith/Verification.lean)
 
 /-! ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean) -/
 
