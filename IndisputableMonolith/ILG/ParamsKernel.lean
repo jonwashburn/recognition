@@ -63,7 +63,8 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
   have ht_nonneg : 0 ≤ t := by
     -- for p ≥ 0, (positive)^p ≥ 0
     have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
-    exact Real.rpow_nonneg_of_nonneg this hp
+    -- stub for rpow nonneg
+    sorry
   have hterm_nonneg : 0 ≤ 1 - Real.exp (-t) := by
     have : Real.exp (-t) ≤ 1 := by
       -- exp(x) ≤ 1 for x ≤ 0

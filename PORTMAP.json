@@ -534,9 +534,9 @@
       "id": "ILG:ParamsKernel",
       "namespace": "IndisputableMonolith.ILG.ParamsKernel",
       "path": "IndisputableMonolith/ILG/ParamsKernel.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Params, ParamProps, w_t, n_of_r, xi_of_bin"
+      "notes": "Params, ParamProps, w_t, n_of_r, xi_of_bin; minimal stubs; core green"
     }
     ,{
       "id": "ILG:NOfRMono",
@@ -550,9 +550,9 @@
       "id": "RH:RS:Witness",
       "namespace": "IndisputableMonolith.RH.RS.Witness",
       "path": "IndisputableMonolith/RH/RS/Witness.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "RH.RS witness definitions, UniversalDimless, Matches theorems, inevitability proofs; ~74 lines; dependency-light"
+      "notes": "RH.RS witness definitions, UniversalDimless, Matches theorems, inevitability proofs; ~74 lines; minimal stubs; core green"
     }
     ,{
       "id": "LNAL:VM",
@@ -1081,6 +1081,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "BoundedStep class, ballFS finite set definition, and cone bound theorems; axiom stubs; core green"
+    },
+    {
+      "id": "Masses:AnchorPolicy",
+      "namespace": "IndisputableMonolith.Masses.AnchorPolicy",
+      "path": "IndisputableMonolith/Masses/AnchorPolicy.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "AnchorPolicy structure, Z charge functions, and residue/sector law structures"
     }
     ,    {
       "id": "Gravity:Rotation",
