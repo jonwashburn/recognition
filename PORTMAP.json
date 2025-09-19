@@ -834,6 +834,14 @@
       "owner": "cursor-gpt5",
       "notes": "Expose phi_fixed_point into Cost namespace; axiom stubs for Constants deps; core green"
     }
+    ,{
+      "id": "Cost:FlogEL",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/FlogEL.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Flog def + EL equivalence theorems; 43 lines; dependency-light"
+    }
   ]
 }
 
