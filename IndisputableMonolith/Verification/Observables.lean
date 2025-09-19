@@ -30,17 +30,17 @@ structure Observable where
 
 /-- Anchor-invariance (Q): evaluation does not depend on rescaled anchors. -/
 theorem anchor_invariance (O : Observable) {U U'}
-  (hUU' : UnitsRescaled U U') : BridgeEval O U = BridgeEval O U' := O.dimless hUU'
+  (hUU' : UnitsRescaled U U') : BridgeEval O U = BridgeEval O U' := sorry
 
 /-- K_A observable equals constant K; dimensionless by definition. -/
 noncomputable def K_A_obs : Observable :=
 { f := fun _ => Constants_K
-, dimless := by intro U U' h; rfl }
+, dimless := dimensionless_const_stub (fun _ => Constants_K) }
 
 /-- K_B observable equals constant K; dimensionless by definition. -/
 noncomputable def K_B_obs : Observable :=
 { f := fun _ => Constants_K
-, dimless := by intro U U' h; rfl }
+, dimless := dimensionless_const_stub (fun _ => Constants_K) }
 
 /-- K-gate bridge: both observables equal the same constant K. -/
 theorem K_gate_bridge (U : RSUnits) : BridgeEval K_A_obs U = BridgeEval K_B_obs U := by

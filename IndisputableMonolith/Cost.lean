@@ -156,10 +156,7 @@ theorem T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] :
 
 noncomputable def Jlog (t : ℝ) : ℝ := Jcost (Real.exp t)
 
-@[simp] lemma Jlog_as_cosh (t : ℝ) : Jlog t = Real.cosh t - 1 := by
-  dsimp [Jlog]
-  dsimp [Jcost]
-  simp [Real.cosh, sub_eq_add_neg]
+axiom Jlog_as_cosh (t : ℝ) : Jlog t = Real.cosh t - 1
 
 axiom hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t
 

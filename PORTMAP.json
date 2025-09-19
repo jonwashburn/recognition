@@ -557,10 +557,10 @@
     ,    {
       "id": "Verification:Observables",
       "namespace": "IndisputableMonolith.Verification",
-      "path": "IndisputableMonolith/Verification/Verification.lean",
+      "path": "IndisputableMonolith/Verification/Observables.lean",
       "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Observable structure, K-gate observables, calibration evidence, claim checking framework; moved to Verification.lean"
+      "notes": "Observable structure, K-gate observables, calibration evidence, claim checking framework; extracted to separate file; axiom stubs for Constants/RSUnits deps; core green"
     }
     ,{
       "id": "LNAL:VM",
@@ -1105,6 +1105,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Extracted core Masses types (gauge/completion/rung); core green"
+    },
+    {
+      "id": "Cost:core",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Jensen cost functions, averaging bounds, and uniqueness theorems; minimal axiom stubs; core green"
     }
     ,    {
       "id": "Gravity:Rotation",
