@@ -814,9 +814,9 @@
       "id": "Masses:ExponentKernel",
       "namespace": "IndisputableMonolith.Masses.Exponent",
       "path": "IndisputableMonolith/Masses/ExponentKernel.lean",
-      "status": "in_progress",
-      "owner": "agentE",
-      "notes": "GaugeEq relation and factorization/functoriality helpers"
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "GaugeEq relation and factorization/functoriality helpers; refl/symm/trans lemmas; core green"
     },
     {
       "id": "Constants:RSDisplay",
