@@ -48,5 +48,3 @@ axiom ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤
 end ConeBound
 end Causality
 end IndisputableMonolith
-
-
