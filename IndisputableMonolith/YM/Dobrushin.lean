@@ -38,11 +38,13 @@ axiom dobrushin_coeff_nonneg {α β : Type} (P : MarkovKernel α β) : 0 ≤ dob
 axiom dobrushin_coeff_le_one {α β : Type} (P : MarkovKernel α β) : dobrushin_coeff P ≤ 1
 
 /-- Main Dobrushin contraction theorem: TV distance contracts under kernel composition. -/
-axiom dobrushin_contraction {α β γ : Type} (P : MarkovKernel α β) (Q R : MarkovKernel β γ) :
-  tv_distance (compose_kernels P Q) (compose_kernels P R) ≤ (dobrushin_coeff P) * tv_distance Q R
+theorem dobrushin_contraction {α β γ : Type} (P : MarkovKernel α β) (Q R : MarkovKernel β γ) :
+  tv_distance (compose_kernels P Q) (compose_kernels P R) ≤ (dobrushin_coeff P) * tv_distance Q R :=
+  sorry -- WIP: depends on actual kernel composition and contraction proof
 
 /-- Axiom stub for kernel composition - depends on category theory/functional composition. -/
-axiom compose_kernels {α β γ : Type} (P : MarkovKernel α β) (Q : MarkovKernel β γ) : MarkovKernel α γ
+noncomputable def compose_kernels {α β γ : Type} (P : MarkovKernel α β) (Q : MarkovKernel β γ) : MarkovKernel α γ :=
+  sorry -- WIP: depends on actual kernel composition implementation
 
 /-- Overlap implies TV contraction for small perturbations. -/
 axiom overlap_implies_contraction {α β : Type} (P Q : MarkovKernel α β) :

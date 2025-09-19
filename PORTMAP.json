@@ -1151,8 +1151,8 @@
       "namespace": "IndisputableMonolith.Bridge.BridgeData",
       "path": "IndisputableMonolith/Bridge/DataExt.lean",
       "status": "done",
-      "owner": "autonomous-agent",
-      "notes": "Physical constants, lambda_rec functions, K-gate verification, and fine-structure constants; minimal stubs; core green"
+      "owner": "cursor-gpt5",
+      "notes": "Physical constants, lambda_rec functions, K-gate verification, BridgeData structure; axiom stubs; core green"
     }
   ]
 }

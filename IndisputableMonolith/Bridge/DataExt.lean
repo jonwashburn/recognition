@@ -110,8 +110,9 @@ structure Witness where
 
 /-- Electron mass in units of E_coh: m_e/E_coh = Φ(r_e + 𝔽(Z_e)). -/
 @[simp] noncomputable def m_e_over_Ecoh : ℝ :=
-  -- Stub for PhiPow function from Recognition module
-  sorry
+  Recognition_PhiPow
+    ((Recognition_r Recognition_Species Recognition_Species_e : ℝ)
+     + Recognition_Fgap (Recognition_Z Recognition_Species Recognition_Species_e))
 
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 @[simp] noncomputable def m_e (B : BridgeData) : ℝ := m_e_over_Ecoh * E_coh B
