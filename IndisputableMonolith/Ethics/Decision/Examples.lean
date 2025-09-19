@@ -38,5 +38,3 @@ end Examples
 end Decision
 end Ethics
 end IndisputableMonolith
-
-

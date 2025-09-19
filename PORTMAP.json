@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Ethics.Decision:Parity",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Parity",
+      "path": "IndisputableMonolith/Ethics/Decision/Parity.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Parity helpers extracted"
+    },
+    {
       "id": "Ethics.Decision:Examples",
       "namespace": "IndisputableMonolith.Ethics.Decision.Examples",
       "path": "IndisputableMonolith/Ethics/Decision/Examples.lean",
