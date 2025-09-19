@@ -20,7 +20,7 @@ structure Claim where
   status    : ClaimStatus := .unchecked
 
 /-- Smart constructor that only accepts anchor-invariant expressions. -/
-def dimensionless_claim (id : String) (stype : @StatementType)
+def dimensionless_claim (id : String) (stype : StatementType)
   (expr : Observable) (target : ℝ) (tol : Option ℝ := none) : Claim :=
 { id := id, stype := stype, expr := expr, target := target, tol := tol, status := .unchecked }
 
