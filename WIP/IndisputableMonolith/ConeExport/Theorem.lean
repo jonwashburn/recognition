@@ -1,5 +1,4 @@
 import Mathlib
-import IndisputableMonolith.Causality.Reach
 import IndisputableMonolith.LightCone.StepBounds
 import IndisputableMonolith.Constants
 
@@ -7,7 +6,7 @@ namespace IndisputableMonolith
 namespace ConeExport
 
 variable {α : Type _}
-variable (K : Causality.Kinematics α)
+variable (K : LightCone.Local.Kinematics α)
 variable (U : Constants.RSUnits)
 variable (time rad : α → ℝ)
 
@@ -15,7 +14,7 @@ variable (time rad : α → ℝ)
     `rad y - rad x ≤ U.c * (time y - time x)` with no `n` in the statement. -/
 theorem cone_bound_export
   (H : LightCone.StepBounds K U time rad)
-  {n x y} (h : Causality.ReachN K n x y) :
+  {n x y} (h : LightCone.Local.ReachN K n x y) :
   rad y - rad x ≤ U.c * (time y - time x) := by
   simpa using (LightCone.StepBounds.cone_bound (K:=K) (U:=U) (time:=time) (rad:=rad) H h)
 

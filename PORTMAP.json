@@ -954,13 +954,13 @@
       "owner": "cursor-gpt5",
       "notes": "extracted T4 unique constant, gauge classes; minimal axiom stubs; core green"
     }
-    ,{
+    ,    {
       "id": "Constants:RSDisplay",
       "namespace": "IndisputableMonolith.Constants.RSUnits",
       "path": "IndisputableMonolith/Constants/RSDisplay.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Display functions tau_rec_display/lambda_kin_display and K-gate theorems; 105 lines; dependency-light"
+      "notes": "extracted RSUnits display functions and K-gate theorems; minimal axiom stubs; core green"
     }
     ,    {
       "id": "Recognition:Certification",
