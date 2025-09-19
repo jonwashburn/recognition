@@ -798,9 +798,9 @@
       "id": "TruthCore:TimeKernelDimensionless",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/TimeKernel.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "alias theorem using ILG.w_time_ratio_rescale"
+      "notes": "time_kernel_dimensionless axiom; minimal deps; core green"
     }
     ,{
       "id": "TruthCore:MRDScaffold",

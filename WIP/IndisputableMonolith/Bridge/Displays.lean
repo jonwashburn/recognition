@@ -32,5 +32,3 @@ end BridgeData
 end
 end Bridge
 end IndisputableMonolith
-
-
