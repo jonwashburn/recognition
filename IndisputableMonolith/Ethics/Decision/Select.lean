@@ -17,8 +17,8 @@ def crossAgentParityOk (P : Policy A) (xs : List (Request A)) : Bool :=
           let rate (a : String) : ℝ :=
             let zs := ys.filter (fun r => agentOf r = a)
             if zs.length = 0 then 1 else
-              let acc := (gs.filter (fun r => gatesOk (P:=P) r)).length
-              (acc : ℝ) / (gs.length : ℝ)
+              let acc := (zs.filter (fun r => gatesOk (P:=P) r)).length
+              (acc : ℝ) / (zs.length : ℝ)
           let base := rate a
           as.all (fun b => |rate b - base| ≤ P.parityTol)
 

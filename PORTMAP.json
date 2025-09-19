@@ -19,6 +19,14 @@
       "notes": "Parity helpers extracted"
     },
     {
+      "id": "Ethics.Alignment:Morph",
+      "namespace": "IndisputableMonolith.Ethics.Alignment.Morph",
+      "path": "IndisputableMonolith/Ethics/Alignment/Morph.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Morph + mapMicro + invariance lemmas"
+    },
+    {
       "id": "Ethics.Decision:Select",
       "namespace": "IndisputableMonolith.Ethics.Decision.Select",
       "path": "IndisputableMonolith/Ethics/Decision/Select.lean",
