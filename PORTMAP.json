@@ -913,6 +913,22 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "phi squared and fixed point lemmas; minimal algebraic proofs; core green"
+    },
+    {
+      "id": "Ablation:Harness",
+      "namespace": "IndisputableMonolith.Ablation",
+      "path": "IndisputableMonolith/Ablation.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "Z transformations and anchor equality proofs for ablation testing; core green"
+    }
+    ,{
+      "id": "Masses:Ribbons",
+      "namespace": "IndisputableMonolith.Masses.Ribbons",
+      "path": "IndisputableMonolith/Masses/Ribbons.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Ribbon structure, Word operations, cancellation/reduction; 93 lines; dependency-light"
     }
   ]
 }
