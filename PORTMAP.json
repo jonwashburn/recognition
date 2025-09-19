@@ -734,9 +734,9 @@
       "id": "Constants:RSUnitsHelpers",
       "namespace": "IndisputableMonolith.Constants",
       "path": "IndisputableMonolith/Constants/RSUnitsHelpers.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "c_pos and c_mul_tau0_eq_ell0 helpers"
+      "notes": "c_mul_tau0_eq_ell0 helper moved; core green"
     },
     {
       "id": "Cost:Demo",
@@ -753,6 +753,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Jcost core definitions and typeclasses; dependency-light; core green"
+    },
+    {
+      "id": "LNAL:VM",
+      "namespace": "IndisputableMonolith.LNAL",
+      "path": "IndisputableMonolith/LNAL/VM.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "LNAL virtual machine: registers, instructions, state, and step function"
     },
     {
       "id": "Measurement:Realization",
