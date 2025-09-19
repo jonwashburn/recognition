@@ -1033,6 +1033,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "GapSeries, Curvature modules with golden ratio, gap coefficients, and fine-structure predictions; core green"
+    },
+    {
+      "id": "Quantum:core",
+      "namespace": "IndisputableMonolith.Quantum",
+      "path": "IndisputableMonolith/Quantum.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "PathWeight, BornRuleIface, BoseFermiIface structures and quantum path weight theorem"
     }
     ,    {
       "id": "Gravity:Rotation",
