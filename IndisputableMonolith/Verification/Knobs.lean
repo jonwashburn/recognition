@@ -18,5 +18,3 @@ namespace Verification
 
 end Verification
 end IndisputableMonolith
-
-
