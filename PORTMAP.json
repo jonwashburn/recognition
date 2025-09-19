@@ -758,9 +758,9 @@
       "id": "Masses:Ribbons.WordAbbrev",
       "namespace": "IndisputableMonolith.Masses.Ribbons",
       "path": "IndisputableMonolith/Masses/Ribbons/Word.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "abbrev Word := List Ribbon"
+      "notes": "abbrev Word := List Ribbon; extracted to separate file"
     },
     {
       "id": "Cost:Demo",
@@ -979,12 +979,12 @@
       "notes": "extracted RSUnits display functions and K-gate theorems; minimal axiom stubs; core green"
     },
     {
-      "id": "Verification:Claims",
-      "namespace": "IndisputableMonolith",
-      "path": "IndisputableMonolith/Verification/Claims.lean",
-      "status": "done",
+      "id": "Verification:Core",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Core.lean",
+      "status": "in_progress",
       "owner": "cursor-gpt5",
-      "notes": "Claim, KGateInput, KGateResult structures and claim evaluation functions; moved to Verification.lean"
+      "notes": "UnitsRescaled, Observable, K_A/K_B_obs, CalibrationEvidence structures and K-gate verification"
     }
     ,    {
       "id": "Recognition:Certification",
