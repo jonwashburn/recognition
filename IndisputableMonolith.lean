@@ -335,11 +335,10 @@ deriving Repr
   { KA := KA, KB := KB, u := u, Z := Z, pass := decide (Z ≤ 1) }
 
 /-- Tick from anchors via hop map λ_rec = c · τ0. -/
-@[simp] def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
+-- (Moved to IndisputableMonolith/Bridge/Displays.lean)
 
 /-- Coherence energy: E_coh = φ^-5 · (2π ħ / τ0). -/
-@[simp] def E_coh (B : BridgeData) : ℝ :=
-  (1 / (Constants.phi ^ (5 : Nat))) * (2 * Real.pi * B.hbar / (tau0 B))
+-- (Moved to IndisputableMonolith/Bridge/Displays.lean)
 
 /-- Dimensionless inverse fine-structure constant (seed–gap–curvature). -/
 -- (Moved to IndisputableMonolith/Constants/Alpha.lean)

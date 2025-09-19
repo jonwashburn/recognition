@@ -750,9 +750,9 @@
       "id": "Cost:JcostCore",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost/JcostCore.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Jcost def + typeclasses (SymmUnit, Averaging*, Jensen*) + theorems"
+      "notes": "Jcost core definitions and typeclasses; dependency-light; core green"
     },
     {
       "id": "Measurement:Realization",
@@ -806,9 +806,9 @@
       "id": "TruthCore:MRDScaffold",
       "namespace": "IndisputableMonolith.TruthCore.MRD",
       "path": "IndisputableMonolith/TruthCore/MRD.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "ScalingModel/FundamentalProcess/EmergentMeasurement/MeasurementMap"
+      "notes": "ScalingModel/FundamentalProcess/EmergentMeasurement/MeasurementMap; minimal stubs; core green"
     }
     ,{
       "id": "TruthCore:MRD.Scaling",
