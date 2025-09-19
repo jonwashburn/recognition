@@ -329,6 +329,14 @@
       "status": "in_progress",
       "owner": "agentE",
       "notes": "Delta subgroup, fromZ/toZ, kOf/rungOf, δ=1 equiv"
+    },
+    {
+      "id": "UnitMapping:core",
+      "namespace": "IndisputableMonolith.UnitMapping",
+      "path": "IndisputableMonolith/UnitMapping.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "UnitMapping shard extracted"
     }
   ]
 }

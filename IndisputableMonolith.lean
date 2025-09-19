@@ -752,6 +752,7 @@ lemma kOf_step_succ (δ : ℤ) (hδ : δ ≠ 0) (m : Nat) :
 
 
 
+-- (Moved to IndisputableMonolith/LedgerUnits.lean)
 end LedgerUnits
 
 /-! ## UnitMapping: affine mappings from δ-ledger units to context scales (no numerics) -/
