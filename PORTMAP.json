@@ -739,6 +739,14 @@
       "notes": "c_mul_tau0_eq_ell0 helper moved; core green"
     },
     {
+      "id": "Verification:KnobsCount",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/KnobsCount.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "knobsCount def and no_knobs_proof_layer"
+    },
+    {
       "id": "Cost:Demo",
       "namespace": "IndisputableMonolith.CostDemo",
       "path": "IndisputableMonolith/Cost/Demo.lean",
