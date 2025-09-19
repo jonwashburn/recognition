@@ -494,7 +494,6 @@ def zeroKnobsExports : List String :=
   , "gap_delta_time_identity"
   , "recognition_lower_bound_sat"
   ]
-
 /-- Anchor-invariance holds for all registered dimensionless observables. -/
 theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
   BridgeEval K_A_obs U = BridgeEval K_A_obs U' := anchor_invariance K_A_obs h
@@ -1484,7 +1483,6 @@ theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
   -- This is exactly Potential.T4_unique_up_to_const_on_component
   simpa using Potential.T4_unique_up_to_const_on_component
     (M:=M) (δ:=δ) (p := phi L) (q := phi L') (hp := hL) (hq := hL') (x0 := x0)
-
 end LedgerUniqueness
 
 -- ClassicalBridge (gauge, setoid, schedule) moved to `IndisputableMonolith/Recognition.lean`.
@@ -1980,7 +1978,6 @@ lemma hasDerivAt_Flog_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t
   deriv (Flog F) 0 = 0 := by
   classical
   simpa using (hasDerivAt_Flog_of_derivation (F:=F) 0).deriv
-
 lemma Flog_nonneg_of_derivation {F : ℝ → ℝ} [AveragingDerivation F] (t : ℝ) :
   0 ≤ Flog F t := by
   have := Jlog_nonneg t
@@ -2468,7 +2465,6 @@ universe v
 /-- Abstract ledger carrier to be instantiated by IndisputableMonolith. -/
 structure Ledger where
   Carrier : Sort u
-
 /-- Bridge from ledger to observables (opaque here). -/
 structure Bridge (L : Ledger) : Type := (dummy : Unit := ())
 
@@ -3454,7 +3450,6 @@ deriving DecidableEq, Repr
 structure RungSpec where
   ell : Nat
   gen : GenClass
-
 @[simp] def rungOf (R : RungSpec) : ℤ := (R.ell : ℤ) + tauOf R.gen
 
 end Masses
@@ -4466,7 +4461,7 @@ lemma anchorIdentity_of_zeroWidthCert
 
 end
 
-end Certification
+end
 end Recognition
 end IndisputableMonolith
 
@@ -4923,24 +4918,6 @@ def ResidueCert.valid (c : ResidueCert) : Prop :=
 
 end RSBridge
 end IndisputableMonolith
-
-namespace IndisputableMonolith
-namespace Recognition
-
-noncomputable section
-open Classical
-
-/-- Sectors for the discrete constructor layer. -/
-inductive Sector | up | down | lepton | neutrino deriving DecidableEq, Repr
-
-/-- The 12 SM fermion species (Dirac ν allowed). -/
-inductive Species
-| u | c | t
-| d | s | b
-| e | mu | tau
-| nu1 | nu2 | nu3
-deriving DecidableEq, Repr
-
 /-- Sector assignment per species. -/
 @[simp] def sector : Species → Sector
 | .u | .c | .t => Sector.up
@@ -6406,28 +6383,6 @@ def w_core_time (t : ℝ) : ℝ :=
 end ILG
 end Gravity
 end IndisputableMonolith
--/
-
-/-- Variant kernel re‑normalized so that lim_{g→∞} w = 1 (dimensionless):
-    w_inf1(g,gext) = 1 + Clag * (( (g+gext)/a0)^(-α) ).
-    Note: at g = a0 (and gext=0) this equals 1 + Clag (not 1). -/
-def w_core_accel_inf1 (a0 g gext : ℝ) : ℝ :=
-  let α := Constants.alpha_locked
-  let x := max εa ((g + gext) / a0)
-  1 + Constants.Clag * Real.rpow x (-α)
-
-/-- Kernel mode selector for ILG weights. -/
-inductive KernelMode | accel | time | accelInf1
-
-/-- Unified core weight selector by mode. -/
-def w_core (mode : KernelMode) (a0 g gext t : ℝ) : ℝ :=
-  match mode with
-  | KernelMode.accel => w_core_accel a0 g gext
-  | KernelMode.time => w_core_time t
-  | KernelMode.accelInf1 => w_core_accel_inf1 a0 g gext
-
-/-- High‑acceleration bounds for the inf‑normalized kernel:
-    if (g+gext)/a0 ≥ 1 then 1 ≤ w ≤ 1 + Clag. -/
 lemma w_core_accel_inf1_bounds_high (a0 g gext : ℝ)
   (hx : 1 ≤ ((g + gext) / a0)) :
   1 ≤ w_core_accel_inf1 a0 g gext ∧ w_core_accel_inf1 a0 g gext ≤ 1 + Constants.Clag := by
@@ -6925,7 +6880,6 @@ lemma mass_strict_mono_k (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   have hpos : 0 < mass U k r f := mass_pos U k r f
   have htwo : (2 : ℝ) > 1 := by norm_num
   simpa [mass_kshift U k r f, two_mul] using (mul_lt_mul_of_pos_right htwo hpos)
-
 lemma mass_strict_mono_r (U : Constants.RSUnits) (k : Nat) (r : ℤ) (f : ℝ) :
   mass U k (r+1) f > mass U k r f := by
   have hpos : 0 < mass U k r f := mass_pos U k r f
@@ -7418,7 +7372,6 @@ def product {γ₁ γ₂ : Type} (PW₁ : PathWeight γ₁) (PW₂ : PathWeight 
     have := hprod.trans hfactor
     simpa [this, PW₁.sum_prob_eq_one, PW₂.sum_prob_eq_one]
 }
-
 end Quantum
 
 end IndisputableMonolith
@@ -7915,7 +7868,6 @@ class Is3Plus1DSpacetime (M : Type) where
   time_dim : Type
   causal_structure : time_dim → time_dim → Prop
   no_cycles : ∀ t : time_dim, ¬ causal_structure t t
-
 /-- **Theorem: 3+1D is Necessary**
 Stable causal recognition requires exactly 3 spatial and 1 time dimension. -/
 theorem dim3p1_necessary : (∃! s, IsGoldenRatioScaling s) → ∃ (M : Type), Is3Plus1DSpacetime M := by
@@ -8406,7 +8358,6 @@ def StableKFlipsP (k : Nat) (ds : List Int) : Prop := signFlips ds ≤ k
 @[simp] lemma stable_k_bridge (k : Nat) (ds : List Int) :
   StableKFlips k ds = true ↔ StableKFlipsP k ds := by
   simp [StableKFlips, StableKFlipsP]
-
 /-- Each flip requires a nonzero leading delta, so flips ≤ curvature K. -/
 lemma signFlips_le_curvatureK : ∀ ds : List Int, signFlips ds ≤ curvatureK ds := by
   intro ds; induction ds with
@@ -8905,7 +8856,6 @@ def acceptRate (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) (g
   if gs.length = 0 then 1 else
     let acc := (gs.filter (fun r => gatesOk (P:=P) r)).length
     (acc : ℝ) / (gs.length : ℝ)
-
 def parityOk (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) : Bool :=
   let groups := (xs.map cfg.groupOf).eraseDups
   match groups with
@@ -9038,46 +8988,8 @@ end URC
 namespace IndisputableMonolith
 namespace URCAdapters
 
-def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge := URC.BridgeAxioms.Manifest.bridge
-
-def routeA_report : String := URC.BridgeAxioms.Manifest.report
-
-def routeA_end_to_end_demo : String :=
-  "URC Route A end-to-end: absolute layer accepts bridge; UniqueCalibration/MeetsBands witnesses available."
-
 /-- Unified A/B wiring report. -/
-def routeAB_report : String :=
-  let _a := routeA_end_to_end_proof
-  let _b := URCGenerators.determination_by_generators (VG := URCGenerators.demo_generators_phi)
-  "URC Routes A and B: both wired (A: axioms ⇒ bridge; B: generators ⇒ bridge)."
-
-/-- Closure-style messages mirroring Route A for Route B and combined. -/
-def routeB_closure_report : String :=
-  let _ := routeB_bridge_end_to_end_proof
-  "URC Route B end-to-end: B ⇒ C wired via generators (absolute layer witnesses constructed)."
-
-def routeAB_closure_report : String :=
-  let _ := routeA_end_to_end_proof
-  let _ := routeB_bridge_end_to_end_proof
-  "URC Routes A and B: both yield B ⇒ C closure wiring (absolute layer)."
-
-/-- Single manifest string: reports Route A and B closure wiring and λ_rec uniqueness. -/
-def grand_manifest : String :=
-  let _ := routeA_end_to_end_proof
-  let _ := routeB_bridge_end_to_end_proof
-  let _ := urc_lambda_unique_holds
-  "URC Manifest: A (axioms→bridge) ⇒ C wired; B (generators→bridge) ⇒ C wired; λ_rec uniqueness OK."
-
-def routeA_end_to_end_proof :
-  RH.RS.UniqueCalibration RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Anchors.mk 1 1)
-  ∧ RH.RS.MeetsBands RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []) := by
-  let L := RH.RS.Instances.IM
-  have B : RH.RS.Bridge L := RH.RS.Bridge.mk Unit
-  let A : RH.RS.Anchors := RH.RS.Anchors.mk 1 1
-  let X : RH.RS.Bands := RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []
-  have hU : RH.RS.UniqueCalibration L B A := uniqueCalibration_any L B A
-  have hM : RH.RS.MeetsBands L B X := meetsBands_any_default L B X
-  exact absolute_layer_any (L:=L) (B:=B) (A:=A) (X:=X) hU hM
+-- (URCAdapters moved to `IndisputableMonolith/URCAdapters.lean`)
 
 end URCAdapters
 end IndisputableMonolith

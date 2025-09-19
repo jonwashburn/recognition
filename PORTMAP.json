@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "URCAdapters:core",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted from monolith; placeholder wiring; core unaffected"
+    },
+    {
       "id": "URCGenerators:VerifiedGenerators",
       "namespace": "IndisputableMonolith.URCGenerators",
       "path": "IndisputableMonolith/URCGenerators.lean",
