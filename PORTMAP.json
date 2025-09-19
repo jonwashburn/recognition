@@ -451,6 +451,14 @@
       "notes": "IsAffine and uniqueness scaffold extracted (axiom stubs); core green"
     }
     ,{
+      "id": "LightCone:StepBounds",
+      "namespace": "IndisputableMonolith.LightCone.StepBounds",
+      "path": "IndisputableMonolith/LightCone/StepBounds.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Per-step bounds and cone bound lemmas"
+    }
+    ,{
       "id": "Verification:RenderedIndex",
       "namespace": "IndisputableMonolith.Verification.Rendered",
       "path": "IndisputableMonolith/Verification/Rendered.lean",
@@ -462,9 +470,9 @@
       "id": "Verification:Manifest",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification/Manifest.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Falsifiable + manifest strings/id helpers"
+      "notes": "Falsifiable + manifest strings/id helpers; core green"
     },
     {
       "id": "RSBridge:Anchor",
