@@ -27,5 +27,3 @@ axiom inv_mul_cancel' (c : ℝ) (hc : c ≠ 0) : c⁻¹ * c = 1
 end Exponent
 end Masses
 end IndisputableMonolith
-
-
