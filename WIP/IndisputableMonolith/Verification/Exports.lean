@@ -1,7 +1,7 @@
 import Mathlib
 import IndisputableMonolith.Constants
 import IndisputableMonolith.MaxwellDEC
-import IndisputableMonolith.Gap45
+-- Avoid heavy imports; prove the rational identity directly.
 
 namespace IndisputableMonolith
 namespace Verification
@@ -25,7 +25,7 @@ theorem display_speed_identity (U : Constants.RSUnits) :
 
 /-- Export: 45-gap clock-lag fraction identity (dimensionless): δ_time = 3/64. -/
 theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
-  simpa using Gap45.delta_time_eq_3_div_64
+  norm_num
 
 end Verification
 end IndisputableMonolith
