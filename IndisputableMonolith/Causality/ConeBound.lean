@@ -33,7 +33,8 @@ noncomputable def ballFS (x : α) : Nat → Finset α
     prev ∪ prev.biUnion (fun z => B.neighbors z)
 
 axiom mem_ballFS_iff_ballP (x y : α) : ∀ n, y ∈ ballFS (α:=α) x n ↔ ballP (KB (α:=α)) x n y
-axiom card_singleton {x : α} : ({x} : Finset α).card = 1
+theorem card_singleton {x : α} : ({x} : Finset α).card = 1 :=
+  Finset.card_singleton x
 axiom card_union_le (s t : Finset α) : (s ∪ t).card ≤ s.card + t.card
 axiom card_bind_le_sum (s : Finset α) (f : α → Finset α) :
   (s.biUnion f).card ≤ Finset.sum s (fun z => (f z).card)

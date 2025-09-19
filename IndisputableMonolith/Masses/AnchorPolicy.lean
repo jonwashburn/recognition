@@ -1,6 +1,5 @@
 import Mathlib
 import IndisputableMonolith.Constants
-import IndisputableMonolith.Masses.SectorParams
 
 namespace IndisputableMonolith
 namespace Masses
