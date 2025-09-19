@@ -12,5 +12,3 @@ lemma eightbeat_holds : eightbeat_prop := by
 
 end URCAdapters
 end IndisputableMonolith
-
-

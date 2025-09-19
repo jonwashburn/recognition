@@ -603,6 +603,14 @@
       "notes": "eightbeat_prop/holds moved; core green"
     },
     {
+      "id": "URCAdapters:UnitsIdentity",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/UnitsIdentity.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "units_identity_prop/holds moved; core green"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",

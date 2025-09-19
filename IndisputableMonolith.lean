@@ -4793,12 +4793,7 @@ lemma lawful_normalizer_exists_unique : URC.lambda_rec_unique := by
 open IndisputableMonolith
 
 /-- Units identity as a Prop: ℓ0/τ0 = c for all anchors. -/
-def units_identity_prop : Prop :=
-  ∀ U : IndisputableMonolith.Constants.RSUnits,
-    U.ell0 / U.tau0 = U.c
-
-lemma units_identity_holds : units_identity_prop := by
-  intro U; simpa using IndisputableMonolith.Constants.RSUnits.ell0_div_tau0_eq_c U
+-- (Moved to IndisputableMonolith/URCAdapters/UnitsIdentity.lean)
 
 /-- φ‑rung step as a Prop on canonical units masses. -/
 def phi_rung_prop : Prop :=

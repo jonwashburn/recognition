@@ -18,5 +18,3 @@ structure Realization (State Obs : Type) where
 
 end Measurement
 end IndisputableMonolith
-
-
