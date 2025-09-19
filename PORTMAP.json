@@ -403,6 +403,14 @@
       "notes": "extracted LNAL scaffold; core green"
     }
     ,{
+      "id": "URCAdapters:ELProp",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/ELProp.lean",
+      "status": "done",
+      "owner": "agentG",
+      "notes": "EL_prop + EL_holds extracted with local axioms; core green"
+    }
+    ,{
       "id": "Verification:ConeExport",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification/ConeExport.lean",
@@ -462,9 +470,9 @@
       "id": "Gravity.ILG:TimeKernelBasics",
       "namespace": "IndisputableMonolith.Gravity.ILG",
       "path": "IndisputableMonolith/Gravity/ILG.lean",
-      "status": "pending",
-      "owner": "",
-      "notes": "unclaimed"
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "w_t basics extraction in progress"
     }
     ,{
       "id": "MaxwellDEC:Equations",
@@ -641,6 +649,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "Monotonicity/Symmetry/Stability props extracted; core green"
+    },
+    {
+      "id": "Potential:Uniqueness",
+      "namespace": "IndisputableMonolith.Potential",
+      "path": "IndisputableMonolith/Potential.lean",
+      "status": "in_progress",
+      "owner": "agentG",
+      "notes": "Edge-diff invariance and uniqueness lemmas"
     },
     {
       "id": "Measurement:Realization",

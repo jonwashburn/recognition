@@ -4808,11 +4808,7 @@ lemma phi_rung_holds : phi_rung_prop := by
 /-- Eight‑beat existence (period exactly 8). -/
 -- (Moved to IndisputableMonolith/URCAdapters/EightBeat.lean)
 
-/-- EL stationarity and minimality on the log axis. -/
-def EL_prop : Prop :=
-  (deriv IndisputableMonolith.Jlog 0 = 0)
-  ∧ (∀ t : ℝ, IndisputableMonolith.Jlog 0 ≤ IndisputableMonolith.Jlog t)
-lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_zero, fun t => IndisputableMonolith.EL_global_min t⟩
+-- (Moved to IndisputableMonolith/URCAdapters/ELProp.lean)
 
 /-- Recognition lower bound (SAT exemplar) as a Prop. -/
 -- moved to Core

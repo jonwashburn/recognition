@@ -13,5 +13,3 @@ lemma units_identity_holds : units_identity_prop := by
 
 end URCAdapters
 end IndisputableMonolith
-
-
