@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Masses:AnchorPolicy",
+      "namespace": "IndisputableMonolith.Masses.AnchorPolicy",
+      "path": "IndisputableMonolith/Masses/AnchorPolicy.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "AnchorPolicy + Z_* wrappers + ResidueLaw/SectorLaw"
+    },
+    {
       "id": "Ethics.Decision:Parity",
       "namespace": "IndisputableMonolith.Ethics.Decision.Parity",
       "path": "IndisputableMonolith/Ethics/Decision/Parity.lean",
@@ -430,9 +438,9 @@
       "id": "Gravity.ILG:TimeKernelBasics",
       "namespace": "IndisputableMonolith.Gravity.ILG",
       "path": "IndisputableMonolith/Gravity/ILG.lean",
-      "status": "in_progress",
-      "owner": "agentE",
-      "notes": "BaryonCurves, epsilons, vbarSq/vbar/gbar, Params, w_t, w_t_display"
+      "status": "pending",
+      "owner": "",
+      "notes": "unclaimed"
     }
     ,{
       "id": "MaxwellDEC:Equations",
@@ -529,6 +537,14 @@
       "status": "in_progress",
       "owner": "agentE",
       "notes": "ethics_invariants_prop/holds + lawfulEthical"
+    },
+    {
+      "id": "Verification:AuditSI",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Audit.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "audit_SI_via_bridge_only moved; core green"
     },
     {
       "id": "RSBridge:Anchor",

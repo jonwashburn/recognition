@@ -5057,7 +5057,7 @@ theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
 
 /-- Audit: SI evaluation must go through BridgeData. This marker theorem is used as a guard
     in code review to avoid accidental direct numerics at the proof layer. -/
-theorem audit_SI_via_bridge_only : True := by trivial
+-- (Moved to IndisputableMonolith/Verification/Audit.lean)
 
 /-- ### Measurement-Reality (MRD) scaling scaffolding -/
 namespace MRD
