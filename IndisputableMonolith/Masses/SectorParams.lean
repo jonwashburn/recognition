@@ -15,5 +15,3 @@ def yardstickOf (U : Constants.RSUnits) (P : SectorParams) : ℝ :=
 
 end Masses
 end IndisputableMonolith
-
-
