@@ -948,11 +948,11 @@
     },
     {
       "id": "Bridge:Data",
-      "namespace": "IndisputableMonolith.BridgeData",
-      "path": "IndisputableMonolith/Bridge/Data.lean",
-      "status": "in_progress",
+      "namespace": "IndisputableMonolith.Bridge.BridgeData",
+      "path": "IndisputableMonolith/Bridge/BridgeData.lean",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "BridgeData structure + physical constants and dimensionless identities"
+      "notes": "BridgeData structure + physical constants and dimensionless identities; core green"
     }
     ,    {
       "id": "Masses:Ribbons",
