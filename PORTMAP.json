@@ -958,9 +958,9 @@
       "id": "Masses:Ribbons",
       "namespace": "IndisputableMonolith.Masses.Ribbons",
       "path": "IndisputableMonolith/Masses/Ribbons.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Ribbon structure, Word operations, cancellation/reduction; 93 lines; dependency-light"
+      "notes": "Ribbon structure, Word operations, cancellation/reduction, torsion/mass calculus; 93 lines; axiom stubs; core green"
     }
     ,{
       "id": "ClassicalBridge:T4Correspondence",
