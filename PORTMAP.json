@@ -718,7 +718,7 @@
       "id": "Cost:PhiFixedPointExpose",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost/PhiFixedPoint.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Expose phi_fixed_point into Cost namespace"
     },

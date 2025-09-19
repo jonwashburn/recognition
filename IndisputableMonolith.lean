@@ -1519,7 +1519,7 @@ theorem uniqueCalibration_any (L : Ledger) (B : Bridge L) (A : Anchors) : Unique
   -- the route displays pins the calibration. We export the Prop‑class witness.
   have hGate : ∀ U, IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge
+    IndisputableMonolith.Verification.k_gate_bridge_theorem
   have hKA_dim : ∀ {U U'} (h : IndisputableMonolith.Verification.UnitsRescaled U U'),
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U' :=
@@ -1546,7 +1546,7 @@ theorem meetsBands_any_param (L : Ledger) (B : Bridge L)
   have hGate :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
     = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge U
+    IndisputableMonolith.Verification.k_gate_bridge_theorem U
   have hChk : meetsBandsChecker_gen U (sampleBandsFor U tol) :=
     And.intro hc (And.intro hKA (And.intro hKB hGate))
   exact meetsBands_any_of_checker (L:=L) (B:=B) (X:=sampleBandsFor U tol) ⟨U, hChk⟩
@@ -1652,7 +1652,7 @@ lemma meetsBandsChecker_gen_invariant
     have hGate' :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U'
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U' :=
-      IndisputableMonolith.Verification.K_gate_bridge U'
+      IndisputableMonolith.Verification.k_gate_bridge_theorem U'
     exact And.intro hc' (And.intro hKA' (And.intro hKB' hGate'))
   · intro hC'
     rcases hC' with ⟨hc', _KA', _KB', _Gate'⟩
@@ -1664,7 +1664,7 @@ lemma meetsBandsChecker_gen_invariant
     have hGate :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-      IndisputableMonolith.Verification.K_gate_bridge U
+      IndisputableMonolith.Verification.k_gate_bridge_theorem U
     exact And.intro hc (And.intro hKA (And.intro hKB hGate))
 
 /-- If some anchors U satisfy the generic checker for bands X, then MeetsBands holds for any ledger/bridge. -/
@@ -1692,7 +1692,7 @@ theorem meetsBands_any_default (L : RH.RS.Ledger) (B : RH.RS.Bridge L)
   have hGate :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
     = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge U
+    IndisputableMonolith.Verification.k_gate_bridge_theorem U
   have hChk : meetsBandsChecker_gen U (sampleBandsFor U 0) :=
     And.intro hc (And.intro hKA (And.intro hKB hGate))
   exact meetsBands_any_of_checker (L:=L) (B:=B) (X:=sampleBandsFor U 0) ⟨U, hChk⟩
@@ -1916,7 +1916,7 @@ theorem t5_for_log_model (G : ℝ → ℝ) [IndisputableMonolith.LogModel G] :
 theorem k_gate_bridge_level (U : IndisputableMonolith.Constants.RSUnits) :
   IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
     = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-  IndisputableMonolith.Verification.K_gate_bridge U
+    IndisputableMonolith.Verification.k_gate_bridge_theorem U
 
 /-- No‑injected‑constants wrapper: anchor‑invariance for K_A and K_B displays. -/
 theorem dimless_KA_invariant {U U' : IndisputableMonolith.Constants.RSUnits}
@@ -1948,7 +1948,7 @@ theorem uniqueCalibration_IM (B : RH.RS.Bridge IM) (A : RH.RS.Anchors) : RH.RS.U
   -- K identities and K‑gate enforce uniqueness up to UnitsEqv
   have hKgate : ∀ U, IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
                      = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge
+    IndisputableMonolith.Verification.k_gate_bridge_theorem
   -- Anchor rescaling invariance keeps dimensionless displays fixed
   have hdim : ∀ {U U'} (h : IndisputableMonolith.Verification.UnitsRescaled U U'),
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
@@ -1971,7 +1971,7 @@ theorem meetsBands_IM (B : RH.RS.Bridge IM) (X : RH.RS.Bands) : RH.RS.MeetsBands
   -- Combine with gate equality
   have hgate : ∀ U, IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge
+    IndisputableMonolith.Verification.k_gate_bridge_theorem
   -- Concrete band checking occurs at the display layer; here we certify the invariance structure
   exact ⟨⟩
 
@@ -2001,7 +2001,7 @@ lemma meetsBandsChecker_invariant {U U' : IndisputableMonolith.Constants.RSUnits
     have hGate' :
         IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U'
         = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U' :=
-        IndisputableMonolith.Verification.K_gate_bridge U'
+        IndisputableMonolith.Verification.k_gate_bridge_theorem U'
     exact And.intro hc' (And.intro hKA' (And.intro hKB' hGate'))
   · intro hC'
     rcases hC' with ⟨hc', _KA', _KB', _Gate'⟩
@@ -2014,7 +2014,7 @@ lemma meetsBandsChecker_invariant {U U' : IndisputableMonolith.Constants.RSUnits
     have hGate :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
       = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-      IndisputableMonolith.Verification.K_gate_bridge U
+      IndisputableMonolith.Verification.k_gate_bridge_theorem U
     exact And.intro hc (And.intro hKA (And.intro hKB hGate))
 
 /-- If there exists anchors U satisfying the checker, then MeetsBands holds (IM). -/
@@ -2064,7 +2064,7 @@ theorem meetsBands_IM_default (B : RH.RS.Bridge IM)
   have hGate :
       IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_A_obs U
     = IndisputableMonolith.Verification.BridgeEval IndisputableMonolith.Verification.K_B_obs U :=
-    IndisputableMonolith.Verification.K_gate_bridge U
+    IndisputableMonolith.Verification.k_gate_bridge_theorem U
   have hChk : meetsBandsChecker U (sampleBandsFor U 0) := by
     exact And.intro hc (And.intro hKA (And.intro hKB hGate))
   exact meetsBands_IM_of_checker (B:=B) (X:=sampleBandsFor U 0) ⟨U, hChk⟩

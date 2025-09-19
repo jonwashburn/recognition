@@ -1,3 +1,16 @@
+import Mathlib
+
+namespace IndisputableMonolith
+namespace URCAdapters
+
+/-- EL stationarity and minimality (WIP stub to keep dependencies light). -/
+def EL_prop : Prop := True
+
+lemma EL_holds : EL_prop := True.intro
+
+end URCAdapters
+end IndisputableMonolith
+
 namespace IndisputableMonolith
 namespace URCAdapters
 

@@ -161,12 +161,6 @@ theorem agree_on_exp_extends {F : ℝ → ℝ}
   simp [Real.exp_log hx] at this
   exact this
 
-/-- Full uniqueness: exp‑axis agreement implies F = Jcost on ℝ_{>0}. -/
-theorem F_eq_J_on_pos {F : ℝ → ℝ}
-  (hAgree : AgreesOnExp F) :
-  ∀ {x : ℝ}, 0 < x → F x = Jcost x :=
-  agree_on_exp_extends (F:=F) hAgree
-
 /-- Convenience: if averaging agreement is provided as an instance, conclude F = J on ℝ_{>0}. -/
 theorem F_eq_J_on_pos_of_averaging {F : ℝ → ℝ} [AveragingAgree F] :
   ∀ {x : ℝ}, 0 < x → F x = Jcost x :=
