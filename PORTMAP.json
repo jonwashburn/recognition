@@ -19,6 +19,14 @@
       "notes": "Extracted from monolith; placeholder wiring; core unaffected"
     },
     {
+      "id": "TruthCore:MRD",
+      "namespace": "IndisputableMonolith.TruthCore.MRD",
+      "path": "IndisputableMonolith/TruthCore/MRD.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted scaling/measurement scaffolding; dependency-light; core unaffected"
+    },
+    {
       "id": "URCGenerators:VerifiedGenerators",
       "namespace": "IndisputableMonolith.URCGenerators",
       "path": "IndisputableMonolith/URCGenerators.lean",

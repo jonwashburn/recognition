@@ -40,5 +40,3 @@ def grand_manifest : String :=
 
 end URCAdapters
 end IndisputableMonolith
-
-
