@@ -12,19 +12,19 @@ noncomputable def Z : Species → Int := fun _ => 0
 noncomputable def Fgap : Int → ℝ := fun _ => 0
 
 /-- Drop the +4 offset for quarks in Z. -/
-noncomputable @[simp] def Z_dropPlus4 (i : Species) : Int :=
+noncomputable def Z_dropPlus4 (i : Species) : Int :=
   if tildeQ i > 0 then (tildeQ i)^2 + (tildeQ i)^4 else 0
 
 /-- Drop the Q^4 term everywhere in Z. -/
-noncomputable @[simp] def Z_dropQ4 (i : Species) : Int :=
+noncomputable def Z_dropQ4 (i : Species) : Int :=
   if tildeQ i > 0 then 4 + (tildeQ i)^2 else 0
 
 /-- Break the integerization ˜Q = 6Q by using ˜Q' = 3Q (integerized) instead. -/
-noncomputable @[simp] def tildeQ_broken3 : Species → Int :=
+noncomputable def tildeQ_broken3 : Species → Int :=
   fun _ => 0  -- Simplified stub
 
 /-- Recompute Z with the broken integerization. -/
-noncomputable @[simp] def Z_break6Q (i : Species) : Int :=
+noncomputable def Z_break6Q (i : Species) : Int :=
   4 + (tildeQ_broken3 i)^2 + (tildeQ_broken3 i)^4
 
 /-- Anchor-equality predicate for a candidate Z-map: residues must match the original. -/

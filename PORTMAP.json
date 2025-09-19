@@ -774,9 +774,9 @@
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "lawful_normalizer_exists_unique lemma; dependency-light"
+      "notes": "lawful_normalizer_exists_unique lemma; minimal URC stubs; core green"
     }
     ,{
       "id": "Ethics:CostModel",
