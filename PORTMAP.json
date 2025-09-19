@@ -334,9 +334,9 @@
       "id": "UnitMapping:core",
       "namespace": "IndisputableMonolith.UnitMapping",
       "path": "IndisputableMonolith/UnitMapping.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "affine δ→ℝ mapping; depends on LedgerUnits"
+      "notes": "extracted affine δ→ℝ mapping; core green"
     }
   ]
 }

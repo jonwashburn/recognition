@@ -6,6 +6,9 @@ namespace PhiSupport
 
 open Real
 
+-- WIP stub to avoid depending on the monolith proof
+axiom IndisputableMonolith.Constants.phi_fixed_point : Constants.phi = 1 + 1 / Constants.phi
+
 lemma phi_squared : Constants.phi ^ 2 = Constants.phi + 1 := by
   have hfix := Constants.phi_fixed_point
   have hpos := Constants.phi_pos
