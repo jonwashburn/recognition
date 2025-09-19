@@ -331,6 +331,14 @@
       "notes": "extracted delta subgroup; core green"
     },
     {
+      "id": "RS.Witness:minimal",
+      "namespace": "IndisputableMonolith.RH.RS.Witness",
+      "path": "IndisputableMonolith/RH/RS/Witness.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Minimal RS Witness scaffolding (True props); extraction in progress"
+    },
+    {
       "id": "UnitMapping:core",
       "namespace": "IndisputableMonolith.UnitMapping",
       "path": "IndisputableMonolith/UnitMapping.lean",
