@@ -1234,67 +1234,7 @@ theorem T5_EL_equiv_general {F : ℝ → ℝ} [AveragingDerivation F] :
 
 end Cost
 
-/-! ## T5 demo: a concrete `G` witnessing the log-model obligations. -/
-namespace CostDemo
-
-open Cost
-
-noncomputable def Gcosh (t : ℝ) : ℝ := ((Real.exp t + Real.exp (-t)) / 2 - 1)
-
-lemma Gcosh_even : ∀ t : ℝ, Gcosh (-t) = Gcosh t := by
-  intro t
-  -- ((e^{-t} + e^{--t})/2 - 1) = ((e^t + e^{-t})/2 - 1)
-  simpa [Gcosh, add_comm] using rfl
-
-lemma Gcosh_base0 : Gcosh 0 = 0 := by
-  simp [Gcosh]
-
-instance : LogModel Gcosh :=
-  { even_log := Gcosh_even
-  , base0 := Gcosh_base0
-  , upper_cosh := by intro t; exact le_of_eq rfl
-  , lower_cosh := by intro t; exact le_of_eq rfl }
-
--- End-to-end T5: for x > 0, F_ofLog Gcosh x = Jcost x
-theorem F_ofLog_Gcosh_eq_Jcost : ∀ {x : ℝ}, 0 < x → F_ofLog Gcosh x = Jcost x :=
-  T5_for_log_model (G := Gcosh)
-
-end CostDemo
-
-/-! ## T5 demo 2: a scaled cosh variant also satisfies the log-model obligations. -/
-namespace CostDemo2
-
-open Cost
-
-noncomputable def GcoshScaled (t : ℝ) : ℝ := (CostDemo.Gcosh t)
-
-instance : LogModel GcoshScaled :=
-  { even_log := by intro t; dsimp [GcoshScaled]; simpa using CostDemo.Gcosh_even t
-  , base0 := by dsimp [GcoshScaled]; simpa using CostDemo.Gcosh_base0
-  , upper_cosh := by intro t; dsimp [GcoshScaled]; exact le_of_eq rfl
-  , lower_cosh := by intro t; dsimp [GcoshScaled]; exact le_of_eq rfl }
-
-example : ∀ {x : ℝ}, 0 < x → F_ofLog GcoshScaled x = Jcost x :=
-  T5_for_log_model (G := GcoshScaled)
-
-/-! ### Euler–Lagrange (EL) stationarity at t = 0 for J(e^t) = cosh t − 1 -/
-
-/-- EL stationarity at 0: the first variation vanishes for `Jlog` at `t=0`. -/
-theorem EL_stationary_at_zero : deriv Jlog 0 = 0 := by
-  simpa using deriv_Jlog_zero
-
-/-- Global minimality: `t=0` is a global minimizer of `Jlog`. -/
-theorem EL_global_min (t : ℝ) : Jlog 0 ≤ Jlog t := by
-  simpa [Jlog_zero] using Jlog_nonneg t
-
-/-!
-Precise continuum hypotheses note: the EL certificate here is packaged via the explicit
-closed form `Jlog = cosh − 1`. In contexts where `J` is provided via an averaging derivation
-on the log axis, the lemmas `Flog_eq_Jlog` and `hasDerivAt_Flog` (derived from `Jlog`)
-transport the stationarity and minimality to any `F` with `AveragingDerivation F`.
-This realizes the EL equivalence in the intended continuum setting. -/
-
-end CostDemo2
+-- (Moved to IndisputableMonolith/Cost/Demo.lean)
 
 /-! Axiom audit hooks: uncomment locally to inspect axiom usage. Keep commented for library builds.
 

@@ -635,6 +635,14 @@
       "notes": "units_identity_prop/holds moved; core green"
     },
     {
+      "id": "URCAdapters:ELProp",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/ELProp.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "EL_prop/EL_holds (stubbed True)"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",
@@ -707,12 +715,20 @@
       "notes": "Jlog definition + zero lemma; dependency-light; core green"
     },
     {
+      "id": "Cost:PhiFixedPointExpose",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/PhiFixedPoint.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Expose phi_fixed_point into Cost namespace"
+    },
+    {
       "id": "Cost:Demo",
       "namespace": "IndisputableMonolith.CostDemo",
       "path": "IndisputableMonolith/Cost/Demo.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Gcosh demo + scaled variant + EL lemmas"
+      "notes": "Gcosh demo extracted; dependency-light; core green"
     },
     {
       "id": "Measurement:Realization",
@@ -774,9 +790,9 @@
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
-      "status": "done",
+      "status": "in_progress",
       "owner": "cursor-gpt5",
-      "notes": "lawful_normalizer_exists_unique lemma; minimal URC stubs; core green"
+      "notes": "lawful_normalizer_exists_unique lemma; dependency-light"
     }
     ,{
       "id": "Ethics:CostModel",
@@ -790,9 +806,9 @@
       "id": "Ablation:Harness",
       "namespace": "IndisputableMonolith.Ablation",
       "path": "IndisputableMonolith/Ablation.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Integer charge/word transforms and contradiction lemmas; 104 lines; self-contained"
+      "notes": "Integer charge transforms and contradiction lemmas extracted; axiom stubs for Species/Sector deps; core green"
     }
   ]
 }
