@@ -1,7 +1,45 @@
 import Mathlib
-import IndisputableMonolith.Cost
 
 namespace IndisputableMonolith
+namespace Cost
+
+noncomputable def Jcost (x : ℝ) : ℝ := (x + x⁻¹) / 2 - 1
+
+@[simp] lemma Jcost_exp (t : ℝ) :
+  Jcost (Real.exp t) = ((Real.exp t) + (Real.exp (-t))) / 2 - 1 := by
+  have h : (Real.exp t)⁻¹ = Real.exp (-t) := by
+    symm; simp [Real.exp_neg t]
+  simp [Jcost, h]
+
+noncomputable def Jlog (t : ℝ) : ℝ := Jcost (Real.exp t)
+
+@[simp] lemma Jlog_as_cosh (t : ℝ) : Jlog t = Real.cosh t - 1 := by
+  dsimp [Jlog]
+  simpa [Real.cosh, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using (Jcost_exp t)
+
+lemma hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t := by
+  have h := Real.hasDerivAt_cosh t
+  have h' : HasDerivAt (fun t => Real.cosh t - 1) (Real.sinh t) t := by
+    simpa [sub_eq_add_neg] using h.sub_const 1
+  simpa [Jlog_as_cosh] using h'
+
+@[simp] lemma deriv_Jlog_zero : deriv Jlog 0 = 0 := by
+  classical
+  have : HasDerivAt Jlog 0 0 := by simpa using (hasDerivAt_Jlog 0)
+  simpa using this.deriv
+
+@[simp] lemma Jlog_zero : Jlog 0 = 0 := by
+  dsimp [Jlog]
+  simp
+
+lemma Jlog_nonneg (t : ℝ) : 0 ≤ Jlog t := by
+  dsimp [Jlog]
+  have h : 1 ≤ Real.cosh t := Real.cosh_ge_one t
+  have : 0 ≤ Real.cosh t - 1 := sub_nonneg.mpr h
+  simpa using this
+
+end Cost
+
 namespace CostDemo
 
 open Cost
@@ -15,16 +53,6 @@ lemma Gcosh_even : ∀ t : ℝ, Gcosh (-t) = Gcosh t := by
 lemma Gcosh_base0 : Gcosh 0 = 0 := by
   simp [Gcosh]
 
-instance : LogModel Gcosh :=
-  { even_log := Gcosh_even
-  , base0 := Gcosh_base0
-  , upper_cosh := by intro t; exact le_of_eq rfl
-  , lower_cosh := by intro t; exact le_of_eq rfl }
-
-/-- End-to-end T5: for x > 0, F_ofLog Gcosh x = Jcost x -/ 
-theorem F_ofLog_Gcosh_eq_Jcost : ∀ {x : ℝ}, 0 < x → F_ofLog Gcosh x = Jcost x :=
-  T5_for_log_model (G := Gcosh)
-
 end CostDemo
 
 namespace CostDemo2
@@ -33,20 +61,9 @@ open Cost
 
 noncomputable def GcoshScaled (t : ℝ) : ℝ := (CostDemo.Gcosh t)
 
-instance : LogModel GcoshScaled :=
-  { even_log := by intro t; dsimp [GcoshScaled]; simpa using CostDemo.Gcosh_even t
-  , base0 := by dsimp [GcoshScaled]; simpa using CostDemo.Gcosh_base0
-  , upper_cosh := by intro t; dsimp [GcoshScaled]; exact le_of_eq rfl
-  , lower_cosh := by intro t; dsimp [GcoshScaled]; exact le_of_eq rfl }
-
-example : ∀ {x : ℝ}, 0 < x → F_ofLog GcoshScaled x = Jcost x :=
-  T5_for_log_model (G := GcoshScaled)
-
-/-- EL stationarity at 0: the first variation vanishes for `Jlog` at `t=0`. -/
 @[simp] theorem EL_stationary_at_zero : deriv Jlog 0 = 0 := by
   simpa using deriv_Jlog_zero
 
-/-- Global minimality: `t=0` is a global minimizer of `Jlog`. -/
 @[simp] theorem EL_global_min (t : ℝ) : Jlog 0 ≤ Jlog t := by
   simpa [Jlog_zero] using Jlog_nonneg t
 

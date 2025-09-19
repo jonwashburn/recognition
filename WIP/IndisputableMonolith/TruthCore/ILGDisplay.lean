@@ -15,5 +15,3 @@ end
 
 end TruthCore
 end IndisputableMonolith
-
-

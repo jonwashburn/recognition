@@ -691,6 +691,14 @@
       "notes": "extracted alpha_locked/Clag and bounds; core green"
     },
     {
+      "id": "Cost:JlogBasics",
+      "namespace": "IndisputableMonolith.Cost",
+      "path": "IndisputableMonolith/Cost/Jlog.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Jlog definition, derivative and basic lemmas"
+    },
+    {
       "id": "Cost:Demo",
       "namespace": "IndisputableMonolith.CostDemo",
       "path": "IndisputableMonolith/Cost/Demo.lean",
@@ -734,9 +742,33 @@
       "id": "TruthCore:ILGDisplayAlias",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/ILGDisplay.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "export alias ILG_w_t_display; minimal deps; core green"
+    }
+    ,{
+      "id": "TruthCore:TimeKernelDimensionless",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/TimeKernel.lean",
       "status": "in_progress",
       "owner": "cursor-gpt5",
-      "notes": "export alias ILG_w_t_display to Gravity.ILG.w_t_display"
+      "notes": "alias theorem using ILG.w_time_ratio_rescale"
+    }
+    ,{
+      "id": "URCAdapters:LawfulNormalizer",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "lawful_normalizer_exists_unique lemma; dependency-light"
+    }
+    ,{
+      "id": "Ethics:CostModel",
+      "namespace": "IndisputableMonolith.Ethics",
+      "path": "IndisputableMonolith/Ethics/CostModel.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "CostModel, Prefer, Composable, CQAligned, Admissible; 83 lines; self-contained"
     }
   ]
 }
