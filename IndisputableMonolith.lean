@@ -8764,11 +8764,7 @@ def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 @[simp] lemma crossAgentParityOk_true_iff (P : Policy A) (xs : List (Request A)) :
   crossAgentParityOk (P:=P) xs = true ↔ CrossAgentOKP (P:=P) xs := by simp [crossAgentParityOk, CrossAgentOKP]
 
-@[simp] lemma fairnessBatchOk_mapped (P : Policy A) (xs : List (Request A)) (φ : Alignment.Morph) :
-  fairnessBatchOk (P:=P) (xs.map (fun r => mapReqMicro r φ)) = fairnessBatchOk (P:=P) xs := by
-  classical
-  unfold fairnessBatchOk eqOppOk calibOk individualFairnessOk crossAgentParityOk
-  simp [filterByGates, gatesOk, mapReqMicro]
+-- Fairness bridging lemmas moved to `IndisputableMonolith/Ethics/Decision/Fairness.lean`.
 
 end Decision
 end Ethics

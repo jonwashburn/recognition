@@ -19,6 +19,14 @@
       "notes": "Parity helpers extracted"
     },
     {
+      "id": "Ethics.Decision:Fairness",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Fairness",
+      "path": "IndisputableMonolith/Ethics/Decision/Fairness.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Fairness Prop stubs and bridging lemmas extracted"
+    },
+    {
       "id": "Ethics.Decision:Examples",
       "namespace": "IndisputableMonolith.Ethics.Decision.Examples",
       "path": "IndisputableMonolith/Ethics/Decision/Examples.lean",
