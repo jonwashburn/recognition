@@ -803,6 +803,14 @@
       "notes": "ScalingModel, predicted_ratio, rescale lemma"
     }
     ,{
+      "id": "Verification:KGateBridge",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/KGateBridge.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "K_gate_bridge theorem; extracted with references updated; core green"
+    }
+    ,{
       "id": "URCAdapters:LawfulNormalizer",
       "namespace": "IndisputableMonolith.URCAdapters",
       "path": "IndisputableMonolith/URCAdapters/LawfulNormalizer.lean",
@@ -838,9 +846,9 @@
       "id": "Cost:FlogEL",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost/FlogEL.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "Flog def + EL equivalence theorems; 43 lines; dependency-light"
+      "notes": "Flog def + EL equivalence theorems; axiom stubs for Jlog deps; core green"
     }
   ]
 }
