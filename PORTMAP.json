@@ -422,9 +422,9 @@
       "id": "Causality:ConeBound",
       "namespace": "IndisputableMonolith.Causality.ConeBound",
       "path": "IndisputableMonolith/Causality/ConeBound.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "BFS finset ball and cardinality bounds"
+      "notes": "BFS finset ball and cardinality bounds; core green"
     }
     ,{
       "id": "Verification:RenderedIndex",
