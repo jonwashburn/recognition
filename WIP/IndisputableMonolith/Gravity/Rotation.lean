@@ -68,8 +68,10 @@ lemma g_of_linear_Menc (S : RotSys) (α : ℝ)
         have hα_nonneg : 0 ≤ α := by
           have : 0 ≤ α * r := by rw [hM]; exact S.nonnegM r
           have hr_pos : 0 < r := hr
-          have : 0 ≤ α := (mul_nonneg_iff.mp this).1
-          exact this
+          have : 0 ≤ α ∧ 0 ≤ r ∨ α ≤ 0 ∧ r ≤ 0 := mul_nonneg_iff.mp this
+          cases this with
+          | inl h => exact h.1
+          | inr h => contradiction
         exact mul_nonneg (le_of_lt S.posG) hα_nonneg
       rw [←hfrac] at this
       exact this

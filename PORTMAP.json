@@ -977,6 +977,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "extracted RSUnits display functions and K-gate theorems; minimal axiom stubs; core green"
+    },
+    {
+      "id": "Verification:Claims",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Verification/Claims.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Claim, KGateInput, KGateResult structures and claim evaluation functions"
     }
     ,    {
       "id": "Recognition:Certification",
