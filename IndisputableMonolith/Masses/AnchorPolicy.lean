@@ -25,5 +25,3 @@ structure SectorLaw where
 
 end Masses
 end IndisputableMonolith
-
-
