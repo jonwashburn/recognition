@@ -50,9 +50,29 @@ theorem card_bind_neighbors_le (s : Finset α) :
   have h1 := card_bind_le_sum s (fun z => B.neighbors z)
   have h2 := sum_card_neighbors_le s
   exact Nat.le_trans h1 h2
-axiom card_ballFS_succ_le (x : α) (n : Nat) :
-  (ballFS (α:=α) x (n+1)).card ≤ (1 + d) * (ballFS (α:=α) x n).card
-axiom ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n
+theorem card_ballFS_succ_le (x : α) (n : Nat) :
+  (ballFS (α:=α) x (n+1)).card ≤ (1 + d) * (ballFS (α:=α) x n).card := by
+  dsimp [ballFS]
+  let prev := ballFS (α:=α) x n
+  let new_neighbors := prev.biUnion (fun z => B.neighbors z)
+  have h_union := card_union_le prev new_neighbors
+  have h_neighbors := card_bind_neighbors_le prev
+  have h_combined := Nat.le_trans h_union (Nat.add_le_add_left h_neighbors prev.card)
+  rw [Nat.mul_add, Nat.mul_one] at h_combined
+  exact h_combined
+theorem ballFS_card_le_geom (x : α) : ∀ n : Nat, (ballFS (α:=α) x n).card ≤ (1 + d) ^ n := by
+  intro n
+  induction n with
+  | zero =>
+    dsimp [ballFS]
+    rw [card_singleton]
+    rw [Nat.pow_zero]
+    exact Nat.le_refl 1
+  | succ n ih =>
+    have h_succ := card_ballFS_succ_le x n
+    have h_pow := Nat.pow_succ (1 + d) n
+    rw [h_pow] at h_succ
+    exact Nat.le_trans h_succ (Nat.mul_le_mul_left (1 + d) ih)
 
 end ConeBound
 end Causality

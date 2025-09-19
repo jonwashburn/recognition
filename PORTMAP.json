@@ -1089,6 +1089,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "AnchorPolicy structure, Z charge functions, and residue/sector law structures; core green"
+    },
+    {
+      "id": "Masses:KernelTypes",
+      "namespace": "IndisputableMonolith.Masses",
+      "path": "IndisputableMonolith/Masses/KernelTypes.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "Extracted core Masses types (gauge/completion/rung); core green"
     }
     ,    {
       "id": "Gravity:Rotation",
