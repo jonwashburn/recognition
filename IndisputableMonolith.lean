@@ -2802,23 +2802,11 @@ namespace Exponent
 
 open IndisputableMonolith.Recognition
 
-/-- Gauge equivalence on masses: identify by nonzero scale factors (e.g., sector gauges). -/
-def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
+-- (Moved to IndisputableMonolith/Masses/Exponent/Gauge.lean)
 
-@[simp] lemma gauge_refl (m : ℝ) : GaugeEq m m := ⟨1, by norm_num, by simp⟩
+-- (Moved to IndisputableMonolith/Masses/ExponentKernel.lean)
 
-@[simp] lemma gauge_symm {a b : ℝ} : GaugeEq a b → GaugeEq b a := by
-  intro h; rcases h with ⟨c, hc, h⟩
-  refine ⟨1/c, one_div_ne_zero hc, ?_⟩
-  have : a = (1/c) * b := by simpa [mul_comm, mul_left_comm, mul_assoc] using by
-    have := congrArg (fun x => (1/c) * x) h
-    simpa [mul_comm, mul_left_comm, mul_assoc, inv_mul_cancel hc] using this.symm
-  simpa [this, mul_comm]
-
-@[simp] lemma gauge_trans {a b c : ℝ} : GaugeEq a b → GaugeEq b c → GaugeEq a c := by
-  intro h₁ h₂; rcases h₁ with ⟨x, hx, hxEq⟩; rcases h₂ with ⟨y, hy, hyEq⟩
-  refine ⟨x*y, mul_ne_zero hx hy, ?_⟩
-  simpa [hxEq, hyEq, mul_comm, mul_left_comm, mul_assoc]
+-- (Moved to IndisputableMonolith/Masses/ExponentKernel.lean)
 
 /-- Factorization: any sector units mass equals a gauge factor times the canonical mass. -/
 lemma factor_sector (U : Constants.RSUnits) (P : SectorParams) (i : Species) :

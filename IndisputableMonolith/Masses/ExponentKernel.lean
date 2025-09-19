@@ -12,11 +12,10 @@ def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
 @[simp] lemma gauge_symm {a b : ℝ} : GaugeEq a b → GaugeEq b a := by
   intro h; rcases h with ⟨c, hc, h⟩
   refine ⟨c⁻¹, inv_ne_zero hc, ?_⟩
-  -- a = c * b ⇒ c⁻¹ * a = c⁻¹ * (c * b) = b
-  have eq1 : c⁻¹ * a = c⁻¹ * (c * b) := by simpa [h]
-  have hb : c⁻¹ * (c * b) = b := by
-    simpa [mul_comm, mul_left_comm, mul_assoc] using (inv_mul_cancel_left₀ (a:=c) (b:=b) hc)
-  have : c⁻¹ * a = b := eq1.trans hb
+  -- a = c * b ⇒ c⁻¹ * a = b
+  have : c⁻¹ * a = b := by
+    have := congrArg (fun x => c⁻¹ * x) h
+    simpa [mul_left_comm, mul_assoc, inv_mul_cancel hc, one_mul] using this
   simpa [mul_comm] using this.symm
 
 @[simp] lemma gauge_trans {a b c : ℝ} : GaugeEq a b → GaugeEq b c → GaugeEq a c := by

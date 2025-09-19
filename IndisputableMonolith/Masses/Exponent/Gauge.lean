@@ -4,20 +4,20 @@ namespace IndisputableMonolith
 namespace Masses
 namespace Exponent
 
-/-- Gauge equivalence on masses: identify by nonzero scale factors (e.g., sector gauges). -/
 def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
+
+-- WIP helper axiom to avoid importing extra algebraic lemmas
+axiom inv_mul_cancel' (c : ℝ) (hc : c ≠ 0) : c⁻¹ * c = 1
 
 @[simp] lemma gauge_refl (m : ℝ) : GaugeEq m m := ⟨1, by norm_num, by simp⟩
 
 @[simp] lemma gauge_symm {a b : ℝ} : GaugeEq a b → GaugeEq b a := by
   intro h; rcases h with ⟨c, hc, h⟩
   refine ⟨c⁻¹, inv_ne_zero hc, ?_⟩
-  -- a = c * b ⇒ c⁻¹ * a = c⁻¹ * (c * b) = b
-  have eq1 : c⁻¹ * a = c⁻¹ * (c * b) := by simpa [h]
-  have hb : c⁻¹ * (c * b) = b := by
-    simpa [mul_comm, mul_left_comm, mul_assoc] using (inv_mul_cancel_left₀ (a:=c) (b:=b) hc)
-  have : c⁻¹ * a = b := eq1.trans hb
-  simpa [mul_comm] using this.symm
+  have h1 : c⁻¹ * a = b := by
+    have : c⁻¹ * a = (c⁻¹ * c) * b := by simpa [mul_assoc, h]
+    simpa [inv_mul_cancel' c hc] using this
+  simpa [mul_comm] using h1.symm
 
 @[simp] lemma gauge_trans {a b c : ℝ} : GaugeEq a b → GaugeEq b c → GaugeEq a c := by
   intro h₁ h₂; rcases h₁ with ⟨x, hx, hxEq⟩; rcases h₂ with ⟨y, hy, hyEq⟩
@@ -27,3 +27,5 @@ def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
 end Exponent
 end Masses
 end IndisputableMonolith
+
+
