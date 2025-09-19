@@ -987,6 +987,14 @@
       "notes": "voxel walk mathematics with phi, A2, sigmaCore, fEye/fHalfVoxel/fFace functions; ~55 lines; minimal stubs; core green"
     }
     ,{
+      "id": "Gap45:TimeLag",
+      "namespace": "IndisputableMonolith.Gap45.TimeLag",
+      "path": "IndisputableMonolith/Gap45/TimeLag.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "time-lag arithmetic constants and rational/real identities; ~11 lines; minimal stubs; core green"
+    }
+    ,{
       "id": "YM:Dobrushin",
       "namespace": "IndisputableMonolith.YM.Dobrushin",
       "path": "IndisputableMonolith/YM/Dobrushin.lean",

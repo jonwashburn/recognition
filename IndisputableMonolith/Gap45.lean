@@ -123,18 +123,7 @@ lemma no_smaller_multiple_8_45 {n : Nat} (hnpos : 0 < n) (hnlt : n < 360) :
 
 end Beat
 
-/-- Time-lag arithmetic helpers (pure numerics used by the paper). -/
-namespace TimeLag
-
-/-- As rationals: 45 / (8 * 120) = 3 / 64. -/
-@[simp] lemma lag_q : (45 : ℚ) / ((8 : ℚ) * (120 : ℚ)) = (3 : ℚ) / 64 := by
-  norm_num
-
-/-- As reals: 45 / (8 * 120) = 3 / 64. -/
-@[simp] lemma lag_r : (45 : ℝ) / ((8 : ℝ) * (120 : ℝ)) = (3 : ℝ) / 64 := by
-  norm_num
-
-end TimeLag
+-- (Moved to IndisputableMonolith/Gap45/TimeLag.lean)
 
 /-- Uncomputability and experiential navigation scaffolding. -/
 namespace RecognitionBarrier
@@ -319,18 +308,7 @@ lemma no_smaller_multiple_8_45 {n : Nat} (hnpos : 0 < n) (hnlt : n < 360) :
 
 end Beat
 
-/-- Time-lag arithmetic helpers (pure numerics used by the paper). -/
-namespace TimeLag
-
-/-- As rationals: 45 / (8 * 120) = 3 / 64. -/
-@[simp] lemma lag_q : (45 : ℚ) / ((8 : ℚ) * (120 : ℚ)) = (3 : ℚ) / 64 := by
-  norm_num
-
-/-- As reals: 45 / (8 * 120) = 3 / 64. -/
-@[simp] lemma lag_r : (45 : ℝ) / ((8 : ℝ) * (120 : ℝ)) = (3 : ℝ) / 64 := by
-  norm_num
-
-end TimeLag
+-- (Moved to IndisputableMonolith/Gap45/TimeLag.lean)
 
 /-- Uncomputability and experiential navigation scaffolding. -/
 namespace RecognitionBarrier
