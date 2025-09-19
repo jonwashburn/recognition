@@ -427,6 +427,14 @@
       "notes": "BFS finset ball and cardinality bounds; core green"
     }
     ,{
+      "id": "Gravity.ILG:TimeKernelBasics",
+      "namespace": "IndisputableMonolith.Gravity.ILG",
+      "path": "IndisputableMonolith/Gravity/ILG.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "BaryonCurves, epsilons, vbarSq/vbar/gbar, Params, w_t, w_t_display"
+    }
+    ,{
       "id": "MaxwellDEC:Equations",
       "namespace": "IndisputableMonolith.MaxwellDEC",
       "path": "IndisputableMonolith/MaxwellDEC.lean",
@@ -457,6 +465,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "Extracted StepBounds and cone_bound; standalone green; core green"
+    }
+    ,{
+      "id": "ILG:ParamsKernel",
+      "namespace": "IndisputableMonolith.ILG.ParamsKernel",
+      "path": "IndisputableMonolith/ILG/ParamsKernel.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Params, ParamProps, w_t, n_of_r, xi_of_bin"
     }
     ,{
       "id": "Verification:RenderedIndex",
@@ -497,6 +513,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "routeA_report, lambda_report moved; core green"
+    },
+    {
+      "id": "URCAdapters:TcGrowth",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/TcGrowth.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "tc_growth_prop and lemma moved; core green"
     },
     {
       "id": "RSBridge:Anchor",

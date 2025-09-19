@@ -4891,10 +4891,7 @@ lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_ze
 
 -- (RS-preserving existence moved to Complexity/RSVC.)
 
-/-- Simple computation growth placeholder (e.g., O(n log n) abstracted as a Prop). -/
-def tc_growth_prop : Prop := True
-
-lemma tc_growth_holds : tc_growth_prop := True.intro
+-- (Moved to IndisputableMonolith/URCAdapters/TcGrowth.lean)
 
 /-- Route A adapter: treat `URC.BridgeAxioms.Manifest.bridge` as the B (short lawful bridge)
     input for absolute-layer assembly. -/
