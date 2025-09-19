@@ -1,0 +1,451 @@
+{
+  "source": "IndisputableMonolith.lean",
+  "jobs": [
+    {
+      "name": "Constants",
+      "start_line": 21,
+      "end_line": 93,
+      "claimedBy": "agent-1",
+      "claimedAt": 1758296606
+    },
+    {
+      "name": "BridgeData",
+      "start_line": 265,
+      "end_line": 401,
+      "claimedBy": "agent-2",
+      "claimedAt": 1758296613
+    },
+    {
+      "name": "LedgerUnits",
+      "start_line": 644,
+      "end_line": 755,
+      "claimedBy": "agentE",
+      "claimedAt": 1758297626
+    },
+    {
+      "name": "UnitMapping",
+      "start_line": 758,
+      "end_line": 839
+    },
+    {
+      "name": "ConeBound",
+      "start_line": 948,
+      "end_line": 1112
+    },
+    {
+      "name": "StepBounds",
+      "start_line": 1129,
+      "end_line": 1200
+    },
+    {
+      "name": "LightCone",
+      "start_line": 1115,
+      "end_line": 1202
+    },
+    {
+      "name": "LNAL",
+      "start_line": 1257,
+      "end_line": 1326
+    },
+    {
+      "name": "Potential",
+      "start_line": 1332,
+      "end_line": 1434
+    },
+    {
+      "name": "ClassicalBridge",
+      "start_line": 1591,
+      "end_line": 1654
+    },
+    {
+      "name": "Cost#part1",
+      "start_line": 1657,
+      "end_line": 1802
+    },
+    {
+      "name": "Cost#part2",
+      "start_line": 1803,
+      "end_line": 1948
+    },
+    {
+      "name": "RSUnits",
+      "start_line": 2139,
+      "end_line": 2245
+    },
+    {
+      "name": "Constants",
+      "start_line": 2081,
+      "end_line": 2247
+    },
+    {
+      "name": "RS#part1",
+      "start_line": 2316,
+      "end_line": 2474
+    },
+    {
+      "name": "RS#part2",
+      "start_line": 2475,
+      "end_line": 2633
+    },
+    {
+      "name": "RH#part1",
+      "start_line": 2315,
+      "end_line": 2474
+    },
+    {
+      "name": "RH#part2",
+      "start_line": 2475,
+      "end_line": 2634
+    },
+    {
+      "name": "Instances",
+      "start_line": 2639,
+      "end_line": 2710
+    },
+    {
+      "name": "RS",
+      "start_line": 2638,
+      "end_line": 2711
+    },
+    {
+      "name": "RH",
+      "start_line": 2637,
+      "end_line": 2712
+    },
+    {
+      "name": "Instances",
+      "start_line": 2717,
+      "end_line": 2806
+    },
+    {
+      "name": "RS",
+      "start_line": 2716,
+      "end_line": 2807
+    },
+    {
+      "name": "RH",
+      "start_line": 2715,
+      "end_line": 2808
+    },
+    {
+      "name": "Instances",
+      "start_line": 2813,
+      "end_line": 2944
+    },
+    {
+      "name": "RS",
+      "start_line": 2812,
+      "end_line": 2945
+    },
+    {
+      "name": "RH",
+      "start_line": 2811,
+      "end_line": 2946
+    },
+    {
+      "name": "Witness",
+      "start_line": 2951,
+      "end_line": 3037
+    },
+    {
+      "name": "RS",
+      "start_line": 2950,
+      "end_line": 3038
+    },
+    {
+      "name": "RH",
+      "start_line": 2949,
+      "end_line": 3039
+    },
+    {
+      "name": "VoxelWalks#part1",
+      "start_line": 3099,
+      "end_line": 3225
+    },
+    {
+      "name": "VoxelWalks#part2",
+      "start_line": 3226,
+      "end_line": 3353
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 3098,
+      "end_line": 3225
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 3226,
+      "end_line": 3354
+    },
+    {
+      "name": "Masses",
+      "start_line": 3357,
+      "end_line": 3417
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 3356,
+      "end_line": 3418
+    },
+    {
+      "name": "Derivation#part1",
+      "start_line": 3540,
+      "end_line": 3666
+    },
+    {
+      "name": "Derivation#part2",
+      "start_line": 3667,
+      "end_line": 3793
+    },
+    {
+      "name": "Masses#part1",
+      "start_line": 3539,
+      "end_line": 3666
+    },
+    {
+      "name": "Masses#part2",
+      "start_line": 3667,
+      "end_line": 3794
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 3538,
+      "end_line": 3666
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 3667,
+      "end_line": 3795
+    },
+    {
+      "name": "Ribbons",
+      "start_line": 3799,
+      "end_line": 3893
+    },
+    {
+      "name": "Masses",
+      "start_line": 3798,
+      "end_line": 3894
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 3797,
+      "end_line": 3895
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 3897,
+      "end_line": 4024
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 4025,
+      "end_line": 4153
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 4155,
+      "end_line": 4240
+    },
+    {
+      "name": "Recognition",
+      "start_line": 4296,
+      "end_line": 4427
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 4295,
+      "end_line": 4428
+    },
+    {
+      "name": "Gap45",
+      "start_line": 4431,
+      "end_line": 4603
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 4430,
+      "end_line": 4604
+    },
+    {
+      "name": "Recognition",
+      "start_line": 4607,
+      "end_line": 4738
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 4606,
+      "end_line": 4739
+    },
+    {
+      "name": "RSBridge",
+      "start_line": 4742,
+      "end_line": 4850
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 4741,
+      "end_line": 4851
+    },
+    {
+      "name": "Ablation",
+      "start_line": 4924,
+      "end_line": 5027
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 5143,
+      "end_line": 5206
+    },
+    {
+      "name": "BridgeData",
+      "start_line": 5433,
+      "end_line": 5569
+    },
+    {
+      "name": "URCAdapters",
+      "start_line": 5770,
+      "end_line": 5924
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 5769,
+      "end_line": 5925
+    },
+    {
+      "name": "MRD",
+      "start_line": 5998,
+      "end_line": 6061
+    },
+    {
+      "name": "TruthCore",
+      "start_line": 5928,
+      "end_line": 6069
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 5927,
+      "end_line": 6070
+    },
+    {
+      "name": "ILG#part1",
+      "start_line": 6074,
+      "end_line": 6193
+    },
+    {
+      "name": "ILG#part2",
+      "start_line": 6194,
+      "end_line": 6314
+    },
+    {
+      "name": "Gravity#part1",
+      "start_line": 6073,
+      "end_line": 6193
+    },
+    {
+      "name": "Gravity#part2",
+      "start_line": 6194,
+      "end_line": 6315
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 6072,
+      "end_line": 6193
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 6194,
+      "end_line": 6316
+    },
+    {
+      "name": "Spectra#part1",
+      "start_line": 6656,
+      "end_line": 6807
+    },
+    {
+      "name": "Spectra#part2",
+      "start_line": 6808,
+      "end_line": 6960
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 6652,
+      "end_line": 6806
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 6807,
+      "end_line": 6962
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 6964,
+      "end_line": 7045
+    },
+    {
+      "name": "Quantum#part1",
+      "start_line": 7051,
+      "end_line": 7178
+    },
+    {
+      "name": "Quantum#part2",
+      "start_line": 7179,
+      "end_line": 7306
+    },
+    {
+      "name": "IndisputableMonolith#part1",
+      "start_line": 7047,
+      "end_line": 7177
+    },
+    {
+      "name": "IndisputableMonolith#part2",
+      "start_line": 7178,
+      "end_line": 7308
+    },
+    {
+      "name": "Dynamics#part1",
+      "start_line": 7347,
+      "end_line": 7496
+    },
+    {
+      "name": "Dynamics#part2",
+      "start_line": 7497,
+      "end_line": 7647
+    },
+    {
+      "name": "NecessityCascade#part1",
+      "start_line": 7653,
+      "end_line": 7850
+    },
+    {
+      "name": "NecessityCascade#part2",
+      "start_line": 7851,
+      "end_line": 8048
+    },
+    {
+      "name": "Alignment",
+      "start_line": 8447,
+      "end_line": 8515
+    },
+    {
+      "name": "Ethics",
+      "start_line": 8446,
+      "end_line": 8516
+    },
+    {
+      "name": "IndisputableMonolith",
+      "start_line": 8445,
+      "end_line": 8517
+    },
+    {
+      "name": "BridgeAxioms",
+      "start_line": 8653,
+      "end_line": 8713
+    },
+    {
+      "name": "URC",
+      "start_line": 8652,
+      "end_line": 8714
+    }
+  ]
+}

@@ -321,6 +321,14 @@
       "status": "done",
       "owner": "",
       "notes": "Promoted into core (minimal skeleton, axioms for proofs)"
+    },
+    {
+      "id": "LedgerUnits:delta-one",
+      "namespace": "IndisputableMonolith.LedgerUnits",
+      "path": "IndisputableMonolith/LedgerUnits.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Delta subgroup, fromZ/toZ, kOf/rungOf, δ=1 equiv"
     }
   ]
 }
