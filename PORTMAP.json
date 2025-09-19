@@ -486,9 +486,9 @@
       "id": "Verification:ZeroKnobs",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification/Knobs.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "zeroKnobsExports list"
+      "notes": "moved zeroKnobsExports; core green"
     },
     {
       "id": "RSBridge:Anchor",
