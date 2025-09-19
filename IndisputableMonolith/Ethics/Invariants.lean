@@ -19,5 +19,3 @@ lemma all_holds : All := And.intro monotonicity_holds (And.intro symmetry_holds 
 end Invariants
 end Ethics
 end IndisputableMonolith
-
-

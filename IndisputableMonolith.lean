@@ -393,11 +393,7 @@ def zeroKnobsExports : List String :=
   , "recognition_lower_bound_sat"
   ]
 /-- Anchor-invariance holds for all registered dimensionless observables. -/
-theorem dimless_anchor_invariant_KA {U U'} (h : UnitsRescaled U U') :
-  BridgeEval K_A_obs U = BridgeEval K_A_obs U' := anchor_invariance K_A_obs h
-
-theorem dimless_anchor_invariant_KB {U U'} (h : UnitsRescaled U U') :
-  BridgeEval K_B_obs U = BridgeEval K_B_obs U' := anchor_invariance K_B_obs h
+-- (Moved to IndisputableMonolith/Verification/AnchorInvariants.lean)
 
 /-! ### Machine-readable manifest (moved to IndisputableMonolith/Verification/Manifest.lean) -/
 

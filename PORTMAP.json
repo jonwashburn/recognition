@@ -475,6 +475,14 @@
       "notes": "Falsifiable + manifest strings/id helpers; core green"
     },
     {
+      "id": "Verification:AnchorInvariants",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/AnchorInvariants.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "moved KA/KB anchor invariance theorems; core green"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",
@@ -505,6 +513,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "Monotonicity/Symmetry/Stability props extracted; core green"
+    },
+    {
+      "id": "Measurement:Realization",
+      "namespace": "IndisputableMonolith.Measurement",
+      "path": "IndisputableMonolith/Measurement/Realization.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "Realization struct and lnalRealization helper"
     }
   ]
 }
