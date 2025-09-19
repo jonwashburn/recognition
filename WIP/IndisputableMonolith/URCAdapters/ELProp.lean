@@ -3,6 +3,19 @@ import Mathlib
 namespace IndisputableMonolith
 namespace URCAdapters
 
+/-- EL stationarity and minimality on the log axis (stubbed Prop for WIP). -/
+def EL_prop : Prop := True
+
+lemma EL_holds : EL_prop := True.intro
+
+end URCAdapters
+end IndisputableMonolith
+
+import Mathlib
+
+namespace IndisputableMonolith
+namespace URCAdapters
+
 /-! EL stationarity and minimality on the log axis (WIP extract).
     We avoid depending on the full monolith by stubbing `Jlog` lemmas. -/
 
