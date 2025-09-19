@@ -1,21 +1,8 @@
 import Mathlib
 import IndisputableMonolith.Core
+import IndisputableMonolith.Manifest
 
-/-!
-README (Executable Manifest) — Proven Architecture of Reality
-
-To verify in seconds (no knobs), run:
-  #eval IndisputableMonolith.URCAdapters.routeA_end_to_end_demo
-  #eval IndisputableMonolith.URCAdapters.routeB_closure_report
-  #eval IndisputableMonolith.URCAdapters.lambda_report
-  #eval IndisputableMonolith.URCAdapters.grand_manifest
-
-These confirm: A (axioms→bridge) ⇒ C; B (generators→bridge) ⇒ C; λ_rec uniqueness holds.
--/
-
-open Classical Function
-open Real Complex
-open scoped BigOperators
+-- (Moved to IndisputableMonolith/Manifest.lean)
 
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)
 -- (Moved to IndisputableMonolith/Recognition/Certification.lean)

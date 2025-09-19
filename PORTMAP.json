@@ -1161,6 +1161,14 @@
       "status": "done",
       "owner": "autonomous-agent",
       "notes": "BridgeData structure with physical constants, lambda_rec, K-gate functions, dimensionless identities, and electron mass calculations; axiom stubs; core green"
+    },
+    {
+      "id": "Manifest:Entry",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Manifest.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "Documentation and entry point manifest for IndisputableMonolith; ~20 lines; minimal dependencies; core green"
     }
   ]
 }
