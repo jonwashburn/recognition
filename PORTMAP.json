@@ -337,22 +337,22 @@
       "status": "done",
       "owner": "agentE",
       "notes": "extracted affine δ→ℝ mapping; core green"
-    }
-    ,{
-      "id": "Masses.Ribbons:core",
-      "namespace": "IndisputableMonolith.Masses.Ribbons",
-      "path": "IndisputableMonolith/Masses/Ribbons.lean",
+    },
+    {
+      "id": "Causality:Basic",
+      "namespace": "IndisputableMonolith.Causality",
+      "path": "IndisputableMonolith/Causality/Basic.lean",
       "status": "done",
       "owner": "agentE",
-      "notes": "Ribbon words, normalization, winding; local stubs; core green"
-    }
-    ,{
-      "id": "Causality:ReachN",
+      "notes": "Kinematics/ReachN/inBall/Reaches extracted; core green"
+    },
+    {
+      "id": "Causality:BallP",
       "namespace": "IndisputableMonolith.Causality",
-      "path": "IndisputableMonolith/Causality/Reach.lean",
-      "status": "in_progress",
+      "path": "IndisputableMonolith/Causality/BallP.lean",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Kinematics, ReachN, inBall, ballP equivalence"
+      "notes": "extracted ballP + lemmas; core green"
     }
   ]
 }

@@ -794,63 +794,7 @@ end Causality
 
 /-! Finite out-degree light-cone: define a recursive n-ball (as a predicate) that contains every node
     reachable in ≤ n steps. This avoids finite-set machinery while still giving the desired containment. -/
-namespace Causality
-
-variable {α : Type}
-
-/-- `ballP K x n y` means y is within ≤ n steps of x via `K.step`.
-    This is the graph-theoretic n-ball as a predicate on vertices. -/
-def ballP (K : Kinematics α) (x : α) : Nat → α → Prop
-| 0, y => y = x
-| Nat.succ n, y => ballP K x n y ∨ ∃ z, ballP K x n z ∧ K.step z y
-
-lemma ballP_mono {K : Kinematics α} {x : α} {n m : Nat}
-  (hnm : n ≤ m) : {y | ballP K x n y} ⊆ {y | ballP K x m y} := by
-  induction hnm with
-  | refl => intro y hy; exact (by simpa using hy)
-  | @step m hm ih =>
-      intro y hy
-      -- lift membership from n to n+1 via the left disjunct
-      exact Or.inl (ih hy)
-
-lemma reach_mem_ballP {K : Kinematics α} {x y : α} :
-  ∀ {n}, ReachN K n x y → ballP K x n y := by
-  intro n h; induction h with
-  | zero => simp [ballP]
-  | @succ n x y z hxy hyz ih =>
-      -- y is in ballP K x n; step y→z puts z into the next shell
-      exact Or.inr ⟨y, ih, hyz⟩
-
-lemma inBall_subset_ballP {K : Kinematics α} {x y : α} {n : Nat} :
-  inBall K x n y → ballP K x n y := by
-  intro ⟨k, hk, hreach⟩
-  have : ballP K x k y := reach_mem_ballP (K:=K) (x:=x) (y:=y) hreach
-  -- monotonicity in the radius
-  have mono := ballP_mono (K:=K) (x:=x) hk
-  exact mono this
-
-lemma ballP_subset_inBall {K : Kinematics α} {x y : α} :
-  ∀ {n}, ballP K x n y → inBall K x n y := by
-  intro n
-  induction n generalizing y with
-  | zero =>
-      intro hy
-      -- at radius 0, membership means y = x
-      rcases hy with rfl
-      exact ⟨0, le_rfl, ReachN.zero⟩
-  | succ n ih =>
-      intro hy
-      cases hy with
-      | inl hy' =>
-          -- lift inclusion from n to n+1
-          rcases ih hy' with ⟨k, hk, hkreach⟩
-          exact ⟨k, Nat.le_trans hk (Nat.le_succ _), hkreach⟩
-      | inr h' =>
-          rcases h' with ⟨z, hz, hstep⟩
-          rcases ih hz with ⟨k, hk, hkreach⟩
-          exact ⟨k + 1, Nat.succ_le_succ hk, ReachN.succ hkreach hstep⟩
-
-end Causality
+-- (Moved to IndisputableMonolith/Causality/BallP.lean)
 
 /-! ## Locally-finite causality: bounded out-degree and n-ball cardinality bounds -/
 
