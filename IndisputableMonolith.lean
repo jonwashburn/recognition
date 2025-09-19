@@ -1366,11 +1366,7 @@ end Cost
 
 namespace Constants
 
-/-- Locked ILG exponent (dimensionless): α = (1 - 1/φ)/2. -/
-@[simp] def alpha_locked : ℝ := (1 - 1 / phi) / 2
-
-/-- Small-lag constant (dimensionless): C_lag = φ^(-5) = 1 / φ^5. -/
-@[simp] def Clag : ℝ := 1 / (phi ^ (5 : Nat))
+-- (Moved to IndisputableMonolith/Constants/AlphaLocked.lean)
 
 /-- Acceleration normalization used in the acceleration kernel (SI units). -/
 -- Removed hard SI numeric for Bohr radius; use BridgeData.a0_bohr for SI evaluation.
@@ -1378,38 +1374,7 @@ namespace Constants
 /-- Build note (Lean): to resolve Mathlib imports and `Real.rpow`, add mathlib4 to your Lake project. -/
 
 /-- α > 0, using 1 < φ. -/
-lemma alpha_locked_pos : 0 < alpha_locked := by
-  -- (1 - 1/φ) > 0 because 1/φ < 1 when φ > 1
-  have hφ : 1 < phi := one_lt_phi
-  have hlt : 1 / phi < 1 := by
-    have hφpos : 0 < phi := phi_pos
-    have : 0 < 1 / phi := inv_pos.mpr hφpos
-    -- 1/φ < 1 ↔ 1 < φ
-    exact (inv_lt_one_iff_of_pos hφpos).mpr hφ
-  have : 0 < 1 - 1 / phi := sub_pos.mpr hlt
-  have htwo : 0 < (2 : ℝ) := by norm_num
-  exact div_pos this htwo
-
-/-- α < 1 (in fact α ≤ 1/2). -/
-lemma alpha_locked_lt_one : alpha_locked < 1 := by
-  -- (1 - 1/φ)/2 < 1/2 < 1
-  have hlt : (1 - 1 / phi) / 2 < (1 : ℝ) / 2 := by
-    have : 1 - 1 / phi < 1 := by
-      have hφ : 0 < 1 / phi := inv_pos.mpr phi_pos
-      have : (1 - 1 / phi) < 1 - 0 := sub_lt_sub_left (lt_of_le_of_lt (le_of_lt hφ) (lt_of_le_of_lt (le_of_eq rfl) (by norm_num : (0 : ℝ) < 1))) 1
-      -- simpler: 1/φ > 0 ⇒ 1 - 1/φ < 1
-      have : 0 < 1 / phi := inv_pos.mpr phi_pos
-      simpa using sub_lt_iff_lt_add'.mpr this
-    have htwo : 0 < (2 : ℝ) := by norm_num
-    exact (div_lt_div_of_pos_right this htwo)
-  have : (1 : ℝ) / 2 < 1 := by norm_num
-  exact lt_trans hlt this
-
-/-- C_lag > 0 since φ > 1. -/
-lemma Clag_pos : 0 < Clag := by
-  have hφ : 0 < phi := phi_pos
-  have hpow : 0 < phi ^ (5 : Nat) := pow_pos hφ 5
-  simpa [Clag, one_div] using inv_pos.mpr hpow
+-- (Moved to IndisputableMonolith/Constants/AlphaLocked.lean)
 
 /-! ### Dimensionless bridge ratio K and display equalities -/
 

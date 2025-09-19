@@ -155,5 +155,3 @@ theorem display_speed_identity (U : IndisputableMonolith.Constants.RSUnits) :
 
 end TruthCore
 end IndisputableMonolith
-
-

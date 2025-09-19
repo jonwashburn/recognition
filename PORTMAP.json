@@ -686,9 +686,9 @@
       "id": "Constants:AlphaLockedClag",
       "namespace": "IndisputableMonolith.Constants",
       "path": "IndisputableMonolith/Constants/AlphaLocked.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "alpha_locked/Clag and basic bounds"
+      "notes": "extracted alpha_locked/Clag and bounds; core green"
     },
     {
       "id": "Measurement:Realization",
