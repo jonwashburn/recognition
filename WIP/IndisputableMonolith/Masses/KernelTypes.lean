@@ -32,5 +32,3 @@ structure RungSpec where
 
 end Masses
 end IndisputableMonolith
-
-

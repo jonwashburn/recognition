@@ -11,6 +11,14 @@
       "notes": "Moved from monolith; noncomputable defs; core unaffected"
     },
     {
+      "id": "Masses:ExponentGauge",
+      "namespace": "IndisputableMonolith.Masses.Exponent.Gauge",
+      "path": "IndisputableMonolith/Masses/Exponent/Gauge.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "GaugeEq + refl/symm/trans"
+    },
+    {
       "id": "Masses:KernelTypes",
       "namespace": "IndisputableMonolith.Masses",
       "path": "IndisputableMonolith/Masses/KernelTypes.lean",
@@ -491,6 +499,14 @@
       "notes": "Params, ParamProps, w_t, n_of_r, xi_of_bin"
     }
     ,{
+      "id": "Constants:KDisplay",
+      "namespace": "IndisputableMonolith.Constants.KDisplay",
+      "path": "IndisputableMonolith/Constants/KDisplay.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "tau_rec_display, lambda_kin_display, K gate"
+    }
+    ,{
       "id": "Verification:RenderedIndex",
       "namespace": "IndisputableMonolith.Verification.Rendered",
       "path": "IndisputableMonolith/Verification/Rendered.lean",
@@ -555,6 +571,14 @@
       "notes": "audit_SI_via_bridge_only moved; core green"
     },
     {
+      "id": "URCAdapters:Routes",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/Routes.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "RouteA_LawfulBridge moved; core green"
+    },
+    {
       "id": "RSBridge:Anchor",
       "namespace": "IndisputableMonolith.RSBridge",
       "path": "IndisputableMonolith/RSBridge/Anchor.lean",
@@ -593,6 +617,14 @@
       "status": "in_progress",
       "owner": "agentE",
       "notes": "Realization struct and lnalRealization helper"
+    },
+    {
+      "id": "Masses:ExponentKernel",
+      "namespace": "IndisputableMonolith.Masses.Exponent",
+      "path": "IndisputableMonolith/Masses/ExponentKernel.lean",
+      "status": "in_progress",
+      "owner": "agentE",
+      "notes": "GaugeEq relation and factorization/functoriality helpers"
     }
   ]
 }

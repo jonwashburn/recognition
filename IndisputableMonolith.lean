@@ -4863,8 +4863,7 @@ lemma EL_holds : EL_prop := by exact ⟨IndisputableMonolith.EL_stationary_at_ze
 
 /-- Route A adapter: treat `URC.BridgeAxioms.Manifest.bridge` as the B (short lawful bridge)
     input for absolute-layer assembly. -/
-def RouteA_LawfulBridge : URC.BridgeAxioms.LawfulBridge :=
-  URC.BridgeAxioms.Manifest.bridge
+-- (Moved to IndisputableMonolith/URCAdapters/Routes.lean)
 
 -- (Moved to IndisputableMonolith/URCAdapters/Reports.lean)
 -- (Moved to IndisputableMonolith/URCAdapters/Reports.lean)
