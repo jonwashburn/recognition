@@ -181,37 +181,9 @@ end Complex4D
 end DEC4D
 
 /-! ### Compatibility re-exports (MaxwellDEC alias)
-These provide the names used in the umbrella file without changing callers.
+Omitted in WIP to avoid instance inference issues. Use DEC.* and DEC4D.* directly.
 -/
 namespace MaxwellDEC
-
-abbrev CochainSpace := DEC.CochainSpace
-
-namespace CochainSpace
-
-abbrev F := DEC.CochainSpace.F
-abbrev gauge := DEC.CochainSpace.gauge
-
-theorem bianchi {A} [AddCommMonoid A]
-  (X : CochainSpace A) (A1 : A) : X.d2 (F X A1) = 0 :=
-  DEC.CochainSpace.bianchi X A1
-
-theorem F_gauge_invariant {A} [AddCommMonoid A]
-  (X : CochainSpace A) (A1 χ : A) : F X (gauge X A1 χ) = F X A1 :=
-  DEC.CochainSpace.F_gauge_invariant X A1 χ
-
-abbrev MaxwellModel := DEC.CochainSpace.MaxwellModel
-
-namespace MaxwellModel
-
-abbrev J := DEC.CochainSpace.MaxwellModel.J
-
-theorem current_conservation {A} [AddCommMonoid A]
-  (M : MaxwellModel A) (A1 : A) : M.d3 (J M A1) = 0 :=
-  DEC.CochainSpace.MaxwellModel.current_conservation M A1
-
-end MaxwellModel
-end CochainSpace
 end MaxwellDEC
 
 end IndisputableMonolith
