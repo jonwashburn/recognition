@@ -1,29 +1,39 @@
 import Mathlib
+import URC.Minimal
 import IndisputableMonolith.RH.RS.Spec
+import IndisputableMonolith.URCAdapters.Routes
+import IndisputableMonolith.URCAdapters.Reports
 
 namespace IndisputableMonolith
 namespace URCAdapters
 
-def RouteA_LawfulBridge : RH.RS.LawfulBridge := by
-  -- Minimal placeholder; detailed construction remains in monolith comments.
-  exact ⟨⟩
-
-def routeA_report : String :=
-  "URC Route A: B ⇒ C wired via bridge_inevitability (MonolithMA → LawfulBridge)."
+/-!
+  Route A: We use `URCMinimal.bridge` (see URCAdapters/Routes.lean).
+  Route B: Provide a concrete, admit-free witness that the absolute layer
+  obligations (`UniqueCalibration` and `MeetsBands`) can be bundled for a
+  minimal ledger/bridge, using the spec-level generic lemmas.
+-/
 
 def routeA_end_to_end_demo : String :=
   "URC Route A end-to-end: absolute layer accepts bridge; UniqueCalibration/MeetsBands witnesses available."
 
 def routeB_bridge_end_to_end_proof :
-  RH.RS.UniqueCalibration RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Anchors.mk 1 1)
-  ∧ RH.RS.MeetsBands RH.RS.Instances.IM (RH.RS.Bridge.mk Unit) (RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []) := by
-  -- Provide a trivial witness via RS Spec placeholders
-  let L := RH.RS.Instances.IM
-  have B : RH.RS.Bridge L := RH.RS.Bridge.mk Unit
-  let A : RH.RS.Anchors := RH.RS.Anchors.mk 1 1
-  let X : RH.RS.Bands := RH.RS.Bands.mk ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ ⟨0,0⟩ [] []
+  let L : RH.RS.Ledger := { Carrier := Unit }
+  let B : RH.RS.Bridge L := { dummy := () }
+  let A : RH.RS.Anchors := { a1 := 1, a2 := 1 }
+  let U : IndisputableMonolith.Constants.RSUnits :=
+    { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp }
+  let X : RH.RS.Bands := RH.RS.sampleBandsFor U.c
+  RH.RS.UniqueCalibration L B A ∧ RH.RS.MeetsBands L B X := by
+  -- Instantiate minimal ledger/bridge/anchors and use generic witnesses.
+  let L : RH.RS.Ledger := { Carrier := Unit }
+  let B : RH.RS.Bridge L := { dummy := () }
+  let A : RH.RS.Anchors := { a1 := 1, a2 := 1 }
+  let U : IndisputableMonolith.Constants.RSUnits :=
+    { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp }
+  let X : RH.RS.Bands := RH.RS.sampleBandsFor U.c
   have hU : RH.RS.UniqueCalibration L B A := RH.RS.uniqueCalibration_any L B A
-  have hM : RH.RS.MeetsBands L B X := RH.RS.meetsBands_any_default L B X
+  have hM : RH.RS.MeetsBands L B X := RH.RS.meetsBands_any_default L B U
   exact RH.RS.absolute_layer_any (L:=L) (B:=B) (A:=A) (X:=X) hU hM
 
 def routeAB_report : String :=

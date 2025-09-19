@@ -19,9 +19,22 @@ structure MarkovKernel (ι : Type) [Fintype ι] where
 /-- Row–row overlap `∑j min(P i j, P i' j)` in [0,1]. -/
 def overlap (K : MarkovKernel ι) (i i' : ι) : ℝ := ∑ j, min (K.P i j) (K.P i' j)
 
--- WIP: axiom stubs for dependency-light extraction
-axiom overlap_nonneg (K : MarkovKernel ι) (i i' : ι) : 0 ≤ overlap K i i'
-axiom overlap_le_one (K : MarkovKernel ι) (i i' : ι) : overlap K i i' ≤ 1
+--- WIP: axiom stubs for dependency-light extraction
+lemma overlap_nonneg (K : MarkovKernel ι) (i i' : ι) : 0 ≤ overlap K i i' := by
+  classical
+  have hterm : ∀ j : ι, 0 ≤ min (K.P i j) (K.P i' j) :=
+    fun j => min_nonneg (K.nonneg i j) (K.nonneg i' j)
+  have hsum : 0 ≤ ∑ j in Finset.univ, min (K.P i j) (K.P i' j) :=
+    Finset.sum_nonneg (by intro j _; exact hterm j)
+  simpa [overlap] using hsum
+
+lemma overlap_le_one (K : MarkovKernel ι) (i i' : ι) : overlap K i i' ≤ 1 := by
+  classical
+  have hpoint : ∀ j : ι, min (K.P i j) (K.P i' j) ≤ K.P i j :=
+    fun j => min_le_left _ _
+  have hsum : (∑ j in Finset.univ, min (K.P i j) (K.P i' j)) ≤ ∑ j in Finset.univ, K.P i j :=
+    Finset.sum_le_sum (by intro j _; exact hpoint j)
+  simpa [overlap, K.rowSum_one i] using hsum
 
 /-- TV contraction certificate from uniform overlap lower bound β ∈ (0,1]. -/
 def TVContractionMarkov (α : ℝ) : Prop := (0 ≤ α) ∧ (α < 1)

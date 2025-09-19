@@ -1,5 +1,6 @@
 import Mathlib
 import IndisputableMonolith.Constants
+import IndisputableMonolith.RH.RS.Scales
 
 namespace IndisputableMonolith
 namespace URCAdapters
@@ -20,23 +21,33 @@ namespace Derivation
 /-- A base mass map per sector/word charge Z (placeholder; nonzero scale). -/
 noncomputable def baseMass (_U : IndisputableMonolith.Constants.RSUnits) (_Z : ℤ) : ℝ := 1
 
-/-- Canonical units mass ladder: base × φ^{r} using the continuous real exponent form. -/
+/-- Canonical units mass ladder: base × PhiPow(r). -/
 noncomputable def massCanonUnits (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ) : ℝ :=
-  baseMass U Z * Real.exp (Real.log (IndisputableMonolith.Constants.phi) * (r : ℝ))
+  baseMass U Z * IndisputableMonolith.RH.RS.PhiPow ((r : ℝ))
 
-/-- φ‑rung shift for the definitional ladder. -/
+/-- φ‑rung shift for the definitional ladder via PhiPow_add and PhiPow 1 = φ. -/
 lemma massCanonUnits_rshift (U : IndisputableMonolith.Constants.RSUnits) (r Z : ℤ) :
   massCanonUnits U (r + 1) Z = IndisputableMonolith.Constants.phi * massCanonUnits U r Z := by
   unfold massCanonUnits
-  have hx : Real.log (IndisputableMonolith.Constants.phi) * ((r + 1 : ℤ) : ℝ)
-      = Real.log (IndisputableMonolith.Constants.phi) * (r : ℝ)
-        + Real.log (IndisputableMonolith.Constants.phi) := by
-    ring
+  -- PhiPow (r+1) = PhiPow r * PhiPow 1
+  have hadd : IndisputableMonolith.RH.RS.PhiPow (((r + 1 : ℤ) : ℝ))
+            = IndisputableMonolith.RH.RS.PhiPow ((r : ℝ)) * IndisputableMonolith.RH.RS.PhiPow (1 : ℝ) := by
+    have : (((r + 1 : ℤ) : ℝ)) = (r : ℝ) + 1 := by
+      simp [Int.cast_add, Int.cast_one]
+    simpa [this] using IndisputableMonolith.RH.RS.PhiPow_add (x:=(r : ℝ)) (y:=(1 : ℝ))
+  -- PhiPow 1 = φ
   have hφpos : 0 < IndisputableMonolith.Constants.phi := IndisputableMonolith.Constants.phi_pos
-  have hφ : Real.exp (Real.log (IndisputableMonolith.Constants.phi))
-            = IndisputableMonolith.Constants.phi := Real.exp_log hφpos
-  -- Expand step r→r+1 using exp-additivity, then identify exp(log φ) = φ
-  simp [hx, Real.exp_add, hφ, mul_comm, mul_left_comm, mul_assoc]
+  have hφ1 : IndisputableMonolith.RH.RS.PhiPow (1 : ℝ)
+            = IndisputableMonolith.Constants.phi := by
+    unfold IndisputableMonolith.RH.RS.PhiPow
+    simpa using (Real.exp_log hφpos)
+  -- Conclude the rung shift
+  calc
+    baseMass U Z * IndisputableMonolith.RH.RS.PhiPow (((r + 1 : ℤ) : ℝ))
+        = baseMass U Z * (IndisputableMonolith.RH.RS.PhiPow ((r : ℝ)) * IndisputableMonolith.RH.RS.PhiPow (1 : ℝ)) := by simpa [hadd]
+    _ = baseMass U Z * IndisputableMonolith.RH.RS.PhiPow ((r : ℝ)) * IndisputableMonolith.RH.RS.PhiPow (1 : ℝ) := by ring
+    _ = baseMass U Z * IndisputableMonolith.RH.RS.PhiPow ((r : ℝ)) * IndisputableMonolith.Constants.phi := by simpa [hφ1]
+    _ = IndisputableMonolith.Constants.phi * (baseMass U Z * IndisputableMonolith.RH.RS.PhiPow ((r : ℝ))) := by ring
 
 end Derivation
 end Masses

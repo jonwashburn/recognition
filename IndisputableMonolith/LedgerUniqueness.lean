@@ -1,5 +1,7 @@
 import Mathlib
 import IndisputableMonolith.Recognition
+import IndisputableMonolith.Potential
+import IndisputableMonolith.Causality.Basic
 -- For standalone WIP, inline a minimal Kinematics to avoid module dependency
 namespace Local
 structure Kinematics (α : Type) where
@@ -19,24 +21,37 @@ open Recognition
 variable {M : Recognition.RecognitionStructure}
 
 def IsAffine (δ : ℤ) (L : Recognition.Ledger M) : Prop :=
-  True  -- WIP stub: replace with Potential.DE (phi L) when ported
+  Potential.DE (M:=M) δ (fun x => Recognition.phi L x)
 
-axiom unique_on_reachN {δ : ℤ} {L L' : Recognition.Ledger M}
+lemma unique_on_reachN {δ : ℤ} {L L' : Recognition.Ledger M}
   (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
   {x0 : M.U} (hbase : Recognition.phi L x0 = Recognition.phi L' x0) :
-  ∀ {n y}, Local.ReachN ({ step := M.R }) n x0 y →
-    Recognition.phi L y = Recognition.phi L' y
+  ∀ {n y}, Causality.ReachN (Potential.Kin M) n x0 y →
+    Recognition.phi L y = Recognition.phi L' y := by
+  intro n y hreach
+  have : (fun x => Recognition.phi L x) y = (fun x => Recognition.phi L' x) y := by
+    refine Potential.T4_unique_on_reachN (M:=M) (δ:=δ)
+      (p:=fun x => Recognition.phi L x) (q:=fun x => Recognition.phi L' x)
+      hL hL' (x0:=x0) (by simpa using hbase) (n:=n) (y:=y) hreach
+  simpa using this
 
-axiom unique_on_inBall {δ : ℤ} {L L' : Recognition.Ledger M}
+lemma unique_on_inBall {δ : ℤ} {L L' : Recognition.Ledger M}
   (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
   {x0 y : M.U} (hbase : Recognition.phi L x0 = Recognition.phi L' x0) {n : Nat}
-  (hin : Local.inBall ({ step := M.R }) x0 n y) :
-  Recognition.phi L y = Recognition.phi L' y
+  (hin : Causality.inBall (Potential.Kin M) x0 n y) :
+  Recognition.phi L y = Recognition.phi L' y := by
+  exact Potential.T4_unique_on_inBall (M:=M) (δ:=δ)
+    (p:=fun x => Recognition.phi L x) (q:=fun x => Recognition.phi L' x)
+    hL hL' (x0:=x0) (by simpa using hbase) (n:=n) hin
 
-axiom unique_up_to_const_on_component {δ : ℤ} {L L' : Recognition.Ledger M}
+lemma unique_up_to_const_on_component {δ : ℤ} {L L' : Recognition.Ledger M}
   (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
-  {x0 : M.U} : ∃ c : ℤ, ∀ {y : M.U}, Local.Reaches ({ step := M.R }) x0 y →
-    Recognition.phi L y = Recognition.phi L' y + c
+  {x0 : M.U} : ∃ c : ℤ, ∀ {y : M.U}, Causality.Reaches (Potential.Kin M) x0 y →
+    Recognition.phi L y = Recognition.phi L' y + c := by
+  simpa using
+    (Potential.T4_unique_up_to_const_on_component (M:=M) (δ:=δ)
+      (p:=fun x => Recognition.phi L x) (q:=fun x => Recognition.phi L' x)
+      hL hL' (x0:=x0))
 
 end LedgerUniqueness
 end IndisputableMonolith

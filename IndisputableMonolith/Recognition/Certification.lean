@@ -4,17 +4,13 @@ namespace IndisputableMonolith
 namespace Recognition
 namespace Certification
 
-/-- Stub for Species type from Recognition (heavy dependency) -/
-axiom Species : Type
-
-/-- Stub for Z function from Recognition (heavy dependency) -/
-axiom Z : Species → Int
-
-/-- Stub for Fgap function from Recognition (heavy dependency) -/
-noncomputable axiom Fgap : Int → ℝ
-
 noncomputable section
 open Classical
+
+-- Replace heavy stubs with section parameters to avoid axioms.
+variable (Species : Type)
+variable (Z : Species → Int)
+variable (Fgap : Int → ℝ)
 
 /-- Closed interval with endpoints `lo ≤ hi`. -/
 structure Interval where
@@ -64,15 +60,55 @@ structure Valid (C : AnchorCert) : Prop where
 lemma M0_pos_of_cert {C : AnchorCert} (hC : Valid C) : 0 < C.M0.lo := hC.M0_pos
 
 /-- Certificate replacement for anchorIdentity (inequality form). -/
-axiom anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
+lemma anchorIdentity_cert {C : AnchorCert} (hC : Valid C)
   (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i)) :
-  ∀ i : Species, |res i - Fgap (Z i)| ≤ 2 * C.eps (Z i)
+  ∀ i : Species, |res i - Fgap (Z i)| ≤ 2 * C.eps (Z i) := by
+  intro i
+  -- Both `res i` and `Fgap (Z i)` lie in the same certified interval `Igap`.
+  have hF : memI (Igap C (Z i)) (Fgap (Z i)) := hC.Fgap_in i
+  have hI : (Igap C (Z i)).lo ≤ (C.Ires i).lo ∧ (C.Ires i).hi ≤ (Igap C (Z i)).hi :=
+    hC.Ires_in_Igap i
+  have hr : memI (Igap C (Z i)) (res i) := by
+    have hr0 := hres i
+    have hlo : (Igap C (Z i)).lo ≤ res i := by exact le_trans hI.left hr0.left
+    have hhi : res i ≤ (Igap C (Z i)).hi := by exact le_trans hr0.right hI.right
+    exact And.intro hlo hhi
+  -- Apply interval width bound in the same interval
+  have hbound := abs_sub_le_width_of_memI (I:=(Igap C (Z i))) (x:=res i) (y:=Fgap (Z i)) hr hF
+  -- Compute the width of Igap
+  dsimp [Igap, width] at hbound
+  -- (center+eps) - (center-eps) = 2*eps
+  have : (C.center (Z i) + C.eps (Z i)) - (C.center (Z i) - C.eps (Z i)) = 2 * C.eps (Z i) := by
+    ring
+  simpa [this]
 
 /-- Equal‑Z degeneracy (inequality form) from a certificate. -/
-axiom equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
+lemma equalZ_residue_of_cert {C : AnchorCert} (hC : Valid C)
   (res : Species → ℝ) (hres : ∀ i, memI (C.Ires i) (res i))
   {i j : Species} (hZ : Z i = Z j) :
-  |res i - res j| ≤ 2 * C.eps (Z i)
+  |res i - res j| ≤ 2 * C.eps (Z i) := by
+  -- Both residues lie in the same gap interval `Igap C (Z i)` when Z i = Z j.
+  have hI_i : (Igap C (Z i)).lo ≤ (C.Ires i).lo ∧ (C.Ires i).hi ≤ (Igap C (Z i)).hi :=
+    hC.Ires_in_Igap i
+  have hI_j : (Igap C (Z j)).lo ≤ (C.Ires j).lo ∧ (C.Ires j).hi ≤ (Igap C (Z j)).hi :=
+    hC.Ires_in_Igap j
+  have hres_i : memI (Igap C (Z i)) (res i) := by
+    have hr0 := hres i
+    exact And.intro (le_trans hI_i.left hr0.left) (le_trans hr0.right hI_i.right)
+  have hres_j : memI (Igap C (Z i)) (res j) := by
+    -- transport j's membership into the same interval via hZ
+    have hr0 := hres j
+    -- Coerce through equality of Z
+    have hlo_j : (Igap C (Z i)).lo ≤ (C.Ires j).lo := by simpa [hZ] using hI_j.left
+    have hhi_j : (C.Ires j).hi ≤ (Igap C (Z i)).hi := by simpa [hZ] using hI_j.right
+    exact And.intro (le_trans hlo_j hr0.left) (le_trans hr0.right hhi_j)
+  -- Interval width bound
+  have hbound := abs_sub_le_width_of_memI (I:=(Igap C (Z i))) (x:=res i) (y:=res j) hres_i hres_j
+  -- Compute width 2*eps
+  dsimp [Igap, width] at hbound
+  have : (C.center (Z i) + C.eps (Z i)) - (C.center (Z i) - C.eps (Z i)) = 2 * C.eps (Z i) := by
+    ring
+  simpa [this]
 
 /-! #### Zero-width anchor certificate (exact equality) -/
 
