@@ -3,6 +3,9 @@ import IndisputableMonolith.Core
 
 namespace IndisputableMonolith
 
+/-- Axiom stub for StatementType - depends on Core module. -/
+axiom StatementType : Type
+
 /-- Status of a claim: proven, failed, or unchecked. -/
 inductive ClaimStatus
 | proven
