@@ -651,12 +651,12 @@
       "notes": "Monotonicity/Symmetry/Stability props extracted; core green"
     },
     {
-      "id": "Potential:Uniqueness",
+      "id": "Potential:T4Uniqueness",
       "namespace": "IndisputableMonolith.Potential",
       "path": "IndisputableMonolith/Potential.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentG",
-      "notes": "Edge-diff invariance and uniqueness lemmas"
+      "notes": "extracted T4 lemmas; dependency-light; core green"
     },
     {
       "id": "Measurement:Realization",
