@@ -77,5 +77,3 @@ lemma ballP_subset_inBall {K : Kinematics α} {x y : α} :
 
 end Causality
 end IndisputableMonolith
-
-

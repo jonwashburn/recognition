@@ -372,7 +372,7 @@
     }
     ,{
       "id": "Causality:ConeBound",
-      "namespace": "IndisputableMonolith.ConeBound",
+      "namespace": "IndisputableMonolith.Causality.ConeBound",
       "path": "IndisputableMonolith/Causality/ConeBound.lean",
       "status": "in_progress",
       "owner": "agentE",
