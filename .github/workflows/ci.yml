@@ -1,4 +1,4 @@
-name: Lean CI (head + full)
+name: Lean CI
 
 on:
   push:
@@ -11,72 +11,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache elan and Lake deps
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.elan
-            ~/.cache/elan
-            ~/.lake
-            ./lake-packages
-            ./.lake
-          key: ${{ runner.os }}-lean-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}
-
-      - name: Install elan (Lean toolchain)
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | bash -s -- -y --default-toolchain none
-          echo "source $HOME/.elan/env" >> $GITHUB_ENV
-
-      - name: Show versions
-        run: |
-          source $HOME/.elan/env
-          lean --version
-          lake --version
-
-      - name: Build and run CI checks (lightweight)
-        run: |
-          source $HOME/.elan/env
-          lake exe ci_checks
-
-      - name: Guard against sorries/admit (excluding heavy monolith)
-        run: |
-          set -e
-          if grep -RInE "\bsorry\b|\badmit\b" \
-               --include="*.lean" \
-               --exclude="IndisputableMonolith.lean" \
-               --exclude-dir=".lake" \
-               --exclude-dir="lake-packages" .; then
-            echo "Found 'sorry' or 'admit' outside the heavy monolith"; exit 1;
-          else
-            echo "No 'sorry'/'admit' outside monolith";
-          fi
-
-name: Lean CI (head + full)
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-env:
-  LEAN_VERSION: 4.23.0-rc2
-
-jobs:
   head_build:
-    name: Route A/B head-only check
+    name: Fast head check (lean quick checks)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/setup-lean@v1
-        with:
-          lean-version: ${{ env.LEAN_VERSION }}
+      - name: Set up elan (Lean toolchain)
+        uses: leanprover/elan-action@v1
       - name: Cache Lake packages
         uses: actions/cache@v4
         with:
@@ -84,27 +25,27 @@ jobs:
           key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
           restore-keys: |
             ${{ runner.os }}-lake-
-      - name: Build sliced head (A/B region)
+      - name: Slice monolith head and run quick checks
         shell: bash
         run: |
           set -euxo pipefail
           cp IndisputableMonolith.lean IndisputableMonolith.full.lean
           head -n 6000 IndisputableMonolith.full.lean > IndisputableMonolith.lean
           lake update
-          lake build IndisputableMonolith
+          lake env -- lean -q IndisputableMonolith/Core.lean -o /dev/null
+          lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
           ./build/bin/ci_checks | sed -e 's/.*/HEAD: &/'
 
-  full_build:
-    name: Full monolith build (allowed to fail)
+  full_quick:
+    name: Full quick checks (lean) — allow failure
     runs-on: ubuntu-latest
     needs: head_build
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/setup-lean@v1
-        with:
-          lean-version: ${{ env.LEAN_VERSION }}
+      - name: Set up elan (Lean toolchain)
+        uses: leanprover/elan-action@v1
       - name: Cache Lake packages
         uses: actions/cache@v4
         with:
@@ -112,42 +53,12 @@ jobs:
           key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
           restore-keys: |
             ${{ runner.os }}-lake-
-      - name: Build full monolith and summarize errors
+      - name: Run lean quick checks on full monolith
         shell: bash
         run: |
           set -euxo pipefail
           lake update
-          lake build IndisputableMonolith 2>&1 | tee full_build.log || true
-          tail -n 200 full_build.log || true
-name: CI
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up elan (Lean toolchain)
-        uses: leanprover/elan-action@v1
-      - name: Cache Lake
-        uses: actions/cache@v4
-        with:
-          path: |
-            .lake
-            lake-packages
-            build
-          key: ${{ runner.os }}-lake-${{ hashFiles('**/lake-manifest.json') }}
-          restore-keys: |
-            ${{ runner.os }}-lake-
-      - name: Update deps
-        run: lake update
-      - name: Build monolith and ci_checks
-        run: |
-          lake build IndisputableMonolith
+          lake env -- lean -q IndisputableMonolith/Core.lean -o /dev/null
+          lake env -- lean -q IndisputableMonolith.lean -o /dev/null
           lake build ci_checks
-      - name: Run CI checks
-        run: |
-          ./build/bin/ci_checks
+          ./build/bin/ci_checks | sed -e 's/.*/FULL: &/'

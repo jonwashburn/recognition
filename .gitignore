@@ -9,3 +9,8 @@ IndisputableMonolith.index
 cache_fetch.log
 /tmp/*.log
 **/*.log
+
+# Ignore build outputs and macOS files
+.lake/**
+**/.DS_Store
+**/._*

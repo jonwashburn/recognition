@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2025-09-19T03:00:00Z",
+  "clusters": [
+    {
+      "id": "Pipelines:core",
+      "namespace": "IndisputableMonolith.Pipelines",
+      "path": "IndisputableMonolith/Pipelines.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Moved from monolith; noncomputable defs; core unaffected"
+    },
+    {
+      "id": "Ethics.Decision:Parity",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Parity",
+      "path": "IndisputableMonolith/Ethics/Decision/Parity.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Parity helpers extracted"
+    },
+    {
+      "id": "Ethics.Alignment:Morph",
+      "namespace": "IndisputableMonolith.Ethics.Alignment.Morph",
+      "path": "IndisputableMonolith/Ethics/Alignment/Morph.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Morph + mapMicro + invariance lemmas"
+    },
+    {
+      "id": "Ethics.Decision:Select",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Select",
+      "path": "IndisputableMonolith/Ethics/Decision/Select.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Selection helpers extracted (crossAgentParityOk, fairnessBatchOk, choose*)"
+    },
+    {
+      "id": "Ethics.Decision:Mapping",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Mapping",
+      "path": "IndisputableMonolith/Ethics/Decision/Mapping.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "mapReqMicro and mapping lemmas extracted"
+    },
+    {
+      "id": "Ethics.Decision:BoolProp",
+      "namespace": "IndisputableMonolith.Ethics.Decision.BoolProp",
+      "path": "IndisputableMonolith/Ethics/Decision/BoolProp.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Bool↔Prop bridging and Prop stubs"
+    },
+    {
+      "id": "Ethics.Decision:Fairness",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Fairness",
+      "path": "IndisputableMonolith/Ethics/Decision/Fairness.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Fairness Prop stubs and bridging lemmas extracted"
+    },
+    {
+      "id": "Ethics.Decision:Examples",
+      "namespace": "IndisputableMonolith.Ethics.Decision.Examples",
+      "path": "IndisputableMonolith/Ethics/Decision/Examples.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Decision-layer examples extracted"
+    },
+    {
+      "id": "Ethics:Sigma",
+      "namespace": "IndisputableMonolith.Ethics.Sigma",
+      "path": "IndisputableMonolith/Ethics/Sigma.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Sigma model and reciprocity extracted"
+    },
+    {
+      "id": "Ethics:StakeGraph",
+      "namespace": "IndisputableMonolith.Ethics.StakeGraph",
+      "path": "IndisputableMonolith/Ethics/StakeGraph.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Stakeholder graph utilities extracted"
+    },
+    {
+      "id": "Masses:SectorParams",
+      "namespace": "IndisputableMonolith.Masses.SectorParams",
+      "path": "IndisputableMonolith/Masses/SectorParams.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "SectorParams and yardstickOf extracted"
+    },
+    {
+      "id": "Ethics:Truth",
+      "namespace": "IndisputableMonolith.Ethics.Truth",
+      "path": "IndisputableMonolith/Ethics/Truth.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Truth closure/ledger utilities extracted"
+    },
+    {
+      "id": "Ethics.Alignment:Temporal",
+      "namespace": "IndisputableMonolith.Ethics.Alignment.Temporal",
+      "path": "IndisputableMonolith/Ethics/Alignment/Temporal.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Temporal concatenation lemmas extracted"
+    },
+    {
+      "id": "Recognition:Cycle3",
+      "namespace": "IndisputableMonolith.Recognition.Cycle3",
+      "path": "IndisputableMonolith/Recognition/Cycle3.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Cycle3 demo extracted"
+    },
+    {
+      "id": "Causality:BoundedStep",
+      "namespace": "IndisputableMonolith.Causality.BoundedStep",
+      "path": "IndisputableMonolith/Causality/BoundedStep.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "BoundedStep class extracted"
+    },
+    {
+      "id": "Recognition:ModelingExamples",
+      "namespace": "IndisputableMonolith.Recognition.ModelingExamples",
+      "path": "IndisputableMonolith/Recognition/ModelingExamples.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "SimpleStructure demo extracted"
+    },
+    {
+      "id": "Quantum:core",
+      "namespace": "IndisputableMonolith.Quantum",
+      "path": "IndisputableMonolith/Quantum.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Minimal interface extracted; placeholders only; core unaffected"
+    },
+    {
+      "id": "URCAdapters:core",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted from monolith; placeholder wiring; core unaffected"
+    },
+    {
+      "id": "Gap45:GroupView",
+      "namespace": "IndisputableMonolith.Gap45.GroupView",
+      "path": "IndisputableMonolith/Gap45/GroupView.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Group-theoretic trivial intersection lemma extracted"
+    },
+    {
+      "id": "Gap45:AddGroupView",
+      "namespace": "IndisputableMonolith.Gap45.AddGroupView",
+      "path": "IndisputableMonolith/Gap45/AddGroupView.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Additive trivial intersection lemma extracted"
+    },
+    {
+      "id": "Gap45:Beat",
+      "namespace": "IndisputableMonolith.Gap45.Beat",
+      "path": "IndisputableMonolith/Gap45/Beat.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Beat/time-lag arithmetic extracted; dependency-light; core unaffected"
+    },
+    {
+      "id": "Gap45:RecognitionBarrier",
+      "namespace": "IndisputableMonolith.Gap45.RecognitionBarrier",
+      "path": "IndisputableMonolith/Gap45/RecognitionBarrier.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted minimal scaffold; dependency-light; core unaffected"
+    },
+    {
+      "id": "TruthCore:MRD",
+      "namespace": "IndisputableMonolith.TruthCore.MRD",
+      "path": "IndisputableMonolith/TruthCore/MRD.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Extracted scaling/measurement scaffolding; dependency-light; core unaffected"
+    },
+    {
+      "id": "URCGenerators:VerifiedGenerators",
+      "namespace": "IndisputableMonolith.URCGenerators",
+      "path": "IndisputableMonolith/URCGenerators.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "VerifiedGenerators + route B demo"
+    },
+    {
+      "id": "RH.RS.Scales:delta-general",
+      "namespace": "IndisputableMonolith.RH.RS.LedgerUnits",
+      "path": "IndisputableMonolith/RH/RS/Scales.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "General δ ≠ 0 helpers (fromZ/toZ/rungOf/kOf)"
+    },
+    {
+      "id": "Gap45:arithmetic",
+      "namespace": "IndisputableMonolith.Gap45",
+      "path": "IndisputableMonolith/Gap45.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "gcd/lcm facts, Beat/TimeLag, GroupView/AddGroupView"
+    },
+    {
+      "id": "Measurement:CQ",
+      "namespace": "IndisputableMonolith.Measurement",
+      "path": "IndisputableMonolith/Measurement.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Map, avg, CQ, score and monotonicity"
+    },
+    {
+      "id": "Recognition:Consent",
+      "namespace": "IndisputableMonolith.Recognition",
+      "path": "IndisputableMonolith/Recognition/Consent.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "ConsentWindow/ConsentLedger"
+    },
+    {
+      "id": "Ethics:CostModel",
+      "namespace": "IndisputableMonolith.Ethics",
+      "path": "IndisputableMonolith/Ethics/CostModel.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "CostModel, Prefer/Improves, Composable"
+    },
+    {
+      "id": "Complexity:VertexCover",
+      "namespace": "IndisputableMonolith.Complexity.VertexCover",
+      "path": "IndisputableMonolith/Complexity/VertexCover.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already ported in submodule"
+    },
+    {
+      "id": "Complexity:RSVC",
+      "namespace": "IndisputableMonolith.Complexity.RSVC",
+      "path": "IndisputableMonolith/Complexity/RSVC.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already ported in submodule"
+    },
+    {
+      "id": "Complexity:BalancedParityHidden",
+      "namespace": "IndisputableMonolith.Complexity.BalancedParityHidden",
+      "path": "IndisputableMonolith/Complexity/BalancedParityHidden.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Already in submodule"
+    },
+    {
+      "id": "Patterns:core",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Patterns.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Core patterns ported and green"
+    },
+    {
+      "id": "Streams:core",
+      "namespace": "IndisputableMonolith",
+      "path": "IndisputableMonolith/Streams.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Streams + Blocks ported and green"
+    },
+    {
+      "id": "RH.RS:Anchors",
+      "namespace": "IndisputableMonolith.RH.RS",
+      "path": "IndisputableMonolith/RH/RS/Anchors.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Anchors ported and green"
+    },
+    {
+      "id": "RH.RS:Bands",
+      "namespace": "IndisputableMonolith.RH.RS",
+      "path": "IndisputableMonolith/RH/RS/Bands.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Bands ported and green"
+    },
+    {
+      "id": "RH.RS:Spec",
+      "namespace": "IndisputableMonolith.RH.RS.Spec",
+      "path": "IndisputableMonolith/RH/RS/Spec.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Promoted into core (stubbed), builds green"
+    },
+    {
+      "id": "Verification:core",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification.lean",
+      "status": "in_progress",
+      "owner": "",
+      "notes": "Minimal stub in core; full port in WIP"
+    },
+    {
+      "id": "Verification:DEC",
+      "namespace": "IndisputableMonolith.Verification.DEC",
+      "path": "IndisputableMonolith/Verification/DEC.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Promoted into core (minimal skeleton)"
+    },
+    {
+      "id": "Bridge:BridgeData",
+      "namespace": "IndisputableMonolith.Bridge.BridgeData",
+      "path": "IndisputableMonolith/Bridge/BridgeData.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Promoted into core (minimal skeleton, axioms for proofs)"
+    }
+  ]
+}
+
+
