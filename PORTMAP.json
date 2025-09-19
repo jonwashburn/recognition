@@ -763,14 +763,6 @@
       "notes": "Jcost core definitions and typeclasses; dependency-light; core green"
     },
     {
-      "id": "LNAL:VM",
-      "namespace": "IndisputableMonolith.LNAL",
-      "path": "IndisputableMonolith/LNAL/VM.lean",
-      "status": "in_progress",
-      "owner": "cursor-gpt5",
-      "notes": "LNAL virtual machine: registers, instructions, state, and step function"
-    },
-    {
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",

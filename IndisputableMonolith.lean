@@ -643,7 +643,6 @@ lemma reach_time_eq
                       = (n : ℝ) * U.tau0 + 1 * U.tau0 := by simpa [one_mul]
                   _ = ((n : ℝ) + 1) * U.tau0 := by simpa [add_mul, one_mul]
               simpa [this]
-
 /-- Under per-step bounds, the radial display grows by at most `n·ℓ0` along any `n`-step reach. -/
 lemma reach_rad_le
   (H : StepBounds K U time rad) :
@@ -1277,7 +1276,6 @@ namespace RSUnits
   have ht : U.tau0 ≠ 0 := ne_of_gt U.pos_tau0
   -- rewrite ℓ0 = c · τ0 and cancel τ0
   simpa [c_mul_tau0_eq_ell0 U] using (mul_div_cancel U.c ht)
-
 /-- Display speed equals structural speed: (λ_kin/τ_rec) = c. -/
 @[simp] lemma display_speed_eq_c_of_nonzero (U : RSUnits)
   (hτ : tau_rec_display U ≠ 0) : (lambda_kin_display U) / (tau_rec_display U) = U.c := by
@@ -1910,7 +1908,6 @@ theorem uniqueCalibration_IM (B : RH.RS.Bridge IM) (A : RH.RS.Anchors) : RH.RS.U
     by intro U U' h; exact IndisputableMonolith.Verification.anchor_invariance _ h
   -- These witnesses justify uniqueness of calibration up to the units relation
   exact ⟨⟩
-
 /-- MeetsBands for IM (skeleton): anchor‑invariant observables fall inside certified bands X. -/
 theorem meetsBands_IM (B : RH.RS.Bridge IM) (X : RH.RS.Bands) : RH.RS.MeetsBands IM B X := by
   -- BridgeEval invariance ensures consistent evaluation against bands
@@ -2550,8 +2547,6 @@ def lookup (i : Species) : Spec :=
 end SMWords
 end Masses
 end IndisputableMonolith
-
-
 namespace IndisputableMonolith
 namespace Masses
 namespace Derivation
@@ -3190,7 +3185,6 @@ structure Interval where
   lo : ℝ
   hi : ℝ
   lo_le_hi : lo ≤ hi
-
 @[simp] def memI (I : Interval) (x : ℝ) : Prop := I.lo ≤ x ∧ x ≤ I.hi
 
 @[simp] def width (I : Interval) : ℝ := I.hi - I.lo
@@ -3835,7 +3829,6 @@ lemma PhiPow_sub (x y : ℝ) : PhiPow (x - y) = PhiPow x / PhiPow y := by
         = Real.log (Constants.phi) * x + Real.log (Constants.phi) * (-y) := by ring
   simp [this, sub_eq_add_neg, Real.exp_add, Real.exp_neg, div_eq_mul_inv,
         mul_comm, mul_left_comm, mul_assoc]
-
 /-- Scale‑carrying mass: mᵢ = M₀ · Φ(Eᵢ). -/
 noncomputable def mass (M0 : ℝ) (i : Species) : ℝ := M0 * PhiPow (massExp i)
 
@@ -4445,10 +4438,7 @@ structure MeasurementMap where
     toBands ⟨U.G, U.hbar, U.c, 0, 0, 0⟩ X ↔ toBands ⟨U'.G, U'.hbar, U'.c, 0, 0, 0⟩ X
 
 /-- Build a canonical measurement map from the c-band evaluator. -/
-def measurementFromCBand : MeasurementMap :=
-{ toBands := fun _B X => True ∧ True ∧ True ∧ True ∧ True ∧ True ∧ True ∧ True ∧ (True ∧ (X.cBand.lo ≤ X.cBand.hi))
-, invariant_under_units := by
-    intro U U' h X; constructor <;> intro hx <;> simpa using hx }
+-- (Moved to IndisputableMonolith/TruthCore/MRD.lean)
 
 end MRD
 

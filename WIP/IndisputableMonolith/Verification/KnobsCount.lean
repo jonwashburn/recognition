@@ -8,5 +8,3 @@ def knobsCount : Nat := 0
 
 end Verification
 end IndisputableMonolith
-
-
