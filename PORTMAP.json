@@ -22,9 +22,9 @@
       "id": "Masses:SectorPrimitive",
       "namespace": "IndisputableMonolith.Masses.SectorPrimitive",
       "path": "IndisputableMonolith/Masses/SectorPrimitive.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "Primitive/deltaOf/invariance"
+      "notes": "Primitive/deltaOf/invariance moved; core green"
     },
     {
       "id": "Masses:KernelTypes",
@@ -593,6 +593,14 @@
       "status": "done",
       "owner": "agentE",
       "notes": "moved gap_delta_time_identity; core green"
+    },
+    {
+      "id": "URCAdapters:EightBeat",
+      "namespace": "IndisputableMonolith.URCAdapters",
+      "path": "IndisputableMonolith/URCAdapters/EightBeat.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "eightbeat_prop/holds moved; core green"
     },
     {
       "id": "RSBridge:Anchor",

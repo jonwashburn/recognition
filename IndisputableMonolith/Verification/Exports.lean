@@ -9,5 +9,3 @@ theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
 
 end Verification
 end IndisputableMonolith
-
-

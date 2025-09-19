@@ -6,8 +6,12 @@ namespace Ribbons
   inductive GaugeTag | Y | T3 | Color
   deriving DecidableEq, Repr
   abbrev Tick := Fin 8
-  structure Ribbon where start : Tick; dir : Bool; bit : Int; tag : GaugeTag
-  deriving Repr, DecidableEq
+  structure Ribbon where
+    start : Tick
+    dir   : Bool
+    bit   : Int
+    tag   : GaugeTag
+  deriving DecidableEq, Repr
   abbrev Word := List Ribbon
   @[simp] def normalForm (w : Word) : Word := w
   @[simp] def ell (w : Word) : Nat := w.length
@@ -35,5 +39,3 @@ lemma delta_invariant (p : Primitive) (gen : Ribbons.GenClass) :
 end SectorPrimitive
 end Masses
 end IndisputableMonolith
-
-

@@ -2826,28 +2826,7 @@ end Exponent
 end Masses
 end IndisputableMonolith
 
-namespace IndisputableMonolith
-namespace Masses
-namespace SectorPrimitive
-
-open IndisputableMonolith.Recognition
-
-/-- Abstract sector primitive: a reduced, sector‑global word. -/
-structure Primitive where
-  word : Ribbons.Word
-  reduced : Ribbons.normalForm word = word
-
-/-- Sector integer Δ_B realized as rung shift from a primitive and a generation class. -/
-@[simp] def deltaOf (gen : Derivation.GenClass) (p : Primitive) : ℤ :=
-  Derivation.rungOf { ell := Ribbons.ell p.word, gen := gen }
-
-/-- Invariance lemma stub: Δ_B is sector‑global (same value reused). -/
-lemma delta_invariant (p : Primitive) (gen : Derivation.GenClass)
-  {i j : Species} : deltaOf gen p = deltaOf gen p := rfl
-
-end SectorPrimitive
-end Masses
-end IndisputableMonolith
+-- (Moved to IndisputableMonolith/Masses/SectorPrimitive.lean)
 
 namespace IndisputableMonolith
 namespace Masses
@@ -4832,9 +4811,7 @@ lemma phi_rung_holds : phi_rung_prop := by
   intro U r Z; simpa using IndisputableMonolith.Masses.Derivation.massCanonUnits_rshift U r Z
 
 /-- Eight‑beat existence (period exactly 8). -/
-def eightbeat_prop : Prop := ∃ w : IndisputableMonolith.CompleteCover 3, w.period = 8
-
-lemma eightbeat_holds : eightbeat_prop := by simpa using IndisputableMonolith.period_exactly_8
+-- (Moved to IndisputableMonolith/URCAdapters/EightBeat.lean)
 
 /-- EL stationarity and minimality on the log axis. -/
 def EL_prop : Prop :=
