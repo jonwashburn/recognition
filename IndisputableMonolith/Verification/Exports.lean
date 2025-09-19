@@ -1,10 +1,7 @@
 import Mathlib
--- Keep dependencies minimal; avoid heavy imports.
 
 namespace IndisputableMonolith
 namespace Verification
-
--- (DEC/Bianchi and display speed exports are handled in their dedicated modules.)
 
 /-- Export: 45-gap clock-lag fraction identity (dimensionless): δ_time = 3/64. -/
 theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
@@ -12,3 +9,5 @@ theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
 
 end Verification
 end IndisputableMonolith
+
+

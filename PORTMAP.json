@@ -14,9 +14,17 @@
       "id": "Masses:ExponentGauge",
       "namespace": "IndisputableMonolith.Masses.Exponent.Gauge",
       "path": "IndisputableMonolith/Masses/Exponent/Gauge.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "GaugeEq + refl/symm/trans; core green"
+    },
+    {
+      "id": "Masses:SectorPrimitive",
+      "namespace": "IndisputableMonolith.Masses.SectorPrimitive",
+      "path": "IndisputableMonolith/Masses/SectorPrimitive.lean",
       "status": "in_progress",
       "owner": "agentE",
-      "notes": "GaugeEq + refl/symm/trans"
+      "notes": "Primitive/deltaOf/invariance"
     },
     {
       "id": "Masses:KernelTypes",
@@ -582,9 +590,9 @@
       "id": "Verification:CrossExports",
       "namespace": "IndisputableMonolith.Verification",
       "path": "IndisputableMonolith/Verification/Exports.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "display_speed_identity, gap_delta_time_identity, dec_dd_eq_zero, dec_bianchi"
+      "notes": "moved gap_delta_time_identity; core green"
     },
     {
       "id": "RSBridge:Anchor",

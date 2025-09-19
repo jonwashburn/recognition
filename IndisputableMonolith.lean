@@ -4991,8 +4991,7 @@ theorem display_speed_identity (U : Constants.RSUnits) :
   simpa using Constants.RSUnits.display_speed_eq_c U
 
 /-- Export: 45-gap clock-lag fraction identity (dimensionless): δ_time = 3/64. -/
-theorem gap_delta_time_identity : (45 : ℚ) / 960 = (3 : ℚ) / 64 := by
-  simpa using Gap45.delta_time_eq_3_div_64
+-- (Moved to IndisputableMonolith/Verification/Exports.lean)
 
 /-- Export: ILG time-kernel display evaluation; SI is threaded only via BridgeData. -/
 @[simp] def ILG_w_t_display
