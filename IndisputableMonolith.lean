@@ -2791,23 +2791,7 @@ structure Completion where
   n3 : ℤ
   n2 : ℤ
 /-- Reduced word length as an abstract, deterministic function (interface stub). -/
-structure WordLength where
-  len : GaugeSkeleton → Completion → Nat
-
-/-- Generation class and torsion map τ ∈ {0,11,17} (shared with Paper 2). -/
-inductive GenClass | g1 | g2 | g3
-deriving DecidableEq, Repr
-
-@[simp] def tauOf : GenClass → ℤ
-| .g1 => 0
-| .g2 => 11
-| .g3 => 17
-
-/-- Rung from (ℓ, τ). -/
-structure RungSpec where
-  ell : Nat
-  gen : GenClass
-@[simp] def rungOf (R : RungSpec) : ℤ := (R.ell : ℤ) + tauOf R.gen
+-- (Moved to IndisputableMonolith/Masses/KernelTypes.lean)
 
 end Masses
 end IndisputableMonolith

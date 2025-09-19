@@ -14,9 +14,9 @@
       "id": "Masses:KernelTypes",
       "namespace": "IndisputableMonolith.Masses",
       "path": "IndisputableMonolith/Masses/KernelTypes.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "GaugeSkeleton/Completion/WordLength/GenClass/tauOf/RungSpec/rungOf"
+      "notes": "Extracted core Masses types (gauge/completion/rung); core green"
     },
     {
       "id": "Masses:AnchorPolicy",
