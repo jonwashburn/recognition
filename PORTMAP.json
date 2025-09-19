@@ -1110,7 +1110,7 @@
       "id": "Cost:core",
       "namespace": "IndisputableMonolith.Cost",
       "path": "IndisputableMonolith/Cost.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
       "notes": "Jensen cost functions, averaging bounds, and uniqueness theorems; minimal axiom stubs; core green"
     }
