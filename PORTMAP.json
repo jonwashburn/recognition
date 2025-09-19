@@ -403,6 +403,14 @@
       "notes": "added phi_fixed_point corollary; core green"
     }
     ,{
+      "id": "Verification:DimensionlessConst",
+      "namespace": "IndisputableMonolith.Verification",
+      "path": "IndisputableMonolith/Verification/Dimensionless.lean",
+      "status": "done",
+      "owner": "agentE",
+      "notes": "moved dimensionless_const; dependency-light; core green"
+    }
+    ,{
       "id": "Causality:ConeBound",
       "namespace": "IndisputableMonolith.Causality.ConeBound",
       "path": "IndisputableMonolith/Causality/ConeBound.lean",

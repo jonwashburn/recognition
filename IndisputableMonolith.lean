@@ -4914,9 +4914,7 @@ structure CalibrationEvidence : Type where
 , KA_invariant := by intro U U' h; exact anchor_invariance _ h
 , KB_invariant := by intro U U' h; exact anchor_invariance _ h }
 
-/-- Any constant-valued display is dimensionless. -/
-lemma dimensionless_const (c : ℝ) : Dimensionless (fun (_ : RSUnits) => c) := by
-  intro U U' h; rfl
+-- (Moved to IndisputableMonolith/Verification/Dimensionless.lean)
 
 /-! ### Discrete cone bound export (clean signature) -/
 

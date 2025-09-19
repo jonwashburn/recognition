@@ -40,4 +40,31 @@ theorem tv_contraction_from_overlap_lb (K : MarkovKernel ι) {β : ℝ}
 
 end Dobrushin
 end YM
+
+namespace YM
+
+open YM.Dobrushin
+
+variable {ι : Type} [Fintype ι]
+
+/-- Turn a strictly positive row‑stochastic real matrix into a MarkovKernel. -/
+noncomputable def markovOfMatrix (A : Matrix ι ι ℝ)
+  (hrow : ∀ i, ∑ j, A i j = 1) (hnn : ∀ i j, 0 ≤ A i j) : Dobrushin.MarkovKernel ι :=
+{ P := fun i j => A i j
+, nonneg := hnn
+, rowSum_one := hrow }
+
+/-- If all row‑row overlaps are uniformly ≥ β ∈ (0,1], we obtain a TV contraction with α = 1−β. -/
+theorem tv_contract_of_uniform_overlap {A : Matrix ι ι ℝ}
+    (hrow : ∀ i, ∑ j, A i j = 1) (hnn : ∀ i j, 0 ≤ A i j)
+    {β : ℝ} (hβpos : 0 < β) (hβle : β ≤ 1)
+    (hover : ∀ i i', β ≤ ∑ j, min (A i j) (A i' j)) :
+    Dobrushin.TVContractionMarkov (K := markovOfMatrix A hrow hnn) (α := 1 - β) := by
+  classical
+  -- special case of tv_contraction_from_overlap_lb applied to `markovOfMatrix A`
+  refine Dobrushin.tv_contraction_from_overlap_lb (K := markovOfMatrix A hrow hnn) hβpos hβle ?hβ
+  intro i i'
+  simpa [Dobrushin.overlap, markovOfMatrix] using hover i i'
+
+end YM
 end IndisputableMonolith
