@@ -31,5 +31,3 @@ def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 end Decision
 end Ethics
 end IndisputableMonolith
-
-

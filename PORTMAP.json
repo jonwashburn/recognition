@@ -19,6 +19,14 @@
       "notes": "Parity helpers extracted"
     },
     {
+      "id": "Ethics.Decision:BoolProp",
+      "namespace": "IndisputableMonolith.Ethics.Decision.BoolProp",
+      "path": "IndisputableMonolith/Ethics/Decision/BoolProp.lean",
+      "status": "done",
+      "owner": "",
+      "notes": "Bool↔Prop bridging and Prop stubs"
+    },
+    {
       "id": "Ethics.Decision:Fairness",
       "namespace": "IndisputableMonolith.Ethics.Decision.Fairness",
       "path": "IndisputableMonolith/Ethics/Decision/Fairness.lean",
