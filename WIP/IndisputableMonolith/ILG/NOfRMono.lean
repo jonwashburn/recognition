@@ -1,11 +1,18 @@
 import Mathlib
-import IndisputableMonolith.ILG.ParamsKernel
 
 namespace IndisputableMonolith
 namespace ILG
 
 noncomputable section
 open Real
+
+/-- Internal guard to keep square-roots well-defined. -/
+noncomputable def εr : ℝ := 1e-12
+
+/-- Analytic global radial shape factor n(r) = 1 + A (1 - exp(-(r/r0)^p)). -/
+noncomputable def n_of_r (A r0 p : ℝ) (r : ℝ) : ℝ :=
+  let x := (max 0 r) / max εr r0
+  1 + A * (1 - Real.exp (-(x ^ p)))
 
 /-- Monotonicity in A under nonnegative exponent: if p ≥ 0 and A₁ ≤ A₂ then
     n_of_r A₁ ≤ n_of_r A₂ (for fixed r0,p,r). -/

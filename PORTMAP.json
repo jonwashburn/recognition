@@ -406,9 +406,9 @@
       "id": "TruthCore:DisplayExports",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/Display.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentG",
-      "notes": "DEC dd=0/Bianchi exporters + display_speed_identity"
+      "notes": "Extracted DEC dd=0/Bianchi exporters + display_speed_identity; core green"
     }
     ,{
       "id": "URCAdapters:ELProp",

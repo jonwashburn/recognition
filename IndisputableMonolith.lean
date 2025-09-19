@@ -4820,17 +4820,9 @@ theorem AllClaimsHold : AllClaimsHoldProp := by
   · intro γ PW; exact Quantum.rs_pathweight_iface γ PW
 
 /-- Cross-domain canonical exports for discoverability. -/
-theorem dec_dd_eq_zero {A} (X : MaxwellDEC.CochainSpace A) :
-  (∀ a, X.d1 (X.d0 a) = 0) ∧ (∀ b, X.d2 (X.d1 b) = 0) := by
-  exact ⟨(by intro a; simpa using X.dd01 a), (by intro b; simpa using X.dd12 b)⟩
+-- (Moved to IndisputableMonolith/TruthCore/Display.lean)
 
-theorem dec_bianchi {A} (X : MaxwellDEC.CochainSpace A) (A1 : A) :
-  MaxwellDEC.CochainSpace.d2 X (MaxwellDEC.CochainSpace.F X A1) = 0 := by
-  simpa using MaxwellDEC.CochainSpace.bianchi X A1
-
-theorem display_speed_identity (U : Constants.RSUnits) :
-  (Constants.RSUnits.lambda_kin_display U) / (Constants.RSUnits.tau_rec_display U) = U.c := by
-  simpa using Constants.RSUnits.display_speed_eq_c U
+-- (Moved to IndisputableMonolith/TruthCore/Display.lean)
 
 /-- Export: 45-gap clock-lag fraction identity (dimensionless): δ_time = 3/64. -/
 -- (Moved to IndisputableMonolith/Verification/Exports.lean)
