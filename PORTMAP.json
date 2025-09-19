@@ -446,9 +446,9 @@
       "id": "LedgerUniqueness:core",
       "namespace": "IndisputableMonolith.LedgerUniqueness",
       "path": "IndisputableMonolith/LedgerUniqueness.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "agentE",
-      "notes": "IsAffine and uniqueness scaffold (axiom stubs)"
+      "notes": "IsAffine and uniqueness scaffold extracted (axiom stubs); core green"
     }
     ,{
       "id": "Verification:RenderedIndex",

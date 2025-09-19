@@ -630,6 +630,7 @@ end LedgerUnits
 -- end of bounded out-degree sketch
 
 /-! ## ConeBound: computable BFS balls and equivalence to `ballP` (no sorries). -/
+-- (Moved to IndisputableMonolith/Causality/ConeBound.lean)
 namespace ConeBound
 
 open Causality
@@ -909,49 +910,7 @@ end Potential
 /-! ## Ledger uniqueness via affine edge increments
     If two ledgers' `phi` differ by the same increment `δ` across every edge, then their
     `phi` agree on reach sets/components once matched at a basepoint, i.e., uniqueness up to a constant. -/
-namespace LedgerUniqueness
-
-open Potential
-
-variable {M : RecognitionStructure}
-
-def IsAffine (δ : ℤ) (L : Ledger M) : Prop :=
-  Potential.DE (M:=M) δ (phi L)
-
-lemma phi_edge_increment (δ : ℤ) {L : Ledger M}
-  (h : IsAffine (M:=M) δ L) {a b : M.U} (hR : M.R a b) :
-  phi L b - phi L a = δ := h hR
-
-/-- If two affine ledgers (same δ) agree at a basepoint, they agree on its n-step reach set. -/
-theorem unique_on_reachN {δ : ℤ} {L L' : Ledger M}
-  (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
-  {x0 : M.U} (hbase : phi L x0 = phi L' x0) :
-  ∀ {n y}, Causality.ReachN (Potential.Kin M) n x0 y → phi L y = phi L' y := by
-  intro n y hreach
-  -- apply T4 uniqueness with p := phi L, q := phi L'
-  have :=
-    Potential.T4_unique_on_reachN (M:=M) (δ:=δ)
-      (p := phi L) (q := phi L') (hp := hL) (hq := hL') (x0 := x0) hbase (n:=n) (y:=y) hreach
-  simpa using this
-
-/-- If two affine ledgers (same δ) agree at a basepoint, they agree on the n‑ball around it. -/
-theorem unique_on_inBall {δ : ℤ} {L L' : Ledger M}
-  (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
-  {x0 y : M.U} (hbase : phi L x0 = phi L' x0) {n : Nat}
-  (hin : Causality.inBall (Potential.Kin M) x0 n y) : phi L y = phi L' y := by
-  exact Potential.T4_unique_on_inBall (M:=M) (δ:=δ)
-    (p := phi L) (q := phi L') (hp := hL) (hq := hL') (x0 := x0)
-    hbase (n:=n) (y:=y) hin
-
-/-- Uniqueness up to a constant on the reach component: affine ledgers differ by a constant. -/
-theorem unique_up_to_const_on_component {δ : ℤ} {L L' : Ledger M}
-  (hL : IsAffine (M:=M) δ L) (hL' : IsAffine (M:=M) δ L')
-  {x0 : M.U} : ∃ c : ℤ, ∀ {y : M.U}, Causality.Reaches (Potential.Kin M) x0 y →
-    phi L y = phi L' y + c := by
-  -- This is exactly Potential.T4_unique_up_to_const_on_component
-  simpa using Potential.T4_unique_up_to_const_on_component
-    (M:=M) (δ:=δ) (p := phi L) (q := phi L') (hp := hL) (hq := hL') (x0 := x0)
-end LedgerUniqueness
+-- (Moved to IndisputableMonolith/LedgerUniqueness.lean)
 
 -- ClassicalBridge (gauge, setoid, schedule) moved to `IndisputableMonolith/Recognition.lean`.
 

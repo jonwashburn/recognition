@@ -1,6 +1,6 @@
 import Mathlib
 import IndisputableMonolith.Verification
-import IndisputableMonolith.Verification.Rendered
+-- Keep deps minimal; use base Verification scaffold only.
 
 namespace IndisputableMonolith
 namespace Verification
@@ -26,18 +26,18 @@ deriving Repr
 
 /-- Machine-readable manifest: claims, gates, and knobs count. -/
 structure RenderedManifest where
-  claims         : List Rendered.RenderedClaim
-  gates          : List Rendered.GateSpec
+  claims         : List RenderedClaim
+  gates          : List GateSpec
   falsifiability : List Falsifiable
   knobs          : Nat
 deriving Repr
 
-@[simp] def claimIds : List String := Rendered.dimlessClaimsRendered.map (fun c => c.id)
-@[simp] def gateIds  : List String := Rendered.gatesRendered.map (fun g => g.id)
+@[simp] def claimIds : List String := dimlessClaimsRendered.map (fun c => c.id)
+@[simp] def gateIds  : List String := gatesRendered.map (fun g => g.id)
 
 @[simp] def manifest : RenderedManifest :=
-{ claims := Rendered.dimlessClaimsRendered
-, gates  := Rendered.gatesRendered
+{ claims := dimlessClaimsRendered
+, gates  := gatesRendered
 , falsifiability := falsifiabilityRendered
 , knobs  := knobsCount }
 
