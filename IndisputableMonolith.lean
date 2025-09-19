@@ -8744,59 +8744,9 @@ lemma admissible_true_iff (P : Policy A) (r : Request A) :
   · simp [admissible, h]
   · simp [admissible, h]
 
-/‑‑ Example usage for fairness/time-window hooks ‑/
-namespace Examples
+/-! Example usage moved to `IndisputableMonolith/Ethics/Decision/Examples.lean`. -/
 
-open IndisputableMonolith.Measurement
-
-def unitCost : CostModel Unit :=
-{ cost := fun _ => (0 : ℝ)
-, nonneg := by intro _; simpa }
-
-def Punit : Policy Unit := { period := 8, threshold := 0, costModel := unitCost }
-
-def cqLo : CQ := { listensPerSec := 1, opsPerSec := 1, coherence8 := 1
-, coherence8_bounds := by
-    exact And.intro (by decide) (And.intro (by decide) (by decide)) }
-
-def cqHi : CQ := { listensPerSec := 2, opsPerSec := 1, coherence8 := 1
-, coherence8_bounds := by
-    exact And.intro (by decide) (And.intro (by decide) (by decide)) }
-
-def rLo : Request Unit := { action := (), cq := cqLo }
-def rHi : Request Unit := { action := (), cq := cqHi }
-
-/-- With default-true gates and period 8 (no Gap45 gating), all requests pass filter. -/
-@[simp] theorem filter_all_pass (xs : List (Request Unit)) :
-  filterByGates (P:=Punit) xs = xs := by
-  classical
-  -- admissible holds (period=8 disables Gap45 requirement), and all gates are True
-  simp [filterByGates, gatesOk, admissible, IndisputableMonolith.Gap45.requiresExperience,
-        justiceOk, reciprocityOk, temperanceOk, withinWindow, uniqueInWindow, fairnessOk,
-        adversarialOk, Measurement.score]
-
-end Examples
-
-/-- Fairness parity helper over batches: require equal acceptance rates per group within tolerance. -/
-structure ParityCfg where
-  groupOf : Request Unit → String
-  tol : ℝ := 0.0
-
-def acceptRate (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) (g : String) : ℝ :=
-  let gs := xs.filter (fun r => cfg.groupOf r = g)
-  if gs.length = 0 then 1 else
-    let acc := (gs.filter (fun r => gatesOk (P:=P) r)).length
-    (acc : ℝ) / (gs.length : ℝ)
-def parityOk (P : Policy Unit) (cfg : ParityCfg) (xs : List (Request Unit)) : Bool :=
-  let groups := (xs.map cfg.groupOf).eraseDups
-  match groups with
-  | [] => True
-  | g :: gs =>
-      let base := acceptRate P cfg xs g
-      gs.all (fun h => |acceptRate P cfg xs h - base| ≤ cfg.tol)
-
-@[simp] theorem parity_trivial (P : Policy Unit) (cfg : ParityCfg) :
-  parityOk P cfg [] = true := by simp [parityOk]
+-- Parity helpers moved to `IndisputableMonolith/Ethics/Decision/Parity.lean`.
 /-- Prop counterparts for fairness components (skeletal). -/
 def EqOppOKP (P : Policy A) (xs : List (Request A)) : Prop := True
 def CalibOKP (P : Policy A) (xs : List (Request A)) : Prop := True
