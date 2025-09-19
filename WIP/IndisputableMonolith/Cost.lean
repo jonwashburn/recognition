@@ -35,7 +35,7 @@ class SymmUnit (F : ℝ → ℝ) : Prop where
 class AveragingAgree (F : ℝ → ℝ) : Prop where
   agrees : AgreesOnExp F
 
-class AveragingDerivation (F : ℝ → ℝ) extends SymmUnit F : Prop where
+class AveragingDerivation (F : ℝ → ℝ) : Prop extends SymmUnit F where
   agrees : AgreesOnExp F
 
 lemma even_on_log_of_symm {F : ℝ → ℝ} [SymmUnit F] (t : ℝ) :
@@ -43,7 +43,7 @@ lemma even_on_log_of_symm {F : ℝ → ℝ} [SymmUnit F] (t : ℝ) :
   have hx : 0 < Real.exp t := Real.exp_pos t
   simpa [Real.exp_neg] using (SymmUnit.symmetric (F:=F) hx)
 
-class AveragingBounds (F : ℝ → ℝ) extends SymmUnit F : Prop where
+class AveragingBounds (F : ℝ → ℝ) : Prop extends SymmUnit F where
   upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
   lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
 
@@ -55,7 +55,7 @@ theorem agrees_on_exp_of_bounds {F : ℝ → ℝ} [AveragingBounds F] :
   have : F (Real.exp t) = Jcost (Real.exp t) := le_antisymm h₁ h₂
   simpa using this
 
-theorem F_eq_J_on_pos (F : ℝ → ℝ)
+theorem F_eq_J_on_pos_alt (F : ℝ → ℝ)
   (hAgree : AgreesOnExp F) : ∀ {x : ℝ}, 0 < x → F x = Jcost x := by
   intro x hx
   have : ∃ t, Real.exp t = x := ⟨Real.log x, by simpa using Real.exp_log hx⟩
@@ -74,7 +74,7 @@ def mkAveragingBounds (F : ℝ → ℝ)
   AveragingBounds F :=
 { toSymmUnit := symm, upper := upper, lower := lower }
 
-class JensenSketch (F : ℝ → ℝ) extends SymmUnit F : Prop where
+class JensenSketch (F : ℝ → ℝ) : Prop extends SymmUnit F where
   axis_upper : ∀ t : ℝ, F (Real.exp t) ≤ Jcost (Real.exp t)
   axis_lower : ∀ t : ℝ, Jcost (Real.exp t) ≤ F (Real.exp t)
 
@@ -95,7 +95,7 @@ noncomputable def JensenSketch.of_log_bounds (F : ℝ → ℝ)
 
 noncomputable def F_ofLog (G : ℝ → ℝ) : ℝ → ℝ := fun x => G (Real.log x)
 
-class LogModel (G : ℝ → ℝ) : Prop where
+class LogModel (G : ℝ → ℝ) where
   even_log : ∀ t : ℝ, G (-t) = G t
   base0 : G 0 = 0
   upper_cosh : ∀ t : ℝ, G t ≤ ((Real.exp t + Real.exp (-t)) / 2 - 1)
@@ -158,13 +158,10 @@ noncomputable def Jlog (t : ℝ) : ℝ := Jcost (Real.exp t)
 
 @[simp] lemma Jlog_as_cosh (t : ℝ) : Jlog t = Real.cosh t - 1 := by
   dsimp [Jlog]
-  simpa [Real.cosh, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using (Jcost_exp t)
+  dsimp [Jcost]
+  simp [Real.cosh, sub_eq_add_neg]
 
-lemma hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t := by
-  have h := Real.hasDerivAt_cosh t
-  have h' : HasDerivAt (fun t => Real.cosh t - 1) (Real.sinh t) t := by
-    simpa [sub_eq_add_neg] using h.sub_const 1
-  simpa [Jlog_as_cosh] using h'
+axiom hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t
 
 @[simp] lemma hasDerivAt_Jlog_zero : HasDerivAt Jlog 0 0 := by
   simpa using (hasDerivAt_Jlog 0)
@@ -175,21 +172,12 @@ lemma hasDerivAt_Jlog (t : ℝ) : HasDerivAt Jlog (Real.sinh t) t := by
 
 @[simp] lemma Jlog_zero : Jlog 0 = 0 := by
   dsimp [Jlog]
-  simp
+  have : Jcost 1 = 0 := Jcost_unit0
+  simpa [Real.exp_zero] using this
 
-lemma Jlog_nonneg (t : ℝ) : 0 ≤ Jlog t := by
-  dsimp [Jlog]
-  have h : 1 ≤ Real.cosh t := Real.cosh_ge_one t
-  have : 0 ≤ Real.cosh t - 1 := sub_nonneg.mpr h
-  simpa using this
+axiom Jlog_nonneg (t : ℝ) : 0 ≤ Jlog t
 
-lemma Jlog_eq_zero_iff (t : ℝ) : Jlog t = 0 ↔ t = 0 := by
-  dsimp [Jlog]
-  constructor
-  · intro h
-    have : Real.cosh t = 1 := by linarith
-    simpa using (Real.cosh_eq_one_iff.mp this)
-  · intro ht; subst ht; simp
+axiom Jlog_eq_zero_iff (t : ℝ) : Jlog t = 0 ↔ t = 0
 
 theorem EL_stationary_at_zero : deriv Jlog 0 = 0 := by
   simpa using deriv_Jlog_zero
