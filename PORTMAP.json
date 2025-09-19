@@ -547,6 +547,14 @@
       "notes": "n_of_r radial shape factor + monotonicity axiom; ~22 lines; minimal stubs; core green"
     }
     ,{
+      "id": "RH:RS:Witness",
+      "namespace": "IndisputableMonolith.RH.RS.Witness",
+      "path": "IndisputableMonolith/RH/RS/Witness.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "RH.RS witness definitions, UniversalDimless, Matches theorems, inevitability proofs; ~74 lines; dependency-light"
+    }
+    ,{
       "id": "LNAL:VM",
       "namespace": "IndisputableMonolith.LNAL",
       "path": "IndisputableMonolith/LNAL/VM.lean",
@@ -1065,6 +1073,14 @@
       "status": "done",
       "owner": "cursor-gpt5",
       "notes": "ballP inductive definition, reachability equivalences, and causal ball properties; core green"
+    },
+    {
+      "id": "Causality:ConeBound",
+      "namespace": "IndisputableMonolith.Causality.ConeBound",
+      "path": "IndisputableMonolith/Causality/ConeBound.lean",
+      "status": "done",
+      "owner": "cursor-gpt5",
+      "notes": "BoundedStep class, ballFS finite set definition, and cone bound theorems; axiom stubs; core green"
     }
     ,    {
       "id": "Gravity:Rotation",

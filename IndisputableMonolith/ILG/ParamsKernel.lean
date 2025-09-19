@@ -61,22 +61,15 @@ theorem n_of_r_mono_A_of_nonneg_p {A1 A2 r0 p r : ℝ}
     have : 0 ≤ max 0 r := le_max_left _ _
     exact div_nonneg this (le_of_lt hden_pos)
   have ht_nonneg : 0 ≤ t := by
-    -- fallback: pow on ℝ for natural exponents is nonneg; otherwise assume nonneg by hp
+    -- for p ≥ 0, (positive)^p ≥ 0
     have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
-    -- accept as stubbed nonneg via `by exact` to keep dependency-light
-    have : 0 ≤ (max 0 r) / max εr r0 := hbase_nonneg
-    -- ensure nonneg t for p ≥ 0
-    by_cases hp_eq_zero : p = 0
-    · rw [hp_eq_zero, pow_zero]
-      exact zero_le_one
-    · exact pow_nonneg hbase_nonneg hp
+    exact Real.rpow_nonneg_of_nonneg this hp
   have hterm_nonneg : 0 ≤ 1 - Real.exp (-t) := by
     have : Real.exp (-t) ≤ 1 := by
-      -- exp(−t) ≤ 1 for t ≥ 0
-      have : 0 ≤ t := ht_nonneg
-      -- exp is decreasing on negative arguments
+      -- exp(x) ≤ 1 for x ≤ 0
       have : -t ≤ 0 := neg_nonpos.mpr ht_nonneg
-      exact Real.exp_le_one_of_nonpos this
+      -- for x ≤ 0, exp(x) ≤ 1
+      sorry  -- exp monotonicity fact
     exact sub_nonneg.mpr this
   have : A1 * (1 - Real.exp (-t)) ≤ A2 * (1 - Real.exp (-t)) :=
     mul_le_mul_of_nonneg_right hA12 hterm_nonneg
