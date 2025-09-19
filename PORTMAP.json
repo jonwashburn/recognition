@@ -674,6 +674,14 @@
       "owner": "agentE",
       "notes": "GaugeEq relation and factorization/functoriality helpers"
     }
+    ,{
+      "id": "TruthCore:Display",
+      "namespace": "IndisputableMonolith.TruthCore",
+      "path": "IndisputableMonolith/TruthCore/Display.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "dec_dd/ bianchi wrappers and display_speed_identity"
+    }
   ]
 }
 
