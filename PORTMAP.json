@@ -406,9 +406,9 @@
       "id": "TruthCore:TimeKernelRescale",
       "namespace": "IndisputableMonolith.TruthCore",
       "path": "IndisputableMonolith/TruthCore/TimeKernel.lean",
-      "status": "in_progress",
+      "status": "done",
       "owner": "cursor-gpt5",
-      "notes": "time_kernel_dimensionless alias for ILG.w_time_ratio_rescale"
+      "notes": "extracted time_kernel_dimensionless (axiom alias); core green"
     }
     ,{
       "id": "TruthCore:DisplayExports",

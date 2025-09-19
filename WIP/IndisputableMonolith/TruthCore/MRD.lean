@@ -1,6 +1,7 @@
 import Mathlib
 import IndisputableMonolith.RH.RS.Bands
 import IndisputableMonolith.Verification
+import IndisputableMonolith.Bridge.BridgeData
 
 namespace IndisputableMonolith
 namespace TruthCore
@@ -12,7 +13,9 @@ structure ScalingModel where
   f     : ℝ → ℝ → ℝ
   f_hom0 : ∀ {c t1 t2}, 0 < c → f (c * t1) (c * t2) = f t1 t2
 
-@[simp] def predicted_ratio (M : ScalingModel) (tau_m1 tau_m2 tau_f : ℝ) : ℝ :=
+noncomputable section
+
+@[simp] noncomputable def predicted_ratio (M : ScalingModel) (tau_m1 tau_m2 tau_f : ℝ) : ℝ :=
   ((tau_m1 / tau_m2) ^ M.gamma) * M.f (tau_m1 / tau_f) (tau_m2 / tau_f)
 
 lemma predicted_ratio_rescale (M : ScalingModel)
@@ -46,7 +49,7 @@ structure EmergentMeasurement where
     ratio p F (c * τ) = ratio p F τ
 
 structure MeasurementMap where
-  toBands : BridgeData → RH.RS.Bands → Prop
+  toBands : IndisputableMonolith.Bridge.BridgeData → RH.RS.Bands → Prop
   invariant_under_units : ∀ {U U'} (h : IndisputableMonolith.Verification.UnitsRescaled U U') (X : RH.RS.Bands),
     toBands ⟨U.G, U.hbar, U.c, 0, 0, 0⟩ X ↔ toBands ⟨U'.G, U'.hbar, U'.c, 0, 0, 0⟩ X
 
@@ -55,5 +58,4 @@ structure MeasurementMap where
 , invariant_under_units := by
     intro U U' h X; constructor <;> intro hx <;> simpa using hx }
 
-end TruthCore
-end IndisputableMonolith
+end
