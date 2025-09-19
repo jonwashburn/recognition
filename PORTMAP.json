@@ -675,6 +675,14 @@
       "notes": "extracted coarse-grain schema; dependency-light; core green"
     },
     {
+      "id": "Constants:AlphaLockedClag",
+      "namespace": "IndisputableMonolith.Constants",
+      "path": "IndisputableMonolith/Constants/AlphaLocked.lean",
+      "status": "in_progress",
+      "owner": "cursor-gpt5",
+      "notes": "alpha_locked/Clag and basic bounds"
+    },
+    {
       "id": "Measurement:Realization",
       "namespace": "IndisputableMonolith.Measurement",
       "path": "IndisputableMonolith/Measurement/Realization.lean",

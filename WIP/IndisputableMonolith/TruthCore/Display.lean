@@ -1,6 +1,5 @@
 import Mathlib
 import IndisputableMonolith.Constants
-import IndisputableMonolith.Verification
 -- Avoid importing heavier DEC modules; we provide a local minimal skeleton below.
 
 namespace IndisputableMonolith
@@ -56,16 +55,17 @@ end DECExports
 /-! ### Display identity (dimensionless speed ratio) -/
 
 end TruthCore
+end IndisputableMonolith
 
 /-- Local WIP declarations for displays (keep it minimal and axiomatized). -/
 namespace IndisputableMonolith
 namespace Constants
-namespace RSUnits
-@[simp] noncomputable def tau_rec_display (U : RSUnits) : ℝ := K * U.tau0
-@[simp] noncomputable def lambda_kin_display (U : RSUnits) : ℝ := K * U.ell0
-axiom display_speed_eq_c (U : RSUnits) :
-  (lambda_kin_display U) / (tau_rec_display U) = U.c
-end RSUnits
+
+@[simp] noncomputable def RSUnits.tau_rec_display (U : RSUnits) : ℝ := K * U.tau0
+@[simp] noncomputable def RSUnits.lambda_kin_display (U : RSUnits) : ℝ := K * U.ell0
+axiom RSUnits.display_speed_eq_c (U : RSUnits) :
+  (RSUnits.lambda_kin_display U) / (RSUnits.tau_rec_display U) = U.c
+
 end Constants
 end IndisputableMonolith
 
@@ -73,9 +73,10 @@ namespace IndisputableMonolith
 namespace TruthCore
 
 /-- Alias: time-kernel ratio is dimensionless (invariant under common rescaling). -/
-theorem display_speed_identity (U : Constants.RSUnits) :
-  (Constants.RSUnits.lambda_kin_display U) / (Constants.RSUnits.tau_rec_display U) = U.c :=
-  Constants.RSUnits.display_speed_eq_c U
+theorem display_speed_identity (U : IndisputableMonolith.Constants.RSUnits) :
+  (IndisputableMonolith.Constants.RSUnits.lambda_kin_display U)
+    / (IndisputableMonolith.Constants.RSUnits.tau_rec_display U) = U.c :=
+  IndisputableMonolith.Constants.RSUnits.display_speed_eq_c U
 
 end TruthCore
 end IndisputableMonolith
