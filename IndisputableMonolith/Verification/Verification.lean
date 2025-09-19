@@ -24,31 +24,7 @@ def UnitsRescaled.refl (U : RSUnits) : UnitsRescaled U U :=
 /-- A numeric display is dimensionless if it is invariant under anchor rescalings. -/
 def Dimensionless (f : RSUnits → ℝ) : Prop := ∀ {U U'}, UnitsRescaled U U' → f U = f U'
 
-/-- Observable: a dimensionless display ready for bridge evaluation. -/
-structure Observable where
-  f       : RSUnits → ℝ
-  dimless : Dimensionless f
-
-/-- Bridge evaluation (A ∘ Q): evaluate any observable under anchors; invariant by construction. -/
-@[simp] def BridgeEval (O : Observable) (U : RSUnits) : ℝ := O.f U
-
-/-- Anchor-invariance (Q): evaluation does not depend on rescaled anchors. -/
-theorem anchor_invariance (O : Observable) {U U'}
-  (hUU' : UnitsRescaled U U') : BridgeEval O U = BridgeEval O U' := O.dimless hUU'
-
-/-- K_A observable equals constant K; dimensionless by definition. -/
-def K_A_obs : Observable :=
-{ f := fun _ => Constants.K
-, dimless := by intro U U' h; rfl }
-
-/-- K_B observable equals constant K; dimensionless by definition. -/
-def K_B_obs : Observable :=
-{ f := fun _ => Constants.K
-, dimless := by intro U U' h; rfl }
-
-/-- The two route displays agree identically as observables (bridge-level K-gate). -/
-theorem K_gate_bridge : ∀ U, BridgeEval K_A_obs U = BridgeEval K_B_obs U := by
-  intro U; simp [BridgeEval, K_A_obs, K_B_obs]
+-- (Moved to IndisputableMonolith/Verification/Observables.lean)
 
 /-! Minimal claim/rendering scaffold -/
 
