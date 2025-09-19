@@ -13,9 +13,7 @@ def GaugeEq (m₁ m₂ : ℝ) : Prop := ∃ c : ℝ, c ≠ 0 ∧ m₁ = c * m₂
   intro h; rcases h with ⟨c, hc, h⟩
   refine ⟨c⁻¹, inv_ne_zero hc, ?_⟩
   -- a = c * b ⇒ b = c⁻¹ * a
-  calc
-    b = c⁻¹ * (c * b) := by rw [mul_inv_cancel_left hc]
-    _ = c⁻¹ * a := by rw [h]
+  rw [h, ←mul_assoc, mul_inv_cancel_left hc]
 
 @[simp] lemma gauge_trans {a b c : ℝ} : GaugeEq a b → GaugeEq b c → GaugeEq a c := by
   intro h₁ h₂; rcases h₁ with ⟨x, hx, hxEq⟩; rcases h₂ with ⟨y, hy, hyEq⟩
