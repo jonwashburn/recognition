@@ -66,6 +66,7 @@ lake exe ci_checks
 - RH/RS Witness: `boseFermiHolds` now constructed from a concrete trivial path-weight system (no `True`).
 - URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness instead of `True.intro`.
 - URC/Minimal: removed trivial `@[simp] def ok : True`.
+- Ethics: replaced Prop=True placeholders with concrete predicates tied to existing boolean checks (`truthOk`, `consentOk`, `harmOk`, `privacyOk`, `coiOk`, `robustOk`, `uniqueInWindow`).
 
 ### How to Explore
 1) Open in a Lean 4–enabled editor (VS Code + Lean extension or Cursor) and navigate `IndisputableMonolith/Manifest.lean`.
