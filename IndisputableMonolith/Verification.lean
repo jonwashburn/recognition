@@ -196,8 +196,13 @@ structure KGateResult where
   note   : String := ""
 deriving Repr
 
-noncomputable def runKGate (_U : RSUnits) (inp : KGateInput) : KGateResult :=
-  { id := inp.id, passed := true, note := "stub" }
+noncomputable def runKGate (U : RSUnits) (inp : KGateInput) : KGateResult :=
+  let lhs := K_A_eval U
+  let rhs := K_B_eval U
+  let ok  := lhs = rhs
+  { id := inp.id
+  , passed := ok
+  , note := if ok then "K_A = K_B holds" else "K_A != K_B" }
 
 end Verification
 end IndisputableMonolith

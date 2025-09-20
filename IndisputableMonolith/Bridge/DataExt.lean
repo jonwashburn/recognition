@@ -2,6 +2,7 @@ import Mathlib
 import IndisputableMonolith.Core
 import IndisputableMonolith.Constants
 import IndisputableMonolith.RH.RS.Scales
+import IndisputableMonolith.Bridge.Basic
 
 /-!
 Bridge Data Physical Constants and K-Gate Verification
@@ -75,15 +76,20 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
 @[simp] noncomputable def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
-/-- Combined uncertainty aggregator (placeholder policy). -/
-@[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
+namespace IndisputableMonolith.Bridge
+namespace DataExt
 
-/-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
-@[simp] noncomputable def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
-  let KA := K_A B
-  let KB := K_B B
-  let u  := u_comb B u_ell0 u_lrec
-  |KA - KB| / (k * u)
+open IndisputableMonolith.Bridge.BridgeData
+
+@[simp] def u_comb (B : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ :=
+  Real.sqrt (u_ell0^2 + u_lrec^2)
+
+@[simp] def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
+  let KA := K_A B; let KB := K_B B; let u := u_comb B u_ell0 u_lrec
+  (Real.abs (KA - KB)) / (k * u)
+
+end DataExt
+end IndisputableMonolith.Bridge
 
 /-- Boolean pass at threshold k: Z ≤ 1. Publishes the exact Z expression. -/
 @[simp] noncomputable def passAt (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Bool :=

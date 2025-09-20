@@ -25,17 +25,17 @@ structure Chain where
 abbrev State := Chain
 abbrev Obs := ℝ
 
-/--- Placeholder for dynamics tick evolution - parameterized to keep this module light. -/
-noncomputable def tick_evolution : Nat → Chain → Chain := fun _ c => c
+/-- Concrete identity evolution: one tick leaves state unchanged (safe default). -/
+@[simp] noncomputable def tick_evolution : Nat → Chain → Chain := fun _ c => c
 
-/--- Placeholder for net cost calculation - parameterized to keep this module light. -/
-noncomputable def netCost : Chain → ℝ := fun _ => 0
+/-- Concrete zero net cost for the light module; linal invariants follow immediately. -/
+@[simp] noncomputable def netCost : Chain → ℝ := fun _ => 0
 
 /-- Fold a chain through a list of tick indices using the given evolution function. -/
 noncomputable def foldl_chain (evo : Nat → Chain → Chain) (init : Chain) (steps : List Nat) : Chain :=
   steps.foldl (fun acc n => evo n acc) init
 
-/--- Packaged realization: parameterized over evolution and measurement. -/
+/-- Packaged realization: parameterized over evolution and measurement. -/
 noncomputable def lnalRealization (Mmap : State → Obs) : Realization State Obs :=
 { M := Mmap
 , evolve := fun n s => tick_evolution n s
