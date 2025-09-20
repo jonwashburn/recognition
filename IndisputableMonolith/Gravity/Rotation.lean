@@ -4,18 +4,18 @@ namespace IndisputableMonolith
 namespace Gravity
 namespace Rotation
 
-/-- Stub for RotSys structure - rotation system with gravitational constant G and enclosed mass function Menc -/
+/-- Rotation system with gravitational constant G and enclosed mass function `Menc`. -/
 structure RotSys where
   G : ℝ
   posG : 0 < G
   Menc : ℝ → ℝ
   nonnegM : ∀ r, 0 ≤ Menc r
 
-/-- Stub for vrot function - rotation velocity as function of radius -/
+/-- Rotation velocity as a function of radius. -/
 noncomputable def vrot (S : RotSys) (r : ℝ) : ℝ :=
   Real.sqrt (S.G * S.Menc r / r)
 
-/-- Stub for g function - centripetal acceleration as function of radius -/
+/-- Centripetal acceleration as a function of radius. -/
 noncomputable def g (S : RotSys) (r : ℝ) : ℝ :=
   (vrot S r) ^ 2 / r
 

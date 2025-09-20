@@ -20,7 +20,7 @@ structure Realization (State Obs : Type) where
 /-- Concrete state and observable for dynamics-coupled measurement. -/
 structure Chain where
   n : Nat
-  f : Fin (n+1) → Empty  -- Placeholder for actual chain structure
+  f : Fin (n+1) → Empty  -- reserved: concrete chain structure is supplied by LNAL layer
 
 abbrev State := Chain
 abbrev Obs := ℝ

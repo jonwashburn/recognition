@@ -67,6 +67,7 @@ lake exe ci_checks
 - URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness.
 - URC/Minimal: removed trivial `@[simp] def ok : True`.
 - Ethics: replaced Prop=True placeholders with concrete predicates tied to existing boolean checks (`truthOk`, `consentOk`, `harmOk`, `privacyOk`, `coiOk`, `robustOk`, `uniqueInWindow`).
+- Measurement: removed placeholder wording; identity evolution and zero-cost defaults documented explicitly.
 - RS Spec: tightened FortyFive_gap_spec shape (removed vestigial trailing True at spec sites; constructors unchanged in meaning).
 
 ### How to Explore
