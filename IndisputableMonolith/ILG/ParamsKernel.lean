@@ -28,7 +28,10 @@ noncomputable def n_of_r (A r0 p : ℝ) (r : ℝ) : ℝ :=
   1 + A * (1 - Real.exp (-(x ^ p)))
 
 @[simp] noncomputable def n_profile (P : Params) (r : ℝ) : ℝ := n_of_r P.A P.r0 P.p r
-@[simp] noncomputable def zeta (P : Params) (r : ℝ) : ℝ := r  -- lightweight placeholder; original used zeta_of_r
+@[simp] noncomputable def zeta (P : Params) (r : ℝ) : ℝ :=
+  -- bounded thickness profile per Source.txt (h_z/R_d ≈ 0.25 clipped to [0.8,1.2])
+  let base := 1 + (P.hz_over_Rd - 0.25) * (1 - Real.exp (-(max 0 r / max εr P.r0)))
+  max 0.8 (min 1.2 base)
 @[simp] noncomputable def xi (P : Params) (u : ℝ) : ℝ := 1 + P.Clag * Real.sqrt (max 0 (min 1 u))
 
 @[simp] noncomputable def w_t (P : Params) (Tdyn τ0 : ℝ) : ℝ :=
