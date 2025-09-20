@@ -4,7 +4,7 @@ namespace IndisputableMonolith
 namespace RH
 namespace RS
 
-/-- Measurement anchors placeholder. -/
+/-- Measurement anchors (minimal interface used by band checks). -/
 structure Anchors where
   a1 : ℝ
   a2 : ℝ
