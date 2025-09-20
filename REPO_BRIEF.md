@@ -82,5 +82,6 @@ lake exe ci_checks
 
 - Quantum: hardened BornRuleIface/BoseFermiIface to concrete properties (normalization, nonnegativity, multiplicative composition), removed True placeholders.
 - Bridge/Data: added concrete helper lemmas (u_comb nonneg/commutative; passAt Bool↔Prop bridge).
+- ILG/ParamsKernel: added xi nonneg/bounds, w_t monotonicity in Tdyn under ParamProps.
 
 
