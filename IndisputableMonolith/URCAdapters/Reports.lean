@@ -214,6 +214,13 @@ namespace URCAdapters
     URCGenerators.InevitabilityDimlessCert.verified_any _
   "InevitabilityDimlessCert: OK"
 
+/-- #eval-friendly report for PDGFitsCert (interface-level placeholder). -/
+@[simp] def pdg_fits_report : String :=
+  let cert : URCGenerators.PDGFitsCert := {}
+  have _ : URCGenerators.PDGFitsCert.verified cert :=
+    URCGenerators.PDGFitsCert.verified_any _
+  "PDGFitsCert: OK"
+
 /-- #eval-friendly report for AbsoluteLayerCert (UniqueCalibration ∧ MeetsBands). -/
 @[simp] def absolute_layer_report : String :=
   let cert : URCGenerators.AbsoluteLayerCert := {}
@@ -270,6 +277,46 @@ namespace URCAdapters
   have _ : URCGenerators.ControlsInflateCert.verified cert :=
     URCGenerators.ControlsInflateCert.verified_any _
   "ControlsInflateCert: OK"
+
+/-- Consolidated manifest of certificate reports (forces elaboration of each). -/
+@[simp] def certificates_manifest : String :=
+  String.intercalate "\n"
+    [ routeA_report
+    , k_identities_report
+    , k_gate_report
+    , lambda_rec_identity_report
+    , single_inequality_report
+    , exactness_report
+    , cone_bound_report
+    , units_invariance_report
+    , eight_tick_report
+    , window8_report
+    , ledger_units_report
+    , rung45_report
+    , gap_consequences_report
+    , family_ratio_report
+    , equalZ_report
+    , rg_residue_report
+    , ablation_sensitivity_report
+    , unique_up_to_units_report
+    , inevitability_dimless_report
+    , absolute_layer_report
+    , maxwell_continuity_report
+    , bose_fermi_report
+    , born_rule_report
+    , rotation_identity_report
+    , ilg_time_report
+    , ilg_effective_report
+    , overlap_contraction_report
+    , folding_complexity_report
+    , lnal_invariants_report
+    , compiler_checks_report
+    , dec_dd_zero_report
+    , dec_bianchi_report
+    , controls_inflate_report
+    , pdg_fits_report
+    , sat_separation_report
+    ]
 
 /-- #eval-friendly consolidated audit identities report (K‑gate, K identities, λ_rec identity, single‑inequality). -/
 @[simp] def audit_identities_report : String :=

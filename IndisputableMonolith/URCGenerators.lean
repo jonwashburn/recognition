@@ -20,6 +20,8 @@ import IndisputableMonolith.Gravity.ILG
 import IndisputableMonolith.Gravity.Rotation
 import IndisputableMonolith.Quantum
 import IndisputableMonolith.YM.Dobrushin
+import IndisputableMonolith.PDG.Fits
+import IndisputableMonolith.LNAL.VM
 
 namespace IndisputableMonolith
 namespace URCGenerators
@@ -501,10 +503,34 @@ structure ControlsInflateCert where
   deriving Repr
 
 @[simp] def ControlsInflateCert.verified (_c : ControlsInflateCert) : Prop :=
-  True
+  (∀ (P : IndisputableMonolith.Gravity.ILG.Params)
+      (H : IndisputableMonolith.Gravity.ILG.ParamProps P)
+      (T τ0 : ℝ), 0 ≤ IndisputableMonolith.Gravity.ILG.w_t P T τ0)
+  ∧ (∀ (P : IndisputableMonolith.Gravity.ILG.Params) (c T τ0 : ℝ),
+        0 < c → IndisputableMonolith.Gravity.ILG.w_t P (c*T) (c*τ0)
+               = IndisputableMonolith.Gravity.ILG.w_t P T τ0)
 
 @[simp] theorem ControlsInflateCert.verified_any (c : ControlsInflateCert) :
-  ControlsInflateCert.verified c := by trivial
+  ControlsInflateCert.verified c := by
+  constructor
+  · intro P H T τ0; exact IndisputableMonolith.Gravity.ILG.w_t_nonneg P H T τ0
+  · intro P c T τ0 hc; simpa using IndisputableMonolith.Gravity.ILG.w_t_rescale P c T τ0 hc
+
+/-! PDG fits (interface-level placeholder): dataset-bound validation of SM masses.
+    This is a policy/True-level certificate until a concrete data pipeline is wired. -/
+structure PDGFitsCert where
+  deriving Repr
+
+@[simp] def PDGFitsCert.verified (_c : PDGFitsCert) : Prop :=
+  -- Enforce per-species |z| ≤ zMax and global χ² ≤ χ2Max for the embedded witness
+  let zMax : ℝ := 3
+  let χ2Max : ℝ := 1
+  (IndisputableMonolith.PDG.Fits.acceptable IndisputableMonolith.PDG.Fits.leptonsWitness zMax χ2Max)
+  ∧ (IndisputableMonolith.PDG.Fits.acceptable IndisputableMonolith.PDG.Fits.quarksWitness zMax χ2Max)
+  ∧ (IndisputableMonolith.PDG.Fits.acceptable IndisputableMonolith.PDG.Fits.bosonsWitness zMax χ2Max)
+
+@[simp] theorem PDGFitsCert.verified_any (c : PDGFitsCert) :
+  PDGFitsCert.verified c := by trivial
 
 structure OverlapContractionCert where
   beta : ℝ
@@ -562,6 +588,7 @@ structure CertFamily where
   overlap : List OverlapContractionCert := []
   foldingComplexity : List FoldingComplexityCert := []
   maxwell : List MaxwellContinuityCert := []
+  pdgFits : List PDGFitsCert := []
   uniqueUpToUnits : List UniqueUpToUnitsCert := []
   sectorYardstick : List SectorYardstickCert := []
   timeKernelDimless : List TimeKernelDimlessCert := []
@@ -604,6 +631,7 @@ def Verified (φ : ℝ) (C : CertFamily) : Prop :=
   (∀ c ∈ C.overlap, OverlapContractionCert.verified c) ∧
   (∀ c ∈ C.foldingComplexity, FoldingComplexityCert.verified c) ∧
   (∀ c ∈ C.maxwell, MaxwellContinuityCert.verified c) ∧
+  (∀ c ∈ C.pdgFits, PDGFitsCert.verified c) ∧
   (∀ c ∈ C.uniqueUpToUnits, UniqueUpToUnitsCert.verified c) ∧
   (∀ c ∈ C.sectorYardstick, SectorYardstickCert.verified c) ∧
   (∀ c ∈ C.timeKernelDimless, TimeKernelDimlessCert.verified c) ∧
@@ -761,13 +789,12 @@ structure MaxwellContinuityCert where
 @[simp] def MaxwellContinuityCert.verified (_c : MaxwellContinuityCert) : Prop :=
   ∀ {A : Type} [AddCommMonoid A]
     (M : IndisputableMonolith.Verification.DEC.MaxwellModel A) (A1 : A),
-    IndisputableMonolith.Verification.DEC.MaxwellModel.current_conservation M A1 = rfl ∨ True
+    M.d3 (IndisputableMonolith.Verification.DEC.MaxwellModel.J M A1) = 0
 
 @[simp] theorem MaxwellContinuityCert.verified_any (c : MaxwellContinuityCert) :
   MaxwellContinuityCert.verified c := by
   intro A _ M A1
-  -- We simply acknowledge the theorem exists; True is enough for this certificate.
-  exact Or.inr trivial
+  exact IndisputableMonolith.Verification.DEC.MaxwellModel.current_conservation M A1
 
 /-! LNAL invariants: token parity, 8-window neutrality, SU(3) triads, 2^10 cycle -/
 
@@ -777,12 +804,12 @@ structure LNALInvariantsCert where
   deriving Repr
 
 @[simp] def LNALInvariantsCert.verified (_c : LNALInvariantsCert) : Prop :=
-  -- TODO: Hook into LNAL.VM invariants when available
-  -- Currently using True as placeholder per project constraints
-  True
+  ∀ (P : IndisputableMonolith.LNAL.Program) (s : IndisputableMonolith.LNAL.State),
+    (IndisputableMonolith.LNAL.step P s).breath < IndisputableMonolith.LNAL.breathPeriod
 
 @[simp] theorem LNALInvariantsCert.verified_any (c : LNALInvariantsCert) :
-  LNALInvariantsCert.verified c := by trivial
+  LNALInvariantsCert.verified c := by
+  intro P s; exact IndisputableMonolith.LNAL.breath_lt_period P s
 
 /-! Compiler static checks certificate -/
 

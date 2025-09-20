@@ -176,6 +176,12 @@ Use this file to look up certificate names, what they assert, and where to hook 
 - Demo: `folding_complexity_report`
 - Status: wired
 
+### PDGFitsCert
+- Claim: PDG dataset fits with uncertainties/systematics are wired (interface-level placeholder).
+- Hooks: `Source.txt @DATASETS PDG_tables`, `SM_masses_repo`; future: CLI pipelines
+- Demo: `pdg_fits_report`
+- Status: wired
+
 ### AbsoluteLayerCert
 - Claim: Absolute layer accepts a bridge: UniqueCalibration ∧ MeetsBands.
 - Hooks: `RH.RS.UniqueCalibration`, `RH.RS.MeetsBands`

@@ -25,6 +25,14 @@ lake build
 lake exe ci_checks
 ```
 
+### Certificates Manifest
+
+See `CERTIFICATES.md` for a copy/paste list of `#eval` commands that elaborate the certificates and print concise OK lines. For a single consolidated line per cert, run:
+
+```lean
+#eval IndisputableMonolith.URCAdapters.certificates_manifest
+```
+
 ## Notes
 
 - The repository includes a GitHub Actions workflow that installs elan, builds the project, runs a smoke check, and guards against `sorry`/`admit` outside the heavy monolith file.
