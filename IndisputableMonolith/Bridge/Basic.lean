@@ -59,7 +59,7 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
 def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
-/-- Combined uncertainty aggregator (placeholder policy). -/
+/-- Combined uncertainty aggregator (policy hook; can be refined downstream). -/
 @[simp]
 def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
 

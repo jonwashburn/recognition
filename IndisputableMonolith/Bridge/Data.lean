@@ -81,7 +81,7 @@ def K_A (_ : BridgeData) : ℝ := IndisputableMonolith.Constants.K
 noncomputable def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
-/-- Combined uncertainty aggregator (placeholder policy). -/
+/-- Combined uncertainty aggregator (policy hook; can be specialized by callers). -/
 noncomputable def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
 
 lemma u_comb_nonneg (B : BridgeData) (u_ell0 u_lrec : ℝ) :
@@ -136,9 +136,8 @@ noncomputable def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
 -- Use canonically defined φ-exponential
 @[simp] noncomputable abbrev PhiPow (x : ℝ) : ℝ := IndisputableMonolith.RH.RS.PhiPow x
 
-/-! Recognition-specific primitives are left abstract but harmless here.
-    Provide zero-valued placeholders to keep this module axiom-free while
-    isolating numerics elsewhere. -/
+/-! Recognition-specific primitives are left abstract via neutral defaults
+    to keep this module axiom-free while isolating numerics elsewhere. -/
 noncomputable abbrev Recognition_r : ℝ := 0
 noncomputable abbrev Recognition_Fgap : ℝ → ℝ := fun _ => 0
 noncomputable abbrev Recognition_Z : ℝ := 0

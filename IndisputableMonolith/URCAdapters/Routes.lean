@@ -73,13 +73,13 @@ def unifyCertificates (φ : ℝ) (routeA : URCMinimal.LawfulBridge)
 def demoUnifiedCertificate (φ : ℝ) : UnifiedCertificate φ :=
   let routeA := URCMinimal.bridge
   let routeB : URCGenerators.CertFamily := {
-    units := [], eightbeat := [], elprobes := [], masses := [],
-    rotation := [], outer := [], conscious := []
+    unitsInv := [], units := [], eightbeat := [], elprobes := [], masses := [],
+    rotation := [], outer := [], conscious := [], kidentities := [], kgate := [], lambdaRec := [], singleineq := []
   }
   let hB : URCGenerators.Verified φ routeB := by
     -- Vacuous verification for empty certificate sets
     dsimp [URCGenerators.Verified, routeB]
-    refine And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout ?hcons)))))
+    refine And.intro ?huInv (And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout (And.intro ?hcons (And.intro ?hkid (And.intro ?hkg (And.intro ?hlrec ?hsing))))))))) )
     all_goals intro x hx; cases hx
 
   unifyCertificates φ routeA routeB hB
