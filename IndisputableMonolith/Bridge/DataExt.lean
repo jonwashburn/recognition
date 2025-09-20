@@ -76,7 +76,7 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
   lambda_rec B / B.ell0
 
 /-- Combined uncertainty aggregator (placeholder policy). -/
-@[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
+@[simp] def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
 
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 @[simp] noncomputable def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
