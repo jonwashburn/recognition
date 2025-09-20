@@ -77,4 +77,6 @@ lake exe ci_checks
 - The repository includes scripts to sync a canonical monolith (`scripts/sync_monolith_from.sh`) and various CI/porting helpers.
 - See `README.md` for install/build instructions; this brief is a quick map of the terrain.
 
+- Quantum: hardened BornRuleIface/BoseFermiIface to concrete properties (normalization, nonnegativity, multiplicative composition), removed True placeholders.
+
 
