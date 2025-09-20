@@ -62,6 +62,7 @@ Use this file to look up certificate names, what they assert, and where to hook 
 - Claim: Bridge uniqueness up to units equivalence.
 - Hooks: `RH.RS.Spec.UniqueUpToUnits`
 - Demo: `unique_up_to_units_report`
+- Status: wired
 
 ### Rung45WitnessCert
 - Claim: Rung 45 exists; no multiples for n≥2.
@@ -97,46 +98,55 @@ Use this file to look up certificate names, what they assert, and where to hook 
 - Claim: Sector `A_B` yardsticks consistent with displays.
 - Hooks: `Source.txt @SECTOR_YARDSTICKS`
 - Demo: `sector_yardstick_report`
+- Status: wired
 
 ### TimeKernelDimlessCert
 - Claim: ILG time-kernel is dimensionless; `w_time_ratio(τ0,τ0)=1`.
 - Hooks: `TruthCore.time_kernel_dimensionless`, `w_time_ratio_ref`
 - Demo: `ilg_time_report`
+- Status: wired
 
 ### EffectiveWeightNonnegCert
 - Claim: Effective weight nonnegative and monotone under premises.
 - Hooks: `Gravity.effectiveSource_of_nonneg`, `effectiveWeight_monotone`
 - Demo: `ilg_effective_report`
+- Status: wired
 
 ### RotationIdentityCert
 - Claim: v^2 = G M_enc/r and flat-curve condition when M_enc ∝ r.
 - Hooks: `Gravity.vrot_sq`, `vrot_flat_of_linear_Menc`
 - Demo: `rotation_identity_report`
+- Status: wired
 
 ### ControlsInflateCert
 - Claim: Negative controls inflate medians; EFE sensitivity bounded; fairness maintained.
 - Hooks: `Source.txt @EXPERIMENTS` (controls, EFE), ILG benchmark scripts
 - Demo: `controls_inflate_report`
+- Status: wired
 
 ### DEC_d∘d_ZeroCert
 - Claim: d∘d = 0 (cochain exactness).
 - Hooks: `TruthCore.dec_dd_eq_zero`
 - Demo: `dec_dd_zero_report`
+- Status: wired
 
 ### DEC_BianchiCert
 - Claim: dF = 0 (Bianchi identity).
 - Hooks: `TruthCore.dec_bianchi`
 - Demo: `dec_bianchi_report`
+- Status: wired
 
 ### MaxwellContinuityCert
 - Claim: dJ = 0 (current conservation in DEC Maxwell model).
 - Hooks: `DEC.CochainSpace.MaxwellModel.current_conservation`
 - Demo: `maxwell_continuity_report`
+- Status: wired
 
 ### BornRuleCert
 - Claim: Path measure exp(−C[γ]) implies |ψ|^2.
 - Hooks: `Source.txt @QUANTUM BORN_RULE`
 - Demo: `born_rule_report`
+- Status: wired
 
 ### BoseFermiCert
 - Claim: Permutation invariance yields Bose/Fermi symmetrization.
@@ -147,11 +157,13 @@ Use this file to look up certificate names, what they assert, and where to hook 
 - Claim: Token parity≤1; 8-window neutrality; legal SU(3) triads; 2^10 cycle with FLIP@512.
 - Hooks: `Source.txt @LNAL_SPEC`, PNAL→LNAL invariants
 - Demo: `lnal_invariants_report`
+- Status: wired
 
 ### CompilerStaticChecksCert
 - Claim: LNAL compiler artifact passes invariants.
 - Hooks: `Source.txt @EXPERIMENTS LNAL_Compiler`
 - Demo: `compiler_checks_report`
+- Status: wired
 
 ### OverlapContractionCert
 - Claim: Uniform overlap β ⇒ TV contraction α=1−β (finite 3×3 example).
@@ -162,5 +174,18 @@ Use this file to look up certificate names, what they assert, and where to hook 
 - Claim: Folding T_c=O(n^{1/3} log n); readout O(n).
 - Hooks: `Source.txt @BIOPHASE` complexity
 - Demo: `folding_complexity_report`
+- Status: wired
+
+### AbsoluteLayerCert
+- Claim: Absolute layer accepts a bridge: UniqueCalibration ∧ MeetsBands.
+- Hooks: `RH.RS.UniqueCalibration`, `RH.RS.MeetsBands`
+- Demo: `absolute_layer_report`
+- Status: wired
+
+### InevitabilityDimlessCert
+- Claim: Dimensionless inevitability: ∀ L B, ∃ U, Matches φ L B U.
+- Hooks: `RH.RS.Inevitability_dimless`, `RH.RS.Witness.inevitability_dimless_partial`
+- Demo: `inevitability_dimless_report`
+- Status: wired
 
 

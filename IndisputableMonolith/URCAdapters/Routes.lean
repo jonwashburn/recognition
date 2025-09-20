@@ -74,12 +74,13 @@ def demoUnifiedCertificate (φ : ℝ) : UnifiedCertificate φ :=
   let routeA := URCMinimal.bridge
   let routeB : URCGenerators.CertFamily := {
     unitsInv := [], units := [], eightbeat := [], elprobes := [], masses := [],
-    rotation := [], outer := [], conscious := [], kidentities := [], kgate := [], lambdaRec := [], singleineq := []
+    rotation := [], outer := [], conscious := [], kidentities := [], kgate := [], lambdaRec := [], singleineq := [], coneBound := [], window8 := [], exactness := [],
+    ledgerUnits := [], rung45 := [], gap45 := [], familyRatio := [], equalZAnchor := [], rgResidue := [], boseFermi := [], bornRule := [], lnalInv := [], compilerChecks := [], overlap := [], foldingComplexity := []
   }
   let hB : URCGenerators.Verified φ routeB := by
     -- Vacuous verification for empty certificate sets
     dsimp [URCGenerators.Verified, routeB]
-    refine And.intro ?huInv (And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout (And.intro ?hcons (And.intro ?hkid (And.intro ?hkg (And.intro ?hlrec ?hsing))))))))) )
+    refine And.intro ?huInv (And.intro ?hu (And.intro ?he8 (And.intro ?hel (And.intro ?hm (And.intro ?hrot (And.intro ?hout (And.intro ?hcons (And.intro ?heigt (And.intro ?hkid (And.intro ?hkg (And.intro ?hlrec (And.intro ?hsing (And.intro ?hcone (And.intro ?hwin (And.intro ?hexact (And.intro ?hled (And.intro ?hr45 (And.intro ?hgap45 (And.intro ?hfr (And.intro ?heqz (And.intro ?hrg (And.intro ?hbf (And.intro ?hborn (And.intro ?hlnal (And.intro ?hcomp (And.intro ?hover (And.intro ?hfold ?hmax)))))))))))))))))))))))))))
     all_goals intro x hx; cases hx
 
   unifyCertificates φ routeA routeB hB
