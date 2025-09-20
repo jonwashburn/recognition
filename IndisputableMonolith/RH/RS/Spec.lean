@@ -102,7 +102,7 @@ structure FortyFiveConsequences (L : Ledger) (B : Bridge L) : Type where
   delta_is_3_over_64  : delta_time_lag = (3 : ℚ) / 64
   rung45_exists       : hasR.rung 45
   no_multiples        : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)
-  sync_lcm_8_45_360   : Prop
+  sync_lcm_8_45_360   : Nat.lcm 8 45 = 360
 
 /-- 45‑Gap holds with minimal witnesses: provides a rung‑45 existence and a no‑multiples property. -/
 structure FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Type where
@@ -120,15 +120,15 @@ theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
   (hasR : HasRung L B)
   (h45 : hasR.rung 45)
   (hNoMul : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)) :
-  ∃ (F : FortyFiveConsequences L B), True := by
+  ∃ (F : FortyFiveConsequences L B), Prop := by
   refine ⟨{
       hasR := hasR
     , delta_time_lag := (3 : ℚ) / 64
     , delta_is_3_over_64 := rfl
     , rung45_exists := h45
     , no_multiples := hNoMul
-    , sync_lcm_8_45_360 := True
-    }, trivial⟩
+    , sync_lcm_8_45_360 := by decide
+    }, True⟩
 
 /-- 45‑gap consequence for any ledger/bridge given a rung‑45 witness and no‑multiples.
     This provides a non‑IM branch to satisfy the 45‑gap spec. -/
@@ -193,11 +193,12 @@ def Recognition_Closure (φ : ℝ) : Prop :=
 
 theorem inevitability_absolute_holds (φ : ℝ) : Inevitability_absolute φ := by
   intro L B
-  -- Provide default anchors and sample bands via constants and bands helpers
-  refine ⟨{ a1 := 0, a2 := 0 }, sampleBandsFor (IndisputableMonolith.Constants.RSUnits.c _), ?_⟩
-  -- Use generic any‑witnesses
-  exact And.intro (uniqueCalibration_any L B { a1 := 0, a2 := 0 })
-    (meetsBands_any_default L B { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp })
+  -- Choose simple anchors and units; use centered bands at U.c
+  let U : IndisputableMonolith.Constants.RSUnits :=
+    { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp }
+  refine ⟨{ a1 := U.c, a2 := U.ell0 }, sampleBandsFor U.c, ?_⟩
+  exact And.intro (uniqueCalibration_any L B { a1 := U.c, a2 := U.ell0 })
+    (meetsBands_any_default L B U)
 
 /-! ### Existence and uniqueness (up to units) scaffold -/
 

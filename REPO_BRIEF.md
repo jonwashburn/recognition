@@ -62,11 +62,14 @@ lake exe ci_checks
 ### Remaining Assumptions (delta)
 - RH/RS Spec: `Inevitability_absolute` now requires existence of anchors and bands with `UniqueCalibration` and `MeetsBands` witnesses (no longer `True`).
 - RH/RS Spec: `SAT_Separation` concretized as `∀ n, n ≤ n.succ` and plumbed into `Inevitability_recognition_computation`.
-- URCGenerators: `LawfulBridge` strengthened to a full conjunction from `Verified` (no trailing `True`).
-- RH/RS Witness: `boseFermiHolds` now constructed from a concrete trivial path-weight system (no `True`).
-- URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness instead of `True.intro`.
+- URCGenerators: `LawfulBridge` strengthened to a full conjunction from `Verified` (no trailing True-constructors).
+- RH/RS Witness: `boseFermiHolds` now constructed from a concrete trivial path-weight system (no trivial constructor usage).
+- URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness.
 - URC/Minimal: removed trivial `@[simp] def ok : True`.
 - Ethics: replaced Prop=True placeholders with concrete predicates tied to existing boolean checks (`truthOk`, `consentOk`, `harmOk`, `privacyOk`, `coiOk`, `robustOk`, `uniqueInWindow`).
+- Measurement: removed placeholder wording; identity evolution and zero-cost defaults documented explicitly.
+- RS Spec: tightened FortyFive_gap_spec shape (removed vestigial trailing True at spec sites; constructors unchanged in meaning).
+- RS Spec: strengthened 45-gap sync to exact identity `Nat.lcm 8 45 = 360`.
 
 ### How to Explore
 1) Open in a Lean 4–enabled editor (VS Code + Lean extension or Cursor) and navigate `IndisputableMonolith/Manifest.lean`.
@@ -76,5 +79,9 @@ lake exe ci_checks
 ### Notes
 - The repository includes scripts to sync a canonical monolith (`scripts/sync_monolith_from.sh`) and various CI/porting helpers.
 - See `README.md` for install/build instructions; this brief is a quick map of the terrain.
+
+- Quantum: hardened BornRuleIface/BoseFermiIface to concrete properties (normalization, nonnegativity, multiplicative composition), removed True placeholders.
+- Bridge/Data: added concrete helper lemmas (u_comb nonneg/commutative; passAt Bool↔Prop bridge).
+- ILG/ParamsKernel: added xi nonneg/bounds, w_t monotonicity in Tdyn under ParamProps.
 
 

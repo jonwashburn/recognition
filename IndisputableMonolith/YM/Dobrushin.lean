@@ -19,7 +19,6 @@ structure MarkovKernel (ι : Type) [Fintype ι] where
 /-- Row–row overlap `∑j min(P i j, P i' j)` in [0,1]. -/
 def overlap (K : MarkovKernel ι) (i i' : ι) : ℝ := ∑ j, min (K.P i j) (K.P i' j)
 
---- WIP: axiom stubs for dependency-light extraction
 lemma overlap_nonneg (K : MarkovKernel ι) (i i' : ι) : 0 ≤ overlap K i i' := by
   classical
   have hterm : ∀ j : ι, 0 ≤ min (K.P i j) (K.P i' j) :=

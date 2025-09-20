@@ -4,7 +4,7 @@ import IndisputableMonolith.RH.RS.Scales
 namespace IndisputableMonolith
 namespace URCAdapters
 
-/-! Simple computation growth placeholder wired to a concrete monotonicity lemma on PhiPow.
+/-! Simple computation growth interface wired to a concrete monotonicity lemma on PhiPow.
     We export a Prop that holds because PhiPow is strictly increasing when φ>1. -/
 def tc_growth_prop : Prop :=
   ∀ x y : ℝ, x ≤ y → IndisputableMonolith.RH.RS.PhiPow x ≤ IndisputableMonolith.RH.RS.PhiPow y

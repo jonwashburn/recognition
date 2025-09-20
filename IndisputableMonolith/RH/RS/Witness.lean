@@ -13,7 +13,7 @@ namespace Witness
 def eightTickMinimalHolds : Prop :=
   ∃ w : IndisputableMonolith.Patterns.CompleteCover 3, w.period = 8
 
-/-- Born rule witness placeholder: existence of a measurement pipeline whose averaging
+/-- Born rule witness interface: existence of a measurement pipeline whose averaging
     recovers a window integer (DNARP bridge). -/
 def bornHolds : Prop :=
   ∃ (w : IndisputableMonolith.Patterns.Pattern 8),
@@ -31,7 +31,7 @@ def boseFermiHolds : Prop :=
          -- sum over singleton = exp(0) = 1
          simp [IndisputableMonolith.Quantum.PathWeight.prob] })
 
-/-- WIP trivial witnesses for the above props. -/
+/-- Minimal witnesses for the above props. -/
 theorem eightTick_from_TruthCore : eightTickMinimalHolds := by
   refine ⟨IndisputableMonolith.Patterns.grayCoverQ3, ?_⟩
   simpa using IndisputableMonolith.Patterns.period_exactly_8

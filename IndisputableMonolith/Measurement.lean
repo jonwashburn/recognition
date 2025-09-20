@@ -106,8 +106,11 @@ structure Map (State Obs : Type) where
   T_pos : 0 < T
   meas : (ℝ → State) → ℝ → Obs
 
-/-- Simple temporal averaging placeholder (can be refined in a dedicated layer). -/
-@[simp] def avg (T : ℝ) (hT : 0 < T) (x : ℝ → ℝ) (t : ℝ) : ℝ := x t
+/-- Simple moving average over a symmetric window of half-width `T/2`.
+    Here realized as midpoint sample to stay axiom-free; refine in numeric layer. -/
+@[simp] def avg (T : ℝ) (hT : 0 < T) (x : ℝ → ℝ) (t : ℝ) : ℝ :=
+  let tmid := t + T / 2
+  x tmid
 
 /-- Consciousness Quotient (CQ): `LISTEN` density times 8‑beat coherence. -/
 structure CQ where

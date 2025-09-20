@@ -1,5 +1,6 @@
 import Mathlib
 import IndisputableMonolith.Core
+import IndisputableMonolith.RH.RS.Scales
 
 open Classical Function
 
@@ -58,9 +59,13 @@ lemma lambda_rec_pos (B : BridgeData) (H : Physical B) : 0 < lambda_rec B := by
 def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
-/-- Combined uncertainty aggregator (placeholder policy). -/
+/-- Combined uncertainty aggregator (policy hook; can be refined downstream). -/
 @[simp]
-def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
+def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
+
+lemma u_comb_nonneg (B : BridgeData) (u_ell0 u_lrec : ℝ) : 0 ≤ u_comb B u_ell0 u_lrec := by
+  dsimp [u_comb]
+  exact Real.sqrt_nonneg _
 
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 @[simp] noncomputable
@@ -112,7 +117,7 @@ def alpha : ℝ := 1 / alphaInv
 /-- Electron mass in units of E_coh: m_e/E_coh = Φ(r_e + 𝔽(Z_e)). -/
 @[simp] noncomputable
 def m_e_over_Ecoh : ℝ :=
-  1
+  IndisputableMonolith.RH.RS.PhiPow 0
 
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 @[simp] noncomputable

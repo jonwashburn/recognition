@@ -28,7 +28,10 @@ noncomputable def n_of_r (A r0 p : ℝ) (r : ℝ) : ℝ :=
   1 + A * (1 - Real.exp (-(x ^ p)))
 
 @[simp] noncomputable def n_profile (P : Params) (r : ℝ) : ℝ := n_of_r P.A P.r0 P.p r
-@[simp] noncomputable def zeta (P : Params) (r : ℝ) : ℝ := r  -- lightweight placeholder; original used zeta_of_r
+@[simp] noncomputable def zeta (P : Params) (r : ℝ) : ℝ :=
+  -- bounded thickness profile per Source.txt (h_z/R_d ≈ 0.25 clipped to [0.8,1.2])
+  let base := 1 + (P.hz_over_Rd - 0.25) * (1 - Real.exp (-(max 0 r / max εr P.r0)))
+  max 0.8 (min 1.2 base)
 @[simp] noncomputable def xi (P : Params) (u : ℝ) : ℝ := 1 + P.Clag * Real.sqrt (max 0 (min 1 u))
 
 @[simp] noncomputable def w_t (P : Params) (Tdyn τ0 : ℝ) : ℝ :=
@@ -115,6 +118,52 @@ noncomputable def xi_of_bin : Nat → ℝ
 | 2 => xi_of_u 0.5
 | 3 => xi_of_u 0.7
 | _ => xi_of_u 0.9
+
+lemma xi_nonneg (P : Params) (u : ℝ) (H : ParamProps P) : 0 ≤ xi P u := by
+  dsimp [xi]
+  have : 0 ≤ Real.sqrt (max 0 (min 1 u)) := Real.sqrt_nonneg _
+  have hClag : 0 ≤ P.Clag := H.Clag_nonneg
+  linarith
+
+lemma xi_of_u_bounds (u : ℝ) : 1 ≤ xi_of_u u ∧ xi_of_u u ≤ 2 := by
+  dsimp [xi_of_u]
+  have h0 : 0 ≤ Real.sqrt (max 0 (min 1 u)) := Real.sqrt_nonneg _
+  have h1 : Real.sqrt (max 0 (min 1 u)) ≤ 1 := by
+    -- max 0 (min 1 u) ≤ 1 ⇒ sqrt ≤ 1
+    have : max 0 (min 1 u) ≤ 1 := by
+      have : (min 1 u) ≤ 1 := by exact min_le_left _ _
+      exact le_trans (le_max_right _ _) this
+    simpa using (Real.sqrt_le_left (by exact le_trans (by simp) (le_max_left _ _)) this)
+  constructor
+  · linarith
+  · linarith
+
+lemma w_t_mono_Tdyn (P : Params) (H : ParamProps P)
+  {T1 T2 τ0 : ℝ} (hT : T1 ≤ T2) : w_t P T1 τ0 ≤ w_t P T2 τ0 := by
+  dsimp [w_t]
+  have hdiv : T1 / τ0 ≤ T2 / τ0 := by
+    by_cases hτ : τ0 = 0
+    · simp [hτ] at hT; simpa [hτ]
+    · simpa [div_eq_mul_inv] using mul_le_mul_of_nonneg_right hT (by
+        classical
+        by_cases ht : 0 ≤ (τ0)⁻¹
+        · exact ht
+        · have : τ0 < 0 := lt_of_not_ge ht
+          exact le_of_lt (by have := this; exact this))
+  have hmax : max εt (T1 / τ0) ≤ max εt (T2 / τ0) := by
+    exact max_le_max_left hdiv _
+  have hα : Monotone (fun t => Real.rpow t P.alpha) := fun x y hx =>
+    by
+      have hxpos : 0 ≤ x := le_trans (le_of_lt (by norm_num)) (le_max_left _ _)
+      have hypos : 0 ≤ y := le_trans (le_of_lt (by norm_num)) (le_max_left _ _)
+      exact Real.rpow_le_rpow_of_exponent_ge hx hxpos hypos (le_of_lt (by exact lt_of_le_of_ne H.alpha_nonneg (by decide)))
+  have : Real.rpow (max εt (T1 / τ0)) P.alpha ≤ Real.rpow (max εt (T2 / τ0)) P.alpha :=
+    by
+      -- alpha ≥ 0 ensures monotone in base
+      have : (max εt (T1 / τ0)) ≤ (max εt (T2 / τ0)) := hmax
+      exact Real.rpow_le_rpow_of_exponent_nonneg this H.alpha_nonneg
+  have hClag : 0 ≤ P.Clag := H.Clag_nonneg
+  linarith
 
 end ILG
 end IndisputableMonolith

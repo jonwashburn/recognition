@@ -34,7 +34,7 @@ deriving Repr
 @[simp] def gatesRendered : List GateSpec :=
   [ { id := "KGate"
     , inputs := ["u(ℓ0)", "u(λ_rec)", "k", "(optional) ρ", "K_B"]
-    , output := "Z = |K_A - K_B| / (k · (u_ell0 + u_lrec)); passAt = (Z ≤ 1)" } ]
+    , output := "Z = |K_A - K_B| / (k · sqrt(u_ell0^2 + u_lrec^2)); passAt = (Z ≤ 1)" } ]
 
 end Rendered
 end Verification

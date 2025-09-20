@@ -81,8 +81,20 @@ def K_A (_ : BridgeData) : ℝ := IndisputableMonolith.Constants.K
 noncomputable def K_B (B : BridgeData) : ℝ :=
   lambda_rec B / B.ell0
 
-/-- Combined uncertainty aggregator (placeholder policy). -/
-noncomputable def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := u_ell0 + u_lrec
+/-- Combined uncertainty aggregator (policy hook; can be specialized by callers). -/
+noncomputable def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
+
+lemma u_comb_nonneg (B : BridgeData) (u_ell0 u_lrec : ℝ) :
+  0 ≤ u_comb B u_ell0 u_lrec := by
+  dsimp [u_comb]
+  exact Real.sqrt_nonneg _
+
+lemma u_comb_comm (B : BridgeData) (u_ell0 u_lrec : ℝ) :
+  u_comb B u_ell0 u_lrec = u_comb B u_lrec u_ell0 := by
+  dsimp [u_comb]
+  have : u_ell0 ^ 2 + u_lrec ^ 2 = u_lrec ^ 2 + u_ell0 ^ 2 := by
+    simpa [add_comm]
+  simpa [this]
 
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 noncomputable def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
@@ -90,6 +102,13 @@ noncomputable def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
   let KB := K_B B
   let u  := u_comb B u_ell0 u_lrec
   (Real.abs (KA - KB)) / (k * u)
+
+@[simp] lemma passAt_true_iff (B : BridgeData) (u_ell0 u_lrec k : ℝ) :
+  passAt B u_ell0 u_lrec k = true ↔ Zscore B u_ell0 u_lrec k ≤ 1 := by
+  dsimp [passAt]
+  by_cases h : Zscore B u_ell0 u_lrec k ≤ 1
+  · simp [h]
+  · simp [h]
 
 /-- Boolean pass at threshold k: Z ≤ 1. Publishes the exact Z expression. -/
 noncomputable def passAt (B : BridgeData) (u_ell0 u_lrec k : ℝ) : Bool :=
@@ -117,9 +136,8 @@ noncomputable def tau0 (B : BridgeData) : ℝ := lambda_rec B / B.c
 -- Use canonically defined φ-exponential
 @[simp] noncomputable abbrev PhiPow (x : ℝ) : ℝ := IndisputableMonolith.RH.RS.PhiPow x
 
-/-! Recognition-specific primitives are left abstract but harmless here.
-    Provide zero-valued placeholders to keep this module axiom-free while
-    isolating numerics elsewhere. -/
+/-! Recognition-specific primitives are left abstract via neutral defaults
+    to keep this module axiom-free while isolating numerics elsewhere. -/
 noncomputable abbrev Recognition_r : ℝ := 0
 noncomputable abbrev Recognition_Fgap : ℝ → ℝ := fun _ => 0
 noncomputable abbrev Recognition_Z : ℝ := 0

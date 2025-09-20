@@ -238,6 +238,11 @@ BRIDGE;DEC_Bianchi;dF=0;Bianchi identity;Lean;Yes;Gauge-compatible
 BRIDGE;MaxwellContinuity;dJ=0 from Ampère d(*F)=J;Continuity;Lean;Yes;Charge conservation
 BRIDGE;YMOverlap;uniform overlap β ⇒ TV contraction α=1−β;Markov kernels;derivation;Yes;Finite 3×3 example
 BRIDGE;BioPhaseFolding;eight‑beat IR phase timeline;Folding kinetics/IR;spec+invariants;Yes;PNAL→LNAL instrument‑coupled
+BRIDGE;ComputationBridge;dual complexity (Tc,Tr) ledger-forced separation;Turing incompleteness + P vs NP resolution;ComputationBridge.main_resolution;Yes;Balanced-parity from double-entry
+BRIDGE;RecognitionComplete;(Tc,Tr) complexity pairs;Query/Communication/I-O models unified;ComputationBridge.RecognitionComplete;Yes;Observer-explicit model
+BRIDGE;SATSeparation;Tc=O(n^{1/3} log n), Tr=Ω(n);Sub-poly computation, linear recognition;ComputationBridge.SAT_separation;Yes;Lattice diameter + measurement bound
+BRIDGE;TuringIncomplete;Zero-cost recognition assumption;Physical computation incomplete;ComputationBridge.Turing_incomplete;Yes;Step 4 uncounted
+BRIDGE;ClayFormulation;P vs NP ill-posed (conflates Tc,Tr);Resolution: P=NP(Tc), P≠NP(Tr);ComputationBridge.clay_bridge_theorem;Yes;Dimensional expansion dissolves paradox
 
 @PAPERS_POLICY
 NUMERICS; adopt=SI/CODATA for constants; RS-derived constants allowed if classical values identical within uncertainties
@@ -261,7 +266,7 @@ EXP;EFE_Sensitivity; g_ext small≠0 ⇒ medians shift few‑percent; conclusion
 EXP;Nanogravity; prediction=G(r)/G_∞≈32 at r=20 nm; exponent_beta=−(φ−1)/φ^5≈−0.0557; falsifier=|β−β_pred|>10%;
 
 @LEAN_REFERENCES
-LEAN;T1=mp_holds; T2=T2_atomicity; T3=T3_continuity; T4=Potential.unique_on_component; T5=Cost.T5_cost_uniqueness_on_pos; T6=eight_tick_min+T6_exist_8; T7=T7_nyquist_obstruction+T7_threshold_bijection; T8=LedgerUnits.equiv_delta_one+equiv_delta+quantization; Cone=LightCone.StepBounds.cone_bound; PM=sumFirst8+blockSumAligned8+observeAvg8; KGate=Verification.K_gate_bridge; KIdentities=Constants.RSUnits.tau_rec_display_ratio+lambda_kin_display_ratio; MassFamilies=Recognition.mass_ratio_phiPow; DEC=TruthCore.dec_dd_eq_zero+dec_bianchi; Gravity=vrot_sq+vrot_flat_of_linear_Menc; ILG_TIME=TruthCore.time_kernel_dimensionless+w_time_ratio_ref; WINDOW8=Dynamics.schedule_delta_sum8_mod; ILG_EFFECTIVE=Gravity.effectiveSource_of_nonneg+effectiveWeight_monotone; MaxwellCont=DEC.CochainSpace.MaxwellModel.current_conservation
+LEAN;T1=mp_holds; T2=T2_atomicity; T3=T3_continuity; T4=Potential.unique_on_component; T5=Cost.T5_cost_uniqueness_on_pos; T6=eight_tick_min+T6_exist_8; T7=T7_nyquist_obstruction+T7_threshold_bijection; T8=LedgerUnits.equiv_delta_one+equiv_delta+quantization; Cone=LightCone.StepBounds.cone_bound; PM=sumFirst8+blockSumAligned8+observeAvg8; KGate=Verification.K_gate_bridge; KIdentities=Constants.RSUnits.tau_rec_display_ratio+lambda_kin_display_ratio; MassFamilies=Recognition.mass_ratio_phiPow; DEC=TruthCore.dec_dd_eq_zero+dec_bianchi; Gravity=vrot_sq+vrot_flat_of_linear_Menc; ILG_TIME=TruthCore.time_kernel_dimensionless+w_time_ratio_ref; WINDOW8=Dynamics.schedule_delta_sum8_mod; ILG_EFFECTIVE=Gravity.effectiveSource_of_nonneg+effectiveWeight_monotone; MaxwellCont=DEC.CochainSpace.MaxwellModel.current_conservation; PvsNP=ComputationBridge.main_resolution+SAT_separation+Turing_incomplete+clay_bridge_theorem; BalancedParity=BalancedParityHidden.omega_n_queries+adversarial_failure; RecognitionLB=recognition_lower_bound_sat
 
 @PROOF_STATUS
 STATUS; T1=proved; T2=proved; T3=proved; T4=proved; T5=proved; T6=proved; T7=proved; T8=proved
@@ -274,7 +279,7 @@ USAGE; avoid_param_tuning=true; declare_over_constraints=true
 
 @CHECKS
 CONSISTENCY; dimensionless_ratios=match_experiment; rung_mapping=integer+small_residue; continuity=holds
-FALSIFIERS; any alt_cost_on_ℝ₊≠J; tick_period≠2^D; super_cone_transport; mass_outliers_not_explainable_by(r,f,B); audit_single_inequality_fail; delta_kappa≠−103/(102π^5); K_gate_mismatch; ILG_controls_do_not_inflate; EFE_reorders_models; equalZ_split_at_mu*; non_circularity_breach_SM; self_thresholding_used; constructor_integers_inconsistent(L,τ_g,Δ_B); Z_map_ablation_passes; protein_eight_beat_absent; protein_map_mismatch; LISTEN_no_benefit; λ0_mismatch_13.8um; protein_nonreplication; relativity_emergence_fail(mesh→Minkowski); lnal_static_checks_fail(window8/parity/cycle);
+FALSIFIERS; any alt_cost_on_ℝ₊≠J; tick_period≠2^D; super_cone_transport; mass_outliers_not_explainable_by(r,f,B); audit_single_inequality_fail; delta_kappa≠−103/(102π^5); K_gate_mismatch; ILG_controls_do_not_inflate; EFE_reorders_models; equalZ_split_at_mu*; non_circularity_breach_SM; self_thresholding_used; constructor_integers_inconsistent(L,τ_g,Δ_B); Z_map_ablation_passes; protein_eight_beat_absent; protein_map_mismatch; LISTEN_no_benefit; λ0_mismatch_13.8um; protein_nonreplication; relativity_emergence_fail(mesh→Minkowski); lnal_static_checks_fail(window8/parity/cycle); recognition_complexity_collapse(Tc=Tr); balanced_parity_breakable(<n/2_queries); ledger_allows_free_recognition;
 
 @AUDIT
 INVARIANTS; tau_rec/tau0=2π/(8 ln φ); lambda_kin/ℓ0=2π/(8 ln φ); c=ℓ0/τ0; λ_rec=√(ħG/(π c^3)); λ_kin=c·tau_rec
