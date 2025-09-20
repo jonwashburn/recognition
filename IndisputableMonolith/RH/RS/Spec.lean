@@ -102,7 +102,7 @@ structure FortyFiveConsequences (L : Ledger) (B : Bridge L) : Type where
   delta_is_3_over_64  : delta_time_lag = (3 : ℚ) / 64
   rung45_exists       : hasR.rung 45
   no_multiples        : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)
-  sync_lcm_8_45_360   : Prop
+  sync_lcm_8_45_360   : Nat.lcm 8 45 = 360
 
 /-- 45‑Gap holds with minimal witnesses: provides a rung‑45 existence and a no‑multiples property. -/
 structure FortyFiveGapHolds (L : Ledger) (B : Bridge L) : Type where
@@ -127,7 +127,7 @@ theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
     , delta_is_3_over_64 := rfl
     , rung45_exists := h45
     , no_multiples := hNoMul
-    , sync_lcm_8_45_360 := True
+    , sync_lcm_8_45_360 := by decide
     }, True⟩
 
 /-- 45‑gap consequence for any ledger/bridge given a rung‑45 witness and no‑multiples.

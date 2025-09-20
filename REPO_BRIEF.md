@@ -69,6 +69,7 @@ lake exe ci_checks
 - Ethics: replaced Prop=True placeholders with concrete predicates tied to existing boolean checks (`truthOk`, `consentOk`, `harmOk`, `privacyOk`, `coiOk`, `robustOk`, `uniqueInWindow`).
 - Measurement: removed placeholder wording; identity evolution and zero-cost defaults documented explicitly.
 - RS Spec: tightened FortyFive_gap_spec shape (removed vestigial trailing True at spec sites; constructors unchanged in meaning).
+- RS Spec: strengthened 45-gap sync to exact identity `Nat.lcm 8 45 = 360`.
 
 ### How to Explore
 1) Open in a Lean 4–enabled editor (VS Code + Lean extension or Cursor) and navigate `IndisputableMonolith/Manifest.lean`.

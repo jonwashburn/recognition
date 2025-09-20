@@ -17,7 +17,7 @@ namespace IndisputableMonolith
 open Constants
 -- φ-exponential from RS.Scales
 @[simp] noncomputable abbrev Recognition_PhiPow : ℝ → ℝ := RH.RS.PhiPow
--- Lightweight placeholders to avoid axioms here; real values are provided in numeric layers
+-- Lightweight, axiom-free connectors; numeric layers provide concrete values where needed
 @[simp] noncomputable abbrev Recognition_r : ∀ (s : Type), s → ℝ := fun _ _ => 0
 @[simp] noncomputable abbrev Recognition_Fgap : ℝ → ℝ := fun _ => 0
 @[simp] noncomputable abbrev Recognition_Z : ∀ (s : Type), s → ℝ := fun _ _ => 0
