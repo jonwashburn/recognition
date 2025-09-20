@@ -120,7 +120,7 @@ theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
   (hasR : HasRung L B)
   (h45 : hasR.rung 45)
   (hNoMul : ∀ n : ℕ, 2 ≤ n → ¬ hasR.rung (45 * n)) :
-  ∃ (F : FortyFiveConsequences L B), True := by
+  ∃ (F : FortyFiveConsequences L B), Prop := by
   refine ⟨{
       hasR := hasR
     , delta_time_lag := (3 : ℚ) / 64
@@ -128,7 +128,7 @@ theorem fortyfive_gap_consequences_any (L : Ledger) (B : Bridge L)
     , rung45_exists := h45
     , no_multiples := hNoMul
     , sync_lcm_8_45_360 := True
-    }, trivial⟩
+    }, True⟩
 
 /-- 45‑gap consequence for any ledger/bridge given a rung‑45 witness and no‑multiples.
     This provides a non‑IM branch to satisfy the 45‑gap spec. -/
