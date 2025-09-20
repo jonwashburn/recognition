@@ -24,7 +24,7 @@ structure BoseFermiIface (γ : Type) (PW : PathWeight γ) : Prop where
 
  theorem rs_pathweight_iface (γ : Type) (PW : PathWeight γ) :
   BornRuleIface γ PW ∧ BoseFermiIface γ PW := by
-  exact ⟨⟨True.intro, True.intro⟩, ⟨True.intro, True.intro⟩⟩
+  exact ⟨⟨trivial, trivial⟩, ⟨trivial, trivial⟩⟩
 
 end Quantum
 end IndisputableMonolith

@@ -193,11 +193,12 @@ def Recognition_Closure (φ : ℝ) : Prop :=
 
 theorem inevitability_absolute_holds (φ : ℝ) : Inevitability_absolute φ := by
   intro L B
-  -- Provide default anchors and sample bands via constants and bands helpers
-  refine ⟨{ a1 := 0, a2 := 0 }, sampleBandsFor (IndisputableMonolith.Constants.RSUnits.c _), ?_⟩
-  -- Use generic any‑witnesses
-  exact And.intro (uniqueCalibration_any L B { a1 := 0, a2 := 0 })
-    (meetsBands_any_default L B { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp })
+  -- Choose simple anchors and units; use centered bands at U.c
+  let U : IndisputableMonolith.Constants.RSUnits :=
+    { tau0 := 1, ell0 := 1, c := 1, c_ell0_tau0 := by simp }
+  refine ⟨{ a1 := U.c, a2 := U.ell0 }, sampleBandsFor U.c, ?_⟩
+  exact And.intro (uniqueCalibration_any L B { a1 := U.c, a2 := U.ell0 })
+    (meetsBands_any_default L B U)
 
 /-! ### Existence and uniqueness (up to units) scaffold -/
 

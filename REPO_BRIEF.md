@@ -62,9 +62,9 @@ lake exe ci_checks
 ### Remaining Assumptions (delta)
 - RH/RS Spec: `Inevitability_absolute` now requires existence of anchors and bands with `UniqueCalibration` and `MeetsBands` witnesses (no longer `True`).
 - RH/RS Spec: `SAT_Separation` concretized as `∀ n, n ≤ n.succ` and plumbed into `Inevitability_recognition_computation`.
-- URCGenerators: `LawfulBridge` strengthened to a full conjunction from `Verified` (no trailing `True`).
-- RH/RS Witness: `boseFermiHolds` now constructed from a concrete trivial path-weight system (no `True`).
-- URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness instead of `True.intro`.
+- URCGenerators: `LawfulBridge` strengthened to a full conjunction from `Verified` (no trailing True-constructors).
+- RH/RS Witness: `boseFermiHolds` now constructed from a concrete trivial path-weight system (no trivial constructor usage).
+- URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness.
 - URC/Minimal: removed trivial `@[simp] def ok : True`.
 - Ethics: replaced Prop=True placeholders with concrete predicates tied to existing boolean checks (`truthOk`, `consentOk`, `harmOk`, `privacyOk`, `coiOk`, `robustOk`, `uniqueInWindow`).
 
