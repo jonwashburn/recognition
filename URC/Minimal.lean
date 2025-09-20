@@ -27,4 +27,6 @@ structure LawfulBridge : Prop where
   , IndisputableMonolith.URCAdapters.EL_holds
   , IndisputableMonolith.URCAdapters.phi_rung_holds ⟩
 
+@[simp] theorem lawfulBridge_holds : LawfulBridge := bridge
+
 end URCMinimal
