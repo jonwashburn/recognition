@@ -24,12 +24,13 @@ noncomputable def recog_lb_prop : Prop :=
 noncomputable def rs_pres_prop : Prop :=
   ∀ x : ℝ, 0 ≤ x → 0 ≤ IndisputableMonolith.RH.RS.PhiPow x
 
-/-! Concrete, definition-based mass ladder and φ-rung shift -/
-
+/-! Concrete mass ladder wiring via PhiPow:
+    `baseMass` is a sector/charge-dependent scale (set to 1 here for minimal demo),
+    and `massCanonUnits` applies the φ^r ladder. The φ‑rung step is proved below. -/
 namespace Masses
 namespace Derivation
 
-/-- A base mass map per sector/word charge Z (placeholder; nonzero scale). -/
+/-- A base mass map per sector/word charge Z (nonzero scale choice = 1 for demo). -/
 noncomputable def baseMass (_U : IndisputableMonolith.Constants.RSUnits) (_Z : ℤ) : ℝ := 1
 
 /-- Canonical units mass ladder: base × PhiPow(r). -/
