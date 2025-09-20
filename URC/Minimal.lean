@@ -1,4 +1,8 @@
 import Mathlib
+import IndisputableMonolith.URCAdapters.UnitsIdentity
+import IndisputableMonolith.URCAdapters.EightBeat
+import IndisputableMonolith.URCAdapters.ELProp
+import IndisputableMonolith.URCAdapters.PhiRung
 
 /-! Minimal URC scaffold to ensure a clean, fast build.
     This file is independent of the heavy monolith; use it for CI builds.
@@ -6,10 +10,10 @@ import Mathlib
 
 namespace URCMinimal
 
-def UnitsProp : Prop := True
-def EightBeatProp : Prop := True
-def ELProp : Prop := True
-def PhiRungProp : Prop := True
+def UnitsProp : Prop := IndisputableMonolith.URCAdapters.units_identity_prop
+def EightBeatProp : Prop := IndisputableMonolith.URCAdapters.eightbeat_prop
+def ELProp : Prop := IndisputableMonolith.URCAdapters.EL_prop
+def PhiRungProp : Prop := IndisputableMonolith.URCAdapters.phi_rung_prop
 
 structure LawfulBridge : Prop where
   units  : UnitsProp
@@ -17,8 +21,10 @@ structure LawfulBridge : Prop where
   el     : ELProp
   rung   : PhiRungProp
 
-@[simp] def bridge : LawfulBridge := ⟨True.intro, True.intro, True.intro, True.intro⟩
-
-@[simp] def ok : True := True.intro
+@[simp] def bridge : LawfulBridge :=
+  ⟨ IndisputableMonolith.URCAdapters.units_identity_holds
+  , IndisputableMonolith.URCAdapters.eightbeat_holds
+  , IndisputableMonolith.URCAdapters.EL_holds
+  , IndisputableMonolith.URCAdapters.phi_rung_holds ⟩
 
 end URCMinimal

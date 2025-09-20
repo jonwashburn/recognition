@@ -1,20 +1,54 @@
 import Mathlib
+import IndisputableMonolith.Measurement
+import IndisputableMonolith.Patterns
 import IndisputableMonolith.RH.RS.Spec
+import IndisputableMonolith.Quantum
 
 namespace IndisputableMonolith
 namespace RH
 namespace RS
 namespace Witness
 
-/-- Wrapper props extracted from TruthCore (WIP: simplified to True). -/
-def eightTickMinimalHolds : Prop := True
-def bornHolds : Prop := True
-def boseFermiHolds : Prop := True
+/-- Eight‑tick minimality witness tied to `Patterns` theorem. -/
+def eightTickMinimalHolds : Prop :=
+  ∃ w : IndisputableMonolith.Patterns.CompleteCover 3, w.period = 8
+
+/-- Born rule witness placeholder: existence of a measurement pipeline whose averaging
+    recovers a window integer (DNARP bridge). -/
+def bornHolds : Prop :=
+  ∃ (w : IndisputableMonolith.Patterns.Pattern 8),
+    IndisputableMonolith.Measurement.observeAvg8 1 (IndisputableMonolith.Measurement.extendPeriodic8 w)
+      = IndisputableMonolith.Measurement.Z_of_window w
+
+/-- Bose–Fermi witness: provide a concrete interface instance from a trivial path system. -/
+def boseFermiHolds : Prop :=
+  IndisputableMonolith.Quantum.BoseFermiIface PUnit
+    ({ C := fun _ => 0
+     , comp := fun _ _ => PUnit.unit
+     , cost_additive := by intro _ _; simp
+     , normSet := { PUnit.unit }
+     , sum_prob_eq_one := by
+         -- sum over singleton = exp(0) = 1
+         simp [IndisputableMonolith.Quantum.PathWeight.prob] })
 
 /-- WIP trivial witnesses for the above props. -/
-theorem eightTick_from_TruthCore : eightTickMinimalHolds := True.intro
-theorem born_from_TruthCore : bornHolds := True.intro
-theorem boseFermi_from_TruthCore : boseFermiHolds := True.intro
+theorem eightTick_from_TruthCore : eightTickMinimalHolds := by
+  refine ⟨IndisputableMonolith.Patterns.grayCoverQ3, ?_⟩
+  simpa using IndisputableMonolith.Patterns.period_exactly_8
+
+theorem born_from_TruthCore : bornHolds := by
+  refine ⟨IndisputableMonolith.Patterns.grayWindow, ?_⟩
+  have hk : (1 : Nat) ≠ 0 := by decide
+  simpa using IndisputableMonolith.Measurement.observeAvg8_periodic_eq_Z (k:=1) hk _
+theorem boseFermi_from_TruthCore : boseFermiHolds := by
+  -- Derived from the generic RS pathweight interface
+  simpa using
+    (IndisputableMonolith.Quantum.rs_pathweight_iface PUnit
+      { C := fun _ => 0
+      , comp := fun _ _ => PUnit.unit
+      , cost_additive := by intro _ _; simp
+      , normSet := { PUnit.unit }
+      , sum_prob_eq_one := by simp [IndisputableMonolith.Quantum.PathWeight.prob] }).right
 
 /-- Provisional φ-closed proof for alpha (constant 1/alphaInv expression). -/
 instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ (0 : ℝ) := ⟨⟩
@@ -64,8 +98,9 @@ theorem matches_withTruthCore (φ : ℝ) (L : RH.RS.Ledger) (B : RH.RS.Bridge L)
 
 /-- Partial inevitability: dimensionless layer witnessed by UD_minimal and matches_withTruthCore. -/
 theorem inevitability_dimless_partial (φ : ℝ) : RH.RS.Inevitability_dimless φ := by
-  -- In the SPEC, this is True; we provide the expected shape for future strengthening.
-  exact True.intro
+  intro L B
+  refine Exists.intro (UD_minimal φ) ?h
+  exact matches_minimal φ L B
 
 end Witness
 end RS
