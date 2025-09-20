@@ -1,5 +1,6 @@
 import Mathlib
 import IndisputableMonolith.Core
+import IndisputableMonolith.RH.RS.Scales
 
 open Classical Function
 
@@ -112,7 +113,7 @@ def alpha : ℝ := 1 / alphaInv
 /-- Electron mass in units of E_coh: m_e/E_coh = Φ(r_e + 𝔽(Z_e)). -/
 @[simp] noncomputable
 def m_e_over_Ecoh : ℝ :=
-  1
+  IndisputableMonolith.RH.RS.PhiPow 0
 
 /-- Electron mass: m_e = (m_e/E_coh) · E_coh. -/
 @[simp] noncomputable
