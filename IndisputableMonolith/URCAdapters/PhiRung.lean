@@ -101,8 +101,9 @@ lemma phi_rung_holds : phi_rung_prop := by
   intro U r Z
   simpa using Masses.Derivation.massCanonUnits_rshift U r Z
 
-/-- Concrete end-to-end construction: apply absolute_layer_any with placeholders.
-    We pick a canonical ledger `IM`, the Route A bridge, and default anchors/bands.
+/-- Concrete end-to-end construction: apply `absolute_layer_any` with the minimal
+    generic witnesses. We pick a canonical ledger `IM`, the Route A bridge,
+    and default anchors/bands.
     Returning this proof term ensures the wiring composes. -/
 noncomputable def routeA_end_to_end_proof : Prop :=
   ∃ (U : IndisputableMonolith.Constants.RSUnits),

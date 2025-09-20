@@ -81,5 +81,6 @@ lake exe ci_checks
 - See `README.md` for install/build instructions; this brief is a quick map of the terrain.
 
 - Quantum: hardened BornRuleIface/BoseFermiIface to concrete properties (normalization, nonnegativity, multiplicative composition), removed True placeholders.
+- Bridge/Data: added concrete helper lemmas (u_comb nonneg/commutative; passAt Bool↔Prop bridge).
 
 

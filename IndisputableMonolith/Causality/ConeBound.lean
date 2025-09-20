@@ -3,7 +3,8 @@ import Mathlib
 namespace IndisputableMonolith
 namespace Causality
 
-/-! WIP minimal ConeBound: local stubs to avoid project imports. -/
+/-! Minimal ConeBound: local definitions to avoid heavy imports. Provides
+    ball growth bounds under a bounded-degree step relation. -/
 
 class BoundedStep (α : Type) (degree_bound : outParam Nat) where
   step : α → α → Prop
