@@ -2,6 +2,7 @@ import Mathlib
 import IndisputableMonolith.Measurement
 import IndisputableMonolith.Patterns
 import IndisputableMonolith.RH.RS.Spec
+import IndisputableMonolith.Quantum
 
 namespace IndisputableMonolith
 namespace RH
@@ -19,11 +20,16 @@ def bornHolds : Prop :=
     IndisputableMonolith.Measurement.observeAvg8 1 (IndisputableMonolith.Measurement.extendPeriodic8 w)
       = IndisputableMonolith.Measurement.Z_of_window w
 
-/-- Bose–Fermi witness: existence of a path-weighted space whose interface encodes
-    permutation invariance and symmetrization properties. -/
+/-- Bose–Fermi witness: provide a concrete interface instance from a trivial path system. -/
 def boseFermiHolds : Prop :=
-  ∃ (γ : Type) (PW : IndisputableMonolith.Quantum.PathWeight γ),
-    IndisputableMonolith.Quantum.BoseFermiIface γ PW
+  IndisputableMonolith.Quantum.BoseFermiIface PUnit
+    ({ C := fun _ => 0
+     , comp := fun _ _ => PUnit.unit
+     , cost_additive := by intro _ _; simp
+     , normSet := { PUnit.unit }
+     , sum_prob_eq_one := by
+         -- sum over singleton = exp(0) = 1
+         simp [IndisputableMonolith.Quantum.PathWeight.prob] })
 
 /-- WIP trivial witnesses for the above props. -/
 theorem eightTick_from_TruthCore : eightTickMinimalHolds := by
@@ -35,20 +41,14 @@ theorem born_from_TruthCore : bornHolds := by
   have hk : (1 : Nat) ≠ 0 := by decide
   simpa using IndisputableMonolith.Measurement.observeAvg8_periodic_eq_Z (k:=1) hk _
 theorem boseFermi_from_TruthCore : boseFermiHolds := by
-  -- Construct a trivial path-weight on Unit and apply the RS iface wrapper
-  let γ := PUnit
-  -- Define a degenerate PathWeight with single element and zero cost
-  let C : γ → ℝ := fun _ => 0
-  let comp : γ → γ → γ := fun _ _ => PUnit.unit
-  have hadd : ∀ a b, C (comp a b) = C a + C b := by
-    intro a b; simp [C, comp]
-  let normSet : Finset γ := {PUnit.unit}
-  have hsum : Finset.sum normSet (fun g => Real.exp (-(C g))) = 1 := by
-    simp [normSet, C]
-  let PW : IndisputableMonolith.Quantum.PathWeight γ :=
-    { C := C, comp := comp, cost_additive := hadd, normSet := normSet, sum_prob_eq_one := hsum }
-  have h := IndisputableMonolith.Quantum.rs_pathweight_iface γ PW
-  exact ⟨γ, PW, (And.right h)⟩
+  -- Derived from the generic RS pathweight interface
+  simpa using
+    (IndisputableMonolith.Quantum.rs_pathweight_iface PUnit
+      { C := fun _ => 0
+      , comp := fun _ _ => PUnit.unit
+      , cost_additive := by intro _ _; simp
+      , normSet := { PUnit.unit }
+      , sum_prob_eq_one := by simp [IndisputableMonolith.Quantum.PathWeight.prob] }).right
 
 /-- Provisional φ-closed proof for alpha (constant 1/alphaInv expression). -/
 instance phiClosed_alpha (φ : ℝ) : RH.RS.PhiClosed φ (0 : ℝ) := ⟨⟩
