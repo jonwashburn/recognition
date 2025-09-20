@@ -14,16 +14,16 @@ def JusticeOKP (r : Request A) : Prop := r.delta = 1 ∨ r.delta = -1
 def ReciprocityOKP (r : Request A) : Prop := r.accurate = true
 def TemperanceOKP (r : Request A) : Prop := r.delta ≠ 0
 def WithinWindowP (r : Request A) : Prop := r.phase.val < 8
-def UniqueInWindowP (r : Request A) : Prop := True  -- placeholder; uniqueness requires history
+def UniqueInWindowP (r : Request A) : Prop := uniqueInWindow r = true
 def FairnessOKP (r : Request A) : Prop := r.cq.coherence8 ≥ 0
-def AdversarialOKP (r : Request A) : Prop := True    -- reserved for adversary models
-def TruthOKP (P : Policy A) (r : Request A) : Prop := True  -- reserved: map to measurement
-def ConsentOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: explicit consent flag
-def HarmOKP (P : Policy A) (r : Request A) : Prop := True    -- reserved: harm model
-def DeonticOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: rule satisfaction
-def PrivacyOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: data scope
-def COIOKP (P : Policy A) (r : Request A) : Prop := True     -- conflict-of-interest guard
-def RobustOKP (P : Policy A) (r : Request A) : Prop := True  -- robustness not formalized here
+def AdversarialOKP (r : Request A) : Prop := adversarialOk r = true
+def TruthOKP (P : Policy A) (r : Request A) : Prop := truthOk (P:=P) r = true
+def ConsentOKP (P : Policy A) (r : Request A) : Prop := consentOk (P:=P) r = true
+def HarmOKP (P : Policy A) (r : Request A) : Prop := harmOk (P:=P) r = true
+def DeonticOKP (P : Policy A) (r : Request A) : Prop := deonticOk (P:=P) r = true
+def PrivacyOKP (P : Policy A) (r : Request A) : Prop := privacyOk (P:=P) r = true
+def COIOKP (P : Policy A) (r : Request A) : Prop := coiOk (P:=P) r = true
+def RobustOKP (P : Policy A) (r : Request A) : Prop := robustOk (P:=P) r = true
 def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop :=
   ∀ r ∈ xs, FairnessOKP r
 
