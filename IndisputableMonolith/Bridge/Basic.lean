@@ -63,6 +63,10 @@ def K_B (B : BridgeData) : ℝ :=
 @[simp]
 def u_comb (_ : BridgeData) (u_ell0 u_lrec : ℝ) : ℝ := Real.sqrt (u_ell0^2 + u_lrec^2)
 
+lemma u_comb_nonneg (B : BridgeData) (u_ell0 u_lrec : ℝ) : 0 ≤ u_comb B u_ell0 u_lrec := by
+  dsimp [u_comb]
+  exact Real.sqrt_nonneg _
+
 /-- Symbolic K-gate Z-score witness: Z = |K_A − K_B| / (k·u_comb). -/
 @[simp] noncomputable
 def Zscore (B : BridgeData) (u_ell0 u_lrec k : ℝ) : ℝ :=
