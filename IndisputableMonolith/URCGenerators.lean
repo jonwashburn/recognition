@@ -35,19 +35,20 @@ structure RotationCert where
   scope : Prop
   deriving Repr
 
-@[simp] def RotationCert.verified (_c : RotationCert) : Prop := True
+@[simp] def RotationCert.verified (c : RotationCert) : Prop :=
+  (0 ≤ (c.gamma : ℝ)) ∧ c.scope
 
 structure OuterBudgetCert where data : Prop
   deriving Repr
 
-@[simp] def OuterBudgetCert.verified (_c : OuterBudgetCert) : Prop := True
+@[simp] def OuterBudgetCert.verified (c : OuterBudgetCert) : Prop := c.data
 
 structure ConsciousCert where
   k_pos : Nat
   hk    : 0 < (k_pos : ℝ)
   deriving Repr
 
-@[simp] def ConsciousCert.verified (_c : ConsciousCert) : Prop := True
+@[simp] def ConsciousCert.verified (c : ConsciousCert) : Prop := 0 < (c.k_pos : ℝ)
 
 structure CertFamily where
   units     : List UnitsCert        := []
@@ -103,18 +104,25 @@ def UnitsProp (C : CertFamily) : Prop := ∀ c ∈ C.units, UnitsCert.verified c
 def EightBeatProp (C : CertFamily) : Prop := ∀ c ∈ C.eightbeat, EightBeatCert.verified c
 def ELProp (C : CertFamily) : Prop := ∀ c ∈ C.elprobes, ELProbe.verified c
 def PhiRungProp (φ : ℝ) (C : CertFamily) : Prop := ∀ c ∈ C.masses, MassCert.verified φ c
+def RotationProp (C : CertFamily) : Prop := ∀ c ∈ C.rotation, RotationCert.verified c
+def OuterBudgetProp (C : CertFamily) : Prop := ∀ c ∈ C.outer, OuterBudgetCert.verified c
+def ConsciousProp (C : CertFamily) : Prop := ∀ c ∈ C.conscious, ConsciousCert.verified c
 
-/--- Route B Lawfulness bundle, tied to a concrete certificate family and φ. -/
+/--- Route B Lawfulness bundle, tied to a concrete certificate family and φ.
+     Strengthened: includes all verified subpredicates (no trailing True). -/
 def LawfulBridge (φ : ℝ) (C : CertFamily) : Prop :=
-  UnitsProp C ∧ EightBeatProp C ∧ ELProp C ∧ PhiRungProp φ C ∧ True
+  UnitsProp C ∧ EightBeatProp C ∧ ELProp C ∧ PhiRungProp φ C ∧
+  RotationProp C ∧ OuterBudgetProp C ∧ ConsciousProp C
 
 /-- Generators imply a lawful-bridge bundle by unpacking the Verified proof. -/
 theorem determination_by_generators {φ : ℝ}
   (VG : VerifiedGenerators φ) : LawfulBridge φ VG.fam := by
   rcases VG with ⟨C, hC⟩
-  dsimp [LawfulBridge, UnitsProp, EightBeatProp, ELProp, PhiRungProp] at *
+  dsimp [LawfulBridge, UnitsProp, EightBeatProp, ELProp, PhiRungProp,
+        RotationProp, OuterBudgetProp, ConsciousProp] at *
   rcases hC with ⟨hu, he8, hel, hm, hrot, hout, hcons⟩
-  exact And.intro hu (And.intro he8 (And.intro hel (And.intro hm True.intro)))
+  exact And.intro hu
+    (And.intro he8 (And.intro hel (And.intro hm (And.intro hrot (And.intro hout hcons)))))
 
 /-- A tiny demo family: empty certificate sets verify vacuously. -/
 def demo_generators (φ : ℝ) : VerifiedGenerators φ :=

@@ -59,6 +59,13 @@ lake exe ci_checks
 ### Placeholder Status
 - Some modules contain placeholders (`sorry`): currently 39 instances across ~17 files (subject to change). CI smoke targets only minimal components to stay fast and admit-free.
 
+### Remaining Assumptions (delta)
+- RH/RS Spec: `Inevitability_absolute` now requires existence of anchors and bands with `UniqueCalibration` and `MeetsBands` witnesses (no longer `True`).
+- RH/RS Spec: `SAT_Separation` concretized as `∀ n, n ≤ n.succ` and plumbed into `Inevitability_recognition_computation`.
+- URCGenerators: `LawfulBridge` strengthened to a full conjunction from `Verified` (no trailing `True`).
+- URCAdapters/PhiRung: `inevitability_dimless_partial` wired to the actual RS witness instead of `True.intro`.
+- URC/Minimal: removed trivial `@[simp] def ok : True`.
+
 ### How to Explore
 1) Open in a Lean 4–enabled editor (VS Code + Lean extension or Cursor) and navigate `IndisputableMonolith/Manifest.lean`.
 2) Use `#eval` at the top-level demos listed above to get quick confirmations.

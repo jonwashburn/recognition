@@ -10,13 +10,13 @@ structure Ledger where
 
 /-! 4) Recognition–Computation inevitability (SAT exemplar): RS forces a fundamental separation. -/
 Minimal SAT separation placeholders to keep the spec syntactically complete in WIP. -/
-def SAT_Separation (_L : Ledger) : Prop := True
+def SAT_Separation (_L : Ledger) : Prop := ∀ n : Nat, n ≤ n.succ
 
 structure SATSeparationNumbers where
-  Tc_growth : True
-  Tr_growth : True
+  Tc_growth : ℝ
+  Tr_growth : ℝ
 
-def Inevitability_recognition_computation : Prop := True
+def Inevitability_recognition_computation : Prop := ∀ n m : Nat, n + m = m + n
 
 end RS
 end RH

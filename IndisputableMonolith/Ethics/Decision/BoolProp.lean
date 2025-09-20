@@ -1,5 +1,6 @@
 import Mathlib
 import IndisputableMonolith
+import IndisputableMonolith.Ethics.Core
 
 namespace IndisputableMonolith
 namespace Ethics
@@ -8,22 +9,23 @@ namespace Decision
 universe u
 variable {A : Type u}
 
--- Prop-level counterparts (skeletal: default True)
-def JusticeOKP (r : Request A) : Prop := True
-def ReciprocityOKP (r : Request A) : Prop := True
-def TemperanceOKP (r : Request A) : Prop := True
-def WithinWindowP (r : Request A) : Prop := True
-def UniqueInWindowP (r : Request A) : Prop := True
-def FairnessOKP (r : Request A) : Prop := True
-def AdversarialOKP (r : Request A) : Prop := True
-def TruthOKP (P : Policy A) (r : Request A) : Prop := True
-def ConsentOKP (P : Policy A) (r : Request A) : Prop := True
-def HarmOKP (P : Policy A) (r : Request A) : Prop := True
-def DeonticOKP (P : Policy A) (r : Request A) : Prop := True
-def PrivacyOKP (P : Policy A) (r : Request A) : Prop := True
-def COIOKP (P : Policy A) (r : Request A) : Prop := True
-def RobustOKP (P : Policy A) (r : Request A) : Prop := True
-def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+-- Prop-level counterparts (tied to existing structures; minimal semantics)
+def JusticeOKP (r : Request A) : Prop := r.delta = 1 ∨ r.delta = -1
+def ReciprocityOKP (r : Request A) : Prop := r.accurate = true
+def TemperanceOKP (r : Request A) : Prop := r.delta ≠ 0
+def WithinWindowP (r : Request A) : Prop := r.phase.val < 8
+def UniqueInWindowP (r : Request A) : Prop := True  -- placeholder; uniqueness requires history
+def FairnessOKP (r : Request A) : Prop := r.cq.coherence8 ≥ 0
+def AdversarialOKP (r : Request A) : Prop := True    -- reserved for adversary models
+def TruthOKP (P : Policy A) (r : Request A) : Prop := True  -- reserved: map to measurement
+def ConsentOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: explicit consent flag
+def HarmOKP (P : Policy A) (r : Request A) : Prop := True    -- reserved: harm model
+def DeonticOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: rule satisfaction
+def PrivacyOKP (P : Policy A) (r : Request A) : Prop := True -- reserved: data scope
+def COIOKP (P : Policy A) (r : Request A) : Prop := True     -- conflict-of-interest guard
+def RobustOKP (P : Policy A) (r : Request A) : Prop := True  -- robustness not formalized here
+def FairnessBatchOKP (P : Policy A) (xs : List (Request A)) : Prop :=
+  ∀ r ∈ xs, FairnessOKP r
 
 -- Bool ↔ Prop bridging lemmas
 @[simp] lemma justiceOk_true_iff (r : Request A) : justiceOk r = true ↔ JusticeOKP r := by

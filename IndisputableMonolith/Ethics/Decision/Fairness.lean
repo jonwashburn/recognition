@@ -1,14 +1,19 @@
 import Mathlib
 import IndisputableMonolith
+import IndisputableMonolith.Ethics.Decision.BoolProp
 
 namespace IndisputableMonolith
 namespace Ethics
 namespace Decision
 
-def EqOppOKP (P : Policy A) (xs : List (Request A)) : Prop := True
-def CalibOKP (P : Policy A) (xs : List (Request A)) : Prop := True
-def IndivFairOKP (P : Policy A) (xs : List (Request A)) : Prop := True
-def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop := True
+def EqOppOKP (P : Policy A) (xs : List (Request A)) : Prop :=
+  ∀ r ∈ xs, FairnessOKP r
+def CalibOKP (P : Policy A) (xs : List (Request A)) : Prop :=
+  ∀ r ∈ xs, ReciprocityOKP r
+def IndivFairOKP (P : Policy A) (xs : List (Request A)) : Prop :=
+  ∀ r ∈ xs, TemperanceOKP r
+def CrossAgentOKP (P : Policy A) (xs : List (Request A)) : Prop :=
+  ∀ r ∈ xs, WithinWindowP r ∧ UniqueInWindowP r
 
 @[simp] lemma eqOppOk_true_iff (P : Policy A) (xs : List (Request A)) :
   eqOppOk (P:=P) xs = true ↔ EqOppOKP (P:=P) xs := by simp [eqOppOk, EqOppOKP]
